@@ -14,14 +14,14 @@
 #' @keywords clustering
 #' @export
 
-setClass("K2", representation(dataMatrix = "matrix",       # Matrix of Z-scored data
+setClass("K2", representation(eSet = "ExpressionSet",      # Expression Set
+                              meta = "list",               # Named list of K2 Taxonomer parameters
+                              dataMatrix = "matrix",       # Matrix of Z-scored data
                               info = "data.frame",         # Data frame of observation information
                               results = "list",            # K2 Taxonomer results 
                               genesets = "list",           # Named list of gene sets for hyperenrichment analysis
                               gene2Pathway = "character",  # Named list mapping genes to gene sets
-                              eSet = "ExpressionSet",      # Expression Set
                               gSet = "ExpressionSet",      # Expression Set (from GSVA)
-                              meta = "list",               # Named list of K2 Taxonomer parameters
                               geneURL = "character",       # Names vector of gene URLs
                               genesetURL = "character"    # Namec vector of geneset URLs
                               ))

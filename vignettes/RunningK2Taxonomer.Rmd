@@ -38,7 +38,7 @@ library(ggdendro)
 data(sample.ExpressionSet)
 ```
 
-# K2Taxonomer basic run
+# `K2Taxonomer` basic run
 
 ## Generate `K2` object
 ```{r create}
@@ -46,33 +46,60 @@ data(sample.ExpressionSet)
 K2res <- K2preproc(sample.ExpressionSet)
 ```
 
-### K2 structure
-```{r structure}
+### `K2` object structre
+
+`K2Taxonomer` functions create and manipulate S4, `K2` objects, defined within the package. `K2` objects have 5 slots.
+
+- **@eSet** = "ExpressionSet": Original expression data, extracted by `K2eSet()`.
+- **@meta** = "list": Named list of parameters for running analysis, extracted by `K2data()`.
+- **@dataMatrix** = "matrix": Matrix of processed expression data for running `K2Taxonomer` algorithm, extracted by `K2results`.
+- **@info** = "data.frame": Data frame of entered observation-level information, extracted by `K2info()`.
+- **@results** = "list": Named list of the results of running the `K2Taxonomer` algorithm, including differential analysis and enrichment results, extracted by `K2results()`
+- **@genesets** = "list": Named list of gene sets to run for enrichment analysis, extracted by `K2genesets`.
+- **@gene2Pathway** = "character": Named vector of gene set names in which each gene appears, extracted by `K2gene2Pathway`.
+- **@geneURL** = "character": Named vector of URLs to link to each gene in the portal, extracted by `K2geneURL()`.
+- **@genesetURL** = "character": Named vector of URLs to link to each gene set in the portal, extracted by `K2genesetURL()`.
+
+`K2preproc()` will fill in three of these slots:, **@eSet**, **@meta**, and **@dataMatrix**.
+```{r eSetDataMatrix}
 # Extract ExpressionSet
 K2eSet(K2res)
 
-# Extract MetaData
+# Extract dataMatrix
+dim(K2data(K2res))
+```
+
+**@meta** will be populated by default a set of parameters entered into `K2preproc()`.  Note that for each step, new parameters may be entered, specific to that function.
+```{r}
+# Extract meta data
 names(K2meta(K2res))
 ```
 
-## Running K2 algorithm
+
+## Running `K2Taxonomer` algorithm
+
+The `K2Taxonomer` is run by `K2tax()`.  At each recursion of the algorithm, the observations in **@dataMatrix** are split into two sub-groups based on a compilation of repeated K=2 clustering on bootstrapped sampling of features. For each split in the recursion, a stability metric is used to estimate robustness, which takes on values between 0 and 1, where values close to 1 represent the instance in which the same clustering occured in every or nearly every perturbation of a large set of observations. As the number of observations decreasing down the taxonomy the largest possible stability estimate decreases, such that the largest possible stability estimate of triplets and duplets, is 0.67 and 0.50, respectively. 
+
+The parameter, **stabThresh**, controls the minimum value of the stability metric to continue splitting the observations.  By default, **stabThresh** is set to 0, which will run the algorithm until until all observations fall into singlets. If we set **stabThresh = 0.5** the algorithm can not separate duplets, as well as larger sets that demonstrate poor stability when a split is attempted. 
+
+Choosing an appropriate threshold is dependent on the size of the original data set.  For large data sets, choosing small values will greatly increase runtime, and values between 0.8 and 0.7, are generally recommended.
+
 ```{r cluster}
 # Run Cluster
 set.seed(143)
 K2res <- K2tax(K2res,
-                 stabThresh = 0.5)
+               stabThresh = 0.5)
 ```
 
-## `K2` results structure
+## `K2Taxonomer` results structure
+
+The **@results** slot of the `K2` object is a named list of the results of running the `K2Taxonomer` algorithm. Each item in the list contains the IDs of the two sets of observations denoted by the split, as well as additional annotation for that split, including the stability estimates.
+
+Each item is assigned a letter ID. If there are more than 26 items, than an additional letter is tacked on, such that the 27th item is named, *AA*, and the 28th item is named **BB**.
+
 ```{r results, fig.align='center', fig.width=5, fig.height=5}
 # Values of each rung
 names(K2results(K2res))
-```
-
-### `K2` results values
-```{r resultsIDs}
-# Get names of things in K2results
-names(K2results(K2res)$A)
 ```
 
 ### Split results
@@ -111,7 +138,9 @@ heatmap(splitAstability,
         keep.dendro = FALSE)
 ```
 
-## Generate dendrogram from `K2` results
+## Generate dendrogram from `K2Taxonomer` results
+
+After running the `K2Taxonomer` algorithm, a `dendrogram` object can be built using `K2dendro()`.
 ```{r dendrogram, fig.align='center', fig.width=5, fig.height=3}
 # Get dendrogram from K2Taxonomer
 dendro <- K2dendro(K2res)
@@ -120,7 +149,11 @@ dendro <- K2dendro(K2res)
 ggdendrogram(dendro)
 ```
 
-## Annotating `K2` results
+## Annotating `K2Taxonomer` results
+
+A principal motivation behind `K2Taxonomer` is that insight can be garnered and tracjed for various levels in a hierarchical sub-grouping of obervations, such that analytical characterization of different sub-groups throughout the taxonomy serve to both validate and inform about specific sub-groups.
+
+To this end, `K2Taxonomer` runs additional analyses to annotate each split. These analyses include: differential expression analysis using the `limma` package and gene set enrichment testing for both hyperenrichment and differntial analysis of singe-sample enrichment scores estimated using the `GSVA` package.
 
 ### Differential analysis
 ```{r Run differential analysis}
@@ -185,7 +218,7 @@ K2dashboard(K2res,
             compile = FALSE)
 ```
 
-## Running K2 with `runK2custer` wrapper
+## Running with `runK2Taxonomer` wrapper
 ```{r, eval=FALSE}
 K2res <- runK2lcuster(
   eSet = sample.ExpressionSet,
@@ -196,7 +229,7 @@ K2res <- runK2lcuster(
 
 # Additional options
 
-## Running K2 with replicates
+## Running with replicates
 ```{r, fig.align='center', fig.width=5, fig.height=3}
 # Create set of cohorts from data
 sample.ExpressionSet$group <- paste0(sample.ExpressionSet$sex, sample.ExpressionSet$type)
