@@ -1,0 +1,215 @@
+---
+title: "Running K2Taxonomer"
+output: 
+  rmarkdown::html_document:
+    toc: true
+    df_print: paged
+vignette: >
+  %\VignetteIndexEntry{RunningK2Taxonomer}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message=F, 
+  warning=F
+)
+```
+
+# Requirements
+
+## Load packages
+```{r setup}
+# K2Taxonomer package
+library(K2Taxonomer)
+
+# For creating and manipulating expression sets
+library(Biobase)
+
+# For drawing dendrograms
+library(ggdendro)
+```
+
+## Read in sample `Expression Set` object
+```{r loadData}
+data(sample.ExpressionSet)
+```
+
+# K2Taxonomer basic run
+
+## Generate `K2` object
+```{r create}
+# Run pre-processing
+K2res <- K2preproc(sample.ExpressionSet)
+```
+
+### K2 structure
+```{r structure}
+# Extract ExpressionSet
+K2eSet(K2res)
+
+# Extract MetaData
+names(K2meta(K2res))
+```
+
+## Running K2 algorithm
+```{r cluster}
+# Run Cluster
+set.seed(143)
+K2res <- K2tax(K2res,
+                 stabThresh = 0.5)
+```
+
+## `K2` results structure
+```{r results, fig.align='center', fig.width=5, fig.height=5}
+# Values of each rung
+names(K2results(K2res))
+```
+
+### `K2` results values
+```{r resultsIDs}
+# Get names of things in K2results
+names(K2results(K2res)$A)
+```
+
+### Split results
+```{r values}
+# Get observations defined in each split
+K2results(K2res)$A$obs
+```
+
+### Stability metrics
+```{r stability, fig.align='center', fig.width=5, fig.height=5}
+# Get bootstrap probability of this split
+K2results(K2res)$A$bootP
+
+# Node stability (Value between 0 and 1. 1 indicating high stability)
+K2results(K2res)$A$stability$node
+
+# Stability of each subseqent cluster.
+K2results(K2res)$A$stability$clusters
+
+# Distance matrix indicating pairwise cosine similarity of each observation
+splitAstability <- as.matrix(K2results(K2res)$A$stability$samples)
+
+# Show heatmap
+hcols <- c("grey", "black")[colnames(splitAstability) %in% K2results(K2res)$A$obs[[1]] + 1]
+
+heatmap(splitAstability, 
+        distfun = function(x) as.dist(1-x), 
+        hclustfun = function(x) hclust(x, method = "mcquitty"),
+        col = hcl.colors(12, "Blue-Red"),
+        scale = "none",
+        cexRow = 0.7,
+        cexCol = 0.7,
+        symm = TRUE,
+        ColSideColors = hcols,
+        RowSideColors = hcols,
+        keep.dendro = FALSE)
+```
+
+## Generate dendrogram from `K2` results
+```{r dendrogram, fig.align='center', fig.width=5, fig.height=3}
+# Get dendrogram from K2Taxonomer
+dendro <- K2dendro(K2res)
+
+# Get dendrogram data
+ggdendrogram(dendro)
+```
+
+## Annotating `K2` results
+
+### Differential analysis
+```{r Run differential analysis}
+# Run DGE
+K2res <- runDGE_mods(K2res)
+
+# Get differential results for one split
+head(K2results(K2res)$A$dge)
+
+# Concatenate all results and generate table
+DGEtable <- getDGETable(K2res)
+head(DGEtable)
+```
+
+### Gene set hyperenrichment
+```{r Run Hyperichment}
+# Create dummy set of gene sets
+genes <- unique(DGEtable$gene)
+genesetsMadeUp <- list(
+  GS1 = genes[1:20],
+  GS2 = genes[21:40],
+  GS3 = genes[41:60]
+)
+
+# Run gene set hyperenrichment
+K2res <- runGSE_mods(K2res, genesets = genesetsMadeUp)
+
+# Get gene set results for one split
+K2results(K2res)$A$gse
+```
+
+### Single-sample gene set enrichment
+```{r Run ssSGEA, warning=FALSE}
+# Create expression matrix with ssGSEA(GSVA) estimates
+K2res <- runGSVA_mods(K2res, 
+                      ssGSEAalg = "ssgsea",
+                      ssGSEAcores = 1,
+                      verbose = FALSE)
+
+# Extract ernichment score Expression Set object
+K2gSet(K2res)
+```
+
+### Differential single-sample enrichment analysis
+```{r Run DSSE}
+# Run differential analysis on enrichment score Expression Set
+K2res <- runDSSE_mods(K2res)
+
+# Get differential results for one split
+head(K2results(K2res)$A$dsse)
+
+# Extract table of all hyper and sample-level enrichment tests
+K2enrRes <- getEnrichmentTable(K2res)
+head(K2enrRes)
+```
+
+## Generate interactive portal to explore results
+```{r portal, eval=FALSE}
+K2dashboard(K2res,
+            analysis_name = "Example",
+            output_dir = ".",
+            compile = FALSE)
+```
+
+## Running K2 with `runK2custer` wrapper
+```{r, eval=FALSE}
+K2res <- runK2lcuster(
+  eSet = sample.ExpressionSet,
+  genesets = genesetsMadeUp,
+  stabThresh = 0.5)
+)
+```
+
+# Additional options
+
+## Running K2 with replicates
+```{r, fig.align='center', fig.width=5, fig.height=3}
+# Create set of cohorts from data
+sample.ExpressionSet$group <- paste0(sample.ExpressionSet$sex, sample.ExpressionSet$type)
+
+# Run pre-processing
+K2res <- K2preproc(sample.ExpressionSet,
+                   cohorts = "group")
+
+# Cluster the data
+K2res <- K2tax(K2res)
+
+# Create dendrogram
+dendro <- K2dendro(K2res)
+ggdendrogram(dendro)
+```
+

@@ -1,0 +1,58 @@
+Package: K2Taxonomer
+Type: Package
+Title: Creating annotated submodules of high-throughput data through iteratively bootstrapping K=2 clusters.
+Version: 1.0
+Date: 2019-03-19
+Author: Eric Reed
+Maintainer: Eric Reed <reeder@bu.edu>
+Description: Perform and annotate divisive hierarchical clusters of high-throughput data by iteratively clustering bootstrapped features and estimating K=2 clusters. User may input any clustering method that splits observations into 2 clusters. Results can be summarized in a interactive dashboard.
+License: Artistic-2.0
+Imports:
+  plotly,
+  limma, 
+  flexdashboard,
+  heatmaply,
+  visNetwork, 
+  shiny, 
+  DT,
+  magrittr
+Suggests: 
+    Biobase,
+    knitr,
+    rmarkdown
+Depends: 
+  R (>= 3.5)
+biocViews: Clustering, Visualization
+BugReports: https://github.com/ericreed
+RoxygenNote: 6.1.1.9000
+Collate: 
+    'K2-class.R'
+    'K2-methods.R'
+    'K2tax.R'
+    'K2dashboard.R'
+    'K2dendro.R'
+    'K2visNetwork.R'
+    'getGenePathways.R'
+    'hclust_wrapper.R'
+    'K2preproc.R'
+    'runTests_mods.R'
+    'runDGE_mods.R'
+    'runGSE_mods.R'
+    'runGSVA_mods.R'
+    'runDSSE_mods.R'
+    'runK2Taxonomer.R'
+    'runFisher1sided.R'
+    'runFisher2sided.R'
+    'runWilcox.R'
+    'runTtest.R'
+    'runSurvival.R'
+    'cutreeK2dendro.R'
+    'getDGEhits.R'
+    'signature_wrapper.R'
+    'dge_wrapper.R'
+    'do_split.R'
+    'formatCov.R'
+    'checkMeta.R'
+    'getEnrichmentTable.R'
+    'getDGETable.R'
+VignetteBuilder: knitr
