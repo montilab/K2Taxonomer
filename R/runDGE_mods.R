@@ -35,6 +35,9 @@ runDGE_mods <- function(K2res){
     return(x)
   })
   
+  # Fix FDR values
+  K2res <- .fixFDR(K2res, "dge")
+  
   # Make K2gSet empty
   K2gSet(K2res) <- ExpressionSet()
   

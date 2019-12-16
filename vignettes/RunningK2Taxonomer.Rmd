@@ -173,13 +173,15 @@ head(DGEtable)
 # Create dummy set of gene sets
 genes <- unique(DGEtable$gene)
 genesetsMadeUp <- list(
-  GS1 = genes[1:20],
-  GS2 = genes[21:40],
-  GS3 = genes[41:60]
+  GS1 = genes[1:50],
+  GS2 = genes[51:100],
+  GS3 = genes[101:150]
 )
 
 # Run gene set hyperenrichment
-K2res <- runGSE_mods(K2res, genesets = genesetsMadeUp)
+K2res <- runGSE_mods(K2res, 
+                     genesets = genesetsMadeUp,
+                     qthresh = 0.1)
 
 # Get gene set results for one split
 K2results(K2res)$A$gse

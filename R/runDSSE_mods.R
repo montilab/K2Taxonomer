@@ -32,5 +32,8 @@ runDSSE_mods <- function(K2res){
     return(x)
   })
   
+  # Fix FDR values
+  K2res <- .fixFDR(K2res, "dsse")
+  
   return(K2res)
 }

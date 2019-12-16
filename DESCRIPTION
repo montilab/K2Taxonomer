@@ -49,6 +49,7 @@ Collate:
     'cutreeK2dendro.R'
     'getDGEhits.R'
     'signature_wrapper.R'
+    'fixFDR.R'
     'dge_wrapper.R'
     'do_split.R'
     'formatCov.R'
