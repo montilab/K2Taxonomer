@@ -45,10 +45,10 @@ runGSE_mods <- function(K2res,
     two <- res[res$mod == "2",]
     
     # For each group get a set of up and down-regulated genes
-    oneUp <- rownames(one)[one$fdr < K2meta(K2res)$qthresh & one$coef > K2meta(K2res)$cthresh]
-    oneDown <- rownames(one)[one$fdr < K2meta(K2res)$qthresh & one$coef < (-K2meta(K2res)$cthresh)]
-    twoUp <- rownames(two)[two$fdr < K2meta(K2res)$qthresh & two$coef > K2meta(K2res)$cthresh]
-    twoDown <- rownames(two)[two$fdr < K2meta(K2res)$qthresh & two$coef < (-K2meta(K2res)$cthresh)]
+    oneUp <- one$gene[one$fdr < K2meta(K2res)$qthresh & one$coef > K2meta(K2res)$cthresh]
+    oneDown <- one$gene[one$fdr < K2meta(K2res)$qthresh & one$coef < (-K2meta(K2res)$cthresh)]
+    twoUp <- two$gene[two$fdr < K2meta(K2res)$qthresh & two$coef > K2meta(K2res)$cthresh]
+    twoDown <- two$gene[two$fdr < K2meta(K2res)$qthresh & two$coef < (-K2meta(K2res)$cthresh)]
     sigList <- list(oneUp, oneDown, twoUp, twoDown)
     
     # Run hyperenrichment
@@ -60,7 +60,7 @@ runGSE_mods <- function(K2res,
         ndrawn <- length(sig)
         ncats <- sapply(K2genesets(K2res),length)
         nleft <- K2meta(K2res)$ntotal - ncats
-        pval <- phyper(q = nhits-1, m = ncats, n = nleft, k = ndrawn, lower.tail  =F)
+        pval <- phyper(q = nhits - 1, m = ncats, n = nleft, k = ndrawn, lower.tail = F)
         enrichFram <- data.frame(category = names(K2genesets(K2res)),
                                pval = pval,
                                nhits = nhits,

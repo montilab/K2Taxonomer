@@ -5,7 +5,7 @@
 \title{Function to create K2 object for pre-processing}
 \usage{
 K2preproc(eSet, cohorts = NULL, vehicle = NULL, covariates = NULL,
-  use = c("Z", "MEAN"), nFeats = nrow(eSet) * 0.02,
+  block = NULL, use = c("Z", "MEAN"), nFeats = nrow(eSet) * 0.02,
   featMetric = c("square", "mad"), nBoots = 500,
   clustFunc = hclust_wrapper, linkage = "mcquitty", info = NULL,
   infoClass = NULL, genesets = NULL, qthresh = 0.05, cthresh = 0,
@@ -21,6 +21,8 @@ K2preproc(eSet, cohorts = NULL, vehicle = NULL, covariates = NULL,
 \item{vehicle}{The value in the cohort variable that contains the vehicle ID. Default NULL if no vehicle to be used.}
 
 \item{covariates}{Covariates in phenotype data of eSet to control for in differential analysis.}
+
+\item{block}{Block parameter in limma for modelling random-like effects.}
 
 \item{use}{Generate test statistics or use means from differential analysis for clustering.}
 

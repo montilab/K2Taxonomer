@@ -552,7 +552,7 @@ genesetTableClusters <- function(ENRTABLE, nodegroupID = NULL, dgeHits = NULL){
 }
 
 # Generete hyperenrichment results
-hyperenrichmentClusters <- function(clusterRes, groupList, genesets, qthresh, ntotal) {
+hyperenrichmentClusters <- function(clusterRes, groupList, genesets, qthresh, cthresh, ntotal) {
   
   # Create list of gene signatures
   sigList <- lapply(seq(length(groupList)), function(mod, clusterRes, qthresh) {
@@ -561,7 +561,7 @@ hyperenrichmentClusters <- function(clusterRes, groupList, genesets, qthresh, nt
     cSub <- clusterRes[clusterRes$mod == mod,]
     
     # Get genes with sig pvalues
-    genes <- rownames(cSub[cSub$fdr < qthresh,])
+    genes <- cSub$gene[cSub$fdr < qthresh & cSub$coef > cthresh]
     
     return(genes)
     

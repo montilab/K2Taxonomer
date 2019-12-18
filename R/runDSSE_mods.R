@@ -23,7 +23,8 @@ runDSSE_mods <- function(K2res){
                                 K2meta(K2res)$cohorts, 
                                 mods, 
                                 K2meta(K2res)$vehicle, 
-                                K2meta(K2res)$covariates)
+                                K2meta(K2res)$covariates,
+                                K2meta(K2res)$block)
     if (!is.null(x$dsse)) {
       x$dsse$category <- rownames(x$dsse)
       x$dsse <- x$dsse[, c(ncol(x$dsse), 1:(ncol(x$dsse)-1)) ]

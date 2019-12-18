@@ -5,6 +5,7 @@
 #' @param cohorts The column in phenotype data of eSet that has cohort ID's. Default NULL if no pre-processing of data.
 #' @param vehicle The value in the cohort variable that contains the vehicle ID. Default NULL if no vehicle to be used.
 #' @param covariates Covariates in phenotype data of eSet to control for in differential analysis.
+#' @param block Block parameter in limma for modelling random-like effects.
 #' @param use Generate test statistics or use means from differential analysis for clustering.
 #' @param nFeats A numeric value <= P of subsets of the data to use.
 #' @param featMatric Metric to use to assign variance/signal score. Options are
@@ -32,8 +33,9 @@ K2preproc <- function(eSet,
                          cohorts = NULL,
                          vehicle = NULL,
                          covariates = NULL,
+                         block = NULL,
                          use = c("Z", "MEAN"),
-                         nFeats = nrow(eSet)*0.02,
+                         nFeats = nrow(eSet) * 0.02,
                          featMetric = c("square", "mad"),
                          nBoots = 500,
                          clustFunc = hclust_wrapper,
@@ -66,6 +68,7 @@ K2preproc <- function(eSet,
   K2meta(K2res) <- list(cohorts = cohorts,
                         vehicle = vehicle,
                         covariates = covariates,
+                        block = block,
                         infoClass = infoClass,
                         use = use,
                         nFeats = nFeats,

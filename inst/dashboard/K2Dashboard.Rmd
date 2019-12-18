@@ -1159,6 +1159,7 @@ observeEvent(input$compareGo, {
                                         values$groupListClicked,
                                         genesets,
                                         meta$qthresh,
+                                        meta$cthresh,
                                         meta$ntotal)
 
     # Add NodeGroup ID

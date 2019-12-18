@@ -1,4 +1,4 @@
-.signature_wrapper <- function(eSet, cohorts, mods, vehicle = NULL, covariates = NULL){
+.signature_wrapper <- function(eSet, cohorts, mods, vehicle = NULL, covariates = NULL, block = NULL){
   
   # Remove vehicle from mods and make a data frame
   mods <- mods[names(mods) != "Vehicle"]
@@ -47,8 +47,20 @@
       design <- model.matrix(as.formula(paste0("~ 0 +", "mods", .formatCov(covariates))), data = pData(eSub))
       colnames(design) <- sub("mods", "X", colnames(design))
       
-      # Fit model
-      fit <- lmFit(eSub, design)
+      # Run duplicateCorrelation
+      if (!is.null(block)) {
+        # Create contrasts between chemicals
+        corfit <- duplicateCorrelation(eSub, design, block = pData(eSub)[, block])
+        
+        if(corfit$consensus.correlation %in% c(-1, 1) | is.na(corfit$consensus.correlation)){
+          fit <- lmFit(eSub, design)
+        } else {
+          fit <- lmFit(eSub, design, correlation = corfit$consensus.correlation, block = pData(eSub)[, block])
+        }
+      } else {
+        # Fit model
+        fit <- lmFit(eSub, design)
+      }
       
       # Fit contrasts
       modFit <- lapply(paste0("X", unique(mods$mods)), function(x, design, fit){
@@ -65,8 +77,20 @@
       design <- model.matrix(as.formula(paste0("~ 0 + ", "GROUP",  .formatCov(covariates))), data = pData(eSub))
       colnames(design) <- sub("GROUP", "X", colnames(design))
       
-      # Fit model
-      fit <- lmFit(eSub, design)
+      # Run duplicateCorrelation
+      if (!is.null(block)) {
+        # Create contrasts between chemicals
+        corfit <- duplicateCorrelation(eSub, design, block = pData(eSub)[, block])
+        
+        if(corfit$consensus.correlation %in% c(-1, 1) | is.na(corfit$consensus.correlation)){
+          fit <- lmFit(eSub, design)
+        } else {
+          fit <- lmFit(eSub, design, correlation = corfit$consensus.correlation, block = pData(eSub)[, block])
+        }
+      } else {
+        # Fit model
+        fit <- lmFit(eSub, design)
+      }
       
       # Create contrasts strings
       modsFull <- unique(pD[,c("GROUP", "mods")])
