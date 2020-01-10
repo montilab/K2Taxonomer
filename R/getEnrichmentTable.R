@@ -60,7 +60,7 @@ getEnrichmentTable <- function(K2res) {
     }))
     
     # Merge the two and sort by hyper p-value
-    EnrTable <- merge(EnrTable, ssEnrTable, all.x = TRUE)
+    EnrTable <- merge(EnrTable, ssEnrTable, all = TRUE)
     
     
     # Sort columns

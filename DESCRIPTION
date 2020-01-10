@@ -55,5 +55,6 @@ Collate:
     'formatCov.R'
     'checkMeta.R'
     'getEnrichmentTable.R'
+    'aggregateGSVAscores.R'
     'getDGETable.R'
 VignetteBuilder: knitr
