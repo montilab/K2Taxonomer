@@ -1199,7 +1199,7 @@ observeEvent(input$compareGo, {
     incProgress(1/3, detail = "Formatting Results")
 
     # Merge the two and sort by hyper p-value
-    EnrRes <- merge(hyperEnrRes, ssEnrRes, all.x = TRUE)
+    EnrRes <- merge(hyperEnrRes, ssEnrRes, all = TRUE)
 
     ## Order by pvalue
     EnrRes <- EnrRes[order(EnrRes$pval_hyper),]
