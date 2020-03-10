@@ -26,7 +26,7 @@
   
   # Get model log fold-changes (means if no intercept)
   modStats <- topTable(fit, number = Inf, sort.by = "none")
-  modStats <- modStats[,colnames(modStats) %in% paste0("X", gUnique)]
+  modStats <- as.matrix(modStats[,colnames(modStats) %in% paste0("X", gUnique)])
   
   # If use == Z get the test statistics instead
   if(use == "Z"){
