@@ -19,7 +19,6 @@ hclust_wrapper <- function(dataMatrix, clustList){
     )
   }
   
-  
   dDist <- dist(t(dataMatrix), method = clustList$distMetric)
   dClust <- hclust(dDist, method = clustList$aggMethod)
   modVec <- as.character(cutree(dClust, k = 2))
