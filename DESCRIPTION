@@ -35,6 +35,7 @@ Collate:
     'K2visNetwork.R'
     'getGenePathways.R'
     'hclust_wrapper.R'
+    'cKmeans_wrapper.R'
     'K2preproc.R'
     'runTests_mods.R'
     'runDGE_mods.R'
