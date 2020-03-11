@@ -7,7 +7,7 @@
 runK2Taxonomer(eSet, cohorts = NULL, vehicle = NULL,
   covariates = NULL, block = NULL, use = c("Z", "MEAN"),
   nFeats = nrow(eSet) * 0.02, featMetric = c("square", "mad"),
-  nBoots = 200, clustFunc = hclust_wrapper, linkage = "mcquitty",
+  nBoots = 200, clustFunc = hclust_ward, linkage = "mcquitty",
   info = NULL, infoClass = NULL, genesets = NULL, qthresh = 0.05,
   cthresh = 0, ntotal = 20000, ssGSEAalg = c("ssgsea", "gsva",
   "zscore", "plage"), ssGSEAminQvalue = 0.05, ssGSEAcores = 0,
@@ -58,6 +58,6 @@ runK2Taxonomer(eSet, cohorts = NULL, vehicle = NULL,
 This function will generate an object of class, K2.  This will run the K2 Taxonomer procedure, differential analysis, and finally hyperenrichment on a named list of feature sets.
 }
 \examples{
-runK2Taxonomer(eSet, cohorts = NULL, vehicle = NULL, nFeats = nrow(eSet)*0.02, nBoots = 200, clustFunction = hclust_wrapper, info = NULL, genesets = NULL)
+runK2Taxonomer(eSet, cohorts = NULL, vehicle = NULL, nFeats = nrow(eSet)*0.02, nBoots = 200, clustFunction = hclust_ward, info = NULL, genesets = NULL)
 }
 \keyword{clustering}

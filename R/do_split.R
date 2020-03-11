@@ -3,6 +3,8 @@
                       nFeats,
                       featMetric,
                       clustFunc,
+                      clustCors,
+                      clustList,
                       linkage){
 
   # Order the chemicals in alphbetical order to generate predictable splits
@@ -24,18 +26,22 @@
 
     # Get consensus module
     if (featMetric == "square") {
-      SCORE <- apply(dataMatrix, 1, function(x) sum(x^2))
-    } else {
+     SCORE <- apply(dataMatrix, 1, function(x) sum(x^2))
+    }
+    if (featMetric == "mad") {
       SCORE <- apply(dataMatrix, 1, mad)
+    }
+    if (featMetric == "sd") {
+      SCORE <- apply(dataMatrix, 1, sd)
     }
     
     # Get number of features
-    modVec <- do.call(c, lapply(1:nBoots, function(x, clustFunc, SCORE, nFeats, dataMatrix){
+    modVec <- do.call(c, mclapply(seq(nBoots), function(x, clustFunc, SCORE, nFeats, dataMatrix, clustList){
       SCOREboot <- sort(sample(SCORE, length(SCORE), replace = T), decreasing = TRUE)[1:nFeats]
       Dboot <- dataMatrix[names(SCOREboot),]
-      mods <- clustFunc(Dboot)
+      mods <- clustFunc(Dboot, clustList)
       return(mods)
-    }, clustFunc, SCORE, nFeats, dataMatrix))
+    }, clustFunc, SCORE, nFeats, dataMatrix, clustList, mc.cores = clustCors))
     
     # Create table of results
     modTab <- sort(table(modVec), decreasing = T)

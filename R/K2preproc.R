@@ -12,6 +12,8 @@
 #' "square" (default) use square values and "mad" to use MAD scores.
 #' @param nBoots A numeric value of the number of bootstraps to run at each split.
 #' @param clustFunc Wrapper function to cluster a P x N (See details).
+#' @param clustCors Number of cores to use for clustering.
+#' @param clustList List of objects to use for clustering procedure.
 #' @param linkage Linkage criteria for splitting cosine matrix ("method" in hclust). "average" by default.
 #' @param info A data frame with rownames that match column names in dataMatrix.
 #' @param infoClass = A named vector denoted types of tests to run on metavariables.
@@ -36,9 +38,11 @@ K2preproc <- function(eSet,
                          block = NULL,
                          use = c("Z", "MEAN"),
                          nFeats = nrow(eSet) * 0.02,
-                         featMetric = c("square", "mad"),
+                         featMetric = c("square", "mad", "sd"),
                          nBoots = 500,
-                         clustFunc = hclust_wrapper,
+                         clustFunc = hclust_ward,
+                         clustCors = 1,
+                         clustList = list(),
                          linkage = "mcquitty",
                          info = NULL,
                          infoClass = NULL,
@@ -75,6 +79,8 @@ K2preproc <- function(eSet,
                         featMetric = featMetric,
                         nBoots = nBoots,
                         clustFunc = clustFunc,
+                        clustCors = clustCors,
+                        clustList = clustList,
                         linkage = linkage,
                         qthresh = qthresh,
                         cthresh = cthresh,

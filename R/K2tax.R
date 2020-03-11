@@ -5,15 +5,18 @@
 #' @param K2
 #' @param nFeats A numeric value <= P of subsets of the data to use.
 #' @param featMatric Metric to use to assign variance/signal score. Options are
-#' "square" (default) use square values and "mad" to use MAD scores.
+#' "square" (default), "mad" to use MAD scores, "sd" to use standard deviation
 #' @param nBoots A numeric value of the number of bootstraps to run at each split.
 #' @param clustFunc Wrapper function to cluster a P x N (See details).
+#' @param clustCors Number of cores to use for clustering.
+#' @param clustList List of objects to use for clustering procedure.
 #' @param linkage Linkage criteria for splitting cosine matrix ("method" in hclust).
 #' @param oneoff Logical. Allow 1 member clusters?
 #' @param stabThresh A numeric value < 1, to set stopping threshold (use any negative value for no threshold).
 #' @return An object of class K2.
 #' @keywords clustering
 #' @export
+#' @import parallel
 #' @examples
 #' K2tax(K2res)
 #'
@@ -23,6 +26,8 @@ K2tax <- function(K2res,
                     featMetric = NULL,
                     nBoots = NULL,
                     clustFunc =  NULL,
+                    clustCors = NULL,
+                    clustList = NULL,
                     linkage = NULL,
                     oneoff = NULL,
                     stabThresh = NULL){
@@ -32,6 +37,8 @@ K2tax <- function(K2res,
   K2meta(K2res)$featMetric <- featMetric <- .checkMeta(K2res, "featMetric", featMetric)
   K2meta(K2res)$nBoots <- nBoots <- .checkMeta(K2res, "nBoots", nBoots)
   K2meta(K2res)$clustFunc <- clustFunc <- .checkMeta(K2res, "clustFunc", clustFunc)
+  K2meta(K2res)$clustCors <- clustCors <- .checkMeta(K2res, "clustCors", clustCors)
+  K2meta(K2res)$clustList <- clustList <- .checkMeta(K2res, "clustList", clustList)
   K2meta(K2res)$linkage <- linkage <- .checkMeta(K2res, "linkage", linkage)
   K2meta(K2res)$oneoff <- oneoff <- .checkMeta(K2res, "oneoff", oneoff)
   K2meta(K2res)$stabThresh <- stabThresh <- .checkMeta(K2res, "stabThresh", stabThresh)
@@ -51,6 +58,8 @@ K2tax <- function(K2res,
                              featMetric = featMetric,
                              nBoots = nBoots,
                              clustFunc = clustFunc,
+                             clustCors = clustCors,
+                             clustList = clustList,
                              linkage = linkage)
         
         # Get minimum size
