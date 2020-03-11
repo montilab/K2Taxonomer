@@ -7,7 +7,7 @@
 #' @keywords clustering
 #' @export
 #' @examples
-#' hclust_wrapper(dataMatrix)
+#' hclust_wrapper(dataMatrix, clusList = list())
 #' 
 
 hclust_wrapper <- function(dataMatrix, clustList){
@@ -20,7 +20,7 @@ hclust_wrapper <- function(dataMatrix, clustList){
   }
   
   
-  dDist <- dist(t(dataMatrix))
+  dDist <- dist(t(dataMatrix), method = clustList$distMetric)
   dClust <- hclust(dDist, method = clustList$aggMethod)
   modVec <- as.character(cutree(dClust, k = 2))
   mods <- paste(modVec, collapse = "")
