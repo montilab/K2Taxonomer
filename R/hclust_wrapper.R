@@ -14,8 +14,8 @@ hclust_wrapper <- function(dataMatrix, clustList){
   
   if(length(clustList) == 0) {
     clustList <- list(
-      aggMethod <- "ward.D2",
-      distMetric <- "euclidean"
+      aggMethod = "ward.D2",
+      distMetric = "euclidean"
     )
   }
   
