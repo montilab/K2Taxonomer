@@ -34,7 +34,7 @@ Collate:
     'K2dendro.R'
     'K2visNetwork.R'
     'getGenePathways.R'
-    'hclust_ward.R'
+    'hclust_wrapper.R'
     'K2preproc.R'
     'runTests_mods.R'
     'runDGE_mods.R'

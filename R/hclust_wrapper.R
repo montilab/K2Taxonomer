@@ -7,12 +7,21 @@
 #' @keywords clustering
 #' @export
 #' @examples
-#' hclust_ward(dataMatrix)
+#' hclust_wrapper(dataMatrix)
 #' 
 
-hclust_ward <- function(dataMatrix, clustList = NULL){
+hclust_wrapper <- function(dataMatrix, clustList){
+  
+  if(length(clustList) == 0) {
+    clustList <- list(
+      aggMethod <- "ward.D2",
+      distMetric <- "euclidean"
+    )
+  }
+  
+  
   dDist <- dist(t(dataMatrix))
-  dClust <- hclust(dDist, method = "ward.D2")
+  dClust <- hclust(dDist, method = clustList$aggMethod)
   modVec <- as.character(cutree(dClust, k = 2))
   mods <- paste(modVec, collapse = "")
   return(mods)
