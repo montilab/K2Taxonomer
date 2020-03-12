@@ -34,6 +34,15 @@
     if (featMetric == "sd") {
       SCORE <- apply(dataMatrix, 1, sd)
     }
+    if (featMetric == "Qn") {
+      SCORE <- apply(dataMatrix, 1, Qn)
+    }
+    if (featMetric == "Sn") {
+      SCORE <- apply(dataMatrix, 1, Sn)
+    }
+    if (featMetric == "random") {
+      SCORE <- sample(nrow(dataMatrix))
+    }
     
     # Get number of features
     modVec <- do.call(c, mclapply(seq(nBoots), function(x, clustFunc, SCORE, nFeats, dataMatrix, clustList){

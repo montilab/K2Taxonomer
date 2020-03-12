@@ -16,10 +16,12 @@ Imports:
   visNetwork, 
   shiny, 
   DT,
+  robustbase,
   magrittr
 Suggests: 
     Biobase,
     knitr,
+    conclust,
     rmarkdown
 Depends: 
   R (>= 3.5)

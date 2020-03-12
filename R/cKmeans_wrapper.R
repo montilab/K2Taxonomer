@@ -8,13 +8,13 @@
 #' @return A character string of concatenated 1's and 2's pertaining to the cluster assignment of each column in dataMatrix.
 #' @keywords clustering
 #' @export
+#' @import conclust
 #' @examples
 #' cKmeans_wrapper(dataMatrix, clusList = list())
 #' 
 
 cKmeans_wrapper <- function(dataMatrix, clustList) {
   
-  require(conclust)
   eMatSub <- clustList$eMat[rownames(dataMatrix), clustList$labs %in% colnames(dataMatrix)]
   labsSub <- clustList$labs[clustList$labs %in% colnames(dataMatrix)]
   

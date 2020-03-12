@@ -17,6 +17,7 @@
 #' @keywords clustering
 #' @export
 #' @import parallel
+#' @import robustbase
 #' @examples
 #' K2tax(K2res)
 #'
