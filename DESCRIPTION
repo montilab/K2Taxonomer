@@ -27,7 +27,7 @@ Depends:
   R (>= 3.5)
 biocViews: Clustering, Visualization
 BugReports: https://github.com/ericreed
-RoxygenNote: 6.1.1.9000
+RoxygenNote: 7.1.0
 Collate: 
     'K2-class.R'
     'K2-methods.R'

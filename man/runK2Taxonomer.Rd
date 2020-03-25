@@ -4,15 +4,32 @@
 \alias{runK2Taxonomer}
 \title{Wrapper function to perform K=2 clustering and annotation}
 \usage{
-runK2Taxonomer(eSet, cohorts = NULL, vehicle = NULL,
-  covariates = NULL, block = NULL, use = c("Z", "MEAN"),
-  nFeats = nrow(eSet) * 0.02, featMetric = c("square", "mad"),
-  nBoots = 200, clustFunc = hclust_wrapper, linkage = "mcquitty",
-  info = NULL, infoClass = NULL, genesets = NULL, qthresh = 0.05,
-  cthresh = 0, ntotal = 20000, ssGSEAalg = c("ssgsea", "gsva",
-  "zscore", "plage"), ssGSEAminQvalue = 0.05, ssGSEAcores = 0,
-  oneoff = FALSE, stabThresh = -1, geneURL = NULL,
-  genesetURL = NULL)
+runK2Taxonomer(
+  eSet,
+  cohorts = NULL,
+  vehicle = NULL,
+  covariates = NULL,
+  block = NULL,
+  use = c("Z", "MEAN"),
+  nFeats = nrow(eSet) * 0.02,
+  featMetric = c("square", "mad"),
+  nBoots = 200,
+  clustFunc = hclust_wrapper,
+  linkage = "mcquitty",
+  info = NULL,
+  infoClass = NULL,
+  genesets = NULL,
+  qthresh = 0.05,
+  cthresh = 0,
+  ntotal = 20000,
+  ssGSEAalg = c("ssgsea", "gsva", "zscore", "plage"),
+  ssGSEAminQvalue = 0.05,
+  ssGSEAcores = 0,
+  oneoff = FALSE,
+  stabThresh = -1,
+  geneURL = NULL,
+  genesetURL = NULL
+)
 }
 \arguments{
 \item{eSet}{An expression set object.}

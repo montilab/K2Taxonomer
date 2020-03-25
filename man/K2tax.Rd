@@ -4,9 +4,18 @@
 \alias{K2tax}
 \title{Function K2 Taxonomer}
 \usage{
-K2tax(K2res, nFeats = NULL, featMetric = NULL, nBoots = NULL,
-  clustFunc = NULL, clustCors = NULL, clustList = NULL,
-  linkage = NULL, oneoff = NULL, stabThresh = NULL)
+K2tax(
+  K2res,
+  nFeats = NULL,
+  featMetric = NULL,
+  nBoots = NULL,
+  clustFunc = NULL,
+  clustCors = NULL,
+  clustList = NULL,
+  linkage = NULL,
+  oneoff = NULL,
+  stabThresh = NULL
+)
 }
 \arguments{
 \item{nFeats}{A numeric value <= P of subsets of the data to use.}

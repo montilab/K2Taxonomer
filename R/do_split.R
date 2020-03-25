@@ -2,10 +2,12 @@
                       nBoots,
                       nFeats,
                       featMetric,
+                      recalcDataMatrix,
                       clustFunc,
                       clustCors,
                       clustList,
-                      linkage){
+                      linkage,
+                      K2res){
 
   # Order the chemicals in alphbetical order to generate predictable splits
   dataMatrix <- dataMatrix[,order(colnames(dataMatrix))]
@@ -23,11 +25,18 @@
     propBoots <- 1
     
   } else {
+    
+    if(recalcDataMatrix | featMetric == "F") {
+      dgeSeg <- .dge_wrapper(eSetSub, 
+                   cohorts = K2meta(K2res)$cohorts, 
+                   vehicle = K2meta(K2res)$vehicle,
+                   covariates = K2meta(K2res)$covariates,
+                   use = K2meta(K2res)$use,
+                   Fstat = TRUE)
+      dataMatrix <- dgeSeg$dataMatrix
+    }
 
     # Get consensus module
-    if (featMetric == "square") {
-     SCORE <- apply(dataMatrix, 1, function(x) sum(x^2))
-    }
     if (featMetric == "mad") {
       SCORE <- apply(dataMatrix, 1, mad)
     }
@@ -42,6 +51,12 @@
     }
     if (featMetric == "random") {
       SCORE <- sample(nrow(dataMatrix))
+    }
+    if (featMetric == "F") {
+      SCORE <- dgeSeg$Fvec
+    }
+    if(featMetric == "square") {
+      SCORE <- apply(dataMatrix, 1, function(x) sum(x^2))
     }
     
     # Get number of features

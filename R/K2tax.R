@@ -6,6 +6,7 @@
 #' @param nFeats A numeric value <= P of subsets of the data to use.
 #' @param featMatric Metric to use to assign variance/signal score. Options are
 #' "square" (default), "mad" to use MAD scores, "sd" to use standard deviation
+#' @param recalcDataMatrix Recalculate dataMatrix for each partion?
 #' @param nBoots A numeric value of the number of bootstraps to run at each split.
 #' @param clustFunc Wrapper function to cluster a P x N (See details).
 #' @param clustCors Number of cores to use for clustering.
@@ -23,15 +24,15 @@
 #'
 
 K2tax <- function(K2res,
-                    nFeats = NULL,
-                    featMetric = NULL,
-                    nBoots = NULL,
-                    clustFunc =  NULL,
-                    clustCors = NULL,
-                    clustList = NULL,
-                    linkage = NULL,
-                    oneoff = NULL,
-                    stabThresh = NULL){
+                  nFeats = NULL,
+                  featMetric = NULL,
+                  nBoots = NULL,
+                  clustFunc =  NULL,
+                  clustCors = NULL,
+                  clustList = NULL,
+                  linkage = NULL,
+                  oneoff = NULL,
+                  stabThresh = NULL){
   
   # Change meta data if new value is specific
   K2meta(K2res)$nFeats <- nFeats <- .checkMeta(K2res, "nFeats", nFeats)
@@ -51,7 +52,7 @@ K2tax <- function(K2res,
   while(max(unlist(lapply(taxList[[iter]], 
                           function(x) length(x[x!="Vehicle"])
   ))) > (2 - oneoff)){
-    outList <- lapply(taxList[[iter]], function(samps, nFeats, nBoots, clustFunc){
+    outList <- lapply(taxList[[iter]], function(samps, nFeats, nBoots, clustFunc, K2res){
       if( length(samps) > 1 ){
         Dsub <- K2data(K2res)[,samps]
         outList <- .do_split(Dsub,
@@ -61,7 +62,8 @@ K2tax <- function(K2res,
                              clustFunc = clustFunc,
                              clustCors = clustCors,
                              clustList = clustList,
-                             linkage = linkage)
+                             linkage = linkage,
+                             K2res = K2res)
         
         # Get minimum size
         minSize <- min(table(outList$mods))
@@ -84,7 +86,7 @@ K2tax <- function(K2res,
         outList <- list(mods = samps, propBoots = NULL, clustStab = NULL)
       }
       return(outList)
-    }, nFeats, nBoots, clustFunc)
+    }, nFeats, nBoots, clustFunc, K2res)
     iter <- iter + 1
     taxList[[iter]] <- list()
     outMods <- lapply(outList, function(x) x[[1]])

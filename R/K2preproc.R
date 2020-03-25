@@ -10,6 +10,7 @@
 #' @param nFeats A numeric value <= P of subsets of the data to use.
 #' @param featMatric Metric to use to assign variance/signal score. Options are
 #' "square" (default) use square values and "mad" to use MAD scores.
+#' @param recalcDataMatrix Recalculate dataMatrix for each partion?
 #' @param nBoots A numeric value of the number of bootstraps to run at each split.
 #' @param clustFunc Wrapper function to cluster a P x N (See details).
 #' @param clustCors Number of cores to use for clustering.
@@ -38,7 +39,8 @@ K2preproc <- function(eSet,
                          block = NULL,
                          use = c("Z", "MEAN"),
                          nFeats = nrow(eSet) * 0.02,
-                         featMetric = c("square", "mad", "sd", "random", "Qn", "Sn"),
+                         featMetric = c("Sn", "mad", "sd", "random", "Qn", "F", "square"),
+                         recalcDataMatrix = FALSE,
                          nBoots = 500,
                          clustFunc = hclust_wrapper,
                          clustCors = 1,
