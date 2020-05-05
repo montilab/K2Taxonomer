@@ -26,6 +26,7 @@
 K2tax <- function(K2res,
                   nFeats = NULL,
                   featMetric = NULL,
+                  recalcDataMatrix = NULL,
                   nBoots = NULL,
                   clustFunc =  NULL,
                   clustCors = NULL,
@@ -37,6 +38,7 @@ K2tax <- function(K2res,
   # Change meta data if new value is specific
   K2meta(K2res)$nFeats <- nFeats <- .checkMeta(K2res, "nFeats", nFeats)
   K2meta(K2res)$featMetric <- featMetric <- .checkMeta(K2res, "featMetric", featMetric)
+  K2meta(K2res)$recalcDataMatrix <- recalcDataMatrix <- .checkMeta(K2res, "recalcDataMatrix", recalcDataMatrix)
   K2meta(K2res)$nBoots <- nBoots <- .checkMeta(K2res, "nBoots", nBoots)
   K2meta(K2res)$clustFunc <- clustFunc <- .checkMeta(K2res, "clustFunc", clustFunc)
   K2meta(K2res)$clustCors <- clustCors <- .checkMeta(K2res, "clustCors", clustCors)
@@ -58,6 +60,7 @@ K2tax <- function(K2res,
         outList <- .do_split(Dsub,
                              nFeats = nFeats,
                              featMetric = featMetric,
+                             recalcDataMatrix = recalcDataMatrix,
                              nBoots = nBoots,
                              clustFunc = clustFunc,
                              clustCors = clustCors,

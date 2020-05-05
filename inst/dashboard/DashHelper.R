@@ -2,7 +2,7 @@
 .formatCov <- function(covariates) if(is.null(covariates)) "" else paste0("+", paste(covariates, collapse = "+"))
 
 # Function to generate differential signature
-.signature_wrapper <- function(eSet, cohorts, mods, vehicle = NULL, covariates = NULL){
+.signature_wrapper <- function(eSet, cohorts, mods, vehicle = NULL, covariates = NULL, logCounts = FALSE){
   
   # Remove vehicle from mods and make a data frame
   mods <- mods[names(mods) != "Vehicle"]
@@ -57,7 +57,7 @@
       modFit <- lapply(paste0("X", unique(mods$mods)), function(x, design, fit){
         conString <- paste0(x, " - (", paste(colnames(design)[colnames(design) != x & colnames(design) %in% paste0("X", unique(mods$mods))], collapse = "+"), ")/", sum(colnames(design) != x & colnames(design) %in% paste0("X", unique(mods$mods))))
         contrasts <- makeContrasts(contrasts = conString, levels = design)
-        contFit <- suppressWarnings(topTable(eBayes(contrasts.fit(fit, contrasts)), number = Inf, sort.by = "none"))
+        contFit <- suppressWarnings(topTable(eBayes(contrasts.fit(fit, contrasts), trend = logCounts, robust = logCounts), number = Inf, sort.by = "none"))
         contFit <- contFit[, c("logFC", "AveExpr", "t", "P.Value", "adj.P.Val", "B")]
         contFit$mod <- sub("X", "", x)
         return(contFit)
@@ -80,7 +80,7 @@
       modFit <- lapply(as.character(unique(mods$mods)), function(x, cVec, design, fit){
         conString <- paste0(cVec[x], " - (", paste(cVec[names(cVec) != x], collapse = "+"), ")/", sum(names(cVec) != x))
         contrasts <- makeContrasts(contrasts = conString, levels = design)
-        contFit <- topTable(eBayes(contrasts.fit(fit, contrasts)), number = Inf, sort.by = "none")
+        contFit <- topTable(eBayes(contrasts.fit(fit, contrasts), trend = logCounts, robust = logCounts), number = Inf, sort.by = "none")
         contFit <- contFit[, c("logFC", "AveExpr", "t", "P.Value", "adj.P.Val", "B")]
         contFit$mod <- x
         return(contFit)

@@ -37,15 +37,16 @@ K2preproc <- function(eSet,
                          vehicle = NULL,
                          covariates = NULL,
                          block = NULL,
+                         logCounts = FALSE,
                          use = c("Z", "MEAN"),
                          nFeats = nrow(eSet) * 0.02,
-                         featMetric = c("Sn", "mad", "sd", "random", "Qn", "F", "square"),
+                         featMetric = c("Sn", "mad", "sd", "Qn", "F", "square"),
                          recalcDataMatrix = FALSE,
                          nBoots = 500,
-                         clustFunc = hclust_wrapper,
+                         clustFunc = hclust_wrapper_fast,
                          clustCors = 1,
                          clustList = list(),
-                         linkage = "mcquitty",
+                         linkage = c("mcquitty", "ward.D", "ward.D2", "single", "complete", "average", "centroid"),
                          info = NULL,
                          infoClass = NULL,
                          genesets = NULL,
@@ -64,8 +65,9 @@ K2preproc <- function(eSet,
   # Match arguments
   use <- match.arg(use)
   featMetric <- match.arg(featMetric)
+  linkage <- match.arg(linkage)
   ssGSEAalg <- match.arg(ssGSEAalg)
-
+  
   # Create K2 object from eSet
   K2res <- new("K2",
                eSet = eSet)
@@ -75,10 +77,12 @@ K2preproc <- function(eSet,
                         vehicle = vehicle,
                         covariates = covariates,
                         block = block,
+                        logCounts = logCounts,
                         infoClass = infoClass,
                         use = use,
                         nFeats = nFeats,
                         featMetric = featMetric,
+                        recalcDataMatrix = recalcDataMatrix,
                         nBoots = nBoots,
                         clustFunc = clustFunc,
                         clustCors = clustCors,
@@ -100,7 +104,7 @@ K2preproc <- function(eSet,
     
     # Format info
     if (is.null(info)) {
-      info <- data.frame(row.names = colnames(dataMatrix))
+      info <- pData(eSet)
     }
     info <- data.frame(sampleID = colnames(dataMatrix),
                        info,
@@ -109,12 +113,11 @@ K2preproc <- function(eSet,
   } else {
     
     cat("Collapsing group-level values with LIMMA.\n")
-    dataMatrix <- .dge_wrapper(eSet, cohorts, vehicle, covariates, use)
+    dataMatrix <- .dge_wrapper(eSet, cohorts, vehicle, covariates, use, logCounts = logCounts)
     
     # Format info
     if (is.null(info)) {
-      info <- data.frame(pData(eSet)[,cohorts], row.names = colnames(eSet))
-      colnames(info) <- cohorts
+      info <- pData(eSet)
     }
     info <- info[!duplicated(info[,cohorts]), ,drop = FALSE]; rownames(info) <- info[,cohorts]
     info <- droplevels(info)

@@ -16,12 +16,13 @@ Imports:
   visNetwork, 
   shiny, 
   DT,
+  Rfast,
   robustbase,
-  magrittr
+  magrittr,
+  conclust
 Suggests: 
     Biobase,
     knitr,
-    conclust,
     rmarkdown
 Depends: 
   R (>= 3.5)
@@ -37,7 +38,9 @@ Collate:
     'K2visNetwork.R'
     'getGenePathways.R'
     'hclust_wrapper.R'
+    'hclust_wrapper_fast.R'
     'cKmeans_wrapper.R'
+    'cKmeans_wrapper_subsample.R'
     'K2preproc.R'
     'runTests_mods.R'
     'runDGE_mods.R'

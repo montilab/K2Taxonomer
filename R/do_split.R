@@ -27,6 +27,7 @@
   } else {
     
     if(recalcDataMatrix | featMetric == "F") {
+      eSetSub <- K2eSet(K2res)[, pData(K2eSet(K2res))[, K2meta(K2res)$cohorts] %in% colnames(dataMatrix)]
       dgeSeg <- .dge_wrapper(eSetSub, 
                    cohorts = K2meta(K2res)$cohorts, 
                    vehicle = K2meta(K2res)$vehicle,
@@ -48,9 +49,6 @@
     }
     if (featMetric == "Sn") {
       SCORE <- apply(dataMatrix, 1, Sn)
-    }
-    if (featMetric == "random") {
-      SCORE <- sample(nrow(dataMatrix))
     }
     if (featMetric == "F") {
       SCORE <- dgeSeg$Fvec

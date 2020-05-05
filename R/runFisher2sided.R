@@ -2,13 +2,16 @@
 .runFisher2sided <- function(csDF) {
   
   # Run test
-  fisherOut <- fisher.test(csDF$cat, csDF$value, simulate.p.value = TRUE)
-  pval <- fisherOut$p.value
-  
-  # Get estimate if possible
-  if (!is.null(fisherOut$estimate)) {
+  if(sum(!is.na(csDF$value[csDF$cat])) > 0 & sum(!is.na(csDF$value[!csDF$cat])) > 0) {
+    fisherOut <- fisher.test(csDF$cat, csDF$value, simulate.p.value = TRUE)
+    pval <- fisherOut$p.value
     stat <- fisherOut$estimate
   } else {
+    pval <- NA
+    stat <- NA
+  }
+  
+  if(is.null(stat)) {
     stat <- NA
   }
   
@@ -24,6 +27,6 @@
              nalt = NA,
              ndrawn = NA,
              hits = NA,
-             test = "2-sided Fisher Exact Test",
+             test = "two-sided Fishers Exact Test",
              stringsAsFactors = FALSE)
 }

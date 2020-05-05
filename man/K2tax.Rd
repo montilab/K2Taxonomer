@@ -8,6 +8,7 @@ K2tax(
   K2res,
   nFeats = NULL,
   featMetric = NULL,
+  recalcDataMatrix = NULL,
   nBoots = NULL,
   clustFunc = NULL,
   clustCors = NULL,
@@ -19,6 +20,8 @@ K2tax(
 }
 \arguments{
 \item{nFeats}{A numeric value <= P of subsets of the data to use.}
+
+\item{recalcDataMatrix}{Recalculate dataMatrix for each partion?}
 
 \item{nBoots}{A numeric value of the number of bootstraps to run at each split.}
 

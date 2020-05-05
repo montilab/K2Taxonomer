@@ -10,14 +10,17 @@ K2preproc(
   vehicle = NULL,
   covariates = NULL,
   block = NULL,
+  logCounts = FALSE,
   use = c("Z", "MEAN"),
   nFeats = nrow(eSet) * 0.02,
-  featMetric = c("Sn", "mad", "sd", "random", "Qn", "F", "square"),
+  featMetric = c("Sn", "mad", "sd", "Qn", "F", "square"),
+  recalcDataMatrix = FALSE,
   nBoots = 500,
-  clustFunc = hclust_wrapper,
+  clustFunc = hclust_wrapper_fast,
   clustCors = 1,
   clustList = list(),
-  linkage = "mcquitty",
+  linkage = c("mcquitty", "ward.D", "ward.D2", "single", "complete", "average",
+    "centroid"),
   info = NULL,
   infoClass = NULL,
   genesets = NULL,
@@ -47,6 +50,8 @@ K2preproc(
 \item{use}{Generate test statistics or use means from differential analysis for clustering.}
 
 \item{nFeats}{A numeric value <= P of subsets of the data to use.}
+
+\item{recalcDataMatrix}{Recalculate dataMatrix for each partion?}
 
 \item{nBoots}{A numeric value of the number of bootstraps to run at each split.}
 

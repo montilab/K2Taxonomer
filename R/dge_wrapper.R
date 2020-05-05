@@ -3,7 +3,8 @@
                          vehicle = NULL, 
                          covariates = NULL, 
                          use = c("Z", "MEAN"),
-                         Fstat = FALSE){
+                         Fstat = FALSE,
+                         logCounts = FALSE){
   
   # Get unique cohorts and remove vehicle
   gUnique <- as.character(unique(pData(eSet)[,cohorts]))
@@ -27,7 +28,7 @@
   colnames(design) <- sub("GROUP", "X", colnames(design))
   
   # Fit model
-  fit <- eBayes(lmFit(eSet, design))
+  fit <- eBayes(lmFit(eSet, design), trend = logCounts, robust = logCounts)
   
   # Get gene-level results
   modStats <- topTable(fit, number = Inf, sort.by = "none")

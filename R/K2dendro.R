@@ -11,6 +11,9 @@
 
 K2dendro <- function(K2res){
   
+  # Get labels order
+  K2labs <- colnames(K2data(K2res))
+  
   # Pull out K2 results
   K2res <- K2results(K2res)
   
@@ -112,16 +115,17 @@ K2dendro <- function(K2res){
     if(length(leaves) > 0){
       for(l in 1:length(leaves)){
         
-        # Add element
-        lPaste <- paste0(iPaste, "[[", l, "]]")
-        eval(parse(text=
-                     paste0(lPaste, "<-list()")
-        ))
-        
-        # Add attributes
+        # Get attributes
         members <- 1
         leaf <- names(leaves)[l]; names(leaf) <- NULL
         height <- 0
+        
+        # Add element
+        lPaste <- paste0(iPaste, "[[", l, "]]")
+        eval(parse(text=
+                     paste0(lPaste, "<-", which(K2labs == leaf), "L")
+        ))
+        
         att <- list(members = members, 
                     height = height, 
                     label = leaf, 
@@ -134,21 +138,21 @@ K2dendro <- function(K2res){
     }
   }
   class(aList) <- "dendrogram"
-
+  
   # Get heights scaling factor
   logStabCums <- get_nodes_attr(aList, "log_stab_cum")
   members <- get_nodes_attr(aList, "members")
-  mHeight <- min(log(sqrt(members)) + logStabCums, na.rm = t)
+  minHeight <- min(log(members) + logStabCums, na.rm = t)
   
   # Add heights to upper nodes
-  aList <- dendrapply(aList, function(x, mHeight) {
+  aList <- dendrapply(aList, function(x, minHeight) {
     attr <- attributes(x)
     if (is.null(attr$height)) {
-      attr$height <- (log(sqrt(attr$members)) + attr$log_stab_cum  - min(logStabCums, na.rm = t)) + 1
+      attr$height <- log(attr$members) + attr$log_stab_cum  - minHeight + 1
     }
     attributes(x) <- attr
     return(x)
-  }, mHeight)
+  }, minHeight)
   
   return(aList)
 }

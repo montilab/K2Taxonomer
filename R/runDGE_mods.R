@@ -24,7 +24,8 @@ runDGE_mods <- function(K2res){
                                 mods, 
                                 K2meta(K2res)$vehicle, 
                                 K2meta(K2res)$covariates,
-                                K2meta(K2res)$block)
+                                K2meta(K2res)$block,
+                                K2meta(K2res)$logCounts)
     if (!is.null(x$dge)) {
       x$dge$gene <- rownames(x$dge)
       x$dge <- x$dge[,c(ncol(x$dge), 1:(ncol(x$dge)-1))]
