@@ -1,7 +1,7 @@
 Package: K2Taxonomer
 Type: Package
 Title: Creating annotated submodules of high-throughput data through iteratively bootstrapping K=2 clusters.
-Version: 1.0
+Version: 1.0.1
 Date: 2019-03-19
 Author: Eric Reed
 Maintainer: Eric Reed <reeder@bu.edu>
@@ -9,13 +9,17 @@ Description: Perform and annotate divisive hierarchical clusters of high-through
 License: Artistic-2.0
 Imports:
   plotly,
-  limma, 
+  limma,
+  parallel,
   flexdashboard,
   heatmaply,
   visNetwork, 
   shiny, 
   DT,
-  magrittr
+  Rfast,
+  robustbase,
+  magrittr,
+  conclust
 Suggests: 
     Biobase,
     knitr,
@@ -24,7 +28,7 @@ Depends:
   R (>= 3.5)
 biocViews: Clustering, Visualization
 BugReports: https://github.com/ericreed
-RoxygenNote: 6.1.1.9000
+RoxygenNote: 7.1.0
 Collate: 
     'K2-class.R'
     'K2-methods.R'
@@ -34,6 +38,9 @@ Collate:
     'K2visNetwork.R'
     'getGenePathways.R'
     'hclust_wrapper.R'
+    'hclust_wrapper_fast.R'
+    'cKmeans_wrapper.R'
+    'cKmeans_wrapper_subsample.R'
     'K2preproc.R'
     'runTests_mods.R'
     'runDGE_mods.R'

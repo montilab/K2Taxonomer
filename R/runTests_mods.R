@@ -40,26 +40,17 @@ runTests_mods <- function(K2res){
         }
         csDF$cat <-  csDF$cohort %in% mod
         
-        out <- NULL
-        if (mean(is.na(csDF$value[csDF$cat])) < 1 & 
-            mean(is.na(csDF$value[!csDF$cat])) < 1) {
-        
-          # Run test
-          if (testID == "factor") out <- .runFisher2sided(csDF)
-          if (testID == "factor1") out <- .runFisher1sided(csDF)
-          if (testID == "numeric") out <- .runWilcox(csDF)
-          if (testID == "numeric1") out <- .runWilcox(csDF, alternative = "greater")
-          if (testID == "normal") out <- .runTtest(csDF)
-          if (testID == "normal1") out <- .runTtest(csDF, alternative = "greater")
-          if (testID == "survival") out <- .runSurvival(csDF)
-        
-        }
+        # Run test
+        if (testID == "factor") out <- .runFisher2sided(csDF)
+        if (testID == "factor1") out <- .runFisher1sided(csDF)
+        if (testID == "numeric") out <- .runWilcox(csDF)
+        if (testID == "numeric1") out <- .runWilcox(csDF, alternative = "greater")
+        if (testID == "normal") out <- .runTtest(csDF)
+        if (testID == "normal1") out <- .runTtest(csDF, alternative = "greater")
+        if (testID == "survival") out <- .runSurvival(csDF)
         
         # Add value ID
-        if (!is.null(out)) {
-          out <- data.frame(value = colName, out, stringsAsFactors = FALSE)
-        }
-        
+        out <- data.frame(value = colName, out, stringsAsFactors = FALSE)
         return(out)
         
       }))

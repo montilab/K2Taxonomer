@@ -1147,7 +1147,8 @@ observeEvent(input$compareGo, {
                      cohorts = meta$cohorts,
                      mods,
                      vehicle = meta$vehicle,
-                     covariates = meta$covariates)
+                     covariates = meta$covariates,
+                     logCounts = meta$logCounts)
 
     # Add NodeGroup and gene column
     clusterRes$NodeGroup <- names(values$groupListClicked)[as.numeric(clusterRes$mod)]

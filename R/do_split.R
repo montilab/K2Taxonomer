@@ -2,8 +2,12 @@
                       nBoots,
                       nFeats,
                       featMetric,
+                      recalcDataMatrix,
                       clustFunc,
-                      linkage){
+                      clustCors,
+                      clustList,
+                      linkage,
+                      K2res){
 
   # Order the chemicals in alphbetical order to generate predictable splits
   dataMatrix <- dataMatrix[,order(colnames(dataMatrix))]
@@ -21,21 +25,45 @@
     propBoots <- 1
     
   } else {
+    
+    if(recalcDataMatrix | featMetric == "F") {
+      eSetSub <- K2eSet(K2res)[, pData(K2eSet(K2res))[, K2meta(K2res)$cohorts] %in% colnames(dataMatrix)]
+      dgeSeg <- .dge_wrapper(eSetSub, 
+                   cohorts = K2meta(K2res)$cohorts, 
+                   vehicle = K2meta(K2res)$vehicle,
+                   covariates = K2meta(K2res)$covariates,
+                   use = K2meta(K2res)$use,
+                   Fstat = TRUE)
+      dataMatrix <- dgeSeg$dataMatrix
+    }
 
     # Get consensus module
-    if (featMetric == "square") {
-      SCORE <- apply(dataMatrix, 1, function(x) sum(x^2))
-    } else {
+    if (featMetric == "mad") {
       SCORE <- apply(dataMatrix, 1, mad)
+    }
+    if (featMetric == "sd") {
+      SCORE <- apply(dataMatrix, 1, sd)
+    }
+    if (featMetric == "Qn") {
+      SCORE <- apply(dataMatrix, 1, Qn)
+    }
+    if (featMetric == "Sn") {
+      SCORE <- apply(dataMatrix, 1, Sn)
+    }
+    if (featMetric == "F") {
+      SCORE <- dgeSeg$Fvec
+    }
+    if(featMetric == "square") {
+      SCORE <- apply(dataMatrix, 1, function(x) sum(x^2))
     }
     
     # Get number of features
-    modVec <- do.call(c, lapply(1:nBoots, function(x, clustFunc, SCORE, nFeats, dataMatrix){
+    modVec <- do.call(c, mclapply(seq(nBoots), function(x, clustFunc, SCORE, nFeats, dataMatrix, clustList){
       SCOREboot <- sort(sample(SCORE, length(SCORE), replace = T), decreasing = TRUE)[1:nFeats]
       Dboot <- dataMatrix[names(SCOREboot),]
-      mods <- clustFunc(Dboot)
+      mods <- clustFunc(Dboot, clustList)
       return(mods)
-    }, clustFunc, SCORE, nFeats, dataMatrix))
+    }, clustFunc, SCORE, nFeats, dataMatrix, clustList, mc.cores = clustCors))
     
     # Create table of results
     modTab <- sort(table(modVec), decreasing = T)

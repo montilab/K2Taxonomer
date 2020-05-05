@@ -4,16 +4,32 @@
 \alias{K2tax}
 \title{Function K2 Taxonomer}
 \usage{
-K2tax(K2res, nFeats = NULL, featMetric = NULL, nBoots = NULL,
-  clustFunc = NULL, linkage = NULL, oneoff = NULL,
-  stabThresh = NULL)
+K2tax(
+  K2res,
+  nFeats = NULL,
+  featMetric = NULL,
+  recalcDataMatrix = NULL,
+  nBoots = NULL,
+  clustFunc = NULL,
+  clustCors = NULL,
+  clustList = NULL,
+  linkage = NULL,
+  oneoff = NULL,
+  stabThresh = NULL
+)
 }
 \arguments{
 \item{nFeats}{A numeric value <= P of subsets of the data to use.}
 
+\item{recalcDataMatrix}{Recalculate dataMatrix for each partion?}
+
 \item{nBoots}{A numeric value of the number of bootstraps to run at each split.}
 
 \item{clustFunc}{Wrapper function to cluster a P x N (See details).}
+
+\item{clustCors}{Number of cores to use for clustering.}
+
+\item{clustList}{List of objects to use for clustering procedure.}
 
 \item{linkage}{Linkage criteria for splitting cosine matrix ("method" in hclust).}
 
@@ -22,7 +38,7 @@ K2tax(K2res, nFeats = NULL, featMetric = NULL, nBoots = NULL,
 \item{stabThresh}{A numeric value < 1, to set stopping threshold (use any negative value for no threshold).}
 
 \item{featMatric}{Metric to use to assign variance/signal score. Options are
-"square" (default) use square values and "mad" to use MAD scores.}
+"square" (default), "mad" to use MAD scores, "sd" to use standard deviation}
 }
 \value{
 An object of class K2.

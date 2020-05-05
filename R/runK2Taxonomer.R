@@ -27,7 +27,7 @@
 #' @import Biobase
 #' @import GSVA
 #' @examples
-#' runK2Taxonomer(eSet, cohorts = NULL, vehicle = NULL, nFeats = nrow(eSet)*0.02, nBoots = 200, clustFunction = hclust_wrapper, info = NULL, genesets = NULL)
+#' runK2Taxonomer(eSet, cohorts = NULL, vehicle = NULL, nFeats = nrow(eSet)*0.02, nBoots = 200, clustFunction = hclust_wrapper_fast, info = NULL, genesets = NULL)
 
 runK2Taxonomer <- function(eSet,
                          cohorts = NULL,
@@ -38,7 +38,7 @@ runK2Taxonomer <- function(eSet,
                          nFeats = nrow(eSet)*0.02,
                          featMetric = c("square", "mad"),
                          nBoots = 200,
-                         clustFunc = hclust_wrapper,
+                         clustFunc = hclust_wrapper_fast,
                          linkage = "mcquitty",
                          info = NULL,
                          infoClass = NULL,

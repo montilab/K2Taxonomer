@@ -1,11 +1,18 @@
 # Create data.frame of factor variable
 .runFisher1sided <- function(csDF) {
   
-  fisherOut <- fisher.test(csDF$cat, csDF$value, alternative = "greater")
-  pval <- fisherOut$p.value
+  if(sum(!is.na(csDF$value[csDF$cat])) > 0 & sum(!is.na(csDF$value[!csDF$cat])) > 0) {
+    fisherOut <- fisher.test(csDF$cat, csDF$value, alternative = "greater")
+    pval <- fisherOut$p.value
+    stat <- fisherOut$estimate
+  } else {
+    pval <- NA
+    stat <- NA
+  }
   
-  # Get estimate if possible
-  stat <- fisherOut$estimate
+  if(is.null(stat)) {
+    stat <- NA
+  }
   
   # Get hits
   hits <- paste(
@@ -35,7 +42,7 @@
              nalt = nalt,
              ndrawn = ndrawn,
              hits = hits,
-             test = "1-sided Fisher Exact Test",
+             test = "one-sided Fishers Exact Test",
              stringsAsFactors = FALSE)
 
 }

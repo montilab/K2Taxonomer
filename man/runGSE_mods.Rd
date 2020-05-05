@@ -4,8 +4,13 @@
 \alias{runGSE_mods}
 \title{Perform hyperenrichment of split specific gene signatures}
 \usage{
-runGSE_mods(K2res, genesets = NULL, qthresh = NULL, cthresh = NULL,
-  ntotal = NULL)
+runGSE_mods(
+  K2res,
+  genesets = NULL,
+  qthresh = NULL,
+  cthresh = NULL,
+  ntotal = NULL
+)
 }
 \arguments{
 \item{K2res}{An object of class K2. The output of runDGE_mods().}

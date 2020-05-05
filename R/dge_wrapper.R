@@ -1,4 +1,10 @@
-.dge_wrapper <- function(eSet, cohorts, vehicle = NULL, covariates = NULL, use = c("Z", "MEAN")){
+.dge_wrapper <- function(eSet, 
+                         cohorts, 
+                         vehicle = NULL, 
+                         covariates = NULL, 
+                         use = c("Z", "MEAN"),
+                         Fstat = FALSE,
+                         logCounts = FALSE){
   
   # Get unique cohorts and remove vehicle
   gUnique <- as.character(unique(pData(eSet)[,cohorts]))
@@ -22,10 +28,18 @@
   colnames(design) <- sub("GROUP", "X", colnames(design))
   
   # Fit model
-  fit <- eBayes(lmFit(eSet, design))
+  fit <- eBayes(lmFit(eSet, design), trend = logCounts, robust = logCounts)
+  
+  # Get gene-level results
+  modStats <- topTable(fit, number = Inf, sort.by = "none")
+  
+  # Get Fstat
+  if(Fstat) {
+    Fvec <- modStats$F
+    names(Fvec) <- rownames(modStats)
+  }
   
   # Get model log fold-changes (means if no intercept)
-  modStats <- topTable(fit, number = Inf, sort.by = "none")
   modStats <- as.matrix(modStats[,colnames(modStats) %in% paste0("X", gUnique)])
   
   # If use == Z get the test statistics instead
@@ -47,5 +61,12 @@
   }
   
   # Return
-  return(modStats)
+  if(Fstat) {
+    return(list(
+      dataMatrix = modStats,
+      Fvec = Fvec
+    ))
+  } else {
+    return(modStats)
+  }
 }

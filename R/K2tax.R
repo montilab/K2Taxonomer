@@ -5,33 +5,44 @@
 #' @param K2
 #' @param nFeats A numeric value <= P of subsets of the data to use.
 #' @param featMatric Metric to use to assign variance/signal score. Options are
-#' "square" (default) use square values and "mad" to use MAD scores.
+#' "square" (default), "mad" to use MAD scores, "sd" to use standard deviation
+#' @param recalcDataMatrix Recalculate dataMatrix for each partion?
 #' @param nBoots A numeric value of the number of bootstraps to run at each split.
 #' @param clustFunc Wrapper function to cluster a P x N (See details).
+#' @param clustCors Number of cores to use for clustering.
+#' @param clustList List of objects to use for clustering procedure.
 #' @param linkage Linkage criteria for splitting cosine matrix ("method" in hclust).
 #' @param oneoff Logical. Allow 1 member clusters?
 #' @param stabThresh A numeric value < 1, to set stopping threshold (use any negative value for no threshold).
 #' @return An object of class K2.
 #' @keywords clustering
 #' @export
+#' @import parallel
+#' @import robustbase
 #' @examples
 #' K2tax(K2res)
 #'
 
 K2tax <- function(K2res,
-                    nFeats = NULL,
-                    featMetric = NULL,
-                    nBoots = NULL,
-                    clustFunc =  NULL,
-                    linkage = NULL,
-                    oneoff = NULL,
-                    stabThresh = NULL){
+                  nFeats = NULL,
+                  featMetric = NULL,
+                  recalcDataMatrix = NULL,
+                  nBoots = NULL,
+                  clustFunc =  NULL,
+                  clustCors = NULL,
+                  clustList = NULL,
+                  linkage = NULL,
+                  oneoff = NULL,
+                  stabThresh = NULL){
   
   # Change meta data if new value is specific
   K2meta(K2res)$nFeats <- nFeats <- .checkMeta(K2res, "nFeats", nFeats)
   K2meta(K2res)$featMetric <- featMetric <- .checkMeta(K2res, "featMetric", featMetric)
+  K2meta(K2res)$recalcDataMatrix <- recalcDataMatrix <- .checkMeta(K2res, "recalcDataMatrix", recalcDataMatrix)
   K2meta(K2res)$nBoots <- nBoots <- .checkMeta(K2res, "nBoots", nBoots)
   K2meta(K2res)$clustFunc <- clustFunc <- .checkMeta(K2res, "clustFunc", clustFunc)
+  K2meta(K2res)$clustCors <- clustCors <- .checkMeta(K2res, "clustCors", clustCors)
+  K2meta(K2res)$clustList <- clustList <- .checkMeta(K2res, "clustList", clustList)
   K2meta(K2res)$linkage <- linkage <- .checkMeta(K2res, "linkage", linkage)
   K2meta(K2res)$oneoff <- oneoff <- .checkMeta(K2res, "oneoff", oneoff)
   K2meta(K2res)$stabThresh <- stabThresh <- .checkMeta(K2res, "stabThresh", stabThresh)
@@ -43,15 +54,19 @@ K2tax <- function(K2res,
   while(max(unlist(lapply(taxList[[iter]], 
                           function(x) length(x[x!="Vehicle"])
   ))) > (2 - oneoff)){
-    outList <- lapply(taxList[[iter]], function(samps, nFeats, nBoots, clustFunc){
+    outList <- lapply(taxList[[iter]], function(samps, nFeats, nBoots, clustFunc, K2res){
       if( length(samps) > 1 ){
         Dsub <- K2data(K2res)[,samps]
         outList <- .do_split(Dsub,
                              nFeats = nFeats,
                              featMetric = featMetric,
+                             recalcDataMatrix = recalcDataMatrix,
                              nBoots = nBoots,
                              clustFunc = clustFunc,
-                             linkage = linkage)
+                             clustCors = clustCors,
+                             clustList = clustList,
+                             linkage = linkage,
+                             K2res = K2res)
         
         # Get minimum size
         minSize <- min(table(outList$mods))
@@ -74,7 +89,7 @@ K2tax <- function(K2res,
         outList <- list(mods = samps, propBoots = NULL, clustStab = NULL)
       }
       return(outList)
-    }, nFeats, nBoots, clustFunc)
+    }, nFeats, nBoots, clustFunc, K2res)
     iter <- iter + 1
     taxList[[iter]] <- list()
     outMods <- lapply(outList, function(x) x[[1]])

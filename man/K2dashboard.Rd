@@ -4,8 +4,12 @@
 \alias{K2dashboard}
 \title{Generate interactive dashboard of K2 Taxonomer results}
 \usage{
-K2dashboard(K2results, analysis_name = "K2Taxonomer", output_dir = ".",
-  compile = TRUE)
+K2dashboard(
+  K2results,
+  analysis_name = "K2Taxonomer",
+  output_dir = ".",
+  compile = TRUE
+)
 }
 \arguments{
 \item{K2results}{Object of class K2. The output of runK2Taxonomer().}

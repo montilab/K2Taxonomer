@@ -10,8 +10,11 @@
 #' @param nFeats A numeric value <= P of subsets of the data to use.
 #' @param featMatric Metric to use to assign variance/signal score. Options are
 #' "square" (default) use square values and "mad" to use MAD scores.
+#' @param recalcDataMatrix Recalculate dataMatrix for each partion?
 #' @param nBoots A numeric value of the number of bootstraps to run at each split.
 #' @param clustFunc Wrapper function to cluster a P x N (See details).
+#' @param clustCors Number of cores to use for clustering.
+#' @param clustList List of objects to use for clustering procedure.
 #' @param linkage Linkage criteria for splitting cosine matrix ("method" in hclust). "average" by default.
 #' @param info A data frame with rownames that match column names in dataMatrix.
 #' @param infoClass = A named vector denoted types of tests to run on metavariables.
@@ -34,12 +37,16 @@ K2preproc <- function(eSet,
                          vehicle = NULL,
                          covariates = NULL,
                          block = NULL,
+                         logCounts = FALSE,
                          use = c("Z", "MEAN"),
                          nFeats = nrow(eSet) * 0.02,
-                         featMetric = c("square", "mad"),
+                         featMetric = c("Sn", "mad", "sd", "Qn", "F", "square"),
+                         recalcDataMatrix = FALSE,
                          nBoots = 500,
-                         clustFunc = hclust_wrapper,
-                         linkage = "mcquitty",
+                         clustFunc = hclust_wrapper_fast,
+                         clustCors = 1,
+                         clustList = list(),
+                         linkage = c("mcquitty", "ward.D", "ward.D2", "single", "complete", "average", "centroid"),
                          info = NULL,
                          infoClass = NULL,
                          genesets = NULL,
@@ -58,8 +65,9 @@ K2preproc <- function(eSet,
   # Match arguments
   use <- match.arg(use)
   featMetric <- match.arg(featMetric)
+  linkage <- match.arg(linkage)
   ssGSEAalg <- match.arg(ssGSEAalg)
-
+  
   # Create K2 object from eSet
   K2res <- new("K2",
                eSet = eSet)
@@ -69,12 +77,16 @@ K2preproc <- function(eSet,
                         vehicle = vehicle,
                         covariates = covariates,
                         block = block,
+                        logCounts = logCounts,
                         infoClass = infoClass,
                         use = use,
                         nFeats = nFeats,
                         featMetric = featMetric,
+                        recalcDataMatrix = recalcDataMatrix,
                         nBoots = nBoots,
                         clustFunc = clustFunc,
+                        clustCors = clustCors,
+                        clustList = clustList,
                         linkage = linkage,
                         qthresh = qthresh,
                         cthresh = cthresh,
@@ -92,7 +104,7 @@ K2preproc <- function(eSet,
     
     # Format info
     if (is.null(info)) {
-      info <- data.frame(row.names = colnames(dataMatrix))
+      info <- pData(eSet)
     }
     info <- data.frame(sampleID = colnames(dataMatrix),
                        info,
@@ -101,12 +113,11 @@ K2preproc <- function(eSet,
   } else {
     
     cat("Collapsing group-level values with LIMMA.\n")
-    dataMatrix <- .dge_wrapper(eSet, cohorts, vehicle, covariates, use)
+    dataMatrix <- .dge_wrapper(eSet, cohorts, vehicle, covariates, use, logCounts = logCounts)
     
     # Format info
     if (is.null(info)) {
-      info <- data.frame(pData(eSet)[,cohorts], row.names = colnames(eSet))
-      colnames(info) <- cohorts
+      info <- pData(eSet)
     }
     info <- info[!duplicated(info[,cohorts]), ,drop = FALSE]; rownames(info) <- info[,cohorts]
     info <- droplevels(info)

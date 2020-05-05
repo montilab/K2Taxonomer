@@ -6,11 +6,12 @@
 #' @return A character string of concatenated 1's and 2's pertaining to the cluster assignment of each column in dataMatrix.
 #' @keywords clustering
 #' @export
+#' @import Rfast
 #' @examples
-#' hclust_wrapper(dataMatrix, clusList = list())
+#' hclust_wrapper_fast(dataMatrix, clusList = list())
 #' 
 
-hclust_wrapper <- function(dataMatrix, clustList){
+hclust_wrapper_fast <- function(dataMatrix, clustList){
   
   if(length(clustList) == 0) {
     clustList <- list(

@@ -4,14 +4,37 @@
 \alias{K2preproc}
 \title{Function to create K2 object for pre-processing}
 \usage{
-K2preproc(eSet, cohorts = NULL, vehicle = NULL, covariates = NULL,
-  block = NULL, use = c("Z", "MEAN"), nFeats = nrow(eSet) * 0.02,
-  featMetric = c("square", "mad"), nBoots = 500,
-  clustFunc = hclust_wrapper, linkage = "mcquitty", info = NULL,
-  infoClass = NULL, genesets = NULL, qthresh = 0.05, cthresh = 0,
-  ntotal = 20000, ssGSEAalg = c("ssgsea", "gsva", "zscore", "plage"),
-  ssGSEAminQvalue = 0.01, ssGSEAcores = 0, oneoff = TRUE,
-  stabThresh = 0, geneURL = NULL, genesetURL = NULL)
+K2preproc(
+  eSet,
+  cohorts = NULL,
+  vehicle = NULL,
+  covariates = NULL,
+  block = NULL,
+  logCounts = FALSE,
+  use = c("Z", "MEAN"),
+  nFeats = nrow(eSet) * 0.02,
+  featMetric = c("Sn", "mad", "sd", "Qn", "F", "square"),
+  recalcDataMatrix = FALSE,
+  nBoots = 500,
+  clustFunc = hclust_wrapper_fast,
+  clustCors = 1,
+  clustList = list(),
+  linkage = c("mcquitty", "ward.D", "ward.D2", "single", "complete", "average",
+    "centroid"),
+  info = NULL,
+  infoClass = NULL,
+  genesets = NULL,
+  qthresh = 0.05,
+  cthresh = 0,
+  ntotal = 20000,
+  ssGSEAalg = c("ssgsea", "gsva", "zscore", "plage"),
+  ssGSEAminQvalue = 0.01,
+  ssGSEAcores = 0,
+  oneoff = TRUE,
+  stabThresh = 0,
+  geneURL = NULL,
+  genesetURL = NULL
+)
 }
 \arguments{
 \item{eSet}{An expression set object.}
@@ -28,9 +51,15 @@ K2preproc(eSet, cohorts = NULL, vehicle = NULL, covariates = NULL,
 
 \item{nFeats}{A numeric value <= P of subsets of the data to use.}
 
+\item{recalcDataMatrix}{Recalculate dataMatrix for each partion?}
+
 \item{nBoots}{A numeric value of the number of bootstraps to run at each split.}
 
 \item{clustFunc}{Wrapper function to cluster a P x N (See details).}
+
+\item{clustCors}{Number of cores to use for clustering.}
+
+\item{clustList}{List of objects to use for clustering procedure.}
 
 \item{linkage}{Linkage criteria for splitting cosine matrix ("method" in hclust). "average" by default.}
 
