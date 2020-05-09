@@ -16,7 +16,6 @@ Imports:
   visNetwork, 
   shiny, 
   DT,
-  Rfast,
   robustbase,
   magrittr,
   conclust
@@ -38,7 +37,6 @@ Collate:
     'K2visNetwork.R'
     'getGenePathways.R'
     'hclust_wrapper.R'
-    'hclust_wrapper_fast.R'
     'cKmeans_wrapper.R'
     'cKmeans_wrapper_subsample.R'
     'K2preproc.R'
