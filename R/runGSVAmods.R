@@ -17,14 +17,14 @@
 #' runGSVAmods(K2res)
 
 runGSVAmods <- function(K2res, ssGSEAalg = NULL, ssGSEAcores = NULL, ...) {
-    
+
     ## Change meta data if new value is specific
     K2meta(K2res)$ssGSEAalg <- .checkMeta(K2res, "ssGSEAalg", ssGSEAalg)
     K2meta(K2res)$ssGSEAcores <- .checkMeta(K2res, "ssGSEAcores", ssGSEAcores)
-    
+
     ## Run GSVA
-    K2gSet(K2res) <- gsva(K2eSet(K2res), method = K2meta(K2res)$ssGSEAalg, gset.idx.list = K2genesets(K2res), 
+    K2gSet(K2res) <- gsva(K2eSet(K2res), method = K2meta(K2res)$ssGSEAalg, gset.idx.list = K2genesets(K2res),
         parallel.sz = K2meta(K2res)$ssGSEAcores, ...)
-    
+
     return(K2res)
 }

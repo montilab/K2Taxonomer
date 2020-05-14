@@ -3,7 +3,7 @@
 #' This function performs K2 Taxonomer procedure only. Arguments values are
 #' extracted from K2meta(K2res) unless othewise specified.
 #'
-#' @param K2
+#' @param K2res An object of class K2. The output of K2preproc().
 #' @param nFeats A numeric value <= P of subsets of the data to use.
 #' @param featMatric Metric to use to assign variance/signal score. Options are
 #' 'square' (default), 'mad' to use MAD scores, 'sd' to use standard deviation

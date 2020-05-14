@@ -19,6 +19,8 @@ K2tax(
 )
 }
 \arguments{
+\item{K2res}{An object of class K2. The output of K2preproc().}
+
 \item{nFeats}{A numeric value <= P of subsets of the data to use.}
 
 \item{recalcDataMatrix}{Recalculate dataMatrix for each partion?}

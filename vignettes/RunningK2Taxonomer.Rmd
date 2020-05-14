@@ -33,7 +33,7 @@ library(Biobase)
 library(ggdendro)
 ```
 
-### Read in sample `Expression Set` object
+### Read in sample `ExpressionSet` object
 ```{r loadData}
 data(sample.ExpressionSet)
 ```
@@ -216,17 +216,16 @@ head(K2enrRes)
 ```{r portal, eval=FALSE}
 K2dashboard(K2res,
             analysis_name = "Example",
-            output_dir = ".",
-            compile = FALSE)
+            output_dir = ".")
+
 ```
 
 ### Running with `runK2Taxonomer` wrapper
-```{r, eval=FALSE}
-K2res <- runK2lcuster(
+```{r RunWrapper}
+K2res <- runK2Taxonomer(
   eSet = sample.ExpressionSet,
   genesets = genesetsMadeUp,
   stabThresh = 0.5)
-)
 ```
 
 ## Additional options
