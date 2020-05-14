@@ -193,7 +193,7 @@ output$Match <- renderUI({
       infoInd <- unique(which(`dim<-`(grepl(input$mstring, infoMat, ignore.case = T), dim(infoMat)), arr.ind=TRUE)[,1])
 
       ## Generate string to show
-      showString <- sapply(infoInd, function(row) paste0(paste(paste0(colnames(infoMat), ":", infoMat[row,]), collapse = "\n"), "\n"))
+      showString <- vapply(infoInd, function(row) paste0(paste(paste0(colnames(infoMat), ":", infoMat[row,]), collapse = "\n"), "\n"), FUN.VALUE = character(1))
 
       ## Get number of matches
       nMatches <- paste0(length(infoInd), " matche(s)")
@@ -587,16 +587,16 @@ observeEvent({
       ## Color breaks
       breaks <- c(1, 0.25, 0.1, 0.05, 0.01, 0.001, 0)
       breakColors <- brewer.pal(7, "Greens")
-      mvTabSub$color <- sapply(mvTabSub$pval, function(pval) {
+      mvTabSub$color <- vapply(mvTabSub$pval, function(pval) {
         breakColors[which.min(breaks >= pval)]
-      })
+    }, FUN.VALUE = character(1))
 
       ## Size breaks
       breaks <- c(1, 0.1, 0.05, 0.01, 0.001, 0.0001, 0)
       breakSize <- seq(length(breaks)) * 7
-      mvTabSub$width <- sapply(mvTabSub$pval, function(pval) {
+      mvTabSub$width <- vapply(mvTabSub$pval, function(pval) {
         breakSize[which.min(breaks >= pval)]
-      })
+    }, FUN.VALUE = integer(1))
 
       ## Add 2 values
       values$mvTabSub <- mvTabSub
