@@ -13,7 +13,8 @@ getGenePathways(genesets)
 A named vector
 }
 \description{
-This function will create a named vector of collapsed names of named genesets list, separated by "; "
+This function will create a named vector of collapsed names of named
+genesets list, separated by '; '
 }
 \examples{
 getGenePathways(genesets)

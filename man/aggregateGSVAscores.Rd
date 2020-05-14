@@ -11,14 +11,14 @@ aggregateGSVAscores(aggList, K2res)
 the new name, the name of the 'up' gene set, and the name of the 'down'
 gene set.}
 
-\item{K2res}{An object of class K2. The output of runDGE_mods().}
+\item{K2res}{An object of class K2. The output of runDGEmods().}
 }
 \value{
 An object of class K2.
 }
 \description{
-Replaces GSVA results from paired up- and down- gene sets with the difference of
-the up-regulated genes and down-regulated genes
+Replaces GSVA results from paired up- and down- gene sets with the difference
+of the up-regulated genes and down-regulated genes
 }
 \examples{
 aggregateGSVAscores(aggList, K2res)

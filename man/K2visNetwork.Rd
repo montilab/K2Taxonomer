@@ -7,7 +7,7 @@
 K2visNetwork(K2res)
 }
 \arguments{
-\item{K2res}{A list object. The output of runGSE_mods().}
+\item{K2res}{A list object. The output of runGSEmods().}
 }
 \description{
 Create an interactive dendrogram of the K2 Taxonomer results

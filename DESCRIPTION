@@ -1,7 +1,7 @@
 Package: K2Taxonomer
 Type: Package
 Title: Creating annotated submodules of high-throughput data through iteratively bootstrapping K=2 clusters.
-Version: 1.0.1
+Version: 1.0.2
 Date: 2019-03-19
 Author: Eric Reed
 Maintainer: Eric Reed <reeder@bu.edu>
@@ -13,38 +13,38 @@ Imports:
   parallel,
   flexdashboard,
   heatmaply,
-  visNetwork, 
-  shiny, 
+  visNetwork,
+  shiny,
   DT,
   robustbase,
   magrittr,
   conclust
-Suggests: 
+Suggests:
     Biobase,
     knitr,
     rmarkdown
-Depends: 
+Depends:
   R (>= 3.5)
 biocViews: Clustering, Visualization
 BugReports: https://github.com/ericreed
 RoxygenNote: 7.1.0
-Collate: 
-    'K2-class.R'
-    'K2-methods.R'
+Collate:
+    'AllClasses.R'
+    'AllGenerics.R'
     'K2tax.R'
     'K2dashboard.R'
     'K2dendro.R'
     'K2visNetwork.R'
     'getGenePathways.R'
-    'hclust_wrapper.R'
-    'cKmeans_wrapper.R'
-    'cKmeans_wrapper_subsample.R'
+    'hclustWrapper.R'
+    'cKmeansWrapper.R'
+    'cKmeansWrapperSubsample.R'
     'K2preproc.R'
-    'runTests_mods.R'
-    'runDGE_mods.R'
-    'runGSE_mods.R'
-    'runGSVA_mods.R'
-    'runDSSE_mods.R'
+    'runTestsMods.R'
+    'runDGEmods.R'
+    'runGSEmods.R'
+    'runGSVAmods.R'
+    'runDSSEmods.R'
     'runK2Taxonomer.R'
     'runFisher1sided.R'
     'runFisher2sided.R'
@@ -52,11 +52,10 @@ Collate:
     'runTtest.R'
     'runSurvival.R'
     'cutreeK2dendro.R'
-    'getDGEhits.R'
-    'signature_wrapper.R'
+    'signatureWrapper.R'
     'fixFDR.R'
-    'dge_wrapper.R'
-    'do_split.R'
+    'dgeWrapper.R'
+    'doSplit.R'
     'formatCov.R'
     'checkMeta.R'
     'getEnrichmentTable.R'

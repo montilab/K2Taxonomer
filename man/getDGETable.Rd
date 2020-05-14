@@ -2,7 +2,7 @@
 % Please edit documentation in R/getDGETable.R
 \name{getDGETable}
 \alias{getDGETable}
-\title{Extract table of differential results from "K2" object}
+\title{Extract table of differential results from 'K2' object}
 \usage{
 getDGETable(K2res)
 }
@@ -13,7 +13,7 @@ getDGETable(K2res)
 A data.frame object.
 }
 \description{
-Create table differential analysis results from "K2" object.
+Create table differential analysis results from 'K2' object.
 }
 \examples{
 getDGETable(K2res)

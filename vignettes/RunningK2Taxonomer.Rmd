@@ -19,34 +19,34 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Requirements
+## Requirements
 
-## Load packages
+### Load packages
 ```{r setup}
-# K2Taxonomer package
+## K2Taxonomer package
 library(K2Taxonomer)
 
-# For creating and manipulating expression sets
+## For creating and manipulating expression sets
 library(Biobase)
 
-# For drawing dendrograms
+## For drawing dendrograms
 library(ggdendro)
 ```
 
-## Read in sample `Expression Set` object
+### Read in sample `ExpressionSet` object
 ```{r loadData}
 data(sample.ExpressionSet)
 ```
 
-# `K2Taxonomer` basic run
+## `K2Taxonomer` basic run
 
-## Generate `K2` object
+### Generate `K2` object
 ```{r create}
-# Run pre-processing
+## Run pre-processing
 K2res <- K2preproc(sample.ExpressionSet)
 ```
 
-### `K2` object structre
+#### `K2` object structre
 
 `K2Taxonomer` functions create and manipulate S4, `K2` objects, defined within the package. `K2` objects have 5 slots.
 
@@ -62,21 +62,21 @@ K2res <- K2preproc(sample.ExpressionSet)
 
 `K2preproc()` will fill in three of these slots:, **@eSet**, **@meta**, and **@dataMatrix**.
 ```{r eSetDataMatrix}
-# Extract ExpressionSet
+## Extract ExpressionSet
 K2eSet(K2res)
 
-# Extract dataMatrix
+## Extract dataMatrix
 dim(K2data(K2res))
 ```
 
 **@meta** will be populated by default a set of parameters entered into `K2preproc()`.  Note that for each step, new parameters may be entered, specific to that function.
 ```{r}
-# Extract meta data
+## Extract meta data
 names(K2meta(K2res))
 ```
 
 
-## Running `K2Taxonomer` algorithm
+### Running `K2Taxonomer` algorithm
 
 The `K2Taxonomer` is run by `K2tax()`.  At each recursion of the algorithm, the observations in **@dataMatrix** are split into two sub-groups based on a compilation of repeated K=2 clustering on bootstrapped sampling of features. For each split in the recursion, a stability metric is used to estimate robustness, which takes on values between 0 and 1, where values close to 1 represent the instance in which the same clustering occured in every or nearly every perturbation of a large set of observations. As the number of observations decreasing down the taxonomy the largest possible stability estimate decreases, such that the largest possible stability estimate of triplets and duplets, is 0.67 and 0.50, respectively. 
 
@@ -85,44 +85,44 @@ The parameter, **stabThresh**, controls the minimum value of the stability metri
 Choosing an appropriate threshold is dependent on the size of the original data set.  For large data sets, choosing small values will greatly increase runtime, and values between 0.8 and 0.7, are generally recommended.
 
 ```{r cluster}
-# Run Cluster
+## Run Cluster
 set.seed(143)
 K2res <- K2tax(K2res,
                stabThresh = 0.5)
 ```
 
-## `K2Taxonomer` results structure
+### `K2Taxonomer` results structure
 
 The **@results** slot of the `K2` object is a named list of the results of running the `K2Taxonomer` algorithm. Each item in the list contains the IDs of the two sets of observations denoted by the split, as well as additional annotation for that split, including the stability estimates.
 
 Each item is assigned a letter ID. If there are more than 26 items, than an additional letter is tacked on, such that the 27th item is named, *AA*, and the 28th item is named **BB**.
 
 ```{r results, fig.align='center', fig.width=5, fig.height=5}
-# Values of each rung
+## Values of each rung
 names(K2results(K2res))
 ```
 
-### Split results
+#### Split results
 ```{r values}
-# Get observations defined in each split
+## Get observations defined in each split
 K2results(K2res)$A$obs
 ```
 
-### Stability metrics
+#### Stability metrics
 ```{r stability, fig.align='center', fig.width=5, fig.height=5}
-# Get bootstrap probability of this split
+## Get bootstrap probability of this split
 K2results(K2res)$A$bootP
 
-# Node stability (Value between 0 and 1. 1 indicating high stability)
+## Node stability (Value between 0 and 1. 1 indicating high stability)
 K2results(K2res)$A$stability$node
 
-# Stability of each subseqent cluster.
+## Stability of each subseqent cluster.
 K2results(K2res)$A$stability$clusters
 
-# Distance matrix indicating pairwise cosine similarity of each observation
+## Distance matrix indicating pairwise cosine similarity of each observation
 splitAstability <- as.matrix(K2results(K2res)$A$stability$samples)
 
-# Show heatmap
+## Show heatmap
 hcols <- c("grey", "black")[colnames(splitAstability) %in% K2results(K2res)$A$obs[[1]] + 1]
 
 heatmap(splitAstability, 
@@ -138,39 +138,39 @@ heatmap(splitAstability,
         keep.dendro = FALSE)
 ```
 
-## Generate dendrogram from `K2Taxonomer` results
+### Generate dendrogram from `K2Taxonomer` results
 
 After running the `K2Taxonomer` algorithm, a `dendrogram` object can be built using `K2dendro()`.
 ```{r dendrogram, fig.align='center', fig.width=5, fig.height=3}
-# Get dendrogram from K2Taxonomer
+## Get dendrogram from K2Taxonomer
 dendro <- K2dendro(K2res)
 
-# Get dendrogram data
+## Get dendrogram data
 ggdendrogram(dendro)
 ```
 
-## Annotating `K2Taxonomer` results
+### Annotating `K2Taxonomer` results
 
 A principal motivation behind `K2Taxonomer` is that insight can be garnered and tracjed for various levels in a hierarchical sub-grouping of obervations, such that analytical characterization of different sub-groups throughout the taxonomy serve to both validate and inform about specific sub-groups.
 
 To this end, `K2Taxonomer` runs additional analyses to annotate each split. These analyses include: differential expression analysis using the `limma` package and gene set enrichment testing for both hyperenrichment and differntial analysis of singe-sample enrichment scores estimated using the `GSVA` package.
 
-### Differential analysis
+#### Differential analysis
 ```{r Run differential analysis}
-# Run DGE
-K2res <- runDGE_mods(K2res)
+## Run DGE
+K2res <- runDGEmods(K2res)
 
-# Get differential results for one split
+## Get differential results for one split
 head(K2results(K2res)$A$dge)
 
-# Concatenate all results and generate table
+## Concatenate all results and generate table
 DGEtable <- getDGETable(K2res)
 head(DGEtable)
 ```
 
-### Gene set hyperenrichment
+#### Gene set hyperenrichment
 ```{r Run Hyperichment}
-# Create dummy set of gene sets
+## Create dummy set of gene sets
 genes <- unique(DGEtable$gene)
 genesetsMadeUp <- list(
   GS1 = genes[1:50],
@@ -178,72 +178,71 @@ genesetsMadeUp <- list(
   GS3 = genes[101:150]
 )
 
-# Run gene set hyperenrichment
-K2res <- runGSE_mods(K2res, 
+## Run gene set hyperenrichment
+K2res <- runGSEmods(K2res, 
                      genesets = genesetsMadeUp,
                      qthresh = 0.1)
 
-# Get gene set results for one split
+## Get gene set results for one split
 K2results(K2res)$A$gse
 ```
 
-### Single-sample gene set enrichment
+#### Single-sample gene set enrichment
 ```{r Run ssSGEA, warning=FALSE}
-# Create expression matrix with ssGSEA(GSVA) estimates
-K2res <- runGSVA_mods(K2res, 
+## Create expression matrix with ssGSEA(GSVA) estimates
+K2res <- runGSVAmods(K2res, 
                       ssGSEAalg = "ssgsea",
                       ssGSEAcores = 1,
                       verbose = FALSE)
 
-# Extract ernichment score Expression Set object
+## Extract ernichment score Expression Set object
 K2gSet(K2res)
 ```
 
-### Differential single-sample enrichment analysis
+#### Differential single-sample enrichment analysis
 ```{r Run DSSE}
-# Run differential analysis on enrichment score Expression Set
-K2res <- runDSSE_mods(K2res)
+## Run differential analysis on enrichment score Expression Set
+K2res <- runDSSEmods(K2res)
 
-# Get differential results for one split
+## Get differential results for one split
 head(K2results(K2res)$A$dsse)
 
-# Extract table of all hyper and sample-level enrichment tests
+## Extract table of all hyper and sample-level enrichment tests
 K2enrRes <- getEnrichmentTable(K2res)
 head(K2enrRes)
 ```
 
-## Generate interactive portal to explore results
+### Generate interactive portal to explore results
 ```{r portal, eval=FALSE}
 K2dashboard(K2res,
             analysis_name = "Example",
-            output_dir = ".",
-            compile = FALSE)
+            output_dir = ".")
+
 ```
 
-## Running with `runK2Taxonomer` wrapper
-```{r, eval=FALSE}
-K2res <- runK2lcuster(
+### Running with `runK2Taxonomer` wrapper
+```{r RunWrapper}
+K2res <- runK2Taxonomer(
   eSet = sample.ExpressionSet,
   genesets = genesetsMadeUp,
   stabThresh = 0.5)
-)
 ```
 
-# Additional options
+## Additional options
 
-## Running with replicates
+### Running with replicates
 ```{r, fig.align='center', fig.width=5, fig.height=3}
-# Create set of cohorts from data
+## Create set of cohorts from data
 sample.ExpressionSet$group <- paste0(sample.ExpressionSet$sex, sample.ExpressionSet$type)
 
-# Run pre-processing
+## Run pre-processing
 K2res <- K2preproc(sample.ExpressionSet,
                    cohorts = "group")
 
-# Cluster the data
+## Cluster the data
 K2res <- K2tax(K2res)
 
-# Create dendrogram
+## Create dendrogram
 dendro <- K2dendro(K2res)
 ggdendrogram(dendro)
 ```

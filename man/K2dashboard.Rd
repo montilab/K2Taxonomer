@@ -4,30 +4,25 @@
 \alias{K2dashboard}
 \title{Generate interactive dashboard of K2 Taxonomer results}
 \usage{
-K2dashboard(
-  K2results,
-  analysis_name = "K2Taxonomer",
-  output_dir = ".",
-  compile = TRUE
-)
+K2dashboard(K2res, analysis_name = "K2Taxonomer", output_dir = ".")
 }
 \arguments{
-\item{K2results}{Object of class K2. The output of runK2Taxonomer().}
+\item{K2res}{Object of class K2.}
 
-\item{analysis_name}{Character string of the name of analysis to write files and generate title of report.}
+\item{analysis_name}{Character string of the name of analysis to write files
+and generate title of report.}
 
 \item{output_dir}{Base directory to put report.}
-
-\item{compile}{Logical. Whether or not to compile dashboard now.}
 }
 \value{
 Nothing.  Writes files to a specified directory.
 }
 \description{
-This function will generate an interactive dashboard of the annotated K=2 clustering results.
+This function will generate an interactive dashboard of the annotated K=2
+clustering results in a specified directory.
 }
 \examples{
-K2dashboard(K2results, analysis_name = "K2Taxonomer", output_dir = ".", compile = TRUE)
+K2dashboard(K2results, analysis_name = 'K2Taxonomer', output_dir = '.')
 
 }
 \keyword{clustering}

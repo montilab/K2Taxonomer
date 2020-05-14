@@ -12,11 +12,11 @@ K2preproc(
   block = NULL,
   logCounts = FALSE,
   use = c("Z", "MEAN"),
-  nFeats = nrow(eSet) * 0.02,
+  nFeats = "sqrt",
   featMetric = c("sd", "mad", "Sn", "Qn", "F", "square"),
   recalcDataMatrix = FALSE,
   nBoots = 500,
-  clustFunc = hclust_wrapper,
+  clustFunc = hclustWrapper,
   clustCors = 1,
   clustList = list(),
   linkage = c("mcquitty", "ward.D", "ward.D2", "single", "complete", "average",
@@ -27,9 +27,8 @@ K2preproc(
   qthresh = 0.05,
   cthresh = 0,
   ntotal = 20000,
-  ssGSEAalg = c("ssgsea", "gsva", "zscore", "plage"),
-  ssGSEAminQvalue = 0.01,
-  ssGSEAcores = 0,
+  ssGSEAalg = c("gsva", "ssgsea", "zscore", "plage"),
+  ssGSEAcores = 1,
   oneoff = TRUE,
   stabThresh = 0,
   geneURL = NULL,
@@ -39,21 +38,31 @@ K2preproc(
 \arguments{
 \item{eSet}{An expression set object.}
 
-\item{cohorts}{The column in phenotype data of eSet that has cohort ID's. Default NULL if no pre-processing of data.}
+\item{cohorts}{The column in phenotype data of eSet that has cohort ID's.
+Default NULL if no pre-processing of data.}
 
-\item{vehicle}{The value in the cohort variable that contains the vehicle ID. Default NULL if no vehicle to be used.}
+\item{vehicle}{The value in the cohort variable that contains the vehicle
+ID. Default NULL if no vehicle to be used.}
 
-\item{covariates}{Covariates in phenotype data of eSet to control for in differential analysis.}
+\item{covariates}{Covariates in phenotype data of eSet to control for in
+differential analysis.}
 
 \item{block}{Block parameter in limma for modelling random-like effects.}
 
-\item{use}{Generate test statistics or use means from differential analysis for clustering.}
+\item{logCounts}{Logical. Whether or not expression values are log-scale
+counts or log normalized counts from RNA-seq. Default is FALSE.}
 
-\item{nFeats}{A numeric value <= P of subsets of the data to use.}
+\item{use}{Character string. Options are "Z" to generate test statistics or
+"MEAN" to use means from differential analysis for clustering.}
 
-\item{recalcDataMatrix}{Recalculate dataMatrix for each partion?}
+\item{nFeats}{"sqrt" or a numeric value <= number of features to subset the
+features for each partition.}
 
-\item{nBoots}{A numeric value of the number of bootstraps to run at each split.}
+\item{recalcDataMatrix}{Logical. Recalculate dataMatrix for each partion?
+Default is FALSE.}
+
+\item{nBoots}{A numeric value of the number of bootstraps to run at each
+split.}
 
 \item{clustFunc}{Wrapper function to cluster a P x N (See details).}
 
@@ -61,17 +70,31 @@ K2preproc(
 
 \item{clustList}{List of objects to use for clustering procedure.}
 
-\item{linkage}{Linkage criteria for splitting cosine matrix ("method" in hclust). "average" by default.}
+\item{linkage}{Linkage criteria for splitting cosine matrix ('method' in
+hclust). 'average' by default.}
 
 \item{info}{A data frame with rownames that match column names in dataMatrix.}
 
-\item{infoClass}{= A named vector denoted types of tests to run on metavariables.}
+\item{infoClass}{A named vector denoted types of tests to run on
+metavariables.}
 
 \item{genesets}{A named list of features in row names of dataMatrix.}
 
-\item{qthresh}{A numeric value between 0 and 1 of the FDR cuttoff to define feature sets.}
+\item{qthresh}{A numeric value between 0 and 1 of the FDR cuttoff to define
+feature sets.}
 
-\item{cthresh}{A positive value for the coefficient cuttoff to define feature sets.}
+\item{cthresh}{A positive value for the coefficient cuttoff to define
+feature sets.}
+
+\item{ntotal}{A positive value to use as the background feature count. 20000
+by default.}
+
+\item{ssGSEAalg}{A character string, specifying which algorithm to use for
+running the gsva() function from the GSVA package. Options are "gsva",
+"ssgsea", "zscore", and "plage". "gsva" by default.}
+
+\item{ssGSEAcores}{Number of cores to use for running gsva() from the GSVA
+package. Default is 1.}
 
 \item{oneoff}{Logical. Allow 1 member clusters?}
 
@@ -82,10 +105,11 @@ K2preproc(
 \item{genesetURL}{Optional. Named list of URLs to geneset information.}
 
 \item{featMatric}{Metric to use to assign variance/signal score. Options are
-"square" (default) use square values and "mad" to use MAD scores.}
+'square' (default) use square values and 'mad' to use MAD scores.}
 }
 \description{
-This function will generate an object of class, K2.  This will run pre-processing functions for running K2 Taxonomer procedure.
+This function will generate an object of class, K2.  This will run
+pre-processing functions for running K2 Taxonomer procedure.
 }
 \examples{
 K2preproc(eSet)
