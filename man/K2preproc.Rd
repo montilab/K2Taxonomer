@@ -16,7 +16,7 @@ K2preproc(
   featMetric = c("sd", "mad", "Sn", "Qn", "F", "square"),
   recalcDataMatrix = FALSE,
   nBoots = 500,
-  clustFunc = hclust_wrapper,
+  clustFunc = hclustWrapper,
   clustCors = 1,
   clustList = list(),
   linkage = c("mcquitty", "ward.D", "ward.D2", "single", "complete", "average",
@@ -39,21 +39,26 @@ K2preproc(
 \arguments{
 \item{eSet}{An expression set object.}
 
-\item{cohorts}{The column in phenotype data of eSet that has cohort ID's. Default NULL if no pre-processing of data.}
+\item{cohorts}{The column in phenotype data of eSet that has cohort ID's.
+Default NULL if no pre-processing of data.}
 
-\item{vehicle}{The value in the cohort variable that contains the vehicle ID. Default NULL if no vehicle to be used.}
+\item{vehicle}{The value in the cohort variable that contains the vehicle
+ID. Default NULL if no vehicle to be used.}
 
-\item{covariates}{Covariates in phenotype data of eSet to control for in differential analysis.}
+\item{covariates}{Covariates in phenotype data of eSet to control for in
+differential analysis.}
 
 \item{block}{Block parameter in limma for modelling random-like effects.}
 
-\item{use}{Generate test statistics or use means from differential analysis for clustering.}
+\item{use}{Generate test statistics or use means from differential analysis
+for clustering.}
 
 \item{nFeats}{A numeric value <= P of subsets of the data to use.}
 
 \item{recalcDataMatrix}{Recalculate dataMatrix for each partion?}
 
-\item{nBoots}{A numeric value of the number of bootstraps to run at each split.}
+\item{nBoots}{A numeric value of the number of bootstraps to run at each
+split.}
 
 \item{clustFunc}{Wrapper function to cluster a P x N (See details).}
 
@@ -61,17 +66,21 @@ K2preproc(
 
 \item{clustList}{List of objects to use for clustering procedure.}
 
-\item{linkage}{Linkage criteria for splitting cosine matrix ("method" in hclust). "average" by default.}
+\item{linkage}{Linkage criteria for splitting cosine matrix ('method' in
+hclust). 'average' by default.}
 
 \item{info}{A data frame with rownames that match column names in dataMatrix.}
 
-\item{infoClass}{= A named vector denoted types of tests to run on metavariables.}
+\item{infoClass}{= A named vector denoted types of tests to run on
+metavariables.}
 
 \item{genesets}{A named list of features in row names of dataMatrix.}
 
-\item{qthresh}{A numeric value between 0 and 1 of the FDR cuttoff to define feature sets.}
+\item{qthresh}{A numeric value between 0 and 1 of the FDR cuttoff to define
+feature sets.}
 
-\item{cthresh}{A positive value for the coefficient cuttoff to define feature sets.}
+\item{cthresh}{A positive value for the coefficient cuttoff to define
+feature sets.}
 
 \item{oneoff}{Logical. Allow 1 member clusters?}
 
@@ -82,10 +91,11 @@ K2preproc(
 \item{genesetURL}{Optional. Named list of URLs to geneset information.}
 
 \item{featMatric}{Metric to use to assign variance/signal score. Options are
-"square" (default) use square values and "mad" to use MAD scores.}
+'square' (default) use square values and 'mad' to use MAD scores.}
 }
 \description{
-This function will generate an object of class, K2.  This will run pre-processing functions for running K2 Taxonomer procedure.
+This function will generate an object of class, K2.  This will run
+pre-processing functions for running K2 Taxonomer procedure.
 }
 \examples{
 K2preproc(eSet)

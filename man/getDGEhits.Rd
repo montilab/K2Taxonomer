@@ -7,7 +7,7 @@
 getDGEhits(K2res)
 }
 \arguments{
-\item{K2res}{An object of class K2. The output of runDGE_mods().
+\item{K2res}{An object of class K2. The output of runDGEmods().
 getDGEhits(K2res)}
 }
 \description{

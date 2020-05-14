@@ -2,7 +2,7 @@
 % Please edit documentation in R/getEnrichmentTable.R
 \name{getEnrichmentTable}
 \alias{getEnrichmentTable}
-\title{Extract table of enrichment results from "K2" object}
+\title{Extract table of enrichment results from 'K2' object}
 \usage{
 getEnrichmentTable(K2res)
 }
@@ -13,7 +13,7 @@ getEnrichmentTable(K2res)
 A data.frame object.
 }
 \description{
-Create table hyper- and single-sample enrichment results from "K2" object.
+Create table hyper- and single-sample enrichment results from 'K2' object.
 }
 \examples{
 getEnrichementTable(K2res)

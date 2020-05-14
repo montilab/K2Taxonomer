@@ -1,59 +1,59 @@
-# Function to format covariates string in formula
+## Function to format covariates string in formula
 .formatCov <- function(covariates) if(is.null(covariates)) "" else paste0("+", paste(covariates, collapse = "+"))
 
-# Function to generate differential signature
-.signature_wrapper <- function(eSet, cohorts, mods, vehicle = NULL, covariates = NULL, logCounts = FALSE){
+## Function to generate differential signature
+.signatureWrapper <- function(eSet, cohorts, mods, vehicle = NULL, covariates = NULL, logCounts = FALSE){
   
-  # Remove vehicle from mods and make a data frame
+  ## Remove vehicle from mods and make a data frame
   mods <- mods[names(mods) != "Vehicle"]
   mods <- data.frame(mods = as.character(mods), GROUP = names(mods), stringsAsFactors = F)
   
   modStats <- NULL
   if(length(unique(mods$mods)) > 1) {
     
-    # If replicates in data get unique cohorts
+    ## If replicates in data get unique cohorts
     if(is.null(cohorts)){
       cohorts <- "GROUP"
       pData(eSet)[,cohorts] <- colnames(eSet)
     }
     
-    # Get unique groups
+    ## Get unique groups
     gUnique <- unique(pData(eSet)[,cohorts])
     
     if(!is.null(vehicle)){
       gUnique <- gUnique[gUnique != vehicle]
     }
     
-    # Subset data for mods
+    ## Subset data for mods
     eSub <- eSet[,pData(eSet)[,cohorts] %in% c(vehicle, mods$GROUP)]
     
-    # Drop levels
+    ## Drop levels
     pData(eSub) <- droplevels(pData(eSub))
     
-    # Create new variable in pData by merging with mods data.frame
+    ## Create new variable in pData by merging with mods data.frame
     pData(eSub)$GROUP <- factor(pData(eSub)[,cohorts], levels = c(vehicle, mods$GROUP))
     pData(eSub)$Rownames <- rownames(pData(eSub))
     pD <- merge(pData(eSub), mods, all.x = TRUE)
     rownames(pD) <- pD$Rownames
     pD <- pD[colnames(eSub), , drop = F]
     
-    # Add vehicle mod
+    ## Add vehicle mod
     pD$mods[is.na(pD$mods)] <- "0"; pD$mods <- as.factor(pD$mods)
     
-    # Add back to eSet
+    ## Add back to eSet
     pData(eSub) <- pD
     
-    # Need to run different analysis if there are cohorts or not
+    ## Need to run different analysis if there are cohorts or not
     if(!is.null(cohorts)){
       
-      # Create design matrix
+      ## Create design matrix
       design <- model.matrix(as.formula(paste0("~ 0 +", "mods", .formatCov(covariates))), data = pData(eSub))
       colnames(design) <- sub("mods", "X", colnames(design))
       
-      # Fit model
+      ## Fit model
       fit <- lmFit(eSub, design)
       
-      # Fit contrasts
+      ## Fit contrasts
       modFit <- lapply(paste0("X", unique(mods$mods)), function(x, design, fit){
         conString <- paste0(x, " - (", paste(colnames(design)[colnames(design) != x & colnames(design) %in% paste0("X", unique(mods$mods))], collapse = "+"), ")/", sum(colnames(design) != x & colnames(design) %in% paste0("X", unique(mods$mods))))
         contrasts <- makeContrasts(contrasts = conString, levels = design)
@@ -68,15 +68,15 @@
       design <- model.matrix(as.formula(paste0("~ 0 + ", "GROUP",  .formatCov(covariates))), data = pData(eSub))
       colnames(design) <- sub("GROUP", "X", colnames(design))
       
-      # Fit model
+      ## Fit model
       fit <- lmFit(eSub, design)
       
-      # Create contrasts strings
+      ## Create contrasts strings
       modsFull <- unique(pD[,c("GROUP", "mods")])
       modsTable <- table(modsFull$mods)
       cVec <- sapply(names(modsTable), function(x) paste0("(", paste(paste0("X", modsFull$GROUP[modsFull$mods==x], collapse = "+")), ")/", sum(modsFull$mods==x)))
       
-      # Run each contrast
+      ## Run each contrast
       modFit <- lapply(as.character(unique(mods$mods)), function(x, cVec, design, fit){
         conString <- paste0(cVec[x], " - (", paste(cVec[names(cVec) != x], collapse = "+"), ")/", sum(names(cVec) != x))
         contrasts <- makeContrasts(contrasts = conString, levels = design)
@@ -87,7 +87,7 @@
       }, cVec, design, fit)
     }
     
-    # Create vector of where to assign result
+    ## Create vector of where to assign result
     if(is.null(vehicle)){
       if(length(modFit) == 2) {
         one2 <- c(1, 2)[as.numeric(modFit[[1]]$t < 0) + 1]
@@ -102,36 +102,36 @@
       one2 <- c(1, 2)[as.numeric(sapply(seq(nrow(modFit[[1]])), function(row, modFit){modFit[[1]]$P.Value[row] > modFit[[2]]$P.Value[row]}, modFit)) + 1]
     }
     
-    # Create just one data.frame
+    ## Create just one data.frame
     modStats <- as.data.frame(t(vapply(1:nrow(modFit[[1]]), function(row, one2, modFit){
       unlist(as.numeric(modFit[[one2[row]]][row,]))
     }, one2, modFit, FUN.VALUE = double(7))))
     colnames(modStats) <- colnames(modFit[[1]]); rownames(modStats) <- rownames(modFit[[1]])
     
-    # Order by p-value
+    ## Order by p-value
     modStats <- modStats[order(modStats$P.Value),]
     modStats$adj.P.Val <- p.adjust(modStats$P.Value, method = "BH")
     
   }
   
-  # Save mods as character
+  ## Save mods as character
   modStats$mod <- as.character(modStats$mod)
   
-  # Change column names
+  ## Change column names
   colnames(modStats) <- c("coef", "mean", "t", "pval", "fdr", "B", "mod")
   
-  # Return
+  ## Return
   return(modStats)
 }
 
-# Function to format differential results
+## Function to format differential results
 geneTable <- function(DGETABLE, nodeID = NULL, geneList = NULL){
   
-  # Get exact match for nodeID
+  ## Get exact match for nodeID
   if (!is.null(nodeID)) nodeID <- paste0("^", nodeID, "$")
   if (!is.null(geneList)) geneList <- paste(paste0("^", geneList, "$"), collapse = "|")
   
-  # Create data table obect
+  ## Create data table obect
   datatable(DGETABLE,
             rownames = F, 
             extensions = 'Buttons', 
@@ -178,18 +178,18 @@ geneTable <- function(DGETABLE, nodeID = NULL, geneList = NULL){
     formatStyle(c("Direction", "Mean"), `border-right` = "solid 2px")
 }
 
-# Function to format hyperenrichment results
+## Function to format hyperenrichment results
 genesetTable <- function(ENRTABLE, nodeID = NULL, groupID = NULL, dgeHits = NULL){
   
-  # Get exact match for nodeID
+  ## Get exact match for nodeID
   if (!is.null(nodeID)) nodeID <- paste0("^", nodeID, "$")
   if (!is.null(dgeHits)) dgeHits <- paste0("^", gsub("; ", "$|^", dgeHits), "$")
   if (!is.null(groupID)) groupID <- paste0("^", groupID, "$")
   
-  # Add line breaks
+  ## Add line breaks
   colnames(ENRTABLE) <- gsub("_", "<br>", colnames(ENRTABLE))
   
-  # Create DT object
+  ## Create DT object
   outDT <- datatable(ENRTABLE,
                      rownames = F,
                      extensions = 'Buttons',
@@ -239,12 +239,12 @@ genesetTable <- function(ENRTABLE, nodeID = NULL, groupID = NULL, dgeHits = NULL
   
 }
 
-# Function to plot gene expression
+## Function to plot gene expression
 plotGenePathway <- function(eSet, gene, obs1, obs2, cohorts, vehicle){
   
   if(gene %in% rownames(eSet)){
     
-    # Format group names
+    ## Format group names
     if(is.null(cohorts)){
       nams <- colnames(eSet)
     } else {
@@ -252,52 +252,52 @@ plotGenePathway <- function(eSet, gene, obs1, obs2, cohorts, vehicle){
     }
     nams[nams == vehicle] <- "Vehicle"
     
-    # Create data.frame of expression values
+    ## Create data.frame of expression values
     e <- Biobase::exprs(eSet)[gene,]
     df <- data.frame(e = e, ch = nams, stringsAsFactors = F)
     
-    # Subset for obs in groups
+    ## Subset for obs in groups
     df <- df[df$ch %in% c(obs1, obs2, "Vehicle"),]
     df$group <- "Group 1"; df$group[df$ch %in% obs2] <- "Group 2"; df$group[df$ch == "Vehicle"] <- "Vehicle"
     
-    # Get per Observation mean
+    ## Get per Observation mean
     dfMeans <- df %>%
       group_by(ch) %>%
       summarise(me = mean(e))
     dfMeans$ch <- as.character(dfMeans$ch)
     dfMeans <- dfMeans[order(dfMeans$me, decreasing = T),]
     
-    # Sort levels by mean expression
+    ## Sort levels by mean expression
     df$ch <- factor(df$ch, levels = dfMeans$ch)
     df <- merge(df, dfMeans)
     
-    # Add levels for boxplots
+    ## Add levels for boxplots
     df$group2 <- df$group
     
-    # Add rows for boxplots
+    ## Add rows for boxplots
     df2 <- df
     df2$ch <- df$group
     df2$group2 <- "Comparison"
     df2$e2 <- df2$e
     df2$e <- NA
     
-    # Concatenate
+    ## Concatenate
     df$e2 <- NA
     df <- df[df$ch != "Vehicle",]
     df <- rbind(df, df2)
     
-    # Fix levels
+    ## Fix levels
     df$ch <- factor(df$ch, levels = c(dfMeans$ch[dfMeans$ch != "Vehicle"], "Group 1", "Vehicle", "Group 2"))
     df$group <- factor(df$group, levels = c("Group 1", "Vehicle", "Group 2"))
     df$group2 <- factor(df$group2, levels = c("Group 1", "Comparison", "Group 2"))
     
-    # Remove Means from comparison
+    ## Remove Means from comparison
     df$me[df$group2 == "Comparison"] <- NA
     
-    # Add column names
+    ## Add column names
     colnames(df) <- c("Observation", "Expression", "Group", "Mean", "Group2", "Expression2")
     
-    # Plot
+    ## Plot
     p <- ggplot(data = df, aes(x = Observation, y = Expression)) +
       geom_boxplot(aes(y = Expression2, fill = Group)) +
       geom_line(aes(group = Observation)) +
@@ -323,7 +323,7 @@ plotGenePathway <- function(eSet, gene, obs1, obs2, cohorts, vehicle){
     
     p <- ggplotly(p)
     
-    # Fix xaxis due to a bug in plotly
+    ## Fix xaxis due to a bug in plotly
     whXaxis <- which(grepl("xaxis", names(p$x$layout)))
     for (i in whXaxis) {
       ticktext <- p$x$layout[[i]]$ticktext
@@ -337,12 +337,12 @@ plotGenePathway <- function(eSet, gene, obs1, obs2, cohorts, vehicle){
   
 }
 
-# Function to plot gene expression
+## Function to plot gene expression
 plotGenePathwayClusters <- function(eSet, gene, groupList, cohorts, vehicle){
   
   if(gene %in% rownames(eSet)){
     
-    # Format group names
+    ## Format group names
     if(is.null(cohorts)){
       nams <- colnames(eSet)
     } else {
@@ -350,64 +350,64 @@ plotGenePathwayClusters <- function(eSet, gene, groupList, cohorts, vehicle){
     }
     nams[nams == vehicle] <- "Vehicle"
     
-    # Create data.frame of expression values
+    ## Create data.frame of expression values
     e <- Biobase::exprs(eSet)[gene,]
     df <- data.frame(e = e, ch = nams, stringsAsFactors = F)
     
-    # Get clusters
+    ## Get clusters
     obs <- unlist(groupList)
     
-    # Subset for obs in groups
+    ## Subset for obs in groups
     df <- df[df$ch %in% c(obs, "Vehicle"),]
     df$group <- "Vehicle"
     for (i in names(groupList)) {
       df$group[df$ch %in% groupList[[i]]] <- i
     }
     
-    # Get per Observation mean
+    ## Get per Observation mean
     dfMeans <- df %>%
       group_by(ch) %>%
       summarise(me = mean(e))
     dfMeans$ch <- as.character(dfMeans$ch)
     dfMeans <- dfMeans[order(dfMeans$me, decreasing = FALSE),]
     
-    # Sort levels by mean expression
+    ## Sort levels by mean expression
     df$ch <- factor(df$ch, levels = dfMeans$ch)
     df <- merge(df, dfMeans)
     
-    # Add levels for boxplots
+    ## Add levels for boxplots
     df$group2 <- df$group
     
-    # Add rows for boxplots
+    ## Add rows for boxplots
     df2 <- df
     df2$ch <- df$group
     df2$group2 <- "Comparison"
     df2$e2 <- df2$e
     df2$e <- NA
     
-    # Concatenate
+    ## Concatenate
     df$e2 <- NA
     df <- df[df$ch != "Vehicle",]
     df <- rbind(df, df2)
     
-    # Fix levels
+    ## Fix levels
     df$ch <- factor(df$ch, levels = c(dfMeans$ch[dfMeans$ch != "Vehicle"], "Vehicle", names(groupList)))
     df$group <- factor(df$group, levels = c("Vehicle", names(groupList)))
     df$group2 <- factor(df$group2, levels = c(names(groupList), "Comparison"))
     
-    # Remove Means from comparison
+    ## Remove Means from comparison
     df$me[df$group2 == "Comparison"] <- NA
     
-    # Add column names
+    ## Add column names
     colnames(df) <- c("Observation", "Expression", "Group", "Mean", "Group2", "Expression2")
     
-    # Create color manual
+    ## Create color manual
     qual_col_pals = brewer.pal.info[brewer.pal.info$category == 'qual',]
     col_vector = unlist(mapply(brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals)))
     colMan <- c("grey", col_vector[seq(length(groupList))])
     names(colMan) <- c("Vehicle", names(groupList))
     
-    # Plot
+    ## Plot
     p <- ggplot(data = df, aes(x = Observation, y = Expression)) +
       geom_boxplot(aes(y = Expression2, fill = Group)) +
       geom_line(aes(group = Observation)) +
@@ -429,7 +429,7 @@ plotGenePathwayClusters <- function(eSet, gene, groupList, cohorts, vehicle){
     
     p <- ggplotly(p)
     
-    # Fix xaxis due to a bug in plotly
+    ## Fix xaxis due to a bug in plotly
     whXaxis <- which(grepl("xaxis", names(p$x$layout)))
     for (i in whXaxis) {
       ticktext <- p$x$layout[[i]]$ticktext
@@ -442,14 +442,14 @@ plotGenePathwayClusters <- function(eSet, gene, groupList, cohorts, vehicle){
   }
 }
 
-# Function to format differential results
+## Function to format differential results
 geneTableClusters <- function(clusterRes, nodegroupID = NULL, geneList = NULL){
   
-  # Get exact match for nodeID
+  ## Get exact match for nodeID
   if (!is.null(nodegroupID)) nodeID <- paste0("^", nodegroupID, "$")
   if (!is.null(geneList)) geneList <- paste(paste0("^", geneList, "$"), collapse = "|")
   
-  # Create data table obect
+  ## Create data table obect
   datatable(clusterRes, 
             rownames = F, 
             extensions = 'Buttons', 
@@ -493,17 +493,17 @@ geneTableClusters <- function(clusterRes, nodegroupID = NULL, geneList = NULL){
     formatStyle(c("NodeGroup", "Mean"), `border-right` = "solid 2px")
 }
 
-# Function to format hyperenrichment results from multiple comparisons
+## Function to format hyperenrichment results from multiple comparisons
 genesetTableClusters <- function(ENRTABLE, nodegroupID = NULL, dgeHits = NULL){
   
-  # Get exact match for nodeID
+  ## Get exact match for nodeID
   if (!is.null(nodegroupID)) nodeID <- paste0("^", nodegroupID, "$")
   if (!is.null(dgeHits)) dgeHits <- paste0("^", gsub("; ", "$|^", dgeHits), "$")
   
-  # Add line breaks
+  ## Add line breaks
   colnames(ENRTABLE) <- gsub("_", "<br>", colnames(ENRTABLE))
   
-  # Create DT object
+  ## Create DT object
   outDT <- datatable(ENRTABLE,
                      rownames = F,
                      extensions = 'Buttons',
@@ -551,16 +551,16 @@ genesetTableClusters <- function(ENRTABLE, nodegroupID = NULL, dgeHits = NULL){
   
 }
 
-# Generete hyperenrichment results
+## Generete hyperenrichment results
 hyperenrichmentClusters <- function(clusterRes, groupList, genesets, qthresh, cthresh, ntotal) {
   
-  # Create list of gene signatures
+  ## Create list of gene signatures
   sigList <- lapply(seq(length(groupList)), function(mod, clusterRes, qthresh) {
     
-    # Get subset of the clusters
+    ## Get subset of the clusters
     cSub <- clusterRes[clusterRes$mod == mod,]
     
-    # Get genes with sig pvalues
+    ## Get genes with sig pvalues
     genes <- cSub$gene[cSub$fdr < qthresh & cSub$coef > cthresh]
     
     return(genes)
@@ -568,7 +568,7 @@ hyperenrichmentClusters <- function(clusterRes, groupList, genesets, qthresh, ct
   }, clusterRes, qthresh)
   names(sigList) <- names(groupList)
   
-  # Run hyperenrichment
+  ## Run hyperenrichment
   gseList <- lapply(sigList, function(sig, genesets, ntotal){
     enrichFram <- NULL
     if(length(sig) > 0) {
@@ -590,7 +590,7 @@ hyperenrichmentClusters <- function(clusterRes, groupList, genesets, qthresh, ct
     return(enrichFram)
   }, genesets, ntotal)
   
-  # Calculate and merge FDR values
+  ## Calculate and merge FDR values
   pValueDF <- data.frame(pval = unlist(lapply(gseList, function(y) y$pval)))
   pValueDF$fdr <- p.adjust(pValueDF$pval, method = "BH")
   pValueDF <- unique(pValueDF)

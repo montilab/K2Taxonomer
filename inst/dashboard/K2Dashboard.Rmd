@@ -31,58 +31,58 @@ library(limma)
 library(dendextend)
 
 
-# Read in helper functions
+## Read in helper functions
 source(system.file("dashboard", "DashHelper.R", package = "K2Taxonomer"))
 
 ```
 
 ```{r data, context="data", include=FALSE}
 
-# Read in analysis results
+## Read in analysis results
 K2summary <- readRDS("K2results.rds")
 
-# Parse results
-info <- K2info(K2summary); infoMat <- as.matrix(info) # Format information
-K2res <- K2results(K2summary) # Format K2 results
-dataMatrix <- K2data(K2summary) # Format dataMatrix
-genesets <- K2genesets(K2summary) # Get geneset lists
-gene2Pathway <- K2gene2Pathway(K2summary) # Get gene2pathway matching
-eSet <- K2eSet(K2summary) # Get expression set
-gSet <- K2gSet(K2summary) # Get gene set projection expression set
-meta <- K2meta(K2summary) # Get meta data
-geneURL <- K2geneURL(K2summary) # Get meta data
-genesetURL <- K2genesetURL(K2summary) # Get meta data
-K2dendrogram <- K2dendro(K2summary) # Create static dendrogram
+## Parse results
+info <- K2info(K2summary); infoMat <- as.matrix(info) ## Format information
+K2res <- K2results(K2summary) ## Format K2 results
+dataMatrix <- K2data(K2summary) ## Format dataMatrix
+genesets <- K2genesets(K2summary) ## Get geneset lists
+gene2Pathway <- K2gene2Pathway(K2summary) ## Get gene2pathway matching
+eSet <- K2eSet(K2summary) ## Get expression set
+gSet <- K2gSet(K2summary) ## Get gene set projection expression set
+meta <- K2meta(K2summary) ## Get meta data
+geneURL <- K2geneURL(K2summary) ## Get meta data
+genesetURL <- K2genesetURL(K2summary) ## Get meta data
+K2dendrogram <- K2dendro(K2summary) ## Create static dendrogram
 
-# Create interactive dendrogram
+## Create interactive dendrogram
 vNetOut <- K2visNetwork(K2summary)
 
-# Remove K2summary to save space
+## Remove K2summary to save space
 rm(K2summary)
 
-# If too many observations in terminal labels, unlabel them
+## If too many observations in terminal labels, unlabel them
 if (max(
   lengths(regmatches(vNetOut$x$nodes$label, gregexpr("\n", vNetOut$x$nodes$label)))
   ) > 20 ) {
 
-    # Fix font size
+    ## Fix font size
     vNetOut$x$nodes$font.size <- 25
     vNetOut$x$nodes$font.size[vNetOut$x$nodes$shape == "box"] <- 0
 
-    # Change shape
+    ## Change shape
     vNetOut$x$nodes$shape[vNetOut$x$nodes$shape == "box"] <- "square"
 }
 
-# Format enrichment table
+## Format enrichment table
 enrTable <- getEnrichmentTable(K2res)
 
-# Remove unnecessary columns
+## Remove unnecessary columns
 enrTable <- enrTable[, !colnames(enrTable) %in% c("B", "ntot", "t")]
 
-# Remove gse from K2res
+## Remove gse from K2res
 K2res <- lapply(K2res, function(x) {x$gse <- NULL; return(x)} )
 
-# Add aliases for plotting and looking up
+## Add aliases for plotting and looking up
 enrTable$Plot <- paste0("<label for='PlotRow",
                           seq(nrow(enrTable)),
                           "'>&#128202;</label>")
@@ -90,30 +90,30 @@ enrTable$Send <- paste0("<label for='SendRow",
                           seq(nrow(enrTable)),
                           "'>&#9992;</label>")
 
-# Add links to gene sets
+## Add links to gene sets
 geneSetStringL <- "<a href='"
 geneSetStringR <- "' style='text-decoration:none' target='_blank'>&#128269;</a>"
 genesetURLsub <- genesetURL[enrTable$category]
 enrTable$Link <- paste0(geneSetStringL, genesetURLsub, geneSetStringR)
 
-# Format numbers to fit in table
+## Format numbers to fit in table
 for (i in c("pval_hyper", "fdr_hyper", "pval_limma", "fdr_limma")) {
   enrTable[,i] <- signif(enrTable[,i], digits = 2)
 }
-# Format numbers to fit in table
+## Format numbers to fit in table
 for (i in c("coef", "mean")) {
   enrTable[,i] <- round(enrTable[,i], digits = 2)
 }
 
 colnames(enrTable) <- c("Gene Set", "Node", "Group", "Direction", "P Value_Hyper", "FDR_Hyper", "N_Overlap", "N_Sig. Genes", "N_Gene Set", "P Value_ssGSEA", "FDR_ssGSEA", "Diff_ssGSEA", "Mean_ssGSEA", "Hits", "Plot", "Send", "Link")
 
-# Get differential gene expression results
+## Get differential gene expression results
 dgeTable <- getDGETable(K2res)
 
-# Remove gse from K2res
+## Remove gse from K2res
 K2res <- lapply(K2res, function(x) {x$dge <- NULL; return(x)} )
 
-# Add aliases for plotting and looking up
+## Add aliases for plotting and looking up
 dgeTable$Plot <- paste0("<label for='PlotRow",
                           seq(nrow(dgeTable)),
                           "'>&#128202;</label>")
@@ -121,29 +121,29 @@ dgeTable$Send <- paste0("<label for='SendRow",
                           seq(nrow(dgeTable)),
                           "'>&#9992;</label>")
 
-## Add links to genes
+### Add links to genes
 geneStringL <- "<a href='"
 geneStringR <- "' style='text-decoration:none' target='_blank'>&#128269;</a>"
 geneURLsub <- geneURL[rownames(dgeTable$gene)]
 dgeTable$Link <- paste0(geneStringL, geneURLsub, geneStringR)
 
-# Reorder columns
+## Reorder columns
 
 dgeTable <- dgeTable[,c("gene", "split", "mod", "direction", "pval", "fdr", "coef", "mean", "Plot", "Send", "Link")]
 
-# Format numbers to fit in table
+## Format numbers to fit in table
 for (i in c("pval", "fdr")) {
   dgeTable[,i] <- signif(dgeTable[,i], digits = 2)
 }
-# Format numbers to fit in table
+## Format numbers to fit in table
 for (i in c("coef", "mean")) {
   dgeTable[,i] <- round(dgeTable[,i], digits = 2)
 }
 
-# Rename columns
+## Rename columns
 colnames(dgeTable) <- c("Gene", "Node", "Group", "Direction", "P Value", "FDR", "Diff", "Mean", "Plot", "Send", "Link")
 
-## Set select input options for annotations bar
+### Set select input options for annotations bar
 varOptions <- sort(colnames(info))
 names(varOptions) <- varOptions
 if(!is.null(meta$cohorts)) {
@@ -153,17 +153,17 @@ if(!is.null(meta$cohorts)) {
 }
 varOptions <- c("Add Annotation to Heatmap:" = "", "RESET" = "RESET", varOptions)
 
-## Get sample order
+### Get sample order
 labs <- get_leaves_attr(K2dendrogram, "label")
 
-# Get IDs of each group
+## Get IDs of each group
 obsMap <- unlist(lapply(K2res, function(x) x$obs), recursive = F)
 
 ```
 
 ```{r values, context="server"}
 
-## Reactive values
+### Reactive values
 values <- reactiveValues(nodeSel = "A",
                          Held = NULL,
                          mvTabSub = NULL)
@@ -176,7 +176,7 @@ K2 Taxonomer Results {data-orientation=rows}
 Selections {.sidebar}
 -------------------------------------
 
-### Member Search
+#### Member Search
 
 ```{r createButtons, context="server"}
 
@@ -186,16 +186,16 @@ output$Search <- renderUI({
 
 output$Match <- renderUI({
 
-  # Get info matches for this string
+  ## Get info matches for this string
   if(!is.null(input$mstring) && (input$mstring != "" & sum(grepl(input$mstring, infoMat, ignore.case = T)) != 0)) {
 
-      # Find matches in the terminal leafs
+      ## Find matches in the terminal leafs
       infoInd <- unique(which(`dim<-`(grepl(input$mstring, infoMat, ignore.case = T), dim(infoMat)), arr.ind=TRUE)[,1])
 
-      # Generate string to show
+      ## Generate string to show
       showString <- sapply(infoInd, function(row) paste0(paste(paste0(colnames(infoMat), ":", infoMat[row,]), collapse = "\n"), "\n"))
 
-      # Get number of matches
+      ## Get number of matches
       nMatches <- paste0(length(infoInd), " matche(s)")
       valueString <- c("A", rownames(infoMat)[infoInd])
       names(valueString) <- c(nMatches, showString)
@@ -227,7 +227,7 @@ observeEvent(input$Helpgo, {
 
 ```{r printbuttons, error = FALSE}
 
-# Out of global help button
+## Out of global help button
 htmlOutput("Search")
 uiOutput("Match")
 actionButton("Helpgo", "Help")
@@ -237,14 +237,14 @@ actionButton("Helpgo", "Help")
 Row {data-height=600}
 -------------------------------------
 
-### Taxonomer Results
+#### Taxonomer Results
 
 ```{r formatNetwork, context="server"}
 
-# Render Dendrogram
+## Render Dendrogram
 output$dendro <- renderVisNetwork({
 
-  # Select path to a specific member by searching
+  ## Select path to a specific member by searching
   if(!is.null(input$mVal) && input$mVal %in% rownames(info) && input$mVal != values$nodeSel){
     pathSel <- as.character(vNetOut$x$nodes$id[
       grep(paste0("^", input$mVal, "<br>|<br>", input$mVal, "<br>|", input$mVal, "$"), vNetOut$x$nodes$title)])
@@ -255,7 +255,7 @@ output$dendro <- renderVisNetwork({
   if(!is.null(values$mvTabSub)) {
     if(nrow(values$mvTabSub) > 0) {
 
-      # Change width of edges
+      ## Change width of edges
       mEdge <- values$mvTabSub[, c("Parent", "Child", "width")]
       colnames(mEdge) <- c("from", "to", "width")
       edgeFram <- merge(vNetOut$x$edges, mEdge, all.x = TRUE, sort = FALSE)
@@ -263,7 +263,7 @@ output$dendro <- renderVisNetwork({
       edgeFram$color.inherit <- 'to'
       vNetOut$x$edges <- edgeFram
 
-      # Change color of edges
+      ## Change color of edges
       mNode <- values$mvTabSub[, c("Child", "color")]
       colnames(mNode) <- c("id", "color.border")
       nodeFram <- merge(vNetOut$x$nodes, mNode, all.x = TRUE, sort = FALSE)
@@ -272,7 +272,7 @@ output$dendro <- renderVisNetwork({
       nodeFram$color.highlight <- 'red'
       vNetOut$x$nodes <- nodeFram
 
-      # Highlight path
+      ## Highlight path
     }
   }
 
@@ -303,7 +303,7 @@ output$dendro <- renderVisNetwork({
 
 ```{r dendrometaprint}
 
-# Show dendrogram output
+## Show dendrogram output
 visNetworkOutput("dendro")
 
 ```
@@ -311,7 +311,7 @@ visNetworkOutput("dendro")
 
 ```{r setvalue, context="server"}
 
-# Selections of dendrogram
+## Selections of dendrogram
 observeEvent({
     input$dendro_selected
   }, {
@@ -338,11 +338,11 @@ observeEvent({
 
 ```
 
-### Cluster Information (&uarr; = Group 1; &darr; = Group 2)
+#### Cluster Information (&uarr; = Group 1; &darr; = Group 2)
 
 ```{r ClusterInfoOutput, context = "server"}
 
-# Create input selector for cluster info
+## Create input selector for cluster info
 output$AddVariable <- renderUI({
   selectInput("selCov", NULL, varOptions)
 })
@@ -351,10 +351,10 @@ output$AddVariable <- renderUI({
 
 ```{r renderheatmap, context = "server"}
 
-# Render heatmap of cluster stability
+## Render heatmap of cluster stability
 output$heatmapPlot <- renderPlotly({
 
-  # Get values to add
+  ## Get values to add
   if(!is.null(input$selCov) && input$selCov %in% colnames(info)) {
     values$selCov <- unique(c(values$selCov, input$selCov))
   } else {
@@ -363,48 +363,48 @@ output$heatmapPlot <- renderPlotly({
 
   if(values$nodeSel %in% names(K2res)){
 
-    # Get matrix and sort
+    ## Get matrix and sort
     samp_stab <- as.matrix(K2res[[values$nodeSel]]$stability$samples)
     ord <- order(match(colnames(samp_stab), labs))
     samp_stab <- as.matrix(samp_stab)[ord, ord]
 
-    # Get sample groups
+    ## Get sample groups
     modList <- K2res[[values$nodeSel]]$obs
 
-    # Create column annotation
+    ## Create column annotation
     colrowAnnot <- data.frame(Group = c(rep("Group:1", length(modList[[1]])),
                               rep("Group:2", length(modList[[2]]))),
                             row.names = c(modList[[1]], modList[[2]])
                             )[colnames(samp_stab), , drop = FALSE]
 
-    # If no selections just color groups
+    ## If no selections just color groups
     colSidePalette <- c("#000000", "#808080")
     names(colSidePalette) <- c("Group:1", "Group:2")
 
-    # If selections are made add colors
+    ## If selections are made add colors
     if(!is.null(values$selCov)){
 
-      # Initialize
+      ## Initialize
       colValues <- c()
       colSidePalette <- c()
 
-      # Get info for these samples
+      ## Get info for these samples
       infoSub <- info[colnames(samp_stab), values$selCov]
       colrowAnnot <- cbind(infoSub, colrowAnnot)
       colnames(colrowAnnot) <- c(values$selCov, "Group")
 
-      # SET VALUES AND COLOR PALLETES
+      ## SET VALUES AND COLOR PALLETES
       for (i in values$selCov) {
           colrowAnnot[,i] <- paste(i, colrowAnnot[,i], sep = ":")
           addValues <- info[,i]; addValues <- addValues[!is.na(addValues)]
           addValuesUnique <- unique(addValues)
           colValues <- c(colValues, paste(i, addValuesUnique, sep = ":"))
 
-          # If a factor or character add unique values for each unique value
+          ## If a factor or character add unique values for each unique value
           if ( class(addValues) %in% c("character", "factor") ) {
               colSidePalette <- c(colSidePalette, heatmaply:::default_side_colors(length(addValuesUnique)))
 
-          # Otherwise use a color gradient based on z-scored quantile
+          ## Otherwise use a color gradient based on z-scored quantile
           } else {
               addValuesNorm <- unique(qnorm(rank(addValues)/(length(addValues)+1)))
               addValuesCut <- rep(NA, length(addValuesNorm))
@@ -419,7 +419,7 @@ output$heatmapPlot <- renderPlotly({
           }
       }
 
-      # Create pallette of all possible factors
+      ## Create pallette of all possible factors
       colSidePalette <- c(colSidePalette, "#000000", "#808080", rep("#D3D3D3", length(values$selCov)))
       names(colSidePalette) <- c(colValues, "Group:1", "Group:2", paste0(values$selCov, ":NA"))
 
@@ -436,11 +436,11 @@ output$heatmapPlot <- renderPlotly({
             dendrogram = FALSE,
             showticklabels = FALSE)
 
-    # Remove legend
+    ## Remove legend
     hm$x$layout$showlegend <- FALSE
 
-    # Change value to cosine similarity
-    whHeatmap <- which(unlist(lapply(hm$x$data, function(x) x$type == "heatmap"))) # Get heatmap index
+    ## Change value to cosine similarity
+    whHeatmap <- which(unlist(lapply(hm$x$data, function(x) x$type == "heatmap"))) ## Get heatmap index
     hm$x$data[[whHeatmap]]$text <- sub("value:", "cos similarity:", hm$x$data[[whHeatmap]]$text)
 
     return(hm)
@@ -472,7 +472,7 @@ output$heatmapPlot <- renderPlotly({
 
 ```{r renderstabstats, context = "server"}
 
-# Render stability statistics
+## Render stability statistics
 output$stabStats <- renderUI({
   if(values$nodeSel %in% names(K2res)){
 
@@ -491,10 +491,10 @@ output$stabStats <- renderUI({
 
 ```{r renderMetaVars, context = "server"}
 
-# Generate table of meta-variable tests
+## Generate table of meta-variable tests
 if (!is.null(K2res[[1]]$modTests)) {
 
-  # Format table
+  ## Format table
   K2modTestList <- lapply(K2res, function(x) {
     modTests <- x$modTests
     names(modTests) <- c("1", "2")
@@ -503,26 +503,26 @@ if (!is.null(K2res[[1]]$modTests)) {
   names(K2modTestList) <- names(K2res)
   K2modTestFram <- do.call(rbind, K2modTestList)[,c("value", "pval", "fdr")]
 
-  # Get parent node
+  ## Get parent node
   K2modTestFram$Parent <- regmatches(rownames(K2modTestFram),
                                      regexpr("^[^.]+",
                                      rownames(K2modTestFram)))
 
-  # Get direction to chile
+  ## Get direction to chile
   K2modTestFram$Direction <- as.character(gsub("[[:alpha:]]+[.]|[.][[:digit:]]+$",
                                   "",
                                   rownames(K2modTestFram)))
 
-  # Get child
+  ## Get child
   K2modTestFram$Child <- apply(K2modTestFram[, c("Parent", "Direction")], 1, function(x){
     vSub <- vNetOut$x$edges[vNetOut$x$edges$from == x[1],]
     vSub$to[as.numeric(x[2])]
   })
 
-  # Get split
+  ## Get split
   K2modTestFram$Split <- paste0(K2modTestFram$Parent, K2modTestFram$Direction)
 
-  # Format p-values
+  ## Format p-values
   K2modTestFram <- K2modTestFram[!is.na(K2modTestFram$pval),]
   K2modTestFram <- K2modTestFram[order(K2modTestFram$pval),]
 
@@ -553,7 +553,7 @@ if (!is.null(K2res[[1]]$modTests)) {
 
   output$metaVarTab <- renderDataTable({
 
-    # Set null data table
+    ## Set null data table
     values$mvTab <- NULL
     K2modTestFramNULL <- data.frame("No meta-variable results."); colnames(K2modTestFramNULL) <- NULL
     datatable(K2modTestFramNULL,
@@ -575,7 +575,7 @@ if (!is.null(K2res[[1]]$modTests)) {
 
 ```{r dendroreactive, context = "server"}
 
-# MetaVariable Clicks will change dendrogram
+## MetaVariable Clicks will change dendrogram
 observeEvent({
     input$metaVarTab_cell_clicked
   },  {
@@ -584,27 +584,27 @@ observeEvent({
       cat <- values$mvTab[input$metaVarTab_cell_clicked$row, "value"]
       mvTabSub <- values$mvTab[values$mvTab$value == cat,]
 
-      # Color breaks
+      ## Color breaks
       breaks <- c(1, 0.25, 0.1, 0.05, 0.01, 0.001, 0)
       breakColors <- brewer.pal(7, "Greens")
       mvTabSub$color <- sapply(mvTabSub$pval, function(pval) {
         breakColors[which.min(breaks >= pval)]
       })
 
-      # Size breaks
+      ## Size breaks
       breaks <- c(1, 0.1, 0.05, 0.01, 0.001, 0.0001, 0)
       breakSize <- seq(length(breaks)) * 7
       mvTabSub$width <- sapply(mvTabSub$pval, function(pval) {
         breakSize[which.min(breaks >= pval)]
       })
 
-      # Add 2 values
+      ## Add 2 values
       values$mvTabSub <- mvTabSub
     }
   }
 )
 
-# Selections of dendrogram
+## Selections of dendrogram
 observeEvent({
     input$dendro_selected
   }, {
@@ -626,15 +626,15 @@ observeEvent({
 
 ```{r formatInfoTab, context = "server"}
 
-# Render table of information for each node
+## Render table of information for each node
 output$infoTab <- renderDataTable({
   if(values$nodeSel != "No Selection"){
 
-    # Get observations
+    ## Get observations
     obs1 <- K2res[[values$nodeSel]]$obs[[1]]
     obs2 <- K2res[[values$nodeSel]]$obs[[2]]
 
-    # Format Cluster information
+    ## Format Cluster information
     infoSub <- info[c(obs1, obs2), , drop = FALSE]
     infoSub$Group <- "1"
     infoSub$Group[rownames(infoSub) %in% obs2] <- "2"
@@ -661,7 +661,7 @@ output$infoTab <- renderDataTable({
 
 ```{r printNodeTabset}
 
-# Show tabset of node information
+## Show tabset of node information
 div(
   tabsetPanel(type = "tabs",
               tabPanel("Stability", fillCol(
@@ -684,18 +684,18 @@ div(
 Row {data-height=550}
 -------------------------------------
 
-### Differential Analysis Results
+#### Differential Analysis Results
 
 ```{r DGEtableOutput}
 
-# Show genetable results
+## Show genetable results
 DT::dataTableOutput("DGE")
 
 ```
 
 ```{r DGEtableRender, context = "server"}
 
-# Render genetable results
+## Render genetable results
 output$DGE <- renderDataTable({
   if (!is.null(values$nodeSelHE)) {
     geneTable(dgeTable, values$nodeSelHE, values$geneList)
@@ -705,7 +705,7 @@ output$DGE <- renderDataTable({
 
 ```{r DGEhelpdownloadfunctions}
 
-# Functions for help and download the data
+## Functions for help and download the data
 geneHelpShow <- function() {
   div(id = "geneHelp",
             modalDialog("1) Use ^SEARCHTERM$ to filter for exact matches in columns",
@@ -718,7 +718,7 @@ geneHelpShow <- function() {
   )
 }
 
-# Functions to download the data
+## Functions to download the data
 geneTabDL <- function() {
   div(id = "geneDL",
       modalDialog(downloadButton("downloadGeneCSV", "Download Table as CSV file"),
@@ -732,12 +732,12 @@ geneTabDL <- function() {
 
 ```{r DGEhelpclickhandling, context = "server"}
 
-# Pop-up for help
+## Pop-up for help
 observeEvent(input$geneHelp, {
   showModal(geneHelpShow())
 })
 
-# Download CSV File
+## Download CSV File
 output$downloadGeneCSV <- downloadHandler(
   filename = function() {
     paste("generesults-", Sys.Date(), ".csv", sep="")
@@ -747,25 +747,25 @@ output$downloadGeneCSV <- downloadHandler(
   }
 )
 
-# Pop-up for CSV file
+## Pop-up for CSV file
 observeEvent(input$geneDL, {
   showModal(geneTabDL())
 })
 
-# Get output
+## Get output
 observeEvent({input$DGE_cell_clicked},
              {
                if(!is.null(input$DGE_cell_clicked$value)){
 
-                 # Get Value
+                 ## Get Value
                  dgeVal <- gsub("<label for='|'>&#9992;</label>|'>&#128202;</label>", "", as.character(input$DGE_cell_clicked$value))
 
-                  # Check that a link was clicked
+                  ## Check that a link was clicked
                  if (grepl("PlotRow|SendRow", dgeVal)) {
                    rowNum <- as.numeric(sub("PlotRow|SendRow", "", dgeVal))
                    GENERow <- dgeTable[rowNum, , drop = FALSE]
 
-                   # If plotting send the node to plot, otherwise global
+                   ## If plotting send the node to plot, otherwise global
                    if (grepl("PlotRow", dgeVal)) {
                      values$Genep <- GENERow[, "Gene"]
                      values$nodeSelDGEp <- GENERow[, "Node"]
@@ -788,11 +788,11 @@ observeEvent({input$DGE_cell_clicked},
 Row {data-height=500}
 -------------------------------------
 
-### Gene Expression
+#### Gene Expression
 
 ```{r geneplotRender, context = "server"}
 
-# Render genePlot
+## Render genePlot
 output$genePlot <- renderPlotly({
 
     if(!is.null(values$nodeSelDGEp)){
@@ -832,7 +832,7 @@ output$genePlot <- renderPlotly({
 
 ```{r geneplotOutput}
 
-# Show genePlot output
+## Show genePlot output
 plotly::plotlyOutput("genePlot")
 
 ```
@@ -840,18 +840,18 @@ plotly::plotlyOutput("genePlot")
 Row {data-height=550}
 -------------------------------------
 
-### Enrichment Results
+#### Enrichment Results
 
 ```{r HEtableOutput}
 
-# Show hyperenrichment table output
+## Show hyperenrichment table output
 DT::dataTableOutput("HE")
 
 ```
 
 ```{r HEtableRender, context = "server"}
 
-# Render hyperenrichment table
+## Render hyperenrichment table
 output$HE <- renderDataTable({
   if (!is.null(values$nodeSelDGE)) {
     genesetTable(enrTable, values$nodeSelDGE, values$groupDGE, values$dgeHits)
@@ -862,7 +862,7 @@ output$HE <- renderDataTable({
 
 ```{r HEhelpclickfunctions, context = "server"}
 
-# Functions for help
+## Functions for help
 hyperHelpShow <- function() {
   div(id = "hyperHelp",
             modalDialog("1) Use ^SEARCHTERM$ to filter for exact matches in columns",
@@ -875,7 +875,7 @@ hyperHelpShow <- function() {
   )
 }
 
-# Functions for download the data
+## Functions for download the data
 hyperTabDL <- function() {
   div(id = "hyperDL",
       modalDialog(downloadButton("downloadHyperCSV", "Download Table as CSV file"),
@@ -888,12 +888,12 @@ hyperTabDL <- function() {
 
 ```{r HEhelpclickhandling, context = "server"}
 
-# Pop-up for help
+## Pop-up for help
 observeEvent(input$hyperHelp, {
   showModal(hyperHelpShow())
 })
 
-# Download CSV File
+## Download CSV File
 output$downloadHyperCSV <- downloadHandler(
   filename = function() {
     paste("enrresults-", Sys.Date(), ".csv", sep="")
@@ -903,25 +903,25 @@ output$downloadHyperCSV <- downloadHandler(
   }
 )
 
-# Pop-up for download
+## Pop-up for download
 observeEvent(input$hyperDL, {
   showModal(hyperTabDL())
 })
 
-# Reactive row selection
+## Reactive row selection
 observeEvent({input$HE_cell_clicked},
              {
                if (!is.null(input$HE_cell_clicked$value)) {
 
-                 # Get Value
+                 ## Get Value
                  hyperVal <- gsub("<label for='|'>&#9992;</label>|'>&#128202;</label>", "", as.character(input$HE_cell_clicked$value))
 
-                 # If PlotRow then set nodeSelHE
+                 ## If PlotRow then set nodeSelHE
                  if (grepl("PlotRow|SendRow", hyperVal)) {
                    rowNum <- as.numeric(sub("PlotRow|SendRow", "", hyperVal))
                    HYPERRow <- enrTable[rowNum, , drop = FALSE]
 
-                   # If plotting send the node to plot, otherwise global
+                   ## If plotting send the node to plot, otherwise global
                    if (grepl("PlotRow", hyperVal)) {
                      values$GeneSetp <- HYPERRow[, "Gene Set"]
                      values$nodeSelHEp <- HYPERRow[, "Node"]
@@ -942,15 +942,15 @@ observeEvent({input$HE_cell_clicked},
 Row {data-height=500}
 -------------------------------------
 
-### Single-Sample Enrichment
+#### Single-Sample Enrichment
 
 ```{r pathwayplotRender, context = "server"}
 
-# Render pathwayPlot
+## Render pathwayPlot
 output$pathwayPlot <- renderPlotly({
   if(!is.null(values$nodeSelHEp)){
 
-    # Plot Pathway
+    ## Plot Pathway
     plotGenePathway(gSet,
          values$GeneSetp,
          K2res[[values$nodeSelHEp]]$obs[[1]],
@@ -984,7 +984,7 @@ output$pathwayPlot <- renderPlotly({
 
 ```{r pathwayplotOutput}
 
-# Show pathwayPlot output
+## Show pathwayPlot output
 plotly::plotlyOutput("pathwayPlot")
 
 ```
@@ -994,7 +994,7 @@ Compare Multiple {data-orientation=rows}
 
 ```{r chooseMultiDendrogram, context = "server"}
 
-# Generate Dendrogram
+## Generate Dendrogram
 output$dendroSelect <- renderVisNetwork({
 
   values$Held
@@ -1027,18 +1027,18 @@ output$dendroSelect <- renderVisNetwork({
 
 ```{r getObs, context = "server"}
 
-# Allow multiple selections
+## Allow multiple selections
 observeEvent(input$Held, {
 
-  # Get selection
+  ## Get selection
   nodeMulti <- input$Held
 
-  # Reset Plot?
+  ## Reset Plot?
   if(is.null(nodeMulti) & !is.null(input$dendroSelect_selected)) {
     values$Held <- runif(1, 0, 1)
   }
 
-  # If unclicked initialize or reset values$groupList
+  ## If unclicked initialize or reset values$groupList
   if (is.null(nodeMulti)) {
     values$colSel <- c()
     values$groupList <- list()
@@ -1047,7 +1047,7 @@ observeEvent(input$Held, {
     values$colSel <- unique(c(values$colSel, nodeMulti))
   }
 
-  # Get current value
+  ## Get current value
   curVal <- values$colSel[length(values$colSel)]
   if (!is.null(curVal)) {
 
@@ -1057,11 +1057,11 @@ observeEvent(input$Held, {
       obs <- strsplit(as.character(vNetOut$x$nodes$label[vNetOut$x$nodes$id == curVal]), "\n")[[1]]
     }
 
-    # Get unique observations
+    ## Get unique observations
     obsWhole <- obs
     obs <- obs[!obs %in% values$obsUsed]
 
-    # Get mapped group
+    ## Get mapped group
     if(length(obs) > 0) {
       gMap <- names(obsMap)[which.max(unlist(lapply(
         obsMap,
@@ -1082,27 +1082,27 @@ observeEvent(input$Held, {
 Row {data-height=600}
 -------------------------------------
 
-### Click and hold nodes to select sub-groups
+#### Click and hold nodes to select sub-groups
 
 ```{r, printSelecter}
 
-# Show dendroselect output
+## Show dendroselect output
 visNetworkOutput("dendroSelect")
 
 ```
 
-### Selections
+#### Selections
 
 ```{r renderDendroClicks, context = "server"}
 
-# Render action button
+## Render action button
 output$compare <- renderUI({
   if(length(values$groupList) > 1) {
       actionButton("compareGo", "Compare")
   }
 })
 
-# Render group selection
+## Render group selection
 output$groupSel <- renderUI({
 
   HTML(paste(unlist(lapply(names(values$groupList), function(gName) {
@@ -1119,7 +1119,7 @@ output$groupSel <- renderUI({
 
 ```{r groupButtonOutput}
 
-# Show buttong and group selection
+## Show buttong and group selection
 div(htmlOutput("compare", inline = TRUE),
     br(),
     htmlOutput("groupSel", inline = TRUE),
@@ -1129,32 +1129,32 @@ div(htmlOutput("compare", inline = TRUE),
 
 ```{r runCompareMulti, context = "server"}
 
-# Run analysis after compareGo is selected
+## Run analysis after compareGo is selected
 observeEvent(input$compareGo, {
 
-  # Set clicked groupList
+  ## Set clicked groupList
   values$groupListClicked <- values$groupList
 
   withProgress(message = "Comparing Selected Groups:", value = 0, {
 
-    # Create data.frame of mods
+    ## Create data.frame of mods
     mods <- as.factor(unlist(lapply(seq(length(values$groupListClicked)), function(x) rep(x, length(values$groupListClicked[[x]])))))
     names(mods) <- unlist(values$groupListClicked)
 
-    # Genereate gene expression results
+    ## Genereate gene expression results
     incProgress(1/10, detail = "Differential Analysis")
-    clusterRes <- .signature_wrapper(eSet,
+    clusterRes <- .signatureWrapper(eSet,
                      cohorts = meta$cohorts,
                      mods,
                      vehicle = meta$vehicle,
                      covariates = meta$covariates,
                      logCounts = meta$logCounts)
 
-    # Add NodeGroup and gene column
+    ## Add NodeGroup and gene column
     clusterRes$NodeGroup <- names(values$groupListClicked)[as.numeric(clusterRes$mod)]
     clusterRes$gene <- rownames(clusterRes)
 
-    # Generete hyperenrichment results
+    ## Generete hyperenrichment results
     incProgress(1/4, detail = "Pathway Hyperenrichment")
     hyperEnrRes <- hyperenrichmentClusters(clusterRes,
                                         values$groupListClicked,
@@ -1163,10 +1163,10 @@ observeEvent(input$compareGo, {
                                         meta$cthresh,
                                         meta$ntotal)
 
-    # Add NodeGroup ID
+    ## Add NodeGroup ID
     hyperEnrRes <- do.call(rbind, lapply(names(hyperEnrRes), function(x) {
 
-      # Get GSE tables
+      ## Get GSE tables
       HYPERtab <- hyperEnrRes[[x]]
 
       if(nrow(HYPERtab) > 0) {
@@ -1176,39 +1176,39 @@ observeEvent(input$compareGo, {
       return(HYPERtab)
     }))
 
-    # Add type of test
+    ## Add type of test
     colnames(hyperEnrRes)[colnames(hyperEnrRes) %in% c("pval", "fdr")] <-
       paste(colnames(hyperEnrRes)[colnames(hyperEnrRes) %in% c("pval", "fdr")], "hyper", sep = "_")
 
-    # Generete hyperenrichment results
+    ## Generete hyperenrichment results
     incProgress(1/4, detail = "Pathway Differential Enrichment")
-    ssEnrRes <- .signature_wrapper(gSet,
+    ssEnrRes <- .signatureWrapper(gSet,
                      cohorts = meta$cohorts,
                      mods,
                      vehicle = NULL,
                      covariates = meta$covariates)
 
-    # Add NodeGroup and category
+    ## Add NodeGroup and category
     ssEnrRes$NodeGroup <- names(values$groupListClicked)[as.numeric(ssEnrRes$mod)]
     ssEnrRes$category <- rownames(ssEnrRes)
 
-    # Add type of test
+    ## Add type of test
     colnames(ssEnrRes)[colnames(ssEnrRes) %in% c("pval", "fdr")] <-
       paste(colnames(ssEnrRes)[colnames(ssEnrRes) %in% c("pval", "fdr")], "limma", sep = "_")
 
-    # Format hyperenrichment table
+    ## Format hyperenrichment table
     incProgress(1/3, detail = "Formatting Results")
 
-    # Merge the two and sort by hyper p-value
+    ## Merge the two and sort by hyper p-value
     EnrRes <- merge(hyperEnrRes, ssEnrRes, all = TRUE)
 
-    ## Order by pvalue
+    ### Order by pvalue
     EnrRes <- EnrRes[order(EnrRes$pval_hyper),]
 
-    # Sort columns
+    ## Sort columns
     EnrRes <- EnrRes[, c("category", "NodeGroup", "pval_hyper", "fdr_hyper", "nhits", "ndrawn", "ncats", "pval_limma", "fdr_limma", "coef", "mean", "hits")]
 
-    # Add aliases for plotting and looking up
+    ## Add aliases for plotting and looking up
     EnrRes$Plot <- paste0("<label for='PlotRow",
                             seq(nrow(EnrRes)),
                             "'>&#128202;</label>")
@@ -1216,33 +1216,33 @@ observeEvent(input$compareGo, {
                             seq(nrow(EnrRes)),
                             "'>&#9992;</label>")
 
-    # Add links to gene sets
+    ## Add links to gene sets
     genesetURLsub <- genesetURL[EnrRes$category]
     EnrRes$Link <- paste0(geneSetStringL, genesetURLsub, geneSetStringR)
 
-    # Format numbers to fit in table
+    ## Format numbers to fit in table
     for (i in c("pval_hyper", "fdr_hyper", "pval_limma", "fdr_limma")) {
       EnrRes[,i] <- signif(EnrRes[,i], digits = 2)
     }
-    # Format numbers to fit in table
+    ## Format numbers to fit in table
     for (i in c("coef", "mean")) {
       EnrRes[,i] <- round(EnrRes[,i], digits = 2)
     }
 
-    # Change column names
+    ## Change column names
     colnames(EnrRes)  <- c("Gene Set", "NodeGroup", "P Value_Hyper", "FDR_Hyper", "N_Overlap", "N_Sig. Genes", "N_Gene Set", "P Value_ssGSEA", "FDR_ssGSEA", "Diff_ssGSEA", "Mean_ssGSEA", "Hits", "Plot", "Send", "Link")
 
-    # Assign to reactiveValues
+    ## Assign to reactiveValues
     values$EnrRes <- EnrRes
 
-    ## Order by pvalue
+    ### Order by pvalue
     clusterRes <- clusterRes[order(clusterRes$pval),]
 
-    ## Add links to genes
+    ### Add links to genes
     geneURLsub <- geneURL[rownames(clusterRes$gene)]
     clusterRes$Link <- paste0(geneStringL, geneURLsub, geneStringR)
 
-    # Add aliases for plotting and looking up
+    ## Add aliases for plotting and looking up
     clusterRes$Send <- paste0("<label for='SendRow",
                             seq(nrow(clusterRes)),
                             "'>&#9992;</label>")
@@ -1252,19 +1252,19 @@ observeEvent(input$compareGo, {
 
     clusterRes <- clusterRes[,c("gene", "NodeGroup", "pval", "fdr",  "coef", "mean", "Plot", "Send", "Link")]
 
-    # Format numbers to fit in table
+    ## Format numbers to fit in table
     for (i in c("pval", "fdr")) {
       clusterRes[,i] <- signif(clusterRes[,i], digits = 2)
     }
-    # Format numbers to fit in table
+    ## Format numbers to fit in table
     for (i in c("coef", "mean")) {
       clusterRes[,i] <- round(clusterRes[,i], digits = 2)
     }
 
-    # Rename columns
+    ## Rename columns
     colnames(clusterRes) <- c("Gene", "NodeGroup", "P Value", "FDR", "Diff", "Mean", "Plot", "Send", "Link")
 
-    # Assign to reactiveValues
+    ## Assign to reactiveValues
     values$clusterRes <- clusterRes
   })
 })
@@ -1274,18 +1274,18 @@ observeEvent(input$compareGo, {
 Row {data-height=550}
 -------------------------------------
 
-### Differential Analysis Results
+#### Differential Analysis Results
 
 ```{r dataTableOutputMulti}
 
-# Show geneTable from multiple group analysis
+## Show geneTable from multiple group analysis
 DT::dataTableOutput("DGEmulti")
 
 ```
 
 ```{r dataTableRenderMulti, context = "server"}
 
-# Render geneTable from multiple group analysis
+## Render geneTable from multiple group analysis
 output$DGEmulti <- renderDataTable({
   if (!is.null(values$clusterRes)) {
     geneTableClusters(values$clusterRes, values$nodeSelHEMulti, values$geneListMulti)
@@ -1296,7 +1296,7 @@ output$DGEmulti <- renderDataTable({
 
 ```{r DGEmultihelpclickfunctions}
 
-# Functions for help and download the data
+## Functions for help and download the data
 geneHelpShowMulti <- function() {
   div(id = "geneHelpMulti",
       modalDialog("1) Use ^SEARCHTERM$ to filter for exact matches in columns",
@@ -1309,7 +1309,7 @@ geneHelpShowMulti <- function() {
   )
 }
 
-# Functions to download the data
+## Functions to download the data
 geneTabDLMulti <- function() {
   div(id = "geneDLMulti",
       modalDialog(downloadButton("downloadGeneCSVMulti", "Download Table as CSV file"),
@@ -1323,12 +1323,12 @@ geneTabDLMulti <- function() {
 
 ```{r DGEmultihelpclickhandling, context = "server"}
 
-# Pop-up for help
+## Pop-up for help
 observeEvent(input$geneHelpMulti, {
   showModal(geneHelpShowMulti())
 })
 
-# Download gene expression results
+## Download gene expression results
 output$downloadGeneCSVMulti <- downloadHandler(
   filename = function() {
     paste("generesultsmulti-", Sys.Date(), ".csv", sep="")
@@ -1338,25 +1338,25 @@ output$downloadGeneCSVMulti <- downloadHandler(
   }
 )
 
-# Download when prompted
+## Download when prompted
 observeEvent(input$geneDLMulti, {
   showModal(geneTabDLMulti())
 })
 
-# Get output
+## Get output
 observeEvent({input$DGEmulti_cell_clicked},
              {
                if(!is.null(input$DGEmulti_cell_clicked$value)){
 
-                 # Get Value
+                 ## Get Value
                  dgeVal <- gsub("<label for='|'>&#9992;</label>|'>&#128202;</label>", "", as.character(input$DGEmulti_cell_clicked$value))
 
-                  # Check that a link was clicked
+                  ## Check that a link was clicked
                  if (grepl("PlotRow|SendRow", dgeVal)) {
                    rowNum <- as.numeric(sub("PlotRow|SendRow", "", dgeVal))
                    GENERowMulti <- values$clusterRes[rowNum, , drop = FALSE]
 
-                   # If plotting send the node to plot, otherwise global
+                   ## If plotting send the node to plot, otherwise global
                    if (grepl("PlotRow", dgeVal)) {
                      values$GeneMultip <- GENERowMulti[, "Gene"]
                    } else {
@@ -1378,18 +1378,18 @@ observeEvent({input$DGEmulti_cell_clicked},
 Row {data-height=500}
 -------------------------------------
 
-### Gene Expression
+#### Gene Expression
 
 ```{r geneplotRenderMulti}
 
-# Show genePlot for multiple clusters
+## Show genePlot for multiple clusters
 plotly::plotlyOutput("genePlotCluster")
 
 ```
 
 ```{r geneplotRendertMulti, context = "server"}
 
-# Render genePlot for multiple clusters
+## Render genePlot for multiple clusters
 output$genePlotCluster <- renderPlotly({
 
   if (!is.null(values$GeneMultip)) {
@@ -1425,18 +1425,18 @@ output$genePlotCluster <- renderPlotly({
 Row {data-height=550}
 -------------------------------------
 
-### Hyperenrichment Results
+#### Hyperenrichment Results
 
 ```{r genesetTableOutputMulti}
 
-# Show table of hyperenrichment
+## Show table of hyperenrichment
 DT::dataTableOutput("HEmulti")
 
 ```
 
 ```{r genesetTableRenderMulti, context = "server"}
 
-# Render table of hyperenrichment
+## Render table of hyperenrichment
 output$HEmulti <- renderDataTable({
   if (!is.null(values$EnrRes)) {
     genesetTableClusters(values$EnrRes, values$nodeSelDGEMulti, values$dgeHitsMulti)
@@ -1448,7 +1448,7 @@ output$HEmulti <- renderDataTable({
 
 ```{r HEmultihelpclickfunctions}
 
-# Functions for help and download the data
+## Functions for help and download the data
 hyperHelpShowMulti <- function() {
   div(id = "hyperHelpMulti",
             modalDialog("1) Use ^SEARCHTERM$ to filter for exact matches in columns",
@@ -1461,7 +1461,7 @@ hyperHelpShowMulti <- function() {
   )
 }
 
-# Functions for help and download the data
+## Functions for help and download the data
 hyperTabDLMulti <- function() {
   div(id = "hyperDLMulti",
       modalDialog(downloadButton("downloadHyperCSVMulti", "Download Table as CSV file"),
@@ -1475,7 +1475,7 @@ hyperTabDLMulti <- function() {
 
 ```{r HEmultihelpclickhandling, context = "server"}
 
-# Pop-up for help
+## Pop-up for help
 observeEvent(input$hyperHelpMulti, {
   showModal(hyperHelpShowMulti())
 })
@@ -1489,27 +1489,27 @@ output$downloadHyperCSVMulti <- downloadHandler(
   }
 )
 
-# Pop-up for download
+## Pop-up for download
 observeEvent(input$hyperDLMulti, {
   showModal(hyperTabDLMulti())
 })
 
-# Reactive row selection
+## Reactive row selection
 observeEvent({input$HEmulti_cell_clicked},
              {
                if (!is.null(input$HEmulti_cell_clicked$value)) {
 
-                 # Get Value
+                 ## Get Value
                  hyperVal <- gsub("<label for='|'>&#9992;</label>|'>&#128202;</label>",
                                   "",
                                   as.character(input$HEmulti_cell_clicked$value))
 
-                 # If PlotRow then set nodeSelHE
+                 ## If PlotRow then set nodeSelHE
                  if (grepl("PlotRow|SendRow", hyperVal)) {
                    rowNum <- as.numeric(sub("PlotRow|SendRow", "", hyperVal))
                    HYPERRowMulti <- values$EnrRes[rowNum, , drop = FALSE]
 
-                   # If plotting send the node to plot, otherwise global
+                   ## If plotting send the node to plot, otherwise global
                    if (grepl("PlotRow", hyperVal)) {
                      values$GeneSetMultip <- HYPERRowMulti[, "Gene Set"]
                    } else {
@@ -1527,11 +1527,11 @@ observeEvent({input$HEmulti_cell_clicked},
 Row {data-height=500}
 -------------------------------------
 
-### Single-sample Enrichment
+#### Single-sample Enrichment
 
 ```{r hyperplotOutputMulti}
 
-# Show plot of hyperenrichment of multiple clusters
+## Show plot of hyperenrichment of multiple clusters
 plotly::plotlyOutput("hePlotCluster")
 
 ```
@@ -1539,7 +1539,7 @@ plotly::plotlyOutput("hePlotCluster")
 
 ```{r hyperplotRenderMulti, context = "server"}
 
-# Render plot of hyperenrichment of multiple clusters
+## Render plot of hyperenrichment of multiple clusters
 output$hePlotCluster <- renderPlotly({
 
   if (!is.null(values$GeneSetMultip)) {

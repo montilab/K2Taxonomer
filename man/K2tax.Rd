@@ -23,7 +23,8 @@ K2tax(
 
 \item{recalcDataMatrix}{Recalculate dataMatrix for each partion?}
 
-\item{nBoots}{A numeric value of the number of bootstraps to run at each split.}
+\item{nBoots}{A numeric value of the number of bootstraps to run at each
+split.}
 
 \item{clustFunc}{Wrapper function to cluster a P x N (See details).}
 
@@ -31,20 +32,23 @@ K2tax(
 
 \item{clustList}{List of objects to use for clustering procedure.}
 
-\item{linkage}{Linkage criteria for splitting cosine matrix ("method" in hclust).}
+\item{linkage}{Linkage criteria for splitting cosine matrix ('method' in
+hclust).}
 
 \item{oneoff}{Logical. Allow 1 member clusters?}
 
-\item{stabThresh}{A numeric value < 1, to set stopping threshold (use any negative value for no threshold).}
+\item{stabThresh}{A numeric value < 1, to set stopping threshold (use any
+negative value for no threshold).}
 
 \item{featMatric}{Metric to use to assign variance/signal score. Options are
-"square" (default), "mad" to use MAD scores, "sd" to use standard deviation}
+'square' (default), 'mad' to use MAD scores, 'sd' to use standard deviation}
 }
 \value{
 An object of class K2.
 }
 \description{
-This function performs K2 Taxonomer procedure only. Arguments values are extracted from K2meta(K2res) unless othewise specified.
+This function performs K2 Taxonomer procedure only. Arguments values are
+extracted from K2meta(K2res) unless othewise specified.
 }
 \examples{
 K2tax(K2res)

@@ -13,7 +13,8 @@ K2dendro(K2res)
 An object of class dendrogram.
 }
 \description{
-Reformats the output of K2tax() to an object of class, dendrogram, which can be easily plotted.
+Reformats the output of K2tax() to an object of class, dendrogram,
+which can be easily plotted.
 }
 \examples{
 K2dendro(K2res)

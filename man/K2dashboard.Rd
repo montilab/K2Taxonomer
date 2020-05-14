@@ -14,7 +14,8 @@ K2dashboard(
 \arguments{
 \item{K2results}{Object of class K2. The output of runK2Taxonomer().}
 
-\item{analysis_name}{Character string of the name of analysis to write files and generate title of report.}
+\item{analysis_name}{Character string of the name of analysis to write files
+and generate title of report.}
 
 \item{output_dir}{Base directory to put report.}
 
@@ -24,10 +25,12 @@ K2dashboard(
 Nothing.  Writes files to a specified directory.
 }
 \description{
-This function will generate an interactive dashboard of the annotated K=2 clustering results.
+This function will generate an interactive dashboard of the annotated K=2
+clustering results.
 }
 \examples{
-K2dashboard(K2results, analysis_name = "K2Taxonomer", output_dir = ".", compile = TRUE)
+K2dashboard(K2results, analysis_name = 'K2Taxonomer', output_dir = '.',
+compile = TRUE)
 
 }
 \keyword{clustering}
