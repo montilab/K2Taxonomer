@@ -16,6 +16,18 @@
 
 runGSEmods <- function(K2res, genesets = NULL, qthresh = NULL, cthresh = NULL, ntotal = NULL) {
 
+    ## Run checks
+    .isK2(K2res)
+    
+    ## K2 algorithm
+    if (length(K2results(K2res)) == 0) {
+        "No results found. Please run K2tax() or runK2Taxonomer().\n"
+    }
+    
+    ## DGE
+    if (is.null(K2results(K2res)[[1]]$dge)) {
+        "No differential analysis results found. Please run runDGEmods().\n"
+    }
 
     ## Change meta data if new value is specific
     K2meta(K2res)$qthresh <- qthresh <- .checkK2(K2res, "qthresh", qthresh)

@@ -3,13 +3,26 @@
 #' Adds statistical tests results to the output of K2tax()
 #' based on numeric and factor variables in info.
 #' @param K2res An object of class K2. The output of K2tax().
+#' @param infoClass A named vector denoted types of tests to run on
+#' meta variables (See K2preproc()).
 #' @return An object of class K2.
 #' @keywords clustering
 #' @export
 #' @examples
 #' runTestsMods(K2res)
 
-runTestsMods <- function(K2res) {
+runTestsMods <- function(K2res, infoClass = NULL) {
+    
+    ## Run checks
+    .isK2(K2res)
+    
+    ## K2 algorithm
+    if (length(K2results(K2res)) == 0) {
+        "No results found. Please run K2tax() or runK2Taxonomer().\n"
+    }
+    
+    ## Change meta data if new value is specied
+    K2meta(K2res)$infoClass <- infoClass <- .checkK2(K2res, "infoClass", infoClass)
     
     ## Check K2 object
     k2Check <- .checkK2(K2res)

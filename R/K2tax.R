@@ -30,6 +30,9 @@
 K2tax <- function(K2res, nFeats = NULL, featMetric = NULL, recalcDataMatrix = NULL,
     nBoots = NULL, clustFunc = NULL, clustCors = NULL, clustList = NULL, linkage = NULL,
     oneoff = NULL, stabThresh = NULL) {
+    
+    ## Run checks
+    .isK2(K2res)
 
     ## Change meta data if new value is specific
     K2meta(K2res)$nFeats <- nFeats <- .checkK2(K2res, "nFeats", nFeats)

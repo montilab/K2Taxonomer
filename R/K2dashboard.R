@@ -16,6 +16,7 @@
 K2dashboard <- function(K2res, analysis_name = "K2Taxonomer", output_dir = ".") {
     
     ## Run checks
+    .isK2(K2res)
     
     ## Check K2 object
     k2Check <- .checkK2(K2res)

@@ -8,6 +8,14 @@
 #' K2visNetwork(K2res)
 #'
 K2visNetwork <- function(K2res) {
+    
+    ## Run checks
+    .isK2(K2res)
+    
+    ## K2 algorithm
+    if (length(K2results(K2res)) == 0) {
+        "No results found. Please run K2tax() or runK2Taxonomer().\n"
+    }
 
     ## Get results list
     K2res <- K2results(K2res)

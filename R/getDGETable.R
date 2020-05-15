@@ -10,6 +10,9 @@
 
 getDGETable <- function(K2res) {
     
+    ## Run checks
+    .isK2(K2res)
+    
     K2resList <- K2results(K2res)
     
     ## Format single-sample enrichment results

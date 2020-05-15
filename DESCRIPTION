@@ -55,6 +55,7 @@ Collate:
     'fixFDR.R'
     'dgeWrapper.R'
     'doSplit.R'
+    'isK2.R'
     'formatCov.R'
     'checkK2.R'
     'getEnrichmentTable.R'

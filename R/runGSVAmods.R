@@ -17,7 +17,10 @@
 #' runGSVAmods(K2res)
 
 runGSVAmods <- function(K2res, ssGSEAalg = NULL, ssGSEAcores = NULL, ...) {
-
+    
+    ## Run checks
+    .isK2(K2res)
+    
     ## Change meta data if new value is specific
     K2meta(K2res)$ssGSEAalg <- .checkK2(K2res, "ssGSEAalg", ssGSEAalg)
     K2meta(K2res)$ssGSEAcores <- .checkK2(K2res, "ssGSEAcores", ssGSEAcores)
