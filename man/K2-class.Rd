@@ -5,7 +5,7 @@
 \alias{K2-class}
 \title{K2 object}
 \description{
-This class is the output of runK2Taxonomer().
+This class is the output of runK2Taxonomer() and K2preproc().
 }
 \section{Slots}{
 

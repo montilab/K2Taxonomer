@@ -10,16 +10,13 @@
 
 getEnrichmentTable <- function(K2res) {
     
-    ## If class is 'K2' extract K2results()
-    if (class(K2res) == "K2") {
-        K2res <- K2results(K2res)
-    }
+    K2resList <- K2results(K2res)
     
     ## Format hyperenrichment table
-    EnrTable <- do.call(rbind, lapply(names(K2res), function(x) {
+    EnrTable <- do.call(rbind, lapply(names(K2resList), function(x, K2resList) {
         
         ## Get GSE tables
-        GSEtabList <- K2res[[x]]$gse
+        GSEtabList <- K2resList[[x]]$gse
         
         ## Add group informaiton and extract tables
         GSEtab <- do.call(rbind, lapply(names(GSEtabList), function(y) {
@@ -37,14 +34,14 @@ getEnrichmentTable <- function(K2res) {
             c("pval", "fdr")], "hyper", sep = "_")
         
         return(GSEtab)
-    }))
+    }, K2resList))
     
-    if (!is.null(K2res[[1]]$dss)) {
+    if (!is.null(K2resList[[1]]$dsse)) {
         ## Format single-sample enrichment results
-        ssEnrTable <- do.call(rbind, lapply(names(K2res), function(x) {
+        ssEnrTable <- do.call(rbind, lapply(names(K2resList), function(x, K2resList) {
             
             ## Get SSGSEA tables
-            SSGSEAtab <- K2res[[x]]$dsse
+            SSGSEAtab <- K2resList[[x]]$dsse
             
             ## Add group information and extract tables
             SSGSEAtab$split <- x
@@ -58,17 +55,15 @@ getEnrichmentTable <- function(K2res) {
                 c("pval", "fdr")], "limma", sep = "_")
             
             return(SSGSEAtab)
-        }))
+        }, K2resList))
         
         ## Merge the two and sort by hyper p-value
         EnrTable <- merge(EnrTable, ssEnrTable, all = TRUE)
-        
         
         ## Sort columns
         EnrTable <- EnrTable[, c("category", "split", "mod", "direction", "pval_hyper", 
             "fdr_hyper", "nhits", "ndrawn", "ncats", "ntot", "pval_limma", "fdr_limma", 
             "coef", "mean", "t", "B", "hits")]
-        
     }
     
     ## Sort by p-value

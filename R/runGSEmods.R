@@ -18,9 +18,12 @@ runGSEmods <- function(K2res, genesets = NULL, qthresh = NULL, cthresh = NULL, n
 
 
     ## Change meta data if new value is specific
-    K2meta(K2res)$qthresh <- qthresh <- .checkMeta(K2res, "qthresh", qthresh)
-    K2meta(K2res)$cthresh <- cthresh <- .checkMeta(K2res, "cthresh", cthresh)
-    K2meta(K2res)$ntotal <- ntotal <- .checkMeta(K2res, "ntotal", ntotal)
+    K2meta(K2res)$qthresh <- qthresh <- .checkK2(K2res, "qthresh", qthresh)
+    K2meta(K2res)$cthresh <- cthresh <- .checkK2(K2res, "cthresh", cthresh)
+    K2meta(K2res)$ntotal <- ntotal <- .checkK2(K2res, "ntotal", ntotal)
+    
+    ## Check K2 object
+    k2Check <- .checkK2(K2res)
 
     ## Set genesets if not null
     if (!is.null(genesets)) {

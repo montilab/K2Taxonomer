@@ -12,6 +12,9 @@
 
 runDGEmods <- function(K2res) {
     
+    ## Check K2 object
+    k2Check <- .checkK2(K2res)
+    
     K2results(K2res) <- lapply(K2results(K2res), function(x) {
         
         ## Create module variable

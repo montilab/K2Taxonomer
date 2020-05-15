@@ -32,17 +32,17 @@ K2tax <- function(K2res, nFeats = NULL, featMetric = NULL, recalcDataMatrix = NU
     oneoff = NULL, stabThresh = NULL) {
 
     ## Change meta data if new value is specific
-    K2meta(K2res)$nFeats <- nFeats <- .checkMeta(K2res, "nFeats", nFeats)
-    K2meta(K2res)$featMetric <- featMetric <- .checkMeta(K2res, "featMetric", featMetric)
-    K2meta(K2res)$recalcDataMatrix <- recalcDataMatrix <- .checkMeta(K2res, "recalcDataMatrix",
+    K2meta(K2res)$nFeats <- nFeats <- .checkK2(K2res, "nFeats", nFeats)
+    K2meta(K2res)$featMetric <- featMetric <- .checkK2(K2res, "featMetric", featMetric)
+    K2meta(K2res)$recalcDataMatrix <- recalcDataMatrix <- .checkK2(K2res, "recalcDataMatrix",
         recalcDataMatrix)
-    K2meta(K2res)$nBoots <- nBoots <- .checkMeta(K2res, "nBoots", nBoots)
-    K2meta(K2res)$clustFunc <- clustFunc <- .checkMeta(K2res, "clustFunc", clustFunc)
-    K2meta(K2res)$clustCors <- clustCors <- .checkMeta(K2res, "clustCors", clustCors)
-    K2meta(K2res)$clustList <- clustList <- .checkMeta(K2res, "clustList", clustList)
-    K2meta(K2res)$linkage <- linkage <- .checkMeta(K2res, "linkage", linkage)
-    K2meta(K2res)$oneoff <- oneoff <- .checkMeta(K2res, "oneoff", oneoff)
-    K2meta(K2res)$stabThresh <- stabThresh <- .checkMeta(K2res, "stabThresh", stabThresh)
+    K2meta(K2res)$nBoots <- nBoots <- .checkK2(K2res, "nBoots", nBoots)
+    K2meta(K2res)$clustFunc <- clustFunc <- .checkK2(K2res, "clustFunc", clustFunc)
+    K2meta(K2res)$clustCors <- clustCors <- .checkK2(K2res, "clustCors", clustCors)
+    K2meta(K2res)$clustList <- clustList <- .checkK2(K2res, "clustList", clustList)
+    K2meta(K2res)$linkage <- linkage <- .checkK2(K2res, "linkage", linkage)
+    K2meta(K2res)$oneoff <- oneoff <- .checkK2(K2res, "oneoff", oneoff)
+    K2meta(K2res)$stabThresh <- stabThresh <- .checkK2(K2res, "stabThresh", stabThresh)
 
     ## Create Splits of the data
     taxList <- list(list(colnames(K2data(K2res))))

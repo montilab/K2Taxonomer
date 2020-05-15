@@ -1,6 +1,6 @@
 #' K2 object
 #'
-#' This class is the output of runK2Taxonomer().
+#' This class is the output of runK2Taxonomer() and K2preproc().
 #' @slot dataMatrix An P x N numeric matrix of data
 #' @slot info A data frame with rownames that match column names in dataMatrix
 #' @slot genesets A named list of features in row names of dataMatrix

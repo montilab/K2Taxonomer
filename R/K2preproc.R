@@ -101,8 +101,8 @@ K2preproc <- function(eSet, cohorts = NULL, vehicle = NULL, covariates = NULL, b
         qthresh = qthresh, cthresh = cthresh, ntotal = ntotal, ssGSEAalg = ssGSEAalg,
         ssGSEAcores = ssGSEAcores, oneoff = oneoff, stabThresh = stabThresh)
 
-    ## Check meta information
-    metaCheck <- .checkMeta(K2res)
+    ## Check K2 object
+    k2Check <- .checkK2(K2res)
 
     ## Perform differential analysis if cohort information is given
     if (is.null(cohorts)) {
