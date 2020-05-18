@@ -156,6 +156,9 @@
         ## Order by p-value
         modStats <- modStats[order(modStats$P.Value), ]
         modStats$adj.P.Val <- p.adjust(modStats$P.Value, method = "BH")
+        
+        ## Remove large objects
+        rm(fit, modFit, design, mods, gUnique, one2, eSet, eSub, pD)
 
     }
 

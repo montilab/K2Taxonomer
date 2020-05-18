@@ -64,7 +64,7 @@ K2dashboard <- function(K2res, analysis_name = "K2Taxonomer", output_dir = ".") 
     dir.create(dirPath)
 
     ## Save K2results to this folder
-    saveRDS(K2results, file.path(dirPath, "K2results.rds"))
+    saveRDS(K2res, file.path(dirPath, "K2results.rds"))
 
     ## Get rmd file location
     K2rmd <- system.file("dashboard", "K2Dashboard.Rmd", package = "K2Taxonomer")
