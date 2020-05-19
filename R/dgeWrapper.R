@@ -50,6 +50,9 @@
     }
     colnames(modStats) <- sub("X", "", colnames(modStats))
     
+    # Remove fit object
+    rm(fit)
+    
     ## Add vehicle 0's
     if (!is.null(vehicle)) {
         modStats <- cbind(modStats, 0)

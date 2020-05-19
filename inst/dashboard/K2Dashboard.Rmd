@@ -54,6 +54,12 @@ geneURL <- K2geneURL(K2summary) ## Get meta data
 genesetURL <- K2genesetURL(K2summary) ## Get meta data
 K2dendrogram <- K2dendro(K2summary) ## Create static dendrogram
 
+# Get differential gene expression results
+dgeTable <- getDGETable(K2summary)
+
+# Get enrichment results
+enrTable <- getEnrichmentTable(K2summary)
+
 ## Create interactive dendrogram
 vNetOut <- K2visNetwork(K2summary)
 
@@ -74,7 +80,6 @@ if (max(
 }
 
 ## Format enrichment table
-enrTable <- getEnrichmentTable(K2res)
 
 ## Remove unnecessary columns
 enrTable <- enrTable[, !colnames(enrTable) %in% c("B", "ntot", "t")]
@@ -107,8 +112,7 @@ for (i in c("coef", "mean")) {
 
 colnames(enrTable) <- c("Gene Set", "Node", "Group", "Direction", "P Value_Hyper", "FDR_Hyper", "N_Overlap", "N_Sig. Genes", "N_Gene Set", "P Value_ssGSEA", "FDR_ssGSEA", "Diff_ssGSEA", "Mean_ssGSEA", "Hits", "Plot", "Send", "Link")
 
-## Get differential gene expression results
-dgeTable <- getDGETable(K2res)
+## Formatdifferential gene expression results
 
 ## Remove gse from K2res
 K2res <- lapply(K2res, function(x) {x$dge <- NULL; return(x)} )

@@ -12,6 +12,14 @@
 
 K2dendro <- function(K2res) {
     
+    ## Run checks
+    .isK2(K2res)
+    
+    ## K2 algorithm
+    if (length(K2results(K2res)) == 0) {
+        "No results found. Please run K2tax() or runK2Taxonomer().\n"
+    }
+    
     ## Get labels order
     K2labs <- colnames(K2data(K2res))
     

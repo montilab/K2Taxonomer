@@ -18,6 +18,8 @@
 ## Create wrapper to subsample
 cKmeansWrapperSubsample <- function(dataMatrix, clustList) {
     
+    clustList$labs <- as.character(clustList$labs)
+    
     eMatSub <- clustList$eMat[rownames(dataMatrix), clustList$labs %in% colnames(dataMatrix)]
     labsSub <- clustList$labs[clustList$labs %in% colnames(dataMatrix)]
     

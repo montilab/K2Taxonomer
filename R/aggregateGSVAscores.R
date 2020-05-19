@@ -16,6 +16,9 @@
 
 aggregateGSVAscores <- function(aggList, K2res) {
     
+    ## Run checks
+    .isK2(K2res)
+    
     ## Only perform this method for gsva runs
     if (K2meta(K2res)$ssGSEAalg != "gsva") {
         stop("Enrichment score aggregation only

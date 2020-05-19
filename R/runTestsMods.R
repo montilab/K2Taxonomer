@@ -3,13 +3,30 @@
 #' Adds statistical tests results to the output of K2tax()
 #' based on numeric and factor variables in info.
 #' @param K2res An object of class K2. The output of K2tax().
+#' @param infoClass A named vector denoted types of tests to run on
+#' meta variables (See K2preproc()).
 #' @return An object of class K2.
 #' @keywords clustering
 #' @export
 #' @examples
 #' runTestsMods(K2res)
 
-runTestsMods <- function(K2res) {
+runTestsMods <- function(K2res, infoClass = NULL) {
+    
+    ## Run checks
+    .isK2(K2res)
+    
+    ## K2 algorithm
+    if (length(K2results(K2res)) == 0) {
+        "No results found. Please run K2tax() or runK2Taxonomer().\n"
+    }
+    
+    ## Change meta data if new value is specied
+    K2meta(K2res)$infoClass <- infoClass <- .checkK2(K2res, "infoClass", infoClass)
+    
+    ## Check K2 object
+    k2Check <- .checkK2(K2res)
+    
     K2results(K2res) <- lapply(K2results(K2res), function(x) {
         
         ## Get module results
@@ -28,15 +45,8 @@ runTestsMods <- function(K2res) {
                 cohort <- K2meta(K2res)$cohort
                 if (is.null(cohort)) 
                   cohort <- "sampleID"
-                
-                if (testID != "survival") {
-                  csDF <- K2info(K2res)[, c(cohort, colName)]
-                  colnames(csDF) <- c("cohort", "value")
-                } else {
-                  csDF <- K2info(K2res)[, c(cohort, paste0(colName, "_time"), paste0(colName, 
-                    "_status"))]
-                  colnames(csDF) <- c("cohort", "time", "value")
-                }
+                csDF <- K2info(K2res)[, c(cohort, colName)]
+                colnames(csDF) <- c("cohort", "value")
                 csDF$cat <- csDF$cohort %in% mod
                 
                 ## Run test
@@ -52,8 +62,6 @@ runTestsMods <- function(K2res) {
                   out <- .runTtest(csDF)
                 if (testID == "normal1") 
                   out <- .runTtest(csDF, alternative = "greater")
-                if (testID == "survival") 
-                  out <- .runSurvival(csDF)
                 
                 ## Add value ID
                 out <- data.frame(value = colName, out, stringsAsFactors = FALSE)

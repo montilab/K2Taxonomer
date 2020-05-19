@@ -13,6 +13,32 @@
 
 runDSSEmods <- function(K2res) {
     
+    ## Run checks
+    .isK2(K2res)
+    
+    ## Check K2 object
+    k2Check <- .checkK2(K2res)
+    
+    ## K2 algorithm
+    if (length(K2results(K2res)) == 0) {
+        "No results found. Please run K2tax() or runK2Taxonomer().\n"
+    }
+    
+    ## DGE
+    if (is.null(K2results(K2res)[[1]]$dge)) {
+        "No differential analysis results found. Please run runDGEmods().\n"
+    }
+    
+    ## GSE
+    if (is.null(K2results(K2res)[[1]]$gse)) {
+        "No enrichment results found. Please run runDGEmods().\n"
+    }
+    
+    ## GSVA
+    if (ncol(K2gSet(K2res)) == 0) {
+        "No ssGSEA data found. Please run runGSVAmods().\n"
+    }
+    
     K2results(K2res) <- lapply(K2results(K2res), function(x) {
         
         ## Create module variable

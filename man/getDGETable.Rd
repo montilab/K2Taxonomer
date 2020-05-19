@@ -7,7 +7,7 @@
 getDGETable(K2res)
 }
 \arguments{
-\item{K2res}{An object of class K2 or K2results().}
+\item{K2res}{An object of class K2.}
 }
 \value{
 A data.frame object.

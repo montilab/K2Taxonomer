@@ -14,7 +14,43 @@
 #'
 
 K2dashboard <- function(K2res, analysis_name = "K2Taxonomer", output_dir = ".") {
+    
+    ## Run checks
+    .isK2(K2res)
+    
+    ## Check K2 object
+    k2Check <- .checkK2(K2res)
+    
+    ## K2 algorithm
+    if (length(K2results(K2res)) == 0) {
+        "No results found. Please run K2tax() or runK2Taxonomer().\n"
+    }
+    
+    ## DGE
+    if (is.null(K2results(K2res)[[1]]$dge)) {
+        "No differential analysis results found. Please run runDGEmods().\n"
+    }
+    
+    ## GSE
+    if (is.null(K2results(K2res)[[1]]$gse)) {
+        "No enrichment results found. Please run runDGEmods().\n"
+    }
+    
+    ## GSVA
+    if (ncol(K2gSet(K2res)) == 0) {
+        "No ssGSEA data found. Please run runGSVAmods().\n"
+    }
+    
+    ## DSSE
+    if (is.null(K2results(K2res)[[1]]$dsse)) {
+        "No differential enrichment results found. Please run runDSSEmods().\n"
+    }
 
+    ## DSSE
+    if (is.null(K2results(K2res)[[1]]$dsse)) {
+        "No differential enrichment results found. Please run runDSSEmods().\n"
+    }
+    
     ## Create file paths
     analysis_name_nospace <- gsub(" ", "_", analysis_name)
 
@@ -28,7 +64,7 @@ K2dashboard <- function(K2res, analysis_name = "K2Taxonomer", output_dir = ".") 
     dir.create(dirPath)
 
     ## Save K2results to this folder
-    saveRDS(K2results, file.path(dirPath, "K2results.rds"))
+    saveRDS(K2res, file.path(dirPath, "K2results.rds"))
 
     ## Get rmd file location
     K2rmd <- system.file("dashboard", "K2Dashboard.Rmd", package = "K2Taxonomer")

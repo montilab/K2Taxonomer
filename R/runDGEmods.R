@@ -12,6 +12,17 @@
 
 runDGEmods <- function(K2res) {
     
+    ## Run checks
+    .isK2(K2res)
+    
+    ## Check K2 object
+    k2Check <- .checkK2(K2res)
+    
+    ## K2 algorithm
+    if (length(K2results(K2res)) == 0) {
+        "No results found. Please run K2tax() or runK2Taxonomer().\n"
+    }
+    
     K2results(K2res) <- lapply(K2results(K2res), function(x) {
         
         ## Create module variable

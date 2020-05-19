@@ -4,10 +4,13 @@
 \alias{runTestsMods}
 \title{Perform tests to test for associations between modules and meta-variables}
 \usage{
-runTestsMods(K2res)
+runTestsMods(K2res, infoClass = NULL)
 }
 \arguments{
 \item{K2res}{An object of class K2. The output of K2tax().}
+
+\item{infoClass}{A named vector denoted types of tests to run on
+meta variables (See K2preproc()).}
 }
 \value{
 An object of class K2.
