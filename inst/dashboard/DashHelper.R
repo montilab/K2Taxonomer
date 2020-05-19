@@ -152,8 +152,6 @@ geneTable <- function(DGETABLE, nodeID = NULL, geneList = NULL) {
     ## Get exact match for nodeID
     if (!is.null(nodeID)) 
         nodeID <- paste0("^", nodeID, "$")
-    if (!is.null(geneList)) 
-        geneList <- paste(paste0("^", geneList, "$"), collapse = "|")
     
     ## Create data table obect
     datatable(DGETABLE, rownames = F, extensions = "Buttons", escape = F, filter = list(position = "top", 
@@ -178,8 +176,6 @@ genesetTable <- function(ENRTABLE, nodeID = NULL, groupID = NULL, dgeHits = NULL
     ## Get exact match for nodeID
     if (!is.null(nodeID)) 
         nodeID <- paste0("^", nodeID, "$")
-    if (!is.null(dgeHits)) 
-        dgeHits <- paste0("^", gsub("; ", "$|^", dgeHits), "$")
     if (!is.null(groupID)) 
         groupID <- paste0("^", groupID, "$")
     
@@ -395,8 +391,6 @@ geneTableClusters <- function(clusterRes, nodegroupID = NULL, geneList = NULL) {
     ## Get exact match for nodeID
     if (!is.null(nodegroupID)) 
         nodeID <- paste0("^", nodegroupID, "$")
-    if (!is.null(geneList)) 
-        geneList <- paste(paste0("^", geneList, "$"), collapse = "|")
     
     ## Create data table obect
     datatable(clusterRes, rownames = F, extensions = "Buttons", escape = F, filter = list(position = "top", 
@@ -421,8 +415,6 @@ genesetTableClusters <- function(ENRTABLE, nodegroupID = NULL, dgeHits = NULL) {
     ## Get exact match for nodeID
     if (!is.null(nodegroupID)) 
         nodeID <- paste0("^", nodegroupID, "$")
-    if (!is.null(dgeHits)) 
-        dgeHits <- paste0("^", gsub("; ", "$|^", dgeHits), "$")
     
     ## Add line breaks
     colnames(ENRTABLE) <- gsub("_", "<br>", colnames(ENRTABLE))
