@@ -101,9 +101,6 @@ K2preproc <- function(eSet, cohorts = NULL, vehicle = NULL, covariates = NULL, b
         qthresh = qthresh, cthresh = cthresh, ntotal = ntotal, ssGSEAalg = ssGSEAalg,
         ssGSEAcores = ssGSEAcores, oneoff = oneoff, stabThresh = stabThresh)
 
-    ## Check K2 object
-    k2Check <- .checkK2(K2res)
-
     ## Perform differential analysis if cohort information is given
     if (is.null(cohorts)) {
 
@@ -134,5 +131,8 @@ K2preproc <- function(eSet, cohorts = NULL, vehicle = NULL, covariates = NULL, b
     K2data(K2res) <- dataMatrix
     K2info(K2res) <- info
 
+    ## Check K2 object
+    k2Check <- .checkK2(K2res)
+    
     return(K2res)
 }

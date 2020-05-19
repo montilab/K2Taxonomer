@@ -109,15 +109,10 @@
                 'ward.D2', 'single', 'complete', 'average', 'centroid'.\n")
         }
 
-        ## info
-        if (!is.null(K2m$info) && !is(K2m$info, "data.frame")) {
-            stop("Argument, info, must be data frame.\n")
-        }
-
         ## infoClass
         if (!is.null(K2m$infoClass) && mean(names(K2m$infoClass) %in% colnames(K2info(K2res))) != 1) {
             stop("Names of argument, infoClass, don't match column names of
-            argument, info, or phenoData of expressionSet.\n")
+            argument, info or phenoData of expressionSet.\n")
         }
 
         ## qthresh
