@@ -67,9 +67,7 @@ vNetOut <- K2visNetwork(K2summary)
 rm(K2summary)
 
 ## If too many observations in terminal labels, unlabel them
-if (max(
-  lengths(regmatches(vNetOut$x$nodes$label, gregexpr("\n", vNetOut$x$nodes$label)))
-  ) > 20 ) {
+if (max(lengths(regmatches(vNetOut$x$nodes$label, gregexpr("\n", vNetOut$x$nodes$label)))) > 20 ) {
 
     ## Fix font size
     vNetOut$x$nodes$font.size <- 25
@@ -115,7 +113,10 @@ colnames(enrTable) <- c("Gene Set", "Node", "Group", "Direction", "P Value_Hyper
 ## Formatdifferential gene expression results
 
 ## Remove gse from K2res
-K2res <- lapply(K2res, function(x) {x$dge <- NULL; return(x)} )
+K2res <- lapply(K2res, function(x) { 
+  x$dge <- NULL; return(x)
+})
+
 
 ## Add aliases for plotting and looking up
 dgeTable$Plot <- paste0("<label for='PlotRow",
@@ -167,10 +168,8 @@ obsMap <- unlist(lapply(K2res, function(x) x$obs), recursive = F)
 
 ```{r values, context="server"}
 
-### Reactive values
-values <- reactiveValues(nodeSel = "A",
-                         Held = NULL,
-                         mvTabSub = NULL)
+## Reactive values
+values <- reactiveValues(nodeSel = "A")
 
 ```
 
@@ -487,8 +486,11 @@ output$stabStats <- renderUI({
     outNode <- paste0("<br> Node Stability: <b>", signif(nodeStab, 2), "</b> <br>")
     outStab <- paste0("Cluster Stability <br> &emsp; Group 1: <b>", signif(sampStab[1], 2), "</b> &emsp; Group 2: <b>",  signif(sampStab[2], 2))
     HTML(paste(outBoot, outNode, outStab))
+    
   } else {
+    
     HTML("")
+    
   }
 })
 ```
@@ -701,10 +703,21 @@ DT::dataTableOutput("DGE")
 
 ## Render genetable results
 output$DGE <- renderDataTable({
-  if (!is.null(values$nodeSelHE)) {
-    geneTable(dgeTable, values$nodeSelHE, values$geneList)
+  values$dgeHeld
+  geneTable(dgeTable, values$nodeSelHE, values$geneList)
+})
+
+## Control Searches
+observeEvent(input$DGE_search_columns, {
+  if (!is.null(values$geneList)) {
+    if(input$DGE_search_columns[1] != values$geneList) {
+      values$heHeld <- runif(1, 0, 1)
+      values$geneList <- NULL
+      values$nodeSelHE <- gsub("\\$|\\^", "", input$DGE_search_columns[2])
+    }
   }
 })
+
 ```
 
 ```{r DGEhelpdownloadfunctions}
@@ -757,10 +770,10 @@ observeEvent(input$geneDL, {
 })
 
 ## Get output
-observeEvent({input$DGE_cell_clicked},
-             {
-               if(!is.null(input$DGE_cell_clicked$value)){
-
+observeEvent(input$DGE_cell_clicked,
+            {
+               if (!is.null(input$DGE_cell_clicked$value)) {
+                 
                  ## Get Value
                  dgeVal <- gsub("<label for='|'>&#9992;</label>|'>&#128202;</label>", "", as.character(input$DGE_cell_clicked$value))
 
@@ -777,15 +790,16 @@ observeEvent({input$DGE_cell_clicked},
                      values$Gene <- GENERow[, "Gene"]
                      values$nodeSelDGE <- GENERow[, "Node"]
                      values$groupDGE <- GENERow[, "Group"]
-                     if(values$Gene %in% names(gene2Pathway)) {
-                       values$dgeHits <- gene2Pathway[[values$Gene]]
+                     if (values$Gene %in% names(gene2Pathway)) {
+                       values$dgeHits <- paste0("^", gsub("; ", "$|^", gene2Pathway[[values$Gene]]), "$")
                      } else {
-                         values$dgeHits <- "NO GENE SETS FOUND."
+                       values$dgeHits <- "NO GENE SETS FOUND."
                      }
                    }
                  }
                }
-             })
+            })
+
 
 ```
 
@@ -857,8 +871,19 @@ DT::dataTableOutput("HE")
 
 ## Render hyperenrichment table
 output$HE <- renderDataTable({
-  if (!is.null(values$nodeSelDGE)) {
-    genesetTable(enrTable, values$nodeSelDGE, values$groupDGE, values$dgeHits)
+  values$heHeld
+  genesetTable(enrTable, values$nodeSelDGE, values$groupDGE, values$dgeHits)
+})
+
+## Control Searches
+observeEvent(input$HE_search_columns, {
+  if (!is.null(values$dgeHits)) {
+    if(input$HE_search_columns[1] != values$dgeHits) {
+      values$dgeHeld <- runif(1, 0, 1)
+      values$dgeHits <- NULL
+      values$nodeSelDGE <- gsub("\\$|\\^", "", input$HE_search_columns[2])
+      values$groupDGE <- input$HE_search_columns[3]
+    }
   }
 })
 
@@ -935,7 +960,7 @@ observeEvent({input$HE_cell_clicked},
                      values$nodeSelHE <- HYPERRow[, "Node"]
                      values$Hits <- strsplit(HYPERRow[, "Hits"], ",")[[1]]
                      values$GeneSet <- HYPERRow[, "Gene Set"]
-                     values$geneList <- genesets[[values$GeneSet]]
+                     values$geneList <- paste(paste0("^", genesets[[values$GeneSet]], "$"), collapse = "|")
                    }
                  }
                }
@@ -1291,8 +1316,22 @@ DT::dataTableOutput("DGEmulti")
 
 ## Render geneTable from multiple group analysis
 output$DGEmulti <- renderDataTable({
+  values$dgeMultiHeld
+  
   if (!is.null(values$clusterRes)) {
     geneTableClusters(values$clusterRes, values$nodeSelHEMulti, values$geneListMulti)
+  }
+  
+})
+
+## Control Searches
+observeEvent(input$DGEmulti_search_columns, {
+  if (!is.null(values$geneListMulti)) {
+    if(input$DGEmulti_search_columns[1] != values$geneListMulti) {
+      values$heMultiHeld <- runif(1, 0, 1)
+      values$geneListMulti <- NULL
+      values$nodeSelHEMulti <- gsub("\\$|\\^", "", input$DGEmulti_search_columns[2])
+    }
   }
 })
 
@@ -1368,7 +1407,7 @@ observeEvent({input$DGEmulti_cell_clicked},
                      values$nodeSelDGEMulti <- GENERowMulti[, "NodeGroup"]
 
                      if (values$GeneMulti %in% names(gene2Pathway)) {
-                       values$dgeHitsMulti <- gene2Pathway[[values$GeneMulti]]
+                       values$dgeHitsMulti <- paste0("^", gsub("; ", "$|^", gene2Pathway[[values$GeneMulti]]), "$")
                      } else {
                        values$dgeHitsMulti <- "NO GENE SETS FOUND."
                      }
@@ -1442,8 +1481,22 @@ DT::dataTableOutput("HEmulti")
 
 ## Render table of hyperenrichment
 output$HEmulti <- renderDataTable({
+  values$heMultiHeld
+  
   if (!is.null(values$EnrRes)) {
     genesetTableClusters(values$EnrRes, values$nodeSelDGEMulti, values$dgeHitsMulti)
+  }
+  
+})
+
+## Control Searches
+observeEvent(input$HEmulti_search_columns, {
+  if (!is.null(values$dgeHitsMulti)) {
+    if(input$HEmulti_search_columns[1] != values$dgeHitsMulti) {
+      values$dgeMultiHeld <- runif(1, 0, 1)
+      values$dgeHitsMulti <- NULL
+      values$nodeSelDGEMulti <- gsub("\\$|\\^", "", input$HEmulti_search_columns[2])
+    }
   }
 })
 
@@ -1519,7 +1572,7 @@ observeEvent({input$HEmulti_cell_clicked},
                    } else {
                      values$nodeSelHEMulti <- HYPERRowMulti[, "NodeGroup"]
                      values$GeneSetMulti <- HYPERRowMulti[, "Gene Set"]
-                     values$geneListMulti <- genesets[[values$GeneSetMulti]]
+                     values$geneListMulti <- paste(paste0("^", genesets[[values$GeneSetMulti]], "$"), collapse = "|")
                    }
                  }
                }
