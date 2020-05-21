@@ -150,6 +150,9 @@
 geneTable <- function(DGETABLE, nodeID = NULL, geneList = NULL) {
     
     ## Get exact match for nodeID
+    if (!is.null(nodeID) && nodeID == "") {
+        nodeID <- NULL
+    }
     if (!is.null(nodeID)) 
         nodeID <- paste0("^", nodeID, "$")
     
@@ -173,11 +176,15 @@ geneTable <- function(DGETABLE, nodeID = NULL, geneList = NULL) {
 ## Function to format hyperenrichment results
 genesetTable <- function(ENRTABLE, nodeID = NULL, groupID = NULL, dgeHits = NULL) {
     
-    ## Get exact match for nodeID
+    ## Get exact match for nodeID and groupID
+    if (!is.null(nodeID) && nodeID == "") {
+        nodeID <- NULL
+    }
+    if (!is.null(groupID) && groupID == "") {
+        groupID <- NULL
+    }
     if (!is.null(nodeID)) 
         nodeID <- paste0("^", nodeID, "$")
-    if (!is.null(groupID)) 
-        groupID <- paste0("^", groupID, "$")
     
     ## Add line breaks
     colnames(ENRTABLE) <- gsub("_", "<br>", colnames(ENRTABLE))
@@ -389,6 +396,9 @@ plotGenePathwayClusters <- function(eSet, gene, groupList, cohorts, vehicle) {
 geneTableClusters <- function(clusterRes, nodegroupID = NULL, geneList = NULL) {
     
     ## Get exact match for nodeID
+    if (!is.null(nodegroupID) && nodegroupID == "") {
+        nodegroupID <- NULL
+    }
     if (!is.null(nodegroupID)) {
         nodeID <- paste0("^", nodegroupID, "$")
     }
@@ -414,6 +424,9 @@ geneTableClusters <- function(clusterRes, nodegroupID = NULL, geneList = NULL) {
 genesetTableClusters <- function(ENRTABLE, nodegroupID = NULL, dgeHits = NULL) {
     
     ## Get exact match for nodeID
+    if (!is.null(nodegroupID) && nodegroupID == "") {
+        nodegroupID <- NULL
+    }
     if (!is.null(nodegroupID)) 
         nodeID <- paste0("^", nodegroupID, "$")
     
