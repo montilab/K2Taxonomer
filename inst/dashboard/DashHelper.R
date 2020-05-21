@@ -389,8 +389,9 @@ plotGenePathwayClusters <- function(eSet, gene, groupList, cohorts, vehicle) {
 geneTableClusters <- function(clusterRes, nodegroupID = NULL, geneList = NULL) {
     
     ## Get exact match for nodeID
-    if (!is.null(nodegroupID)) 
+    if (!is.null(nodegroupID)) {
         nodeID <- paste0("^", nodegroupID, "$")
+    }
     
     ## Create data table obect
     datatable(clusterRes, rownames = F, extensions = "Buttons", escape = F, filter = list(position = "top", 

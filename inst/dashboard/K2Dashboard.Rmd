@@ -713,7 +713,7 @@ observeEvent(input$DGE_search_columns, {
     if(input$DGE_search_columns[1] != values$geneList) {
       values$heHeld <- runif(1, 0, 1)
       values$geneList <- NULL
-      values$nodeSelHE <- input$DGE_search_columns[2]
+      values$nodeSelHE <- gsub("\\$|\\^", "", input$DGE_search_columns[2])
     }
   }
 })
@@ -881,7 +881,7 @@ observeEvent(input$HE_search_columns, {
     if(input$HE_search_columns[1] != values$dgeHits) {
       values$dgeHeld <- runif(1, 0, 1)
       values$dgeHits <- NULL
-      values$nodeSelDGE <- input$HE_search_columns[2]
+      values$nodeSelDGE <- gsub("\\$|\\^", "", input$HE_search_columns[2])
       values$groupDGE <- input$HE_search_columns[3]
     }
   }
@@ -1330,7 +1330,7 @@ observeEvent(input$DGEmulti_search_columns, {
     if(input$DGEmulti_search_columns[1] != values$geneListMulti) {
       values$heMultiHeld <- runif(1, 0, 1)
       values$geneListMulti <- NULL
-      values$nodeSelHEMulti <- input$DGEmulti_search_columns[2]
+      values$nodeSelHEMulti <- gsub("\\$|\\^", "", input$DGEmulti_search_columns[2])
     }
   }
 })
@@ -1495,7 +1495,7 @@ observeEvent(input$HEmulti_search_columns, {
     if(input$HEmulti_search_columns[1] != values$dgeHitsMulti) {
       values$dgeMultiHeld <- runif(1, 0, 1)
       values$dgeHitsMulti <- NULL
-      values$nodeSelDGEMulti <- input$HEmulti_search_columns[2]
+      values$nodeSelDGEMulti <- gsub("\\$|\\^", "", input$HEmulti_search_columns[2])
     }
   }
 })
