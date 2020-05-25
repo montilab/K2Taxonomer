@@ -25,8 +25,8 @@ cKmeansWrapperSubsample <- function(dataMatrix, clustList) {
     
     ## Subsample the data
     minSize <- min(table(labsSub))
-    sVec <- unlist(lapply(unique(labsSub), function(x) {
-        sample(which(labsSub == x))
+    sVec <- unlist(lapply(unique(labsSub), function(x, minSize) {
+        sample(which(labsSub == x), minSize)
     }, minSize))
     eMatSub <- eMatSub[, sVec]
     labsSub <- labsSub[sVec]
