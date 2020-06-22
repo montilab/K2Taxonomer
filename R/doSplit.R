@@ -11,6 +11,7 @@
         mod_stability = c(0, 0)
         Dn = 0.5 * sqrt(2)
         mat <- matrix(c(1, -1, -1, 1), 2, 2)
+        colnames(mat) <- rownames(mat) <- colnames(dataMatrix)
         mods <- c("1", "2")
         names(mods) <- colnames(dataMatrix)
         propBoots <- 1

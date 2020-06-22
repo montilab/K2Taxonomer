@@ -87,7 +87,7 @@ runK2Taxonomer <- function(eSet, cohorts = NULL, vehicle = NULL, covariates = NU
     }
 
     ## Add differential analysis results
-    cat("Running differential analysis.\n")
+    cat("Running differential analysis on genes.\n")
     K2res <- runDGEmods(K2res)
 
     if (!is.null(genesets)) {
@@ -100,6 +100,11 @@ runK2Taxonomer <- function(eSet, cohorts = NULL, vehicle = NULL, covariates = NU
         ## Perform ssGSEA or ssGVA
         cat("Running ssGSEA.\n")
         K2res <- runGSVAmods(K2res)
+        
+        ## Perform differential analysis on gene sets
+        cat("Running differential analysis on gene sets.\n")
+        K2res <- runDSSEmods(K2res)
+        
     }
 
     return(K2res)
