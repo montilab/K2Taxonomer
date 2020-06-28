@@ -54,8 +54,8 @@
 #' K2preproc(eSet)
 
 K2preproc <- function(eSet, cohorts = NULL, vehicle = NULL, covariates = NULL, block = NULL,
-    logCounts = FALSE, use = c("Z", "MEAN"), nFeats = "sqrt", featMetric = c("sd",
-        "mad", "Sn", "Qn", "F", "square"), recalcDataMatrix = FALSE, nBoots = 500,
+    logCounts = FALSE, use = c("Z", "MEAN"), nFeats = "sqrt", featMetric = c("mad",
+        "sd", "Sn", "Qn", "F", "square"), recalcDataMatrix = FALSE, nBoots = 500,
     clustFunc = hclustWrapper, clustCors = 1, clustList = list(), linkage = c("mcquitty",
         "ward.D", "ward.D2", "single", "complete", "average", "centroid"), info = NULL,
     infoClass = NULL, genesets = NULL, qthresh = 0.05, cthresh = 0, ntotal = 20000,

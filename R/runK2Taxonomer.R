@@ -17,8 +17,8 @@
 #' "MEAN" to use means from differential analysis for clustering.
 #' @param nFeats "sqrt" or a numeric value <= number of features to subset the
 #' features for each partition.
-#' @param featMatric Metric to use to assign variance/signal score. Options are
-#' 'square' (default) use square values and 'mad' to use MAD scores.
+#' @param featMatric Metric to use to assign variance/signal score. Options are:
+#' 'mad' (default), "mad", "Sn", "Qn", "F", and "square".
 #' @param recalcDataMatrix Logical. Recalculate dataMatrix for each partion?
 #' Default is FALSE.
 #' @param nBoots A numeric value of the number of bootstraps to run at each
@@ -58,8 +58,8 @@
 #' info = NULL, genesets = NULL)
 
 runK2Taxonomer <- function(eSet, cohorts = NULL, vehicle = NULL, covariates = NULL, block = NULL,
-    logCounts = FALSE, use = c("Z", "MEAN"), nFeats = "sqrt", featMetric = c("sd",
-        "mad", "Sn", "Qn", "F", "square"), recalcDataMatrix = FALSE, nBoots = 500,
+    logCounts = FALSE, use = c("Z", "MEAN"), nFeats = "sqrt", featMetric = c("mad",
+        "sd", "Sn", "Qn", "F", "square"), recalcDataMatrix = FALSE, nBoots = 500,
     clustFunc = hclustWrapper, clustCors = 1, clustList = list(), linkage = c("mcquitty",
         "ward.D", "ward.D2", "single", "complete", "average", "centroid"), info = NULL,
     infoClass = NULL, genesets = NULL, qthresh = 0.05, cthresh = 0, ntotal = 20000,
