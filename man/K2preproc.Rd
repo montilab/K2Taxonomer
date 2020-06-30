@@ -13,7 +13,7 @@ K2preproc(
   logCounts = FALSE,
   use = c("Z", "MEAN"),
   nFeats = "sqrt",
-  featMetric = c("sd", "mad", "Sn", "Qn", "F", "square"),
+  featMetric = c("mad", "sd", "Sn", "Qn", "F", "square"),
   recalcDataMatrix = FALSE,
   nBoots = 500,
   clustFunc = hclustWrapper,

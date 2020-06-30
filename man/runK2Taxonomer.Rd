@@ -13,7 +13,7 @@ runK2Taxonomer(
   logCounts = FALSE,
   use = c("Z", "MEAN"),
   nFeats = "sqrt",
-  featMetric = c("sd", "mad", "Sn", "Qn", "F", "square"),
+  featMetric = c("mad", "sd", "Sn", "Qn", "F", "square"),
   recalcDataMatrix = FALSE,
   nBoots = 500,
   clustFunc = hclustWrapper,
@@ -104,8 +104,8 @@ package. Default is 1.}
 
 \item{genesetURL}{Optional. Named list of URLs to geneset information.}
 
-\item{featMatric}{Metric to use to assign variance/signal score. Options are
-'square' (default) use square values and 'mad' to use MAD scores.}
+\item{featMatric}{Metric to use to assign variance/signal score. Options are:
+'mad' (default), "mad", "Sn", "Qn", "F", and "square".}
 }
 \description{
 This function will generate an object of class, K2.  This will run the K2
