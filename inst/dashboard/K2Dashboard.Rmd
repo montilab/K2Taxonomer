@@ -1,5 +1,5 @@
 ---
-title: "K2 Taxonomic Clustering"
+title: "K2TITLEPLACEHOLDER"
 runtime: shiny
 output:
   flexdashboard::flex_dashboard:
@@ -129,7 +129,7 @@ dgeTable$Send <- paste0("<label for='SendRow",
 ### Add links to genes
 geneStringL <- "<a href='"
 geneStringR <- "' style='text-decoration:none' target='_blank'>&#128269;</a>"
-geneURLsub <- geneURL[rownames(dgeTable$gene)]
+geneURLsub <- geneURL[dgeTable$gene]
 dgeTable$Link <- paste0(geneStringL, geneURLsub, geneStringR)
 
 ## Reorder columns
@@ -179,12 +179,12 @@ K2 Taxonomer Results {data-orientation=rows}
 Selections {.sidebar}
 -------------------------------------
 
-### Member Search
+###
 
 ```{r createButtons, context="server"}
 
 output$Search <- renderUI({
-   textInput("mstring", "Enter a String:")
+   textInput("mstring", "Member Search:", value = "")
 })
 
 output$Match <- renderUI({
@@ -212,18 +212,18 @@ output$Match <- renderUI({
 
 ```
 
-```{r createHelpButtong}
-HelpShow <- function() {
-  div(id = "globalHelp",
-            modalDialog(HTML("<u>K2 Taxonomer Results</u>"),
+```{r createHelpButtong, context="server"}
+AboutShow <- function() {
+  div(id = "globalAbout",
+            modalDialog(HTML("K2ABOUTPLACEHOLDER"),
                   br(),
 
-                  easyClose = TRUE, title = "Help")
+                  easyClose = TRUE, title = "About")
   )
 }
 
-observeEvent(input$Helpgo, {
-  showModal(HelpShow())
+observeEvent(input$Aboutgo, {
+  showModal(AboutShow())
 })
 
 ```
@@ -231,16 +231,16 @@ observeEvent(input$Helpgo, {
 ```{r printbuttons, error = FALSE}
 
 ## Out of global help button
+actionButton("Aboutgo", "About")
 htmlOutput("Search")
 uiOutput("Match")
-actionButton("Helpgo", "Help")
 
 ```
 
 Row {data-height=600}
 -------------------------------------
 
-### Taxonomer Results
+### K2 Taxonomer Results
 
 ```{r formatNetwork, context="server"}
 
@@ -289,7 +289,7 @@ output$dendro <- renderVisNetwork({
                highlightNearest = list(enabled = TRUE,
                                        algorithm = "hierarchical",
                                        degree = 1E10)) %>%
-    visNodes(font = list(size = 25),
+    visNodes(font = list(size = 50),
              size = 40,
              color = list(
                background = "white",
@@ -341,7 +341,7 @@ observeEvent({
 
 ```
 
-### Cluster Information (&uarr; = Group 1; &darr; = Group 2)
+### Subgroup Information (&uarr; = Group 1; &darr; = Group 2)
 
 ```{r ClusterInfoOutput, context = "server"}
 
@@ -483,8 +483,8 @@ output$stabStats <- renderUI({
     nodeStab <- K2res[[values$nodeSel]]$stability$node
     sampStab <- K2res[[values$nodeSel]]$stability$clusters
     outBoot <- paste0("<br> Bootstrap Probability: <b>", bootProb, "</b>")
-    outNode <- paste0("<br> Node Stability: <b>", signif(nodeStab, 2), "</b> <br>")
-    outStab <- paste0("Cluster Stability <br> &emsp; Group 1: <b>", signif(sampStab[1], 2), "</b> &emsp; Group 2: <b>",  signif(sampStab[2], 2))
+    outNode <- paste0("<br> Partition Stability: <b>", signif(nodeStab, 2), "</b> <br>")
+    outStab <- paste0("Subgroup Stability <br> &emsp; Group 1: <b>", signif(sampStab[1], 2), "</b> &emsp; Group 2: <b>",  signif(sampStab[2], 2))
     HTML(paste(outBoot, outNode, outStab))
     
   } else {
@@ -1035,7 +1035,7 @@ output$dendroSelect <- renderVisNetwork({
                highlightNearest = list(enabled = TRUE,
                                        algorithm = "hierarchical",
                                        degree = 1E10)) %>%
-    visNodes(font = list(size = 25),
+    visNodes(font = list(size = 50),
              size = 40) %>%
     visEdges(width = 11,
              smooth = T,
@@ -1111,7 +1111,7 @@ observeEvent(input$Held, {
 Row {data-height=600}
 -------------------------------------
 
-### Click and hold nodes to select sub-groups
+### Click and hold nodes to select subgroups (Click whitespace to reset selections)
 
 ```{r, printSelecter}
 

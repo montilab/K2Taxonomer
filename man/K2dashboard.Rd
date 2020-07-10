@@ -4,13 +4,21 @@
 \alias{K2dashboard}
 \title{Generate interactive dashboard of K2 Taxonomer results}
 \usage{
-K2dashboard(K2res, analysis_name = "K2Taxonomer", output_dir = ".")
+K2dashboard(
+  K2res,
+  analysis_name = "K2 Taxonomer",
+  about = "<u>K2 Taxonomer Partitioning Results</u>",
+  output_dir = "."
+)
 }
 \arguments{
 \item{K2res}{Object of class K2.}
 
 \item{analysis_name}{Character string of the name of analysis to write files
 and generate title of report.}
+
+\item{about}{Character string of HTML code for including in the 
+'about' window of the dashboard.}
 
 \item{output_dir}{Base directory to put report.}
 }
