@@ -12,7 +12,14 @@
 #' @keywords clustering
 #' @export
 #' @examples
-#' K2dashboard(K2results, analysis_name = 'K2Taxonomer', output_dir = '.')
+#' 
+#' ## Read in K2 Taxonomer results
+#' data(K2res)
+#' 
+#' ## Generate interactive dashboard
+#' \dontrun{
+#' K2dashboard(K2res)
+#' }
 #'
 
 K2dashboard <- function(K2res, 

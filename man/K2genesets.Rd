@@ -16,5 +16,7 @@ Named list. A list with an element for each gene set.
 Retrieve or assign named list of genesets for K2Taxonomer run.
 }
 \examples{
-K2genesets(K2res)
+data(K2res)
+head(K2genesets(K2res))
+
 }

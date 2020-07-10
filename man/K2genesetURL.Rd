@@ -16,5 +16,6 @@ Named vector. A vector with a URL string for each geneset.
 Retrieve or assign URLs to geneset pages.
 }
 \examples{
+data(K2res)
 K2genesetURL(K2res)
 }

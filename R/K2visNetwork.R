@@ -4,8 +4,6 @@
 #' @param K2res A list object. The output of runGSEmods().
 #' @keywords clustering
 #' @export
-#' @examples
-#' K2visNetwork(K2res)
 #'
 K2visNetwork <- function(K2res) {
     

@@ -12,8 +12,4 @@ K2visNetwork(K2res)
 \description{
 Create an interactive dendrogram of the K2 Taxonomer results
 }
-\examples{
-K2visNetwork(K2res)
-
-}
 \keyword{clustering}

@@ -24,8 +24,17 @@
 #' @import parallel
 #' @import robustbase
 #' @examples
-#' K2tax(K2res)
-#'
+#' ## Read in ExpressionSet object
+#' library(Biobase)
+#' data(sample.ExpressionSet)
+#' 
+#' ## Pre-process and create K2 object
+#' K2res <- K2preproc(sample.ExpressionSet)
+#' 
+#' ## Run K2 Taxonomer algorithm
+#' K2res <- K2tax(K2res,
+#'                stabThresh = 0.5)
+#'                
 
 K2tax <- function(K2res, nFeats = NULL, featMetric = NULL, recalcDataMatrix = NULL,
     nBoots = NULL, clustFunc = NULL, clustCors = NULL, clustList = NULL, linkage = NULL,

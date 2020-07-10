@@ -20,8 +20,4 @@ This fuction is a wrapper for the constrained Kmeans algorithm using
 `lcvqe` from the `conclust` package. This function will subset each
 cohort down to that with the smallest number of observations.
 }
-\examples{
-cKmeansWrapperSubsample(dataMatrix, clusList = list())
-
-}
 \keyword{clustering}

@@ -11,8 +11,6 @@
 #' @keywords clustering
 #' @export
 #' @import conclust
-#' @examples
-#' cKmeansWrapperSubsample(dataMatrix, clusList = list())
 #'
 
 ## Create wrapper to subsample

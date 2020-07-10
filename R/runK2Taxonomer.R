@@ -53,9 +53,26 @@
 #' @import Biobase
 #' @import GSVA
 #' @examples
-#' runK2Taxonomer(eSet, cohorts = NULL, vehicle = NULL,
-#' nFeats = nrow(eSet)*0.02, nBoots = 200, clustFunction = hclustWrapper_fast,
-#' info = NULL, genesets = NULL)
+#' ## Read in ExpressionSet object
+#' library(Biobase)
+#' data(sample.ExpressionSet)
+#' 
+#' ## Create dummy set of gene sets
+#' genes <- rownames(sample.ExpressionSet)
+#' genesetsMadeUp <- list(
+#'     GS1 = genes[1:50],
+#'     GS2 = genes[51:100],
+#'     GS3 = genes[101:150]
+#' )
+#' 
+#' ## Run K2 Taxonomer wrapper
+#' K2Res <- runK2Taxonomer(sample.ExpressionSet, 
+#'                         genesets = genesetsMadeUp,
+#'                         qthresh = 0.1,
+#'                         ssGSEAalg = "gsva",
+#'                         ssGSEAcores = 1,
+#'                         stabThresh = 0.5)
+#'                         
 
 runK2Taxonomer <- function(eSet, cohorts = NULL, vehicle = NULL, covariates = NULL, block = NULL,
     logCounts = FALSE, use = c("Z", "MEAN"), nFeats = "sqrt", featMetric = c("mad",

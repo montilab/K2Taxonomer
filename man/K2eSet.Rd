@@ -16,5 +16,7 @@ ExpressionSet.
 Retrieve or assign ExpressionSet object.
 }
 \examples{
+data(K2res)
 K2eSet(K2res)
+
 }

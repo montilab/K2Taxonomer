@@ -113,7 +113,7 @@ The **@results** slot of the `K2` object is a named list of the results of runni
 Each item is assigned a letter ID. If there are more than 26 items, than an additional letter is tacked on, such that the 27th item is named, *AA*, and the 28th item is named **BB**.
 
 ```{r results, fig.align='center', fig.width=5, fig.height=5}
-## Values of each rung
+## :abels of each partition
 names(K2results(K2res))
 ```
 

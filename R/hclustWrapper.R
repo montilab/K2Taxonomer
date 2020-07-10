@@ -8,8 +8,6 @@
 #' cluster assignment of each column in dataMatrix.
 #' @keywords clustering
 #' @export
-#' @examples
-#' hclustWrapper(dataMatrix, clusList = list())
 #'
 
 hclustWrapper <- function(dataMatrix, clustList) {

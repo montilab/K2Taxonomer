@@ -8,8 +8,7 @@
 #' @return An object of class K2.
 #' @keywords clustering
 #' @export
-#' @examples
-#' runTestsMods(K2res)
+#' 
 
 runTestsMods <- function(K2res, infoClass = NULL) {
     

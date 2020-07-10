@@ -1,6 +1,6 @@
 Package: K2Taxonomer
 Type: Package
-Title: Creating annotated submodules of high-throughput data through iteratively bootstrapping K=2 clusters.
+Title: Creating annotated submodules of high-throughput data through iteratively bootstrapping K=2 clusters
 Version: 1.0.2
 Date: 2019-03-19
 Author: Eric Reed
@@ -18,15 +18,18 @@ Imports:
   DT,
   robustbase,
   magrittr,
-  conclust
+  conclust,
+  Biobase,
+  GSVA,
+  dendextend
 Suggests:
-    Biobase,
     knitr,
+    ggdendro,
     rmarkdown
 Depends:
   R (>= 3.5)
 biocViews: Clustering, Visualization
-BugReports: https://github.com/ericreed
+BugReports: https://github.com/montilab
 RoxygenNote: 7.1.0
 Collate:
     'AllClasses.R'
@@ -50,7 +53,6 @@ Collate:
     'runFisher2sided.R'
     'runWilcox.R'
     'runTtest.R'
-    'cutreeK2dendro.R'
     'signatureWrapper.R'
     'fixFDR.R'
     'dgeWrapper.R'

@@ -16,5 +16,7 @@ Matrix. Numeric data used for K2Taxonomer run.
 Retrieve or assign matrix of data used in K2Taxonomer run.
 }
 \examples{
+data(K2res)
 K2data(K2res)
+
 }

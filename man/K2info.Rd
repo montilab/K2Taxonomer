@@ -16,5 +16,7 @@ Data frame. Observation information from K2Taxonomer run.
 Retrieve or assign observation information in K2Taxonomer run.
 }
 \examples{
-K2info(K2res)
+data(K2res)
+head(K2info(K2res))
+
 }

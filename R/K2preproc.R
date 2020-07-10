@@ -51,7 +51,13 @@
 #' @import limma
 #' @import Biobase
 #' @examples
-#' K2preproc(eSet)
+#' ## Read in ExpressionSet object
+#' library(Biobase)
+#' data(sample.ExpressionSet)
+#' 
+#' ## Pre-process and create K2 object
+#' K2res <- K2preproc(sample.ExpressionSet)
+#' 
 
 K2preproc <- function(eSet, cohorts = NULL, vehicle = NULL, covariates = NULL, block = NULL,
     logCounts = FALSE, use = c("Z", "MEAN"), nFeats = "sqrt", featMetric = c("mad",

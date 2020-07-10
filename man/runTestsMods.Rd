@@ -19,7 +19,4 @@ An object of class K2.
 Adds statistical tests results to the output of K2tax()
 based on numeric and factor variables in info.
 }
-\examples{
-runTestsMods(K2res)
-}
 \keyword{clustering}

@@ -16,5 +16,7 @@ Named vector. A vector with collapse pathway names for each gene.
 Retrieve or assign named vector of pathways for each gene.
 }
 \examples{
-K2gene2Pathway(K2res)
+data(K2res)
+head(K2gene2Pathway(K2res))
+
 }

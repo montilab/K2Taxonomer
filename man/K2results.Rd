@@ -17,5 +17,7 @@ Retrieve or assign annotated list of subgroups from K2Taxonomer
 run.
 }
 \examples{
-K2results(K2res)
+data(K2res)
+K2resList <- K2results(K2res)
+
 }

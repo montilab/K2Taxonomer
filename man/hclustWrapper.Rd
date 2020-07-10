@@ -19,8 +19,4 @@ cluster assignment of each column in dataMatrix.
 This fuction is a wrapper for the hclust, dist, and cutree functions. It
 outputs a string of a concatenated vector of 1's and 2's indexed by column.
 }
-\examples{
-hclustWrapper(dataMatrix, clusList = list())
-
-}
 \keyword{clustering}

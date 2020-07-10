@@ -10,8 +10,6 @@
 #' @keywords clustering
 #' @export
 #' @import conclust
-#' @examples
-#' cKmeansWrapper(dataMatrix, clusList = list())
 #'
 
 cKmeansWrapper <- function(dataMatrix, clustList) {

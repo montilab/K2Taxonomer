@@ -112,6 +112,12 @@ This function will generate an object of class, K2.  This will run
 pre-processing functions for running K2 Taxonomer procedure.
 }
 \examples{
-K2preproc(eSet)
+## Read in ExpressionSet object
+library(Biobase)
+data(sample.ExpressionSet)
+
+## Pre-process and create K2 object
+K2res <- K2preproc(sample.ExpressionSet)
+
 }
 \keyword{clustering}

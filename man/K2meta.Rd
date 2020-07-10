@@ -16,5 +16,7 @@ Named list. Parameters used in K2Taxonomer run.
 Retrieve or assign meta data variables.
 }
 \examples{
+data(K2res)
 K2meta(K2res)
+
 }

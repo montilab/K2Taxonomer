@@ -19,8 +19,4 @@ cluster assignment of each column in dataMatrix.
 This fuction is a wrapper for the constrained Kmeans algorithm using
 `lcvqe` from the `conclust` package.
 }
-\examples{
-cKmeansWrapper(dataMatrix, clusList = list())
-
-}
 \keyword{clustering}

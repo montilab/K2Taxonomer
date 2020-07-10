@@ -16,5 +16,7 @@ Named vector. A vector with a URL string for each gene.
 Retrieve or assign URLs to gene pages.
 }
 \examples{
+data(K2res)
 K2geneURL(K2res)
+
 }

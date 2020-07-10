@@ -16,5 +16,7 @@ ExpressionSet.
 Retrieve or assign ExpressionSet object of GSVA output.
 }
 \examples{
+data(K2res)
 K2gSet(K2res)
+
 }
