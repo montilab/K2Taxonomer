@@ -1,4 +1,31 @@
 ## K2Taxonomer
-This is an R package under development to perform the K2 Taxonomer recursive partitioning algorithm, as well as annotate and visualize results.
 
-Check the vignettes for instructions on how to run.
+### Introduction
+
+### Requirements
+
+- R (>= 3.5)
+
+### Installation
+
+#### Install from GitHub
+
+```r
+devtools::install_github("montilab/K2Taxonomer")
+```
+
+#### Clone GitHub and install from source
+
+```sh
+## In console
+git clone https://github.com/montilab/K2Taxonomer
+```
+
+```r
+## In R
+install.packages("path/to/K2Taxonomer", repos=NULL, type="source")
+```
+
+### Example
+
+
