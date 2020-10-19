@@ -50,7 +50,6 @@ Here we will start by using the defaults.
 
 ```{r create}
 ## Run pre-processing
-set.seed(143)
 K2res <- K2preproc(sample.ExpressionSet)
 ```
 
@@ -101,7 +100,7 @@ The parameter, **stabThresh**, controls the minimum value of the stability metri
 Choosing an appropriate threshold is dependent on the size of the original data set.  For large data sets, choosing small values will greatly increase runtime, and values between 0.8 and 0.7, are generally recommended.
 
 ```{r cluster}
-## Run Cluster
+## Run K2Taxonomer aglorithm
 K2res <- K2tax(K2res,
                stabThresh = 0.5)
 ```
