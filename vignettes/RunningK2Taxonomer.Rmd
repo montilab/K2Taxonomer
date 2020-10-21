@@ -24,18 +24,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Version Info
-```{r, echo=FALSE, results="hide", warning=FALSE}
-suppressPackageStartupMessages({library('K2Taxonomer')})
-```
-<p>
-**R version**: `r R.version.string`
-<br />
-**Bioconductor version**: `r packageVersion("BiocVersion")`
-<br />
-**Package version**: `r packageVersion("K2Taxonomer")`
-</p>
-
 ## Requirements
 
 ### Load packages
