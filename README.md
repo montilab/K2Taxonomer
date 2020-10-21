@@ -33,7 +33,7 @@ install.packages("path/to/K2Taxonomer", repos=NULL, type="source")
 
 Here we demonstrate the basic functionality of `K2Taxonomer`, which is described in more detail in the vignette, [Running K2Taxonomer](https://montilab.github.io/K2Taxonomer/articles/RunningK2Taxonomer.html).
 
-An alternative workflow for running `K2Taxonomer` for subgrouping cell type labels using single-cell expression data is described in the vignette, [Running K2Taxonomer on single-cell RNA sequencing data](https://montilab.github.io/K2Taxonomer/articles/RunningK2Taxonomer_singlecell.html).
+An alternative workflow for running `K2Taxonomer` for subgrouping cell type labels using single-cell expression data is described in the vignette, [Running K2Taxonomer on single-cell RNA sequencing data](https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_singlecell.html).
 
 #### Load packages and read in gene expression data
 
