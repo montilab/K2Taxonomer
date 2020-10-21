@@ -21,8 +21,8 @@
         if (recalcDataMatrix | featMetric == "F") {
             eSetSub <- K2eSet(K2res)[, pData(K2eSet(K2res))[, K2meta(K2res)$cohorts] %in% 
                 colnames(dataMatrix)]
-            dgeSeg <- .dgeWrapper(eSetSub, cohorts = K2meta(K2res)$cohorts, vehicle = K2meta(K2res)$vehicle, 
-                covariates = K2meta(K2res)$covariates, use = K2meta(K2res)$use, Fstat = TRUE)
+            dgeSeg <- suppressWarnings(.dgeWrapper(eSetSub, cohorts = K2meta(K2res)$cohorts, vehicle = K2meta(K2res)$vehicle, 
+                covariates = K2meta(K2res)$covariates, use = K2meta(K2res)$use, Fstat = TRUE))
             dataMatrix <- dgeSeg$dataMatrix
         }
         

@@ -106,6 +106,10 @@ K2preproc <- function(eSet, cohorts = NULL, vehicle = NULL, covariates = NULL, b
         clustFunc = clustFunc, clustCors = clustCors, clustList = clustList, linkage = linkage,
         qthresh = qthresh, cthresh = cthresh, ntotal = ntotal, ssGSEAalg = ssGSEAalg,
         ssGSEAcores = ssGSEAcores, oneoff = oneoff, stabThresh = stabThresh)
+    
+    # Check inputs
+    k2Check <- .checkK2(K2res, inputsOnly = TRUE)
+    
 
     ## Perform differential analysis if cohort information is given
     if (is.null(cohorts)) {
@@ -121,7 +125,7 @@ K2preproc <- function(eSet, cohorts = NULL, vehicle = NULL, covariates = NULL, b
     } else {
 
         cat("Collapsing group-level values with LIMMA.\n")
-        dataMatrix <- .dgeWrapper(eSet, cohorts, vehicle, covariates, use, logCounts = logCounts)
+        dataMatrix <- suppressWarnings(.dgeWrapper(eSet, cohorts, vehicle, covariates, use, logCounts = logCounts))
 
         ## Format info
         if (is.null(info)) {

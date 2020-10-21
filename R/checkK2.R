@@ -1,5 +1,5 @@
 ## Function to change meta data if new value is entered.
-.checkK2 <- function(K2res, arg = NULL, argValue = NULL) {
+.checkK2 <- function(K2res, arg = NULL, argValue = NULL, inputsOnly = FALSE) {
 
     if (!is.null(arg)) {
 
@@ -158,20 +158,6 @@
             stop("assayData slot in ExpressionSet object contains missing values.\n")
         }
         
-        ## Run stopping criteria for info slot
-        
-        ## Mismatch info and dataMatrix
-        if (nrow(K2info(K2res)) > 0 && nrow(K2info(K2res)) != ncol(K2data(K2res))) {
-            stop("No. columns of info slot doesn't equal No. columns in dataMatrix slot.\n")
-        }
-        
-        ## Run stopping criteria for dataMatrix slot
-        
-        ## Missing values
-        if (sum(is.na(K2data(K2res))) > 0) {
-            stop("dataMatrix slot contains missing values.\n")
-        }
-        
         ## Run stopping criteria for geneURL split
         
         ## Missing names
@@ -202,6 +188,24 @@
         ## Geneset names contain ";"
         if (length(K2genesets(K2res)) > 0 && sum(grepl(";", names(K2genesets(K2res)))) > 0) {
             stop("Names in argument, genesets, cannot contain ';'.\n")
+        }
+        
+        if (!inputsOnly) {
+            
+            ## Run stopping criteria for info slot
+            
+            ## Mismatch info and dataMatrix
+            if (nrow(K2info(K2res)) > 0 && nrow(K2info(K2res)) != ncol(K2data(K2res))) {
+                stop("No. columns of info slot doesn't equal No. columns in dataMatrix slot.\n")
+            }
+            
+            ## Run stopping criteria for dataMatrix slot
+            
+            ## Missing values
+            if (sum(is.na(K2data(K2res))) > 0) {
+                stop("dataMatrix slot contains missing values.\n")
+            }
+            
         }
 
     }

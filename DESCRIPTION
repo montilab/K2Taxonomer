@@ -21,7 +21,8 @@ Imports:
   conclust,
   Biobase,
   GSVA,
-  dendextend
+  dendextend,
+  scRNAseq
 Suggests:
     knitr,
     ggdendro,
