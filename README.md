@@ -23,6 +23,8 @@ https://montilab.github.io/K2Taxonomer/
 
 ### Installation
 
+You may install `K2Taxonomer` from GitHub directly using the `devtools` R package or clone the repository and download from source. Typical download time is under 1 minute.
+
 #### Install from GitHub
 
 ```r

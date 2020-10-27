@@ -26,6 +26,11 @@ knitr::opts_chunk$set(
 )
 ```
 
+
+```{r endtime, echo=FALSE}
+time <- Sys.time()
+```
+
 # Requirements
 
 ## Load packages
@@ -211,6 +216,11 @@ K2dashboard(K2res,
             analysis_name = "Example",
             output_dir = ".")
 
+```
+
+# Runtime for this example
+```{r runtime, echo=FALSE}
+Sys.time() - time 
 ```
 
 # References

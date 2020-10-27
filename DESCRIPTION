@@ -2,7 +2,7 @@ Package: K2Taxonomer
 Type: Package
 Title: Creating annotated submodules of high-throughput data through iteratively bootstrapping K=2 clusters
 Version: 1.0.2
-Date: 2019-03-19
+Date: 2020-10-27
 Author: Eric Reed
 Maintainer: Eric Reed <reeder@bu.edu>
 Description: Perform and annotate divisive hierarchical clusters of high-throughput data by iteratively clustering bootstrapped features and estimating K=2 clusters. User may input any clustering method that splits observations into 2 clusters. Results can be summarized in a interactive dashboard.

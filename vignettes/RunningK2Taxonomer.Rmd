@@ -24,6 +24,10 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r endtime, echo=FALSE}
+time <- Sys.time()
+```
+
 ## Requirements
 
 ### Load packages
@@ -293,3 +297,7 @@ dendro <- K2dendro(K2res)
 ggdendrogram(dendro)
 ```
 
+# Runtime for this example
+```{r runtime, echo=FALSE}
+Sys.time() - time 
+```
