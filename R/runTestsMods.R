@@ -1,13 +1,34 @@
-#' Perform tests to test for associations between modules and meta-variables
+#' Perform tests to test for associations between subgroups and 
+#' phenotypic variables
 #'
 #' Adds statistical tests results to the output of K2tax()
 #' based on numeric and factor variables in info.
 #' @param K2res An object of class K2. The output of K2tax().
 #' @param infoClass A named vector denoted types of tests to run on
-#' meta variables (See K2preproc()).
+#' phenotypic variables (See K2preproc()).
 #' @return An object of class K2.
 #' @keywords clustering
 #' @export
+#' @examples
+#' ## Read in ExpressionSet object
+#' library(Biobase)
+#' data(sample.ExpressionSet)
+#' 
+#' ## Pre-process and create K2 object
+#' K2res <- K2preproc(sample.ExpressionSet)
+#' 
+#' ## Run K2 Taxonomer algorithm
+#' K2res <- K2tax(K2res,
+#'                stabThresh = 0.5)
+#' 
+#' K2res <- infoClassVector <- c(
+#' sex = "factor",
+#' score = "numeric1"
+#' )
+#'
+#' runTestsMods <- function(K2res, infoClass = infoClassVector)
+#'
+#' head(getTestsModTable(K2res))
 #' 
 
 runTestsMods <- function(K2res, infoClass = NULL) {

@@ -4,7 +4,7 @@
     ## Run test
     if (sum(!is.na(csDF$value[csDF$cat])) > 2 & sum(!is.na(csDF$value[!csDF$cat])) > 
         2) {
-        wilcoxOut <- wilcox.test(csDF$value[csDF$cat], csDF$value[!csDF$cat], alternative = alternative)
+        wilcoxOut <- suppressWarnings(wilcox.test(csDF$value[csDF$cat], csDF$value[!csDF$cat], alternative = alternative))
         pval <- wilcoxOut$p.value
         stat <- wilcoxOut$statistic
     } else {

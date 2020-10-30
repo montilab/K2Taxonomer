@@ -27,7 +27,6 @@
     ncase <- sum(cTab[, 2])
     nalt <- sum(cTab[, 1])
     ndrawn <- sum(cTab[2, ])
-    nleft <- sum(cTab[1, ])
     
     ## Generate results
     data.frame(pval = pval, stat = stat, df = NA, obsMean = NA, altMean = NA, diffMean = NA, 

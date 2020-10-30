@@ -109,12 +109,6 @@
                 'ward.D2', 'single', 'complete', 'average', 'centroid'.\n")
         }
 
-        ## infoClass
-        if (!is.null(K2m$infoClass) && mean(names(K2m$infoClass) %in% colnames(K2info(K2res))) != 1) {
-            stop("Names of argument, infoClass, don't match column names of
-            argument, info or phenoData of expressionSet.\n")
-        }
-
         ## qthresh
         if (K2m$qthresh > 1 | K2m$qthresh < 0) {
             stop("Argument, qthresh, must be a value between 0 and 1.\n")
@@ -197,6 +191,12 @@
             ## Mismatch info and dataMatrix
             if (nrow(K2info(K2res)) > 0 && nrow(K2info(K2res)) != ncol(K2data(K2res))) {
                 stop("No. columns of info slot doesn't equal No. columns in dataMatrix slot.\n")
+            }
+            
+            ## infoClass names
+            if (!is.null(K2m$infoClass) && mean(names(K2m$infoClass) %in% colnames(K2info(K2res))) != 1) {
+                stop("Names of argument, infoClass, don't match column names of
+            argument, info or phenoData of expressionSet.\n")
             }
             
             ## Run stopping criteria for dataMatrix slot

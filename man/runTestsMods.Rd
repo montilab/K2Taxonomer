@@ -2,7 +2,8 @@
 % Please edit documentation in R/runTestsMods.R
 \name{runTestsMods}
 \alias{runTestsMods}
-\title{Perform tests to test for associations between modules and meta-variables}
+\title{Perform tests to test for associations between subgroups and 
+phenotypic variables}
 \usage{
 runTestsMods(K2res, infoClass = NULL)
 }
@@ -10,7 +11,7 @@ runTestsMods(K2res, infoClass = NULL)
 \item{K2res}{An object of class K2. The output of K2tax().}
 
 \item{infoClass}{A named vector denoted types of tests to run on
-meta variables (See K2preproc()).}
+phenotypic variables (See K2preproc()).}
 }
 \value{
 An object of class K2.
@@ -18,5 +19,27 @@ An object of class K2.
 \description{
 Adds statistical tests results to the output of K2tax()
 based on numeric and factor variables in info.
+}
+\examples{
+## Read in ExpressionSet object
+library(Biobase)
+data(sample.ExpressionSet)
+
+## Pre-process and create K2 object
+K2res <- K2preproc(sample.ExpressionSet)
+
+## Run K2 Taxonomer algorithm
+K2res <- K2tax(K2res,
+               stabThresh = 0.5)
+
+K2res <- infoClassVector <- c(
+sex = "factor",
+score = "numeric1"
+)
+
+runTestsMods <- function(K2res, infoClass = infoClassVector)
+
+head(getTestsModTable(K2res))
+
 }
 \keyword{clustering}

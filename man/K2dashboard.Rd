@@ -6,8 +6,8 @@
 \usage{
 K2dashboard(
   K2res,
-  analysis_name = "K2 Taxonomer",
-  about = "<u>K2 Taxonomer Partitioning Results</u>",
+  analysis_name = "K2Taxonomer",
+  about = TRUE,
   output_dir = "."
 )
 }
@@ -17,8 +17,7 @@ K2dashboard(
 \item{analysis_name}{Character string of the name of analysis to write files
 and generate title of report.}
 
-\item{about}{Character string of HTML code for including in the 
-'about' window of the dashboard.}
+\item{about}{Logical. Whether to create an "about" tab in the dashboard.}
 
 \item{output_dir}{Base directory to put report.}
 }

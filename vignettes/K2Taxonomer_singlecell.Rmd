@@ -209,12 +209,12 @@ head(K2enrRes)
 
 ## Generate interactive portal to explore results
 
+For more information see the [K2Taxonomer Dashboards](https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_dashboard.html) vignette.
+
 ```{r portal, eval=FALSE}
 
 ## NOT RUN
-K2dashboard(K2res,
-            analysis_name = "Example",
-            output_dir = ".")
+K2dashboard(K2res)
 
 ```
 

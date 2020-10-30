@@ -28,9 +28,9 @@ knitr::opts_chunk$set(
 time <- Sys.time()
 ```
 
-## Requirements
+# Requirements
 
-### Load packages
+## Load packages
 ```{r setup}
 ## K2Taxonomer package
 library(K2Taxonomer)
@@ -42,16 +42,16 @@ library(Biobase)
 library(ggdendro)
 ```
 
-### Read in sample `ExpressionSet` object
+## Read in sample `ExpressionSet` object
 The main input of `r Githubpkg("montilab/K2Taxonomer")` is an `ExpressionSet` object with approximately normally distributed expression values. Here we read in an example data set. See *?sample.ExpressionSet* for more information about these data.
 
 ```{r loadData}
 data(sample.ExpressionSet)
 ```
 
-## `r Githubpkg("montilab/K2Taxonomer")` basic run
+# `r Githubpkg("montilab/K2Taxonomer")` basic run
 
-### Initialize `K2` object
+## Initialize `K2` object
 
 The `K2preproc()` initializes the `K2` object and runs pre-processing steps. Here, you can specify all arguments used throughout the analysis. Otherwise, you can specify these arguments within the specific functions for which they are implements. See help pages for more information.
 
@@ -70,7 +70,7 @@ K2res <- K2preproc(sample.ExpressionSet,
                    logCounts = TRUE)
 ```
 
-#### `K2` object structre
+### `K2` object structre
 
 `r Githubpkg("montilab/K2Taxonomer")` functions create and manipulate S4, `K2` objects, defined within the package. `K2` objects have 5 slots.
 
@@ -100,7 +100,7 @@ names(K2meta(K2res))
 ```
 
 
-### Running `r Githubpkg("montilab/K2Taxonomer")` algorithm
+## Running `r Githubpkg("montilab/K2Taxonomer")` algorithm
 
 The `r Githubpkg("montilab/K2Taxonomer")` is run by `K2tax()`.  At each recursion of the algorithm, the observations in **dataMatrix** are split into two sub-groups based on a compilation of repeated K=2 clustering on bootstrapped sampling of features. For each split in the recursion, a stability metric is used to estimate robustness, which takes on values between 0 and 1, where values close to 1 represent the instance in which the same clustering occured in every or nearly every perturbation of a large set of observations. As the number of observations decreasing down the taxonomy the largest possible stability estimate decreases, such that the largest possible stability estimate of triplets and duplets, is 0.67 and 0.50, respectively. 
 
@@ -114,7 +114,7 @@ K2res <- K2tax(K2res,
                stabThresh = 0.5)
 ```
 
-### `r Githubpkg("montilab/K2Taxonomer")` results structure
+## `r Githubpkg("montilab/K2Taxonomer")` results structure
 
 The **results** slot of the `K2` object is a named list of the results of running the `r Githubpkg("montilab/K2Taxonomer")` algorithm. Each item in the list contains the IDs of the two sets of observations denoted by the split, as well as additional annotation for that split, including the stability estimates.
 
@@ -125,13 +125,13 @@ Each item is assigned a letter ID. If there are more than 26 items, than an addi
 names(K2results(K2res))
 ```
 
-#### Split results
+### Split results
 ```{r values}
 ## Get observations defined in each split
 K2results(K2res)$A$obs
 ```
 
-#### Stability metrics
+### Stability metrics
 
 Stability metrics measure the extant to which pairs of observations in the data setpartitioned together for a given split of the data.
 
@@ -164,7 +164,7 @@ heatmap(splitAstability,
         keep.dendro = FALSE)
 ```
 
-### Generate dendrogram from `r Githubpkg("montilab/K2Taxonomer")` results
+## Generate dendrogram from `r Githubpkg("montilab/K2Taxonomer")` results
 
 After running the `r Githubpkg("montilab/K2Taxonomer")` algorithm, a `dendrogram` object can be built using `K2dendro()`.
 ```{r dendrogram, fig.align='center', fig.width=5, fig.height=3}
@@ -175,15 +175,15 @@ dendro <- K2dendro(K2res)
 ggdendrogram(dendro)
 ```
 
-### Annotating `r Githubpkg("montilab/K2Taxonomer")` results
+## Annotating `r Githubpkg("montilab/K2Taxonomer")` results
 
 A principal motivation behind `r Githubpkg("montilab/K2Taxonomer")` is that insight can be garnered and tracjed for various levels in a hierarchical sub-grouping of obervations, such that analytical characterization of different sub-groups throughout the taxonomy serve to both validate and inform about specific sub-groups.
 
 To this end, `r Githubpkg("montilab/K2Taxonomer")` runs additional analyses to annotate each split. These analyses include: differential expression analysis using the `r Biocpkg("limma")` package and gene set enrichment testing for both hyperenrichment and differntial analysis of singe-sample enrichment scores estimated using the `r Biocpkg("GSVA")` package.
 
-#### Differential analysis
+### Differential gene exprssion analysis
 
-Differential analysis in `r Githubpkg("montilab/K2Taxonomer")` is performed using `r Biocpkg("limma")`. Differential analysis is performed for each partition of the data, comparing the gene expression of each subgroup.
+Differential analysis in `r Githubpkg("montilab/K2Taxonomer")` is performed using `r Biocpkg("limma")`. Differential analysis is performed for each partition of the data, comparing the gene expression between each pair of subgroups across all partitions.
 
 ```{r Run differential analysis}
 ## Run DGE
@@ -197,7 +197,7 @@ DGEtable <- getDGETable(K2res)
 head(DGEtable)
 ```
 
-#### Gene set hyperenrichment
+### Gene set hyperenrichment
 
 `r Githubpkg("montilab/K2Taxonomer")` performed both hyperenrichment and differential single-sample enrichment tests based on an input of gene sets using the **genesets** argument, which can be specified in `runGSEmods()`, as demonstrated here, or during initialization with `K2preproc()`. Here, the gene sets are made up.
 
@@ -209,8 +209,7 @@ genes <- unique(DGEtable$gene)
 genesetsMadeUp <- list(
   GS1 = genes[1:50],
   GS2 = genes[51:100],
-  GS3 = genes[101:150]
-)
+  GS3 = genes[101:150])
 
 ## Run gene set hyperenrichment
 K2res <- runGSEmods(K2res, 
@@ -221,11 +220,10 @@ K2res <- runGSEmods(K2res,
 K2results(K2res)$A$gse
 ```
 
-#### Single-sample gene set enrichment
+### Single-sample gene set enrichment
 
 Single-sample enrichment is performed in two steps.  First, the `r Biocpkg("GSVA")` package is used to generate observation-level enrichment scores, followed by differential analysis using the `r Biocpkg("limma")` package. This is performed by the functions `runGSVAmods()` and `runDSSEmods()`, respectively. Here, we can specify which enrichment algorithm to use when running the `r Biocpkg("GSVA")` functionality and the number of CPU cores to use with the **ssGSEAalg** and **ssGSEAcores** arguments, respectively. These can also be set in the `K2preproc()` function. Note, that the arguments shown are the defaults.
 
-# K2 Taxonomer performed single-sample 
 ```{r Run ssSGEA, warning=FALSE}
 ## Create expression matrix with ssGSEA(GSVA) estimates
 K2res <- runGSVAmods(K2res, 
@@ -237,8 +235,8 @@ K2res <- runGSVAmods(K2res,
 K2gSet(K2res)
 ```
 
+### Differential single-sample enrichment analysis
 
-#### Differential single-sample enrichment analysis
 ```{r Run DSSE}
 ## Run differential analysis on enrichment score Expression Set
 K2res <- runDSSEmods(K2res)
@@ -251,33 +249,92 @@ K2enrRes <- getEnrichmentTable(K2res)
 head(K2enrRes)
 ```
 
-### Generate interactive portal to explore results
+### Phenotypic variable tests (optional)
+
+In addition to annotating subgroups based on gene and pathway activity, `r Githubpkg("montilab/K2Taxonomer")` includes functionality to perform statistical testing of these subgroups based on known "phenotypic" information. For example this data set includes three phenotypic variables, including two binary variables, "**sex**" and "**type**", and a continuos variable, "**score**". 
+
+```{r varPrint}
+print(str(pData(sample.ExpressionSet)))
+```
+
+**Note: Unlike differential gene or pathway analysis, the phenotypic variable tests are run one-versus-all, comparing the members of an individual subgroup to all other observations.**
+
+#### Categorical Variables
+
+For categorical variables, over-representation of a specific label in a given subgroup is evaluated using Fisher's Exact Test. For binary variables, like in this case, this may be run as a one-sided test, in such case the over-representation of only the second factor level in a given subgroup is evaluated. For example, as it is currently coded, a one-sided test of the "**type**" variable would only assess whether a subgroup had significantly greater observations labeled as "*Case*". Alternatively, the test can be run as two-sided, if subgroups of over-representation of "*Control*" observations is also of interest.
+
+**Note: For categorical variables with more than two levels, only two-sided tests are possible.**
+
+#### Continuous Variables
+
+For continuous, statistical differences can be evalutated user either the parametric Students' T-test or the non-parametric Wilcoxon rank-sum test. As with categorical variables, these tests can be either one-sided (higher mean (T-test) or rank (Wilcox) in subgroup, or two-sided (higher or lower mean in node).
+
+#### Running phenotypic variable tests
+
+We specify the type of test to run as a named vector using the *infoClass* argument, in which the values of this vector indicates the type of test to run and the names indicate the variable for which to run the test. Value options are ...
+
+- **factor**: Runs 2-sided Fisher test
+- **factor1**: Runs 1-sided Fisher test
+- **numeric**: Runs 2-sided Wilcox rank-sum test
+- **numeric1**: Runs 1-sided Wilcox rank-sum test
+- **normal**: Runs 2-sided t-test
+- **normal1**: Runs 1-sided t-test
+
+An example of this vector is shown below, specifying the following tests:
+
+- "**sex**": 2-sided Fisher test
+- "**type**": 1-sided Fisher test
+- "**score**": 1-sided Wilcox rank-sum test
+
+```{r infoClass}
+infoClassVector <- c(
+    sex = "factor",
+    type = "factor1",
+    score = "numeric1")
+```
+
+After creating the named vector, phenotypic variable testing is performed using the `runTestsMods()` function.
+
+```{r runPheno}
+## Run phenotype variable tests
+K2res <- runTestsMods(K2res, infoClass = infoClassVector)
+
+## Get differential results for one split
+head(K2results(K2res)$A$modTests)
+
+## Concatenate all results and generate table
+modTestsTable <- getTestsModTable(K2res)
+head(modTestsTable)
+```
+
+See *?getTestsModTable* for a description of the columns in this data frame.
+
+## Generate interactive portal to explore results
 
 `r Githubpkg("montilab/K2Taxonomer")` can automatically generate an interactive web-portal for which to parse through the differential analysis results. This creates it's own sub-directory with a compilable .Rmd file.
 
+For more information see the [K2Taxonomer Dashboards](https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_dashboard.html) vignette. 
+
 ```{r portal, eval=FALSE}
-
 ## NOT RUN
-K2dashboard(K2res,
-            analysis_name = "Example",
-            output_dir = ".")
-
+K2dashboard(K2res)
 ```
 
-### Running with `runK2Taxonomer` wrapper
+## Running with `runK2Taxonomer` wrapper
 
 Alternatively, K2Taxonomer can be run in one step with the `runK2Taxonomer()` function.  This function takes all of the same arguments as the `K2preproc()` function, and runs all of the steps above.
 
-```{r RunWrapper}
+```{r RunWrapper, eval=FALSE}
 K2res <- runK2Taxonomer(
   eSet = sample.ExpressionSet,
   genesets = genesetsMadeUp,
+  infoClass = infoClassVector,
   stabThresh = 0.5)
 ```
 
-## Additional options
+# Additional options
 
-### Running with cohorts
+## Running with cohorts
 
 If there is replicates in the data or if the user is only interested in capturing subgroup relationships between known groups without partitioning the observations themselves, one can specify the **cohort** variable of interest in the `ExpressionSet` object.
 
@@ -297,7 +354,14 @@ dendro <- K2dendro(K2res)
 ggdendrogram(dendro)
 ```
 
-# Runtime for this example
+# Additional topics
+
+## Multiple hypothesis correction
+
+For each of the four statistical testing steps: differential gene expression, gene set hyperenrichment, differential single-sample gene set enrichment, and phenotypic variable testing, multiple hypothesis correction is performed across the aggregate set of p-values across all partitions using the Benjamini-Hochberg FDR correction. This correction is performed independently for each of the four testing steps. 
+
+## Runtime for this example
+
 ```{r runtime, echo=FALSE}
 Sys.time() - time 
 ```

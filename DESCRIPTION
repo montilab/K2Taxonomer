@@ -64,4 +64,5 @@ Collate:
     'getEnrichmentTable.R'
     'aggregateGSVAscores.R'
     'getDGETable.R'
+    'getTestsModTable.R'
 VignetteBuilder: knitr

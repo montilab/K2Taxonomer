@@ -109,7 +109,6 @@ K2preproc <- function(eSet, cohorts = NULL, vehicle = NULL, covariates = NULL, b
     
     # Check inputs
     k2Check <- .checkK2(K2res, inputsOnly = TRUE)
-    
 
     ## Perform differential analysis if cohort information is given
     if (is.null(cohorts)) {

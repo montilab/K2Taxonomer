@@ -5,8 +5,7 @@
 #' @param K2res Object of class K2.
 #' @param analysis_name Character string of the name of analysis to write files
 #' and generate title of report.
-#' @param about Character string of HTML code for including in the 
-#' 'about' window of the dashboard.
+#' @param about Logical. Whether to create an "about" tab in the dashboard.
 #' @param output_dir Base directory to put report.
 #' @return Nothing.  Writes files to a specified directory.
 #' @keywords clustering
@@ -23,8 +22,8 @@
 #'
 
 K2dashboard <- function(K2res, 
-                        analysis_name = "K2 Taxonomer",
-                        about = "<u>K2 Taxonomer Partitioning Results</u>",
+                        analysis_name = "K2Taxonomer",
+                        about = TRUE,
                         output_dir = ".") {
     
     ## Run checks
@@ -87,9 +86,14 @@ K2dashboard <- function(K2res,
     # Add title
     K2rmdLines[2] <- gsub("K2TITLEPLACEHOLDER", analysis_name, K2rmdLines[2])
     
-    # Add about section
-    aboutLine <- grepl("K2ABOUTPLACEHOLDER", K2rmdLines)
-    K2rmdLines[aboutLine] <- gsub("K2ABOUTPLACEHOLDER", about, K2rmdLines[aboutLine])
+    # Add about document
+    if (about) {
+        file.copy(
+            system.file("dashboard", "about.md", package = "K2Taxonomer"),
+            dirPath,
+            overwrite = TRUE
+        )
+    }
     
     # Write document
     writeLines(K2rmdLines, RMDpath)

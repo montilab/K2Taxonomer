@@ -1,5 +1,5 @@
 ---
-title: "K2TITLEPLACEHOLDER"
+title: "K2Taxonomer Example"
 runtime: shiny
 output:
   flexdashboard::flex_dashboard:
