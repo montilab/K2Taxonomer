@@ -187,7 +187,7 @@ values <- reactiveValues(nodeSel = "A")
 
 ```
 
-K2 Taxonomer Results {data-orientation=rows}
+K2Taxonomer Results {data-orientation=rows}
 =====================================
 
 Selections {.sidebar}
@@ -237,7 +237,7 @@ uiOutput("Match")
 Row {data-height=600}
 -------------------------------------
 
-### K2 Taxonomer Results
+### K2Taxonomer Results
 
 ```{r formatNetwork, context="server"}
 
@@ -572,10 +572,10 @@ if (!is.null(K2res[[1]]$modTests)) {
     div(id = "phenoHelp",
               modalDialog("1) Select row to visualize results in dendrogram.",
                     br(),
-                    "2) Download table to view full set of statistical values.
-                    For description of this table go 
-                    <a href='https://montilab.github.io/K2Taxonomer/reference/getTestsModTable.html' 
-                    >here</a>.",
+                    tags$div("2) Download table to view full set of statistical values.
+                    For description of this table go",
+                    tags$a(href = 'https://montilab.github.io/K2Taxonomer/reference/getTestsModTable.html','here'), 
+                    "."),
                     br(),
                     easyClose = TRUE, title = "Help")
     )
