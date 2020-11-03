@@ -183,7 +183,8 @@ obsMap <- unlist(lapply(K2res, function(x) x$obs), recursive = F)
 ```{r values, context="server"}
 
 ## Reactive values
-values <- reactiveValues(nodeSel = "A")
+values <- reactiveValues(nodeSel = "A",
+                         pathSel = "A")
 
 ```
 
@@ -214,15 +215,27 @@ output$Match <- renderUI({
 
       ## Get number of matches
       nMatches <- paste0(length(infoInd), " matche(s)")
-      valueString <- c("A", rownames(infoMat)[infoInd])
+      valueString <- c("NOMATCH", rownames(infoMat)[infoInd])
       names(valueString) <- c(nMatches, showString)
 
     } else {
-    valueString <- c("No Matches" = "A")
+    valueString <- c("No Matches")
   }
-
-  selectInput("mVal", "Select a Match:", valueString, selectize = TRUE)
+  selectInput("mVal", "Select a Match:", valueString)
 })
+
+## Reactive row selection
+observeEvent({input$mVal}, {
+  ## Select path to a specific member by searching
+  if(!is.null(input$mVal) && input$mVal %in% rownames(info) && input$mVal != values$nodeSel){
+    
+    values$pathSel <- as.character(vNetOut$x$nodes$id[
+      grep(paste0("^", input$mVal, "<br>|<br>", input$mVal, "<br>|", input$mVal, "$"), vNetOut$x$nodes$title)])
+    updateTextInput(session, "mstring", value="")
+    values$reset <- runif(1, 0, 1)
+  }
+})
+             
 
 ```
 
@@ -243,14 +256,6 @@ Row {data-height=600}
 
 ## Render Dendrogram
 output$dendro <- renderVisNetwork({
-
-  ## Select path to a specific member by searching
-  if(!is.null(input$mVal) && input$mVal %in% rownames(info) && input$mVal != values$nodeSel){
-    pathSel <- as.character(vNetOut$x$nodes$id[
-      grep(paste0("^", input$mVal, "<br>|<br>", input$mVal, "<br>|", input$mVal, "$"), vNetOut$x$nodes$title)])
-  } else {
-    pathSel <- values$nodeSel
-  }
 
   if(!is.null(values$mvTabSub)) {
     if(nrow(values$mvTabSub) > 0) {
@@ -276,13 +281,15 @@ output$dendro <- renderVisNetwork({
     }
   }
 
+  values$reset
+  
   vNetOut %>%
     visOptions(autoResize = T,
                height = "100%",
                nodesIdSelection = list(enabled = TRUE,
                                        main = "Node ID",
                                        style = 'width: 100px; height: 25px;',
-                                       selected = pathSel),
+                                       selected = values$pathSel),
                highlightNearest = list(enabled = TRUE,
                                        algorithm = "hierarchical",
                                        degree = 1E10)) %>%
@@ -296,6 +303,7 @@ output$dendro <- renderVisNetwork({
     visPhysics(hierarchicalRepulsion = list(nodeDistance = 200)) %>%
     visHierarchicalLayout(direction = "LR", levelSeparation = 300) %>%
     visInteraction(dragNodes = FALSE)
+
 })
 
 ```
