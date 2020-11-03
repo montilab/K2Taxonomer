@@ -1,0 +1,77 @@
+---
+title: "Navigating the K2Taxonomer Dashboard"
+author:
+- name: Eric R. Reed
+  affiliation: Boston University School of Medicine, Section of Computational Biomedicine, 72 E Concord St, Boston, MA 02118
+date: November 2, 2020
+output: 
+  BiocStyle::html_document:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{K2Taxonomer_dashhelp}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: "`r system.file('scripts', 'k2.bib', package='K2Taxonomer')`"
+---
+
+<style>
+    body .main-container {
+        max-width: 2000px;
+    }
+</style>
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message=F, 
+  warning=F
+)
+```
+
+# Introduction
+
+To facilitate the comprehensive interrogation the output of `r Githubpkg("montilab/K2Taxonomer")` this package includes functionality for generating interactive dashboards, which include full compendia of results. In addition to the partition-level molecular comparisons included in these dashboards, they include functionality for performing molecular comparisons of gene expression and gene set enrichment on user-specified sets of two-or-more subgroups. Here we describe the layout and usage of these dashboards.
+
+For more information for how to generate these dashboards go [here](https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_dashboard.html).
+
+
+The `r Githubpkg("montilab/K2Taxonomer")` dashboards include three tabs, described below:
+
+- __**About**__: This is an optional tab with which the user can include information about the analysis being performed. This page is populated by a file, "**about.md**", included in the same directory as the dashboard file. More information about formatting this file can be found [here](https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_dashboard.html#the-about-md-file).
+
+- __***/K2Taxonomer* Results**__: This tab includes all of the results generated throughout the `r Githubpkg("montilab/K2Taxonomer")` workflow, including: *partitioning results*, *partition stability*, *gene expression analysis*, *gene set enrichment*, and *phenotypic variable testing (optional)*. More information for how `r Githubpkg("montilab/K2Taxonomer")` estimates these results can be found [here](https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_dashboard.html#the-about-md-file).
+
+- __**Compare Multiple**__: This tab allows the user to perform additional molecular comparisons between subgroups, beyond the partition-level comparisons performed by `r Githubpkg("montilab/K2Taxonomer")` functions.
+
+# __**About**__
+
+***
+
+![](page1.png)
+
+***
+
+# __**`r Githubpkg("montilab/K2Taxonomer")` Results**__
+
+***
+
+![](page2.png)
+
+***
+
+## __*Subgroup Information*__
+
+***
+
+![](page3.png)
+
+***
+
+# __**Compare Multiple** __
+
+***
+
+![](page4.png)
+
+***

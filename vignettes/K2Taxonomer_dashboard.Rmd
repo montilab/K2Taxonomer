@@ -1,5 +1,5 @@
 ---
-title: "K2Taxonomer Dashboards"
+title: "K2Taxonomer Dashboard Generation"
 author:
 - name: Eric R. Reed
   affiliation: Boston University School of Medicine, Section of Computational Biomedicine, 72 E Concord St, Boston, MA 02118
