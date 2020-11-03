@@ -44,6 +44,8 @@ The `r Githubpkg("montilab/K2Taxonomer")` dashboards include three tabs, describ
 
 - __**Compare Multiple**__: This tab allows the user to perform additional molecular comparisons between subgroups, beyond the partition-level comparisons performed by `r Githubpkg("montilab/K2Taxonomer")` functions.
 
+Annotation of each of these tabs is presented below.
+
 # __**About**__
 
 ***
