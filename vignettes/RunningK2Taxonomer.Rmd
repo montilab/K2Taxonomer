@@ -81,8 +81,8 @@ K2res <- K2preproc(sample.ExpressionSet,
 - **results**: "list": Named list of the results of running the `r Githubpkg("montilab/K2Taxonomer")` algorithm, including differential analysis and enrichment results, extracted by `K2results()`
 - **genesets**: "list": Named list of gene sets to run for enrichment analysis, extracted by `K2genesets`.
 - **gene2Pathway**: "character": Named vector of gene set names in which each gene appears, extracted by `K2gene2Pathway`.
-- **geneURL**: "character": Named vector of URLs to link to each gene in the portal, extracted by `K2geneURL()`.
-- **genesetURL**: "character": Named vector of URLs to link to each gene set in the portal, extracted by `K2genesetURL()`.
+- **geneURL**: "character": Named vector of URLs to link to each gene in the dashboard, extracted by `K2geneURL()`.
+- **genesetURL**: "character": Named vector of URLs to link to each gene set in the dashboard, extracted by `K2genesetURL()`.
 
 `K2preproc()` will fill in three of these slots:, **eSet**, **meta**, and **dataMatrix**.
 ```{r eSetDataMatrix}
@@ -309,13 +309,13 @@ head(modTestsTable)
 
 See *?getTestsModTable* for a description of the columns in this data frame.
 
-## Generate interactive portal to explore results
+## Generate interactive dashboard to explore results
 
-`r Githubpkg("montilab/K2Taxonomer")` can automatically generate an interactive web-portal for which to parse through the differential analysis results. This creates it's own sub-directory with a compilable .Rmd file.
+`r Githubpkg("montilab/K2Taxonomer")` can automatically generate an interactive dashboard for which to parse through the differential analysis results. This creates it's own sub-directory with a compilable .Rmd file.
 
 For more information see the [K2Taxonomer Dashboards](https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_dashboard.html) vignette. 
 
-```{r portal, eval=FALSE}
+```{r dashboard, eval=FALSE}
 ## NOT RUN
 K2dashboard(K2res)
 ```

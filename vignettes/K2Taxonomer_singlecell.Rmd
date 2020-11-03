@@ -207,11 +207,11 @@ K2enrRes <- getEnrichmentTable(K2res)
 head(K2enrRes)
 ```
 
-## Generate interactive portal to explore results
+## Generate interactive dashboard to explore results
 
 For more information see the [K2Taxonomer Dashboards](https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_dashboard.html) vignette.
 
-```{r portal, eval=FALSE}
+```{r dashboard, eval=FALSE}
 
 ## NOT RUN
 K2dashboard(K2res)

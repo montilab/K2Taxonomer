@@ -50,7 +50,7 @@ data(sample.ExpressionSet)
 levels(pData(sample.ExpressionSet)$type) <- c("Control", "Case")
 ```
 
-## Generating `r Githubpkg("montilab/K2Taxonomer")` web portal
+## Generating `r Githubpkg("montilab/K2Taxonomer")` dashboard
 
 ### Run `r Githubpkg("montilab/K2Taxonomer")`
 
@@ -77,21 +77,21 @@ K2res <- runK2Taxonomer(
 
 ```
 
-### Creating the portal
+### Creating the dashboard
 
-We generate the interactive web-portals with the `K2dashboard()` function. This function will create a directory with two files. These two files include the interactive *RMarkdown* (.Rmd) file created by the `r CRANpkg("flexdashboard")` package and the R object (.rds) file containing the `K2` object created by `r Githubpkg("montilab/K2Taxonomer")` functions. 
+We generate the interactive dashboards with the `K2dashboard()` function. This function will create a directory with two files. These two files include the interactive *RMarkdown* (.Rmd) file created by the `r CRANpkg("flexdashboard")` package and the R object (.rds) file containing the `K2` object created by `r Githubpkg("montilab/K2Taxonomer")` functions. 
 
 Below we shown the `K2dashboard()` function and each of its arguments.
 
 The first argument, specifying the `K2` object is the only requirement. The remaining three arguments costumize the output, as follows:
 
-- **analysis_name**: Specifies the title to be printed on the top of the portal. Also, specifies the prefix of the name of the output files. For filenames, spaces are replaced by underscores.
+- **analysis_name**: Specifies the title to be printed on the top of the dashboard. Also, specifies the prefix of the name of the output files. For filenames, spaces are replaced by underscores.
 
-- **about**: Logical specifying whether to include an about page in the portal. If TRUE (default), a third file is written to the portal directory, "**about.md**". This is an editable *markdown* (.md) file, which the user is free to edit, and includes some default information about where to learn more about `r Githubpkg("montilab/K2Taxonomer")` and how to navigate the portal. Customizing this file is described in more detail below.
+- **about**: Logical specifying whether to include an about page in the dashboard. If TRUE (default), a third file is written to the dashboard directory, "**about.md**". This is an editable *markdown* (.md) file, which the user is free to edit, and includes some default information about where to learn more about `r Githubpkg("montilab/K2Taxonomer")` and how to navigate the dashboard. Customizing this file is described in more detail below.
 
-- **output_dir**: This is simply the path to the directory to write the portal directory.
+- **output_dir**: This is simply the path to the directory to write the dashboard directory.
 
-```{r portal}
+```{r dashboard}
 K2dashboard(K2res,
             analysis_name = "K2Taxonomer Example",
             about = TRUE,
@@ -102,26 +102,26 @@ K2dashboard(K2res,
 
 #### The output directory
 
-To prevent the overwriting of dashboard files, in addition to the **analysis_name**, the name of portal directory includes the date and time, followed by a random seven digit integer. It is formatted as follows:
+To prevent the overwriting of dashboard files, in addition to the **analysis_name**, the name of dashboard directory includes the date and time, followed by a random seven digit integer. It is formatted as follows:
 
 <center>**analysis_name**_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND_INTEGER</center>
 
-**Note: Changing the name of this directory does not effect the portal.**
+**Note: Changing the name of this directory does not effect the dashboard.**
 
 #### The "**about.md**" file
 
-`r Githubpkg("montilab/K2Taxonomer")` allows users to include information about their study in the interactive portals by editing" the "**about.md**"  *markdown* file. When the "**about.md**" is included in the portal directory, it is read in and the *markdown* code is compiled along with the code in the dashboard file. 
+`r Githubpkg("montilab/K2Taxonomer")` allows users to include information about their study in the interactive dashboards by editing" the "**about.md**"  *markdown* file. When the "**about.md**" is included in the dashboard directory, it is read in and the *markdown* code is compiled along with the code in the dashboard file. 
 
 This file uses *markdown* syntax specific to the CRANpkg("flexdashboard")` "Multiple Pages" layout, which can be reviewed [here](https://rmarkdown.rstudio.com/flexdashboard/layouts.html#multiple_pages). Mainly, the first two lines of the default "**about.md**" file.
 
 > \ About  
 > \ =====================================
 
-Will result in a tab, named *About*, as the first tab in the portal. Furthermore, lines with headers should start at three hashes, "###".
+Will result in a tab, named *About*, as the first tab in the dashboard. Furthermore, lines with headers should start at three hashes, "###".
 
 Finally, when including links in the "**about.md**" file, make sure that clicking on these links opens a new window using the following:
 
 > ``[TEXT](URL){target="_blank"}``.
 
-Otherwise, the portal will need to reload upon navigating back.
+Otherwise, the dashboard will need to reload upon navigating back.
 
