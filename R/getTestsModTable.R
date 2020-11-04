@@ -5,8 +5,8 @@
 #' @return A data.frame object with the following columns: 
 #' \itemize{
 #'  \item{value: }{The variable being tested}
-#'  \item{split: }{The partition label}
-#'  \item{mod: }{The subgroup for the given partition}
+#'  \item{node: }{The partition label}
+#'  \item{edge: }{The subgroup for the given partition}
 #'  \item{pval: }{Nominal p-value of test}
 #'  \item{fdr: }{Benjamini-Hochberg FDR corrected p-value}
 #'  \item{df: }{Degrees of freedom of test}
@@ -58,22 +58,22 @@ getTestsModTable <- function(K2res) {
         # Get phenotype results
         modTests <- K2resList[[x]]$modTests
         
-        # Add mod ID to each subgroup
-        modTests[[1]]$mod <- "1"
-        modTests[[2]]$mod <- "2"
+        # Add edge ID to each subgroup
+        modTests[[1]]$edge <- "1"
+        modTests[[2]]$edge <- "2"
         
         # Concatenate
         modTests <- do.call(rbind, modTests)
         
-        # Add split ID
-        modTests$split <- x
+        # Add node ID
+        modTests$node <- x
         
         return(modTests)
     }))
     rownames(K2modTestTable) <- NULL
     
     ## Sort columns
-    K2modTestTable <- K2modTestTable[, c("value", "split", "mod", "pval", "fdr", 
+    K2modTestTable <- K2modTestTable[, c("value", "node", "edge", "pval", "fdr", 
                                          "stat", "df", "obsMean", "altMean", 
                                          "diffMean", "nhits", "ncase", 
                                          "nalt", "ndrawn", "hits", "test")]

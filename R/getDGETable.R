@@ -38,7 +38,7 @@ getDGETable <- function(K2res) {
         CompTab <- K2resList[[x]]$dge
         
         ## Add group information and extract tables
-        CompTab$split <- x
+        CompTab$node <- x
         
         ## Add direction information
         CompTab$direction <- c("down", "up")[as.numeric(CompTab$t > 0) + 1]

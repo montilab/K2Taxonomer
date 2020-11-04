@@ -1,7 +1,7 @@
 #' Interactive K2 dendrogram
 #'
 #' Create an interactive dendrogram of the K2 Taxonomer results
-#' @param K2res A list object. The output of runGSEmods().
+#' @param K2res A list object. The output of runK2tax().
 #' @keywords clustering
 #' @export
 #'
@@ -32,9 +32,9 @@ K2visNetwork <- function(K2res) {
 
     ## Add Labels
     titles <- unlist(lapply(K2res, function(x) paste("Probability:", signif(x$bootP,
-        2), "<br>", "Members(Group 1):", length(x$obs[[1]]), "<br>", "Members(Group 2):",
-        length(x$obs[[2]]), "<br>", "Stability(Group 1):", signif(x$stability$clusters[[1]],
-            2), "<br>", "Stability(Group 2):", signif(x$stability$clusters[[2]],
+        2), "<br>", "Members(Edge:1):", length(x$obs[[1]]), "<br>", "Members(Edge:2):",
+        length(x$obs[[2]]), "<br>", "Stability(Edge:1):", signif(x$stability$clusters[[1]],
+            2), "<br>", "Stability(Edge:2):", signif(x$stability$clusters[[2]],
             2))))
     names(titles) <- names(K2res)
 

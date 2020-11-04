@@ -13,8 +13,8 @@ getTestsModTable(K2res)
 A data.frame object with the following columns: 
 \itemize{
  \item{value: }{The variable being tested}
- \item{split: }{The partition label}
- \item{mod: }{The subgroup for the given partition}
+ \item{node: }{The partition label}
+ \item{edge: }{The subgroup for the given partition}
  \item{pval: }{Nominal p-value of test}
  \item{fdr: }{Benjamini-Hochberg FDR corrected p-value}
  \item{df: }{Degrees of freedom of test}

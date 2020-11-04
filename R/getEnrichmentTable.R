@@ -60,8 +60,8 @@ getEnrichmentTable <- function(K2res) {
         GSEtab <- do.call(rbind, lapply(names(GSEtabList), function(y) {
             GSEsub <- GSEtabList[[y]]
             if (nrow(GSEsub) > 0) {
-                GSEsub$split <- x  ## Add split ID
-                GSEsub$mod <- gsub("g|_up|_down", "", y)  ## Add group ID
+                GSEsub$node <- x  ## Add node ID
+                GSEsub$edge <- gsub("g|_up|_down", "", y)  ## Add group ID
                 GSEsub$direction <- gsub("g1_|g2_", "", y)  ## Add  direction
             }
             return(GSEsub)
@@ -82,7 +82,7 @@ getEnrichmentTable <- function(K2res) {
             SSGSEAtab <- K2resList[[x]]$dsse
             
             ## Add group information and extract tables
-            SSGSEAtab$split <- x
+            SSGSEAtab$node <- x
             
             ## Add direction information
             SSGSEAtab$direction <- c("down", "up")[as.numeric(SSGSEAtab$t > 0) + 
@@ -99,7 +99,7 @@ getEnrichmentTable <- function(K2res) {
         EnrTable <- merge(EnrTable, ssEnrTable, all = TRUE)
         
         ## Sort columns
-        EnrTable <- EnrTable[, c("category", "split", "mod", "direction", "pval_hyper", 
+        EnrTable <- EnrTable[, c("category", "node", "edge", "direction", "pval_hyper", 
             "fdr_hyper", "nhits", "ndrawn", "ncats", "ntot", "pval_limma", "fdr_limma", 
             "coef", "mean", "t", "B", "hits")]
     }

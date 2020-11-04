@@ -55,7 +55,6 @@ levels(pData(sample.ExpressionSet)$type) <- c("Control", "Case")
 ### Run `r Githubpkg("montilab/K2Taxonomer")`
 
 ```{r RunWrapper}
-
 # Use toy set of gene sets
 genes <- rownames(sample.ExpressionSet)
 genesetsMadeUp <- list(
@@ -74,7 +73,6 @@ K2res <- runK2Taxonomer(
   genesets = genesetsMadeUp,
   infoClass = infoClassVector,
   stabThresh = 0.5)
-
 ```
 
 ### Creating the dashboard

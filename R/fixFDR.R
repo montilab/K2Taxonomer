@@ -21,10 +21,10 @@
         
         ## Reorder columns
         if (analysis == "dge") {
-            xSub <- xSub[, c("gene", "coef", "mean", "t", "pval", "fdr", "B", "mod")]
+            xSub <- xSub[, c("gene", "coef", "mean", "t", "pval", "fdr", "B", "edge")]
         } else {
             xSub <- xSub[, c("category", "coef", "mean", "t", "pval", "fdr", "B", 
-                "mod")]
+                "edge")]
         }
         
         ## Add back to K2results()

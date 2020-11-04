@@ -81,8 +81,8 @@ runGSEmods <- function(K2res, genesets = NULL, qthresh = NULL, cthresh = NULL, n
         res <- x$dge
 
         ## Assign genes to each group
-        one <- res[res$mod == "1", ]
-        two <- res[res$mod == "2", ]
+        one <- res[res$edge == "1", ]
+        two <- res[res$edge == "2", ]
 
         ## For each group get a set of up and down-regulated genes
         oneUp <- one$gene[one$fdr < K2meta(K2res)$qthresh & one$coef > K2meta(K2res)$cthresh]

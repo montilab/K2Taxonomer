@@ -69,7 +69,7 @@
                   trend = logCounts, robust = logCounts), number = Inf, sort.by = "none"))
                 contFit <- contFit[, c("logFC", "AveExpr", "t", "P.Value", "adj.P.Val", 
                   "B")]
-                contFit$mod <- sub("X", "", x)
+                contFit$edge <- sub("X", "", x)
                 return(contFit)
             }, design, fit)
             
@@ -99,7 +99,7 @@
                   robust = logCounts), number = Inf, sort.by = "none")
                 contFit <- contFit[, c("logFC", "AveExpr", "t", "P.Value", "adj.P.Val", 
                   "B")]
-                contFit$mod <- x
+                contFit$edge <- x
                 return(contFit)
             }, cVec, design, fit)
         }
@@ -137,10 +137,10 @@
     }
     
     ## Save mods as character
-    modStats$mod <- as.character(modStats$mod)
+    modStats$edge <- as.character(modStats$edge)
     
     ## Change column names
-    colnames(modStats) <- c("coef", "mean", "t", "pval", "fdr", "B", "mod")
+    colnames(modStats) <- c("coef", "mean", "t", "pval", "fdr", "B", "edge")
     
     ## Return
     return(modStats)
@@ -174,14 +174,14 @@ geneTable <- function(DGETABLE, nodeID = NULL, geneList = NULL) {
 }
 
 ## Function to format hyperenrichment results
-genesetTable <- function(ENRTABLE, nodeID = NULL, groupID = NULL, dgeHits = NULL) {
+genesetTable <- function(ENRTABLE, nodeID = NULL, edgeID = NULL, dgeHits = NULL) {
     
-    ## Get exact match for nodeID and groupID
+    ## Get exact match for nodeID and edgeID
     if (!is.null(nodeID) && nodeID == "") {
         nodeID <- NULL
     }
-    if (!is.null(groupID) && groupID == "") {
-        groupID <- NULL
+    if (!is.null(edgeID) && edgeID == "") {
+        edgeID <- NULL
     }
     if (!is.null(nodeID)) 
         nodeID <- paste0("^", nodeID, "$")
@@ -195,7 +195,7 @@ genesetTable <- function(ENRTABLE, nodeID = NULL, groupID = NULL, dgeHits = NULL
             orderable = FALSE, width = "3px", targets = c(14, 15, 16)), list(visible = FALSE, 
             targets = c(12, 13)), list(className = "dt-center", targets = "_all")), 
             search = list(regex = TRUE), searchCols = list(list(search = dgeHits), 
-                list(search = nodeID), list(search = groupID), NULL, NULL, NULL, 
+                list(search = nodeID), list(search = edgeID), NULL, NULL, NULL, 
                 NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), 
             scrollX = TRUE, scrollY = "325px", dom = "Brtp", paging = T, pageLength = 50, 
             buttons = list(list(extend = "collection", text = "Help", action = DT::JS("function ( e, dt, node, config ) {
@@ -216,7 +216,7 @@ plotGenePathway <- function(eSet, gene, obs1, obs2, cohorts, vehicle) {
     
     if (gene %in% rownames(eSet)) {
         
-        ## Format group names
+        ## Format subgroup names
         if (is.null(cohorts)) {
             nams <- colnames(eSet)
         } else {
@@ -230,9 +230,9 @@ plotGenePathway <- function(eSet, gene, obs1, obs2, cohorts, vehicle) {
         
         ## Subset for obs in groups
         df <- df[df$ch %in% c(obs1, obs2, "Vehicle"), ]
-        df$group <- "Group 1"
-        df$group[df$ch %in% obs2] <- "Group 2"
-        df$group[df$ch == "Vehicle"] <- "Vehicle"
+        df$edge <- "Edge:1"
+        df$edge[df$ch %in% obs2] <- "Edge:2"
+        df$edge[df$ch == "Vehicle"] <- "Vehicle"
         
         ## Get per Observation mean
         dfMeans <- df %>% group_by(ch) %>% summarise(me = mean(e))
@@ -244,12 +244,12 @@ plotGenePathway <- function(eSet, gene, obs1, obs2, cohorts, vehicle) {
         df <- merge(df, dfMeans)
         
         ## Add levels for boxplots
-        df$group2 <- df$group
+        df$edge2 <- df$edge
         
         ## Add rows for boxplots
         df2 <- df
-        df2$ch <- df$group
-        df2$group2 <- "Comparison"
+        df2$ch <- df$edge
+        df2$edge2 <- "Comparison"
         df2$e2 <- df2$e
         df2$e <- NA
         
@@ -259,13 +259,13 @@ plotGenePathway <- function(eSet, gene, obs1, obs2, cohorts, vehicle) {
         df <- rbind(df, df2)
         
         ## Fix levels
-        df$ch <- factor(df$ch, levels = c(dfMeans$ch[dfMeans$ch != "Vehicle"], "Group 1", 
-            "Vehicle", "Group 2"))
-        df$group <- factor(df$group, levels = c("Group 1", "Vehicle", "Group 2"))
-        df$group2 <- factor(df$group2, levels = c("Group 1", "Comparison", "Group 2"))
+        df$ch <- factor(df$ch, levels = c(dfMeans$ch[dfMeans$ch != "Vehicle"], "Edge:1", 
+            "Vehicle", "Edge:2"))
+        df$edge <- factor(df$edge, levels = c("Edge:1", "Vehicle", "Edge:2"))
+        df$edge2 <- factor(df$edge2, levels = c("Edge:1", "Comparison", "Edge:2"))
         
         ## Remove Means from comparison
-        df$me[df$group2 == "Comparison"] <- NA
+        df$me[df$edge2 == "Comparison"] <- NA
         
         ## Add column names
         colnames(df) <- c("Observation", "Expression", "Group", "Mean", "Group2", 
@@ -275,9 +275,9 @@ plotGenePathway <- function(eSet, gene, obs1, obs2, cohorts, vehicle) {
         p <- ggplot(data = df, aes(x = Observation, y = Expression)) + geom_boxplot(aes(y = Expression2, 
             fill = Group)) + geom_line(aes(group = Observation)) + geom_point(aes(colour = Group), 
             size = 3) + geom_point(aes(y = Mean), shape = 3, size = 3) + facet_grid(~Group2, 
-            scales = "free_x") + scale_colour_manual(values = c(`Group 1` = "darkorange", 
-            Vehicle = "grey", `Group 2` = "darkorchid1")) + scale_fill_manual(values = c(`Group 1` = "darkorange", 
-            Vehicle = "grey", `Group 2` = "darkorchid1")) + scale_x_discrete() + 
+            scales = "free_x") + scale_colour_manual(values = c(`Edge:1` = "darkorange", 
+            Vehicle = "grey", `Edge:2` = "darkorchid1")) + scale_fill_manual(values = c(`Edge:1` = "darkorange", 
+            Vehicle = "grey", `Edge:2` = "darkorchid1")) + scale_x_discrete() + 
             theme_bw() + ggtitle(gene) + theme(plot.margin = margin(0, 10, 0, 10), 
             legend.position = "none", axis.text.x = element_text(angle = 45, hjust = 0, 
                 size = 15), axis.text.y = element_text(size = 15), axis.title.x = element_blank())
@@ -320,9 +320,9 @@ plotGenePathwayClusters <- function(eSet, gene, groupList, cohorts, vehicle) {
         
         ## Subset for obs in groups
         df <- df[df$ch %in% c(obs, "Vehicle"), ]
-        df$group <- "Vehicle"
+        df$edge <- "Vehicle"
         for (i in names(groupList)) {
-            df$group[df$ch %in% groupList[[i]]] <- i
+            df$edge[df$ch %in% groupList[[i]]] <- i
         }
         
         ## Get per Observation mean
@@ -335,12 +335,12 @@ plotGenePathwayClusters <- function(eSet, gene, groupList, cohorts, vehicle) {
         df <- merge(df, dfMeans)
         
         ## Add levels for boxplots
-        df$group2 <- df$group
+        df$edge2 <- df$edge
         
         ## Add rows for boxplots
         df2 <- df
-        df2$ch <- df$group
-        df2$group2 <- "Comparison"
+        df2$ch <- df$edge
+        df2$edge2 <- "Comparison"
         df2$e2 <- df2$e
         df2$e <- NA
         
@@ -352,11 +352,11 @@ plotGenePathwayClusters <- function(eSet, gene, groupList, cohorts, vehicle) {
         ## Fix levels
         df$ch <- factor(df$ch, levels = c(dfMeans$ch[dfMeans$ch != "Vehicle"], "Vehicle", 
             names(groupList)))
-        df$group <- factor(df$group, levels = c("Vehicle", names(groupList)))
-        df$group2 <- factor(df$group2, levels = c(names(groupList), "Comparison"))
+        df$edge <- factor(df$edge, levels = c("Vehicle", names(groupList)))
+        df$edge2 <- factor(df$edge2, levels = c(names(groupList), "Comparison"))
         
         ## Remove Means from comparison
-        df$me[df$group2 == "Comparison"] <- NA
+        df$me[df$edge2 == "Comparison"] <- NA
         
         ## Add column names
         colnames(df) <- c("Observation", "Expression", "Group", "Mean", "Group2", 
@@ -393,14 +393,14 @@ plotGenePathwayClusters <- function(eSet, gene, groupList, cohorts, vehicle) {
 }
 
 ## Function to format differential results
-geneTableClusters <- function(clusterRes, nodegroupID = NULL, geneList = NULL) {
+geneTableClusters <- function(clusterRes, subgroupID = NULL, geneList = NULL) {
     
     ## Get exact match for nodeID
-    if (!is.null(nodegroupID) && nodegroupID == "") {
-        nodegroupID <- NULL
+    if (!is.null(subgroupID) && subgroupID == "") {
+        subgroupID <- NULL
     }
-    if (!is.null(nodegroupID)) {
-        nodeID <- paste0("^", nodegroupID, "$")
+    if (!is.null(subgroupID)) {
+        nodeID <- paste0("^", subgroupID, "$")
     }
     
     ## Create data table obect
@@ -408,7 +408,7 @@ geneTableClusters <- function(clusterRes, nodegroupID = NULL, geneList = NULL) {
         clear = FALSE), options = list(columnDefs = list(list(searchable = FALSE, 
         orderable = FALSE, width = "3px", targets = c(6, 7, 8)), list(className = "dt-center", 
         targets = "_all")), search = list(regex = TRUE), searchCols = list(list(search = geneList), 
-        list(search = nodegroupID), NULL, NULL, NULL, NULL, NULL), scrollX = TRUE, 
+        list(search = subgroupID), NULL, NULL, NULL, NULL, NULL), scrollX = TRUE, 
         scrollY = "325px", dom = "Brtp", paging = T, pageLength = 50, buttons = list(list(extend = "collection", 
             text = "Help", action = DT::JS("function ( e, dt, node, config ) {
                                   Shiny.setInputValue('geneHelp', true, {priority: 'event'});
@@ -417,18 +417,18 @@ geneTableClusters <- function(clusterRes, nodegroupID = NULL, geneList = NULL) {
                                   Shiny.setInputValue('geneDLMulti', true, {priority: 'event'});
                                   }")))), 
         selection = "none") %>% formatRound(c("Mean", "Diff"), digits = 2) %>% formatSignif(c("P Value", 
-        "FDR"), digits = 2) %>% formatStyle(c("NodeGroup", "Mean"), `border-right` = "solid 2px")
+        "FDR"), digits = 2) %>% formatStyle(c("Subgroup", "Mean"), `border-right` = "solid 2px")
 }
 
 ## Function to format hyperenrichment results from multiple comparisons
-genesetTableClusters <- function(ENRTABLE, nodegroupID = NULL, dgeHits = NULL) {
+genesetTableClusters <- function(ENRTABLE, subgroupID = NULL, dgeHits = NULL) {
     
     ## Get exact match for nodeID
-    if (!is.null(nodegroupID) && nodegroupID == "") {
-        nodegroupID <- NULL
+    if (!is.null(subgroupID) && subgroupID == "") {
+        subgroupID <- NULL
     }
-    if (!is.null(nodegroupID)) 
-        nodeID <- paste0("^", nodegroupID, "$")
+    if (!is.null(subgroupID)) 
+        nodeID <- paste0("^", subgroupID, "$")
     
     ## Add line breaks
     colnames(ENRTABLE) <- gsub("_", "<br>", colnames(ENRTABLE))
@@ -438,7 +438,7 @@ genesetTableClusters <- function(ENRTABLE, nodegroupID = NULL, dgeHits = NULL) {
         filter = list(position = "top", clear = FALSE), options = list(columnDefs = list(list(searchable = FALSE, 
             orderable = FALSE, width = "3px", targets = c(12, 13, 14)), list(visible = FALSE, 
             targets = 11), list(className = "dt-center", targets = "_all")), search = list(regex = TRUE), 
-            searchCols = list(list(search = dgeHits), list(search = nodegroupID), 
+            searchCols = list(list(search = dgeHits), list(search = subgroupID), 
                 NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 
                 NULL, NULL), scrollX = TRUE, scrollY = "325px", dom = "Brtp", paging = T, 
             pageLength = 50, buttons = list(list(extend = "collection", text = "Help", 
@@ -450,7 +450,7 @@ genesetTableClusters <- function(ENRTABLE, nodegroupID = NULL, dgeHits = NULL) {
                     }")))), 
         selection = "none") %>% formatRound(c("Mean<br>ssGSEA", "Diff<br>ssGSEA"), 
         digits = 2) %>% formatSignif(c("P Value<br>Hyper", "FDR<br>Hyper", "P Value<br>ssGSEA", 
-        "FDR<br>ssGSEA"), digits = 2) %>% formatStyle(c("NodeGroup", "N<br>Gene Set", 
+        "FDR<br>ssGSEA"), digits = 2) %>% formatStyle(c("Subgroup", "N<br>Gene Set", 
         "Mean<br>ssGSEA"), `border-right` = "solid 2px")
     
 }
@@ -463,7 +463,7 @@ hyperenrichmentClusters <- function(clusterRes, groupList, genesets, qthresh, ct
     sigList <- lapply(seq(length(groupList)), function(mod, clusterRes, qthresh) {
         
         ## Get subset of the clusters
-        cSub <- clusterRes[clusterRes$mod == mod, ]
+        cSub <- clusterRes[clusterRes$edge == mod, ]
         
         ## Get genes with sig pvalues
         genes <- cSub$gene[cSub$fdr < qthresh & cSub$coef > cthresh]

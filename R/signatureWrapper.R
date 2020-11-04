@@ -77,7 +77,7 @@
                   trend = logCounts, robust = logCounts), number = Inf, sort.by = "none"))
                 contFit <- contFit[, c("logFC", "AveExpr", "t", "P.Value", "adj.P.Val",
                   "B")]
-                contFit$mod <- sub("X", "", x)
+                contFit$edge <- sub("X", "", x)
                 return(contFit)
             }, design, fit)
 
@@ -122,7 +122,7 @@
                   robust = logCounts), number = Inf, sort.by = "none")
                 contFit <- contFit[, c("logFC", "AveExpr", "t", "P.Value", "adj.P.Val",
                   "B")]
-                contFit$mod <- x
+                contFit$edge <- x
                 return(contFit)
             }, cVec, design, fit)
         }
@@ -163,10 +163,10 @@
     }
 
     ## Save mods as character
-    modStats$mod <- as.character(modStats$mod)
+    modStats$edge <- as.character(modStats$edge)
 
     ## Change column names
-    colnames(modStats) <- c("coef", "mean", "t", "pval", "fdr", "B", "mod")
+    colnames(modStats) <- c("coef", "mean", "t", "pval", "fdr", "B", "edge")
 
     ## Return
     return(modStats)
