@@ -40,7 +40,7 @@ The `r Githubpkg("montilab/K2Taxonomer")` dashboards include three tabs, describ
 
 - __**About**__: This is an optional tab with which the user can include information about the analysis being performed. This page is populated by a file, "**about.md**", included in the same directory as the dashboard file. More information about formatting this file can be found [here](https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_dashboard.html#the-about-md-file).
 
-- __***/K2Taxonomer* Results**__: This tab includes all of the results generated throughout the `r Githubpkg("montilab/K2Taxonomer")` workflow, including: *partitioning results*, *partition stability*, *gene expression analysis*, *gene set enrichment*, and *phenotypic variable testing (optional)*. More information for how `r Githubpkg("montilab/K2Taxonomer")` estimates these results can be found [here](https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_dashboard.html#the-about-md-file).
+- __***K2Taxonomer* Results**__: This tab includes all of the results generated throughout the `r Githubpkg("montilab/K2Taxonomer")` workflow, including: *partitioning results*, *partition stability*, *gene expression analysis*, *gene set enrichment*, and *phenotypic variable testing (optional)*. More information for how `r Githubpkg("montilab/K2Taxonomer")` estimates these results can be found [here](https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_dashboard.html#the-about-md-file).
 
 - __**Compare Multiple**__: This tab allows the user to perform additional molecular comparisons between subgroups, beyond the partition-level comparisons performed by `r Githubpkg("montilab/K2Taxonomer")` functions.
 
