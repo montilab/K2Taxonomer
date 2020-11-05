@@ -23,15 +23,32 @@ https://montilab.github.io/K2Taxonomer/
 
 ### Installation
 
-You may install `K2Taxonomer` from GitHub directly using the `devtools` R package or clone the repository and download from source. Typical download time is under 1 minute.
+#### Dependencies
+
+Installing `K2Taxonomer` package dependencies available from the *Bioconductor* repository requires the use of the `BiocManager` R package available on CRAN.
+
+```r
+install.packages("BiocManager")
+```
+
+The *Bioconductor* packages can then be installed.
+
+```r
+BiocManager::install(c("limma", "Biobase", "GSVA", "scRNAseq"))
+```
 
 #### Install from GitHub
 
+You may install `K2Taxonomer` from GitHub directly using the `devtools` R package or clone the repository and download from source. Typical download time is under 1 minute.
+
 ```r
+install.packages("devtools")
 devtools::install_github("montilab/K2Taxonomer")
 ```
 
 #### Clone GitHub and install from source
+
+Alternatively, you may clone the GitHub repository and install from source.
 
 ```sh
 ## In console
