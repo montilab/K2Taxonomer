@@ -134,4 +134,7 @@ K2Res <- runK2Taxonomer(sample.ExpressionSet,
                         stabThresh = 0.5)
                         
 }
+\references{
+\insertRef{reed_2020}{K2Taxonomer}
+}
 \keyword{clustering}

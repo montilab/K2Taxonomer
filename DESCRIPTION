@@ -22,7 +22,8 @@ Imports:
   Biobase,
   GSVA,
   dendextend,
-  scRNAseq
+  scRNAseq,
+  Rdpack
 Suggests:
     knitr,
     ggdendro,
@@ -32,6 +33,7 @@ Depends:
 biocViews: Clustering, Visualization
 BugReports: https://github.com/montilab
 RoxygenNote: 7.1.0
+RdMacros: Rdpack
 Collate:
     'AllClasses.R'
     'AllGenerics.R'

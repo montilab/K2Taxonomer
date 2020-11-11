@@ -8,6 +8,8 @@
 #' @param about Logical. Whether to create an "about" tab in the dashboard.
 #' @param output_dir Base directory to put report.
 #' @return Nothing.  Writes files to a specified directory.
+#' @references
+#'  \insertRef{reed_2020}{K2Taxonomer}
 #' @keywords clustering
 #' @export
 #' @examples

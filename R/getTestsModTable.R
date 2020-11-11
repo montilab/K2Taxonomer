@@ -21,6 +21,9 @@
 #'  \item{hits: }{Members of subgroup with second-level label value}
 #'  \item{test: }{The statistical test that produced this result}
 #' }
+#' @references
+#'  \insertRef{reed_2020}{K2Taxonomer}
+#'  \insertRef{bh}{K2Taxonomer}
 #' @keywords clustering
 #' @export
 #' @examples

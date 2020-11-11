@@ -1,5 +1,5 @@
 ---
-title: "Running K2Taxonomer"
+title: "Introduction to running K2Taxonomer (bulk expression data)"
 author:
 - name: Eric R. Reed
   affiliation: Boston University School of Medicine, Section of Computational Biomedicine, 72 E Concord St, Boston, MA 02118
@@ -9,10 +9,10 @@ output:
     toc: true
     df_print: paged
 vignette: >
-  %\VignetteIndexEntry{K2Taxonomer_basic}
+  %\VignetteIndexEntry{RunningK2Taxonomer}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-bibliography: "`r system.file('scripts', 'k2.bib', package='K2Taxonomer')`"
+bibliography: "`r system.file('REFERENCES.bib', package='K2Taxonomer')`"
 ---
 
 ```{r, include = FALSE}
@@ -27,6 +27,10 @@ knitr::opts_chunk$set(
 ```{r endtime, echo=FALSE}
 time <- Sys.time()
 ```
+
+# Introduction
+
+This vignette describes the general workflow for running `r Githubpkg("montilab/K2Taxonomer")` on gene expression data [@reed_2020]. While this vignette describes an analysis of bulk gene expression data, many of these steps are shared with that of single-cell expression analyses. A vignette for running `r Githubpkg("montilab/K2Taxonomer")` on single-cell expression data can be found [here](https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_singlecell.html).
 
 # Requirements
 
@@ -43,6 +47,7 @@ library(ggdendro)
 ```
 
 ## Read in sample `ExpressionSet` object
+
 The main input of `r Githubpkg("montilab/K2Taxonomer")` is an `ExpressionSet` object with approximately normally distributed expression values. Here we read in an example data set. See *?sample.ExpressionSet* for more information about these data.
 
 ```{r loadData}
@@ -62,7 +67,7 @@ Here we will start by using the defaults.
 K2res <- K2preproc(sample.ExpressionSet)
 ```
 
-**Note: This data set is microarray expression data.  If using normalized and log-transformed count data then it's generally recommended that you set *logCounts = TRUE* **. This will more appropriately perform differential gene expression analyses with the `r Biocpkg("limma")` R package.
+**Note: This data set is microarray expression data.  If using normalized and log-transformed count data then it's generally recommended that you set *logCounts = TRUE* **. This will more appropriately perform differential gene expression analyses with the `r Biocpkg("limma")` R package [@limma].
 
 ```{r createCounts, eval=FALSE}
 ## NOT RUN
@@ -99,16 +104,15 @@ dim(K2data(K2res))
 names(K2meta(K2res))
 ```
 
-
 ## Running `r Githubpkg("montilab/K2Taxonomer")` algorithm
 
-The `r Githubpkg("montilab/K2Taxonomer")` is run by `K2tax()`.  At each recursion of the algorithm, the observations in **dataMatrix** are split into two sub-groups based on a compilation of repeated K=2 clustering on bootstrapped sampling of features. For each split in the recursion, a stability metric is used to estimate robustness, which takes on values between 0 and 1, where values close to 1 represent the instance in which the same clustering occured in every or nearly every perturbation of a large set of observations. As the number of observations decreasing down the taxonomy the largest possible stability estimate decreases, such that the largest possible stability estimate of triplets and duplets, is 0.67 and 0.50, respectively. 
+The `r Githubpkg("montilab/K2Taxonomer")` is run by `K2tax()`.  At each recursion of the algorithm, the observations in **dataMatrix** are partitioned into two sub-groups based on a compilation of repeated K=2 clustering on bootstrapped sampling of features. For each partition in the recursion, a stability metric is used to estimate robustness, which takes on values between 0 and 1, where values close to 1 represent the instance in which the same clustering occured in every or nearly every perturbation of a large set of observations. As the number of observations decreasing down the taxonomy the largest possible stability estimate decreases, such that the largest possible stability estimate of triplets and duplets, is 0.67 and 0.50, respectively. 
 
-The parameter, **stabThresh**, controls the minimum value of the stability metric to continue splitting the observations.  By default, **stabThresh** is set to 0, which will run the algorithm until until all observations fall into singlets. If we set **stabThresh = 0.5** the algorithm can not separate duplets, as well as larger sets that demonstrate poor stability when a split is attempted. This can also be set during initialization with `K2preproc()`.
+The parameter, **stabThresh**, controls the minimum value of the stability metric to continue partitioning the observations.  By default, **stabThresh** is set to 0, which will run the algorithm until until all observations fall into singlets. If we set **stabThresh = 0.5** the algorithm can not separate duplets, as well as larger sets that demonstrate poor stability when a partition is attempted. This can also be set during initialization with `K2preproc()`.
 
 Choosing an appropriate threshold is dependent on the size of the original data set.  For large data sets, choosing small values will greatly increase runtime, and values between 0.8 and 0.7, are generally recommended.
 
-```{r cluster}
+```{r partition}
 ## Run K2Taxonomer aglorithm
 K2res <- K2tax(K2res,
                stabThresh = 0.5)
@@ -116,7 +120,7 @@ K2res <- K2tax(K2res,
 
 ## `r Githubpkg("montilab/K2Taxonomer")` results structure
 
-The **results** slot of the `K2` object is a named list of the results of running the `r Githubpkg("montilab/K2Taxonomer")` algorithm. Each item in the list contains the IDs of the two sets of observations denoted by the split, as well as additional annotation for that split, including the stability estimates.
+The **results** slot of the `K2` object is a named list of the results of running the `r Githubpkg("montilab/K2Taxonomer")` algorithm. Each item in the list contains the IDs of the two sets of observations denoted by the partitions, as well as additional annotation for that partition, including the stability estimates.
 
 Each item is assigned a letter ID. If there are more than 26 items, than an additional letter is tacked on, such that the 27th item is named, *AA*, and the 28th item is named **BB**.
 
@@ -125,18 +129,19 @@ Each item is assigned a letter ID. If there are more than 26 items, than an addi
 names(K2results(K2res))
 ```
 
-### Split results
+### Partition results
+
 ```{r values}
-## Get observations defined in each split
+## Get observations defined in each partition
 K2results(K2res)$A$obs
 ```
 
 ### Stability metrics
 
-Stability metrics measure the extant to which pairs of observations in the data setpartitioned together for a given split of the data.
+Stability metrics measure the extant to which pairs of observations in the data setpartitioned together for a given partition of the data.
 
 ```{r stability, fig.align='center', fig.width=5, fig.height=5}
-## Get bootstrap probability of this split
+## Get bootstrap probability of this partition
 K2results(K2res)$A$bootP
 
 ## Node stability (Value between 0 and 1. 1 indicating high stability)
@@ -146,12 +151,12 @@ K2results(K2res)$A$stability$node
 K2results(K2res)$A$stability$clusters
 
 ## Distance matrix indicating pairwise cosine similarity of each observation
-splitAstability <- as.matrix(K2results(K2res)$A$stability$samples)
+partitionAstability <- as.matrix(K2results(K2res)$A$stability$samples)
 
 ## Show heatmap
-hcols <- c("grey", "black")[colnames(splitAstability) %in% K2results(K2res)$A$obs[[1]] + 1]
+hcols <- c("grey", "black")[colnames(partitionAstability) %in% K2results(K2res)$A$obs[[1]] + 1]
 
-heatmap(splitAstability, 
+heatmap(partitionAstability, 
         distfun = function(x) as.dist(1-x), 
         hclustfun = function(x) hclust(x, method = "mcquitty"),
         col = hcl.colors(12, "Blue-Red"),
@@ -179,7 +184,7 @@ ggdendrogram(dendro)
 
 A principal motivation behind `r Githubpkg("montilab/K2Taxonomer")` is that insight can be garnered and tracjed for various levels in a hierarchical sub-grouping of obervations, such that analytical characterization of different sub-groups throughout the taxonomy serve to both validate and inform about specific sub-groups.
 
-To this end, `r Githubpkg("montilab/K2Taxonomer")` runs additional analyses to annotate each split. These analyses include: differential expression analysis using the `r Biocpkg("limma")` package and gene set enrichment testing for both hyperenrichment and differntial analysis of singe-sample enrichment scores estimated using the `r Biocpkg("GSVA")` package.
+To this end, `r Githubpkg("montilab/K2Taxonomer")` runs additional analyses to annotate each partition. These analyses include: differential expression analysis using the `r Biocpkg("limma")` package and gene set enrichment testing for both hyperenrichment and differntial analysis of singe-sample enrichment scores estimated using the `r Biocpkg("GSVA")` package [@limma][@gsva].
 
 ### Differential gene exprssion analysis
 
@@ -189,13 +194,15 @@ Differential analysis in `r Githubpkg("montilab/K2Taxonomer")` is performed usin
 ## Run DGE
 K2res <- runDGEmods(K2res)
 
-## Get differential results for one split
+## Get differential results for one partition
 head(K2results(K2res)$A$dge)
 
 ## Concatenate all results and generate table
 DGEtable <- getDGETable(K2res)
 head(DGEtable)
 ```
+
+See *?getDGETable* for a description of the columns in this data frame.
 
 ### Gene set hyperenrichment
 
@@ -215,9 +222,6 @@ genesetsMadeUp <- list(
 K2res <- runGSEmods(K2res, 
                      genesets = genesetsMadeUp,
                      qthresh = 0.1)
-
-## Get gene set results for one split
-K2results(K2res)$A$gse
 ```
 
 ### Single-sample gene set enrichment
@@ -241,13 +245,14 @@ K2gSet(K2res)
 ## Run differential analysis on enrichment score Expression Set
 K2res <- runDSSEmods(K2res)
 
-## Get differential results for one split
-head(K2results(K2res)$A$dsse)
-
 ## Extract table of all hyper and sample-level enrichment tests
 K2enrRes <- getEnrichmentTable(K2res)
 head(K2enrRes)
 ```
+
+See *?getEnrichmentTable* for a description of the columns in this data frame.
+
+### Differential single-sample enrichment analysis
 
 ### Phenotypic variable tests (optional)
 
@@ -299,7 +304,7 @@ After creating the named vector, phenotypic variable testing is performed using 
 ## Run phenotype variable tests
 K2res <- runTestsMods(K2res, infoClass = infoClassVector)
 
-## Get differential results for one split
+## Get differential results for one partition
 head(K2results(K2res)$A$modTests)
 
 ## Concatenate all results and generate table
@@ -344,6 +349,7 @@ sample.ExpressionSet$group <- paste0(sample.ExpressionSet$sex, sample.Expression
 
 ## Run pre-processing
 K2res <- K2preproc(sample.ExpressionSet,
+                   featMetric = "F",
                    cohorts = "group")
 
 ## Cluster the data
@@ -358,10 +364,12 @@ ggdendrogram(dendro)
 
 ## Multiple hypothesis correction
 
-For each of the four statistical testing steps: differential gene expression, gene set hyperenrichment, differential single-sample gene set enrichment, and phenotypic variable testing, multiple hypothesis correction is performed across the aggregate set of p-values across all partitions using the Benjamini-Hochberg FDR correction. This correction is performed independently for each of the four testing steps. 
+For each of the four statistical testing steps: differential gene expression, gene set hyperenrichment, differential single-sample gene set enrichment, and phenotypic variable testing, multiple hypothesis correction is performed across the aggregate set of p-values across all partitions using the Benjamini-Hochberg FDR correction [@bh]. This correction is performed independently for each of the four testing steps. 
 
 ## Runtime for this example
 
 ```{r runtime, echo=FALSE}
 Sys.time() - time 
 ```
+
+# References

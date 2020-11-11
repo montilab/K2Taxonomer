@@ -9,6 +9,9 @@
 #' feature sets.
 #' @param ... Additional arguments passed onto GSVA::gsva()
 #' @return An object of class K2.
+#' @references
+#'  \insertRef{reed_2020}{K2Taxonomer}
+#'  \insertRef{gsva}{K2Taxonomer}
 #' @keywords clustering
 #' @export
 #' @import GSVA

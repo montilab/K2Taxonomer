@@ -55,4 +55,8 @@ runTestsMods <- function(K2res, infoClass = infoClassVector)
 head(getTestsModTable(K2res))
 
 }
+\references{
+\insertRef{reed_2020}{K2Taxonomer}
+ \insertRef{bh}{K2Taxonomer}
+}
 \keyword{clustering}

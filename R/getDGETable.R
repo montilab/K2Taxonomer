@@ -2,7 +2,25 @@
 #'
 #' Create table differential analysis results from 'K2' object.
 #' @param K2res An object of class K2.
-#' @return A data.frame object.
+#' @return A data.frame object with the following columns: 
+#' \itemize{
+#'  \item{gene: }{The gene ids from the `ExpressionSet` object}
+#'  \item{coef: }{The difference between the means of each subgroup at 
+#'  a given partition}
+#'  \item{mean: }{The mean across all observations at the given 
+#'  partition}
+#'  \item{t: }{The test statistic estimated by the `limma` R package}
+#'  \item{pval: }{The p-value estimated by the `limma` R package}
+#'  \item{fdr: }{The multiple hypothesis corrected fdr p-value, adjusted across all partitions}
+#'  \item{B: }{The B-statistic estimated by the `limma` R package}
+#'  \item{edge: }{Indication of which subgroup the gene was assigned at a given partition}
+#'  \item{node: }{The identifier of the partition}
+#'  \item{direction: }{The direction of coefficient for the assigned gene}
+#' }
+#' @references
+#'  \insertRef{reed_2020}{K2Taxonomer}
+#'  \insertRef{limma}{K2Taxonomer}
+#'  \insertRef{bh}{K2Taxonomer}
 #' @keywords clustering
 #' @export
 #' @examples

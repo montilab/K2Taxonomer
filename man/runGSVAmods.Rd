@@ -61,4 +61,8 @@ K2res <- runGSVAmods(K2res,
                      verbose = FALSE)
 
 }
+\references{
+\insertRef{reed_2020}{K2Taxonomer}
+ \insertRef{gsva}{K2Taxonomer}
+}
 \keyword{clustering}

@@ -11,7 +11,7 @@ vignette: >
   %\VignetteIndexEntry{K2Taxonomer_dashhelp}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-bibliography: "`r system.file('scripts', 'k2.bib', package='K2Taxonomer')`"
+bibliography: "`r system.file('REFERENCES.bib', package='K2Taxonomer')`"
 ---
 
 <style>
@@ -31,7 +31,7 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-To facilitate the comprehensive interrogation the output of `r Githubpkg("montilab/K2Taxonomer")` this package includes functionality for generating interactive dashboards, which include full compendia of results. In addition to the partition-level molecular comparisons included in these dashboards, they include functionality for performing molecular comparisons of gene expression and gene set enrichment on user-specified sets of two-or-more subgroups. Here we describe the layout and usage of these dashboards.
+To facilitate the comprehensive interrogation the output of `r Githubpkg("montilab/K2Taxonomer")` this package includes functionality for generating interactive dashboards, which include full compendia of results [@reed_2020]. In addition to the partition-level molecular comparisons included in these dashboards, they include functionality for performing molecular comparisons of gene expression and gene set enrichment on user-specified sets of two-or-more subgroups. Here we describe the layout and usage of these dashboards.
 
 For more information for how to generate these dashboards go [here](https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_dashboard.html).
 
@@ -44,13 +44,13 @@ The `r Githubpkg("montilab/K2Taxonomer")` dashboards include three tabs, describ
 
 - __**Compare Multiple**__: This tab allows the user to perform additional molecular comparisons between subgroups, beyond the partition-level comparisons performed by `r Githubpkg("montilab/K2Taxonomer")` functions.
 
-Annotation of each of these tabs is presented below.
+Annotation of each of these tabs is presented below. **Click on any of these images to view in higher resolution**
 
 # __**About**__
 
 ***
 
-![](page1.png)
+[![](page1.png)](https://montilab.github.io/K2Taxonomer/articles/page1.png)
 
 ***
 
@@ -58,7 +58,7 @@ Annotation of each of these tabs is presented below.
 
 ***
 
-![](page2.png)
+[![](page2.png)](https://montilab.github.io/K2Taxonomer/articles/page2.png)
 
 ***
 
@@ -66,7 +66,7 @@ Annotation of each of these tabs is presented below.
 
 ***
 
-![](page3.png)
+[![](page3.png)](https://montilab.github.io/K2Taxonomer/articles/page3.png)
 
 ***
 
@@ -74,6 +74,8 @@ Annotation of each of these tabs is presented below.
 
 ***
 
-![](page4.png)
+[![](page4.png)](https://montilab.github.io/K2Taxonomer/articles/page4.png)
 
 ***
+
+# References

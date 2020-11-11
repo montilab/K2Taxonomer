@@ -12,7 +12,7 @@ vignette: >
   %\VignetteIndexEntry{K2Taxonomer_dashboard}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-bibliography: "`r system.file('scripts', 'k2.bib', package='K2Taxonomer')`"
+bibliography: "`r system.file('REFERENCES.bib', package='K2Taxonomer')`"
 ---
 
 ```{r, include = FALSE}
@@ -25,9 +25,13 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Requirements
+# Introduction
 
-### Load packages
+In this vignette we describe the steps for creating and editing interactive dashoboards from the output of the `r Githubpkg("montilab/K2Taxonomer")` workflow [@reed_2020]. For a more detailed description for running `r Githubpkg("montilab/K2Taxonomer")` visit the vignettes describing [bulk](https://montilab.github.io/K2Taxonomer/articles/RunningK2Taxonomer.html) and [single-cell](https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_singlecell.html) workflows.
+
+# Requirements
+
+## Load packages
 ```{r setup}
 ## K2Taxonomer package
 library(K2Taxonomer)
@@ -39,7 +43,8 @@ library(Biobase)
 library(ggdendro)
 ```
 
-### Read in sample `ExpressionSet` object
+## Read in sample `ExpressionSet` object
+
 The main input of `r Githubpkg("montilab/K2Taxonomer")` is an `ExpressionSet` object with approximately normally distributed expression values. Here we read in an example data set. See *?sample.ExpressionSet* for more information about these data.
 
 ```{r loadData}
@@ -50,9 +55,9 @@ data(sample.ExpressionSet)
 levels(pData(sample.ExpressionSet)$type) <- c("Control", "Case")
 ```
 
-## Generating `r Githubpkg("montilab/K2Taxonomer")` dashboard
+# Generating `r Githubpkg("montilab/K2Taxonomer")` dashboard
 
-### Run `r Githubpkg("montilab/K2Taxonomer")`
+## Run `r Githubpkg("montilab/K2Taxonomer")`
 
 ```{r RunWrapper}
 # Use toy set of gene sets
@@ -75,7 +80,7 @@ K2res <- runK2Taxonomer(
   stabThresh = 0.5)
 ```
 
-### Creating the dashboard
+## Creating the dashboard
 
 We generate the interactive dashboards with the `K2dashboard()` function. This function will create a directory with two files. These two files include the interactive *RMarkdown* (.Rmd) file created by the `r CRANpkg("flexdashboard")` package and the R object (.rds) file containing the `K2` object created by `r Githubpkg("montilab/K2Taxonomer")` functions. 
 
@@ -96,9 +101,9 @@ K2dashboard(K2res,
             output_dir = ".")
 ```
 
-### Additional considerations 
+## Additional considerations 
 
-#### The output directory
+### The output directory
 
 To prevent the overwriting of dashboard files, in addition to the **analysis_name**, the name of dashboard directory includes the date and time, followed by a random seven digit integer. It is formatted as follows:
 
@@ -106,7 +111,7 @@ To prevent the overwriting of dashboard files, in addition to the **analysis_nam
 
 **Note: Changing the name of this directory does not effect the dashboard.**
 
-#### The "**about.md**" file
+### The "**about.md**" file
 
 `r Githubpkg("montilab/K2Taxonomer")` allows users to include information about their study in the interactive dashboards by editing" the "**about.md**"  *markdown* file. When the "**about.md**" is included in the dashboard directory, it is read in and the *markdown* code is compiled along with the code in the dashboard file. 
 
@@ -123,3 +128,4 @@ Finally, when including links in the "**about.md**" file, make sure that clickin
 
 Otherwise, the dashboard will need to reload upon navigating back.
 
+# References

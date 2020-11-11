@@ -59,4 +59,8 @@ K2res <- runGSEmods(K2res,
                     qthresh = 0.1)
                     
 }
+\references{
+\insertRef{reed_2020}{K2Taxonomer}
+ \insertRef{bh}{K2Taxonomer}
+}
 \keyword{clustering}

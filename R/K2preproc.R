@@ -46,6 +46,9 @@
 #' @param stabThresh Threshold for ending clustering.
 #' @param geneURL Optional. Named list of URLs to gene information.
 #' @param genesetURL Optional. Named list of URLs to geneset information.
+#' @references
+#'  \insertRef{reed_2020}{K2Taxonomer}
+#'  \insertRef{limma}{K2Taxonomer}
 #' @keywords clustering
 #' @export
 #' @import limma

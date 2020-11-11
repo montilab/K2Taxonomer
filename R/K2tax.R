@@ -19,6 +19,8 @@
 #' @param stabThresh A numeric value < 1, to set stopping threshold (use any
 #' negative value for no threshold).
 #' @return An object of class K2.
+#' @references
+#'  \insertRef{reed_2020}{K2Taxonomer}
 #' @keywords clustering
 #' @export
 #' @import parallel

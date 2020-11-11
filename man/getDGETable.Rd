@@ -10,7 +10,21 @@ getDGETable(K2res)
 \item{K2res}{An object of class K2.}
 }
 \value{
-A data.frame object.
+A data.frame object with the following columns: 
+\itemize{
+ \item{gene: }{The gene ids from the `ExpressionSet` object}
+ \item{coef: }{The difference between the means of each subgroup at 
+ a given partition}
+ \item{mean: }{The mean across all observations at the given 
+ partition}
+ \item{t: }{The test statistic estimated by the `limma` R package}
+ \item{pval: }{The p-value estimated by the `limma` R package}
+ \item{fdr: }{The multiple hypothesis corrected fdr p-value, adjusted across all partitions}
+ \item{B: }{The B-statistic estimated by the `limma` R package}
+ \item{edge: }{Indication of which subgroup the gene was assigned at a given partition}
+ \item{node: }{The identifier of the partition}
+ \item{direction: }{The direction of coefficient for the assigned gene}
+}
 }
 \description{
 Create table differential analysis results from 'K2' object.
@@ -33,5 +47,10 @@ K2res <- runDGEmods(K2res)
 ## Extract table of differential results
 head(getDGETable(K2res))
 
+}
+\references{
+\insertRef{reed_2020}{K2Taxonomer}
+ \insertRef{limma}{K2Taxonomer}
+ \insertRef{bh}{K2Taxonomer}
 }
 \keyword{clustering}

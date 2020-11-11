@@ -19,4 +19,8 @@ cluster assignment of each column in dataMatrix.
 This fuction is a wrapper for the constrained Kmeans algorithm using
 `lcvqe` from the `conclust` package.
 }
+\references{
+\insertRef{reed_2020}{K2Taxonomer}
+ \insertRef{cKm}{K2Taxonomer}
+}
 \keyword{clustering}

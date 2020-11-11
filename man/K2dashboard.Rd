@@ -39,4 +39,7 @@ K2dashboard(K2res)
 }
 
 }
+\references{
+\insertRef{reed_2020}{K2Taxonomer}
+}
 \keyword{clustering}

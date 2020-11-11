@@ -31,4 +31,9 @@ K2res <- K2tax(K2res,
 K2res <- runDGEmods(K2res)
 
 }
+\references{
+\insertRef{reed_2020}{K2Taxonomer}
+ \insertRef{limma}{K2Taxonomer}
+ \insertRef{bh}{K2Taxonomer}
+}
 \keyword{clustering}

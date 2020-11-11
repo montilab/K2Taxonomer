@@ -120,4 +120,8 @@ data(sample.ExpressionSet)
 K2res <- K2preproc(sample.ExpressionSet)
 
 }
+\references{
+\insertRef{reed_2020}{K2Taxonomer}
+ \insertRef{limma}{K2Taxonomer}
+}
 \keyword{clustering}

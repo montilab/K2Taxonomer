@@ -8,6 +8,9 @@
 #' @param cthresh A positive value for the coefficient cuttoff to define
 #' feature sets.
 #' @return An object of class K2.
+#' @references
+#'  \insertRef{reed_2020}{K2Taxonomer}
+#'  \insertRef{bh}{K2Taxonomer}
 #' @keywords clustering
 #' @export
 #' @import Biobase

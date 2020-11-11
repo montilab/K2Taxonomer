@@ -3,6 +3,10 @@
 #' Adds limma differential analysis results to the output of K2tax().
 #' @param K2res An object of class K2. The output of K2tax().
 #' @return An object of class K2.
+#' @references
+#'  \insertRef{reed_2020}{K2Taxonomer}
+#'  \insertRef{limma}{K2Taxonomer}
+#'  \insertRef{bh}{K2Taxonomer}
 #' @keywords clustering
 #' @export
 #' @import limma

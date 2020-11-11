@@ -20,4 +20,8 @@ This fuction is a wrapper for the constrained Kmeans algorithm using
 `lcvqe` from the `conclust` package. This function will subset each
 cohort down to that with the smallest number of observations.
 }
+\references{
+\insertRef{reed_2020}{K2Taxonomer}
+ \insertRef{cKm}{K2Taxonomer}
+}
 \keyword{clustering}

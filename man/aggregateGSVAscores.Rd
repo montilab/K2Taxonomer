@@ -60,4 +60,8 @@ aggList <- list(c("GS12", "GS1", "GS2"))
 K2res <- aggregateGSVAscores(aggList, K2res)
 
 }
+\references{
+\insertRef{reed_2020}{K2Taxonomer}
+ \insertRef{gsva}{K2Taxonomer}
+}
 \keyword{clustering}

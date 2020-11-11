@@ -7,6 +7,9 @@
 #' @param clustList List of objects to use for clustering procedure.
 #' @return A character string of concatenated 1's and 2's pertaining to the
 #' cluster assignment of each column in dataMatrix.
+#' @references
+#'  \insertRef{reed_2020}{K2Taxonomer}
+#'  \insertRef{cKm}{K2Taxonomer}
 #' @keywords clustering
 #' @export
 #' @import conclust

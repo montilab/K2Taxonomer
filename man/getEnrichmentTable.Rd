@@ -10,7 +10,25 @@ getEnrichmentTable(K2res)
 \item{K2res}{An object of class K2 or K2results().}
 }
 \value{
-A data.frame object.
+A data.frame object with the following columns: 
+\itemize{
+ \item{category: }{The user-specified gene set names}
+ \item{node: }{The identifier of the partition}
+ \item{edge: }{Indication of which subgroup the gene was assigned at a given partition}
+ \item{direction: }{The direction of coefficient for the assigned gene set}
+ \item{pval_hyper: }{The p-value of the hyperenrichment test comparing the subgroup-assigned gene set to the user-specified gene set}
+ \item{fdr_hyper: }{The multiple hypothesis corrected FDR (Benjamini-Hochberg) p-value of hyperenrichment, adjusted across all partitions}
+ \item{nhits: }{The intersection of subgroup-assigned genes and the user-specified gene set}
+ \item{ndrawn: }{The number of subgroup-assigned genes}
+ \item{ncats: }{The number of genes in the user-specified gene set}
+ \item{ntot: }{The background population of possible genes} 
+ \item{pval_limma: }{The p-value estimated by the `limma` R package}
+ \item{fdr_limma: }{The multiple hypothesis corrected FDR (Benjamini-Hochberg) p-value of differential analysis, adjusted across all partitions}
+ \item{coef: }{The difference between the means of each subgroup at a given partition}
+ \item{mean: }{The mean across all observations at the given partition}
+ \item{t: }{The test statistic estimated by the `limma` R package}
+ \item{B: }{The B-statistic estimated by the `limma` R package}
+}
 }
 \description{
 Create table hyper- and single-sample enrichment results from 'K2' object.
@@ -52,5 +70,11 @@ K2res <- runGSVAmods(K2res,
 
 head(getEnrichmentTable(K2res))
 
+}
+\references{
+\insertRef{reed_2020}{K2Taxonomer}
+ \insertRef{limma}{K2Taxonomer}
+ \insertRef{bh}{K2Taxonomer}
+ \insertRef{gsva}{K2Taxonomer}
 }
 \keyword{clustering}

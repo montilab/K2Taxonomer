@@ -6,6 +6,8 @@
 #' @return An object of class dendrogram.
 #' @keywords clustering
 #' @export
+#' @references
+#'  \insertRef{reed_2020}{K2Taxonomer}
 #' @import dendextend
 #' @examples
 #' ## Read in ExpressionSet object

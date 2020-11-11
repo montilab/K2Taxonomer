@@ -32,4 +32,7 @@ K2res <- K2tax(K2res,
 K2dendro(K2res)
 
 }
+\references{
+\insertRef{reed_2020}{K2Taxonomer}
+}
 \keyword{clustering}

@@ -2,6 +2,8 @@
 #'
 #' Create an interactive dendrogram of the K2 Taxonomer results
 #' @param K2res A list object. The output of runK2tax().
+#' @references
+#'  \insertRef{reed_2020}{K2Taxonomer}
 #' @keywords clustering
 #' @export
 #'
