@@ -186,7 +186,7 @@ A principal motivation behind `r Githubpkg("montilab/K2Taxonomer")` is that insi
 
 To this end, `r Githubpkg("montilab/K2Taxonomer")` runs additional analyses to annotate each partition. These analyses include: differential expression analysis using the `r Biocpkg("limma")` package and gene set enrichment testing for both hyperenrichment and differntial analysis of singe-sample enrichment scores estimated using the `r Biocpkg("GSVA")` package [@limma][@gsva].
 
-### Differential gene exprssion analysis
+### Differential gene expression analysis
 
 Differential analysis in `r Githubpkg("montilab/K2Taxonomer")` is performed using `r Biocpkg("limma")`. Differential analysis is performed for each partition of the data, comparing the gene expression between each pair of subgroups across all partitions.
 
@@ -203,6 +203,12 @@ head(DGEtable)
 ```
 
 See *?getDGETable* for a description of the columns in this data frame.
+
+#### Interpretting differential analysis results
+
+In this example, we are running `r Githubpkg("montilab/K2Taxonomer")` without information specifying a set of observations to treat as a *control* group, for which to make comparisons in regards to the directionality of differential expression. In the absence of this designation, `r Githubpkg("montilab/K2Taxonomer")` assigns genes to the partition-specific subgroup with the larger mean. Accordingly, the of coeficient (the *"coef"* in the output of `getDGETable()`) is always positive, indicating the difference of mean of the gene expression of the assigned subgroup from the other subgroup. Moreover, the *"direction"* of this gene will always be assigned to *up*. 
+
+Following the full description of this analysis, we describe methods for running `r Githubpkg("montilab/K2Taxonomer")`, specifying a **cohort** variable in the data set. When including this variable, the user may assign one of the levels of this variable as the *control* group. With the inclusion of this designation, `r Githubpkg("montilab/K2Taxonomer")` will assign directionality to the differences in gene expression.
 
 ### Gene set hyperenrichment
 
@@ -228,7 +234,7 @@ K2res <- runGSEmods(K2res,
 
 Single-sample enrichment is performed in two steps.  First, the `r Biocpkg("GSVA")` package is used to generate observation-level enrichment scores, followed by differential analysis using the `r Biocpkg("limma")` package. This is performed by the functions `runGSVAmods()` and `runDSSEmods()`, respectively. Here, we can specify which enrichment algorithm to use when running the `r Biocpkg("GSVA")` functionality and the number of CPU cores to use with the **ssGSEAalg** and **ssGSEAcores** arguments, respectively. These can also be set in the `K2preproc()` function. Note, that the arguments shown are the defaults.
 
-```{r Run ssSGEA, warning=FALSE}
+```{r Run ssSGEA}
 ## Create expression matrix with ssGSEA(GSVA) estimates
 K2res <- runGSVAmods(K2res, 
                       ssGSEAalg = "gsva",
@@ -341,7 +347,7 @@ K2res <- runK2Taxonomer(
 
 ## Running with cohorts
 
-If there is replicates in the data or if the user is only interested in capturing subgroup relationships between known groups without partitioning the observations themselves, one can specify the **cohort** variable of interest in the `ExpressionSet` object.
+If there is replicates in the data or if the user is only interested in capturing subgroup relationships between known groups without partitioning the observations themselves, one can specify the **cohorts** variable of interest in the `ExpressionSet` object.
 
 ```{r, fig.align='center', fig.width=5, fig.height=3}
 ## Create set of cohorts from data
@@ -349,7 +355,6 @@ sample.ExpressionSet$group <- paste0(sample.ExpressionSet$sex, sample.Expression
 
 ## Run pre-processing
 K2res <- K2preproc(sample.ExpressionSet,
-                   featMetric = "F",
                    cohorts = "group")
 
 ## Cluster the data
@@ -360,11 +365,92 @@ dendro <- K2dendro(K2res)
 ggdendrogram(dendro)
 ```
 
+### Running with cohorts and controls
+
+When running with cohorts, `r Githubpkg("montilab/K2Taxonomer")` includes the option of treating one of the levels within the **cohorts** variable as a control by specifying this value in the **vehicle** argument. In doing so, the values of each of the other cohorts will be evaluated in relation to this value.
+
+```{r, fig.align='center', fig.width=5, fig.height=3}
+## Run pre-processing
+K2res <- K2preproc(sample.ExpressionSet,
+                   cohorts = "group",
+                   vehicle = "FemaleControl")
+
+## Cluster the data
+K2res <- K2tax(K2res)
+
+## Create dendrogram
+dendro <- K2dendro(K2res)
+ggdendrogram(dendro)
+```
+
+#### Differential analysis with controls
+
+By specifying a control value, `r Githubpkg("montilab/K2Taxonomer")` is able to assess directionality to differential analyses in relation to the control group, assigning direction of test statistics and gene assignments based on the subgroup in which the difference of the mean is more significantly different from the control group.
+
+```{r Run differential analysis controls}
+## Run DGE
+K2res <- runDGEmods(K2res)
+
+## Get differential results for one partition
+head(K2results(K2res)$A$dge)
+
+## Concatenate all results and generate table
+DGEtable <- getDGETable(K2res)
+head(DGEtable)
+```
+
+#### Gene set analysis with controls
+
+Accordingly, `r Githubpkg("montilab/K2Taxonomer")` can now establish sets of genes that are both up- and down-regulated within a specific subgroup. We can now perform hyperenrichment with these additional gene sets.
+
+```{r, hyper controls}
+## Run gene set hyperenrichment
+K2res <- runGSEmods(K2res, 
+                     genesets = genesetsMadeUp,
+                     qthresh = 0.1)
+```
+
+Finally, differential analysis of single-sample gene set enrichment scores is performed in the same fashion as with differential analysis of gene expression, assessing directionality of differences in enrichment scores based on comparisons to the assigned control group.
+
+```{r Run ssSGEA controls}
+## Create expression matrix with ssGSEA(GSVA) estimates
+K2res <- runGSVAmods(K2res, 
+                      ssGSEAalg = "gsva",
+                      ssGSEAcores = 1,
+                      verbose = FALSE)
+
+## Run differential analysis on enrichment score Expression Set
+K2res <- runDSSEmods(K2res)
+
+## Extract table of all hyper and sample-level enrichment tests
+K2enrRes <- getEnrichmentTable(K2res)
+head(K2enrRes)
+```
+Here, we see that, although not statistically significant (**"fdr_limma"** = 0.25), the enrichment score of *"GS2"* deviated further from the control group in subgroup, **"node"** = "B"; **"edge"** = "2", compared to subgroup, **"node"** = "B"; **"edge"** = "1". 
+
+Missing values for hyperenrichment analysis indicated that no genes were assigned to these specific subgroups and direction combinations. Missing values for differential enrichment score analysis indicate that, while genes were assigned to these specific subgroups and direction combinations, the enrichment score of the gene set deviated further from control in the alternative subgroup for that partition.
+
 # Additional topics
 
 ## Multiple hypothesis correction
 
 For each of the four statistical testing steps: differential gene expression, gene set hyperenrichment, differential single-sample gene set enrichment, and phenotypic variable testing, multiple hypothesis correction is performed across the aggregate set of p-values across all partitions using the Benjamini-Hochberg FDR correction [@bh]. This correction is performed independently for each of the four testing steps. 
+
+## Unsupported combinations of arguments
+
+- **vehicle != NULL** with **featMetric = "F"** or  **recalcDataMatrix = TRUE**
+
+  - Associations between the control cohort and remaining cohorts are generated prior to recursive partitioning. Either of these two argument specifications recalculate cohort-level statistics at each partition, many of which will not include the control cohort.
+
+
+- **covariates != NULL** with **featMetric = "F"** or  **recalcDataMatrix = TRUE**
+
+  - Adjustments of gene expression values for covariates is performed prior to recursive partitioning. Either of these two argument specifications recalculate cohort-level statistics at each partition, some of which will not will not have any variation of this  one or more of the covariates.
+  
+
+- **cohorts != NULL** with **infoClass != NULL**
+
+  - Due to additional statistical and computational considerations for modeling data cohort-level information, currently phenotypic variable testing can only be performed for observation-level analysis.
 
 ## Runtime for this example
 

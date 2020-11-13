@@ -20,16 +20,17 @@
         xSub <- xSub[order(xSub$pval), ]
         
         ## Reorder columns
-        if (analysis == "dge") {
-            xSub <- xSub[, c("gene", "coef", "mean", "t", "pval", "fdr", "B", "edge")]
-        } else {
-            xSub <- xSub[, c("category", "coef", "mean", "t", "pval", "fdr", "B", 
-                "edge")]
+        if(nrow(xSub) > 0) {
+            if (analysis == "dge") {
+                xSub <- xSub[, c("gene", "coef", "mean", "t", "pval", "fdr", "B", "edge")]
+            } else {
+                xSub <- xSub[, c("category", "coef", "mean", "t", "pval", "fdr", "B", 
+                    "edge")]
+            }
+            ## Add back to K2results()
+            x[[analysis]] <- xSub
         }
-        
-        ## Add back to K2results()
-        x[[analysis]] <- xSub
-        
+    
         return(x)
     }, pValueDF, analysis)
     

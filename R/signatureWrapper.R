@@ -2,7 +2,9 @@
     block = NULL, logCounts = FALSE) {
 
     ## Remove vehicle from mods and make a data frame
-    mods <- mods[names(mods) != "Vehicle"]
+    if(!is.null(vehicle)) {
+        mods <- mods[names(mods) != vehicle]
+    }
     mods <- data.frame(mods = as.character(mods), GROUP = names(mods), stringsAsFactors = F)
 
     modStats <- NULL
@@ -159,14 +161,13 @@
         
         ## Remove large objects
         rm(fit, modFit, design, mods, gUnique, one2, eSet, eSub, pD)
-
+        
+        ## Save mods as character
+        modStats$edge <- as.character(modStats$edge)
+        
+        ## Change column names
+        colnames(modStats) <- c("coef", "mean", "t", "pval", "fdr", "B", "edge")
     }
-
-    ## Save mods as character
-    modStats$edge <- as.character(modStats$edge)
-
-    ## Change column names
-    colnames(modStats) <- c("coef", "mean", "t", "pval", "fdr", "B", "edge")
 
     ## Return
     return(modStats)

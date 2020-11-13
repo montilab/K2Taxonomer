@@ -38,15 +38,25 @@
             stop("Values in cohorts variable must be character or factor.\n")
         }
 
-        ## vehicle
+        ## Vehicle
         if (!is.null(K2m$vehicle) && !K2m$vehicle %in% pData(K2eSet(K2res))[,K2m$cohorts]) {
             stop("Argument, vehicle, not found in cohort variable.\n")
+        }
+        
+        ## Vehicle and recalculating data matrix
+        if (!is.null(K2m$vehicle) && (K2m$featMetric == "F" | K2m$recalcDataMatrix)) {
+            stop("Specifying argument, vehicle, currently not supported if argument, featMetric = 'F' or if argument, recalcDataMatrix = TRUE.\n")
         }
 
         ## covariates
         if (!is.null(K2m$covariates) && !K2m$covariates %in% colnames(pData(K2eSet(K2res)))) {
             stop("Argument, covariates, must match column name in phenoData of
                 ExpressionSet.\n")
+        }
+        
+        ## Covariated and recalculating data matrix
+        if (!is.null(K2m$covariates) && (K2m$featMetric == "F" | K2m$recalcDataMatrix)) {
+            stop("Specifying argument, covariates, currently not supported if argument, featMetric = 'F' or if argument, recalcDataMatrix = TRUE.\n")
         }
 
         ## block
@@ -197,6 +207,11 @@
             if (!is.null(K2m$infoClass) && mean(names(K2m$infoClass) %in% colnames(K2info(K2res))) != 1) {
                 stop("Names of argument, infoClass, don't match column names of
             argument, info or phenoData of expressionSet.\n")
+            }
+            
+            ## infoClass and cohorts
+            if (!is.null(K2m$infoClass) && !is.null(K2m$cohorts)) {
+                stop("Specifying argument, infoClass, currently not supported if argument, cohorts, is specified.\n")
             }
             
             ## Run stopping criteria for dataMatrix slot

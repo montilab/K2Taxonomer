@@ -52,15 +52,17 @@ getDGETable <- function(K2res) {
     ## Format single-sample enrichment results
     dgeTable <- do.call(rbind, lapply(names(K2resList), function(x, K2resList) {
         
-        ## Get SSGSEA tables
+        ## Get tables
         CompTab <- K2resList[[x]]$dge
         
-        ## Add group information and extract tables
-        CompTab$node <- x
-        
-        ## Add direction information
-        CompTab$direction <- c("down", "up")[as.numeric(CompTab$t > 0) + 1]
-        
+        if(!is.null(CompTab)) {
+            ## Add group information and extract tables
+            CompTab$node <- x
+            
+            ## Add direction information
+            CompTab$direction <- c("down", "up")[as.numeric(CompTab$t > 0) + 1]
+        }
+            
         return(CompTab)
     }, K2resList))
     

@@ -15,12 +15,12 @@
     pData(eSet) <- droplevels(pData(eSet))
     
     ## Create formula
-    if (!is.null(vehicle)) {
-        design <- model.matrix(as.formula(paste0("~", "GROUP", .formatCov(covariates))), 
-            data = pData(eSet))
-    } else {
+    if (is.null(vehicle) | Fstat) {
         design <- model.matrix(as.formula(paste0("~ 0+", "GROUP", .formatCov(covariates))), 
-            data = pData(eSet))
+                               data = pData(eSet))
+    } else {
+        design <- model.matrix(as.formula(paste0("~", "GROUP", .formatCov(covariates))), 
+                               data = pData(eSet))
     }
     colnames(design) <- sub("GROUP", "X", colnames(design))
     
@@ -28,7 +28,8 @@
     fit <- eBayes(lmFit(eSet, design), trend = logCounts, robust = logCounts)
     
     ## Get gene-level results
-    modStats <- topTable(fit, number = Inf, sort.by = "none")
+    gUniqueX <- paste0("X", gUnique)
+    modStats <- topTable(fit, number = Inf, sort.by = "none", coef =  gUniqueX[gUniqueX %in% colnames(design)])
     
     ## Get Fstat
     if (Fstat) {
@@ -37,7 +38,7 @@
     }
     
     ## Get model log fold-changes (means if no intercept)
-    modStats <- as.matrix(modStats[, colnames(modStats) %in% paste0("X", gUnique)])
+    modStats <- as.matrix(modStats[, colnames(modStats) %in% gUniqueX])
     
     ## If use == Z get the test statistics instead
     if (use == "Z") {
@@ -54,11 +55,11 @@
     rm(fit)
     
     ## Add vehicle 0's
-    if (!is.null(vehicle)) {
-        modStats <- cbind(modStats, 0)
-        colnames(modStats)[ncol(modStats)] <- "Vehicle"
-    } else {
+    if (is.null(vehicle) | Fstat) {
         modStats <- modStats - rowMeans(modStats)
+    } else {
+        modStats <- cbind(modStats, 0)
+        colnames(modStats)[ncol(modStats)] <- vehicle
     }
     
     ## Return
