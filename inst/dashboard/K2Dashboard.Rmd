@@ -188,6 +188,24 @@ values <- reactiveValues(nodeSel = "A",
 
 ```
 
+```{r progressbar, context = "server"}
+
+observeEvent(values$gp, {
+
+  withProgress({
+    input$`plotly_afterplot-A`
+    for(i in seq(10)) {
+        incProgress(1/10)
+        Sys.sleep(0.05)
+    }
+  }, message = "Rendering...", min = 0, max = 1, value = 1)
+  
+  values$gp <- NULL
+  
+})
+
+```
+
 K2Taxonomer Results {data-orientation=rows}
 =====================================
 
@@ -282,7 +300,7 @@ output$dendro <- renderVisNetwork({
   }
 
   values$reset
-  
+  values$gp <- TRUE
   vNetOut %>%
     visOptions(autoResize = T,
                height = "100%",
@@ -431,6 +449,7 @@ output$heatmapPlot <- renderPlotly({
 
     }
 
+    values$gp <- TRUE
     hm <- heatmaply(x = samp_stab,
             color = rev(RdBu(n = 256)),
             limits = c(-1, 1),
@@ -531,11 +550,12 @@ if (!is.null(K2res[[1]]$modTests)) {
               extensions = 'Buttons',
               escape = FALSE,
               filter = list(position = 'top', clear = FALSE),
-              options = list(dom = 'Brtp',
+              options = list(dom = 'Brt',
                              search = list(regex = TRUE, caseInsensitive = FALSE),
                              scrollX = TRUE,
                              scrollY = "400px",
-                             paging = F,
+                             paging = FALSE,
+                             pageLength = nrow(K2modTestFram),  # Set because paging option is ignored on some systems
                              buttons = list(list(extend = "collection", text = "Help", action = DT::JS("function ( e, dt, node, config ) {
                                   Shiny.setInputValue('phenoHelp', true, {priority: 'event'});
                                   }")), 
@@ -558,9 +578,12 @@ if (!is.null(K2res[[1]]$modTests)) {
               rownames = F,
               extensions = 'Buttons',
               escape = FALSE,
-              options = list(dom = 'Brtp',
+              options = list(dom = 'Brt',
                              search = list(regex = TRUE, caseInsensitive = FALSE),
-                             paging = F,
+                             scrollX = TRUE,
+                             scrollY = "400px",
+                             paging = FALSE,
+                             pageLength = nrow(K2modTestFramNULL), # Set because paging option is ignored on some systems
                              buttons = c('csv', 'excel'),
                              columnDefs = list(list(className = 'dt-center', targets = "_all"))),
               selection = "single")
@@ -700,11 +723,12 @@ output$infoTab <- renderDataTable({
               rownames = F,
               filter = list(position = 'top', clear = FALSE),
               extensions = 'Buttons',
-              options = list(dom = 'Brtp',
+              options = list(dom = 'Brt',
                              search = list(regex = TRUE, caseInsensitive = FALSE),
                              scrollX = TRUE,
                              scrollY = "400px",
-                             paging = F,
+                             paging = FALSE,
+                             pageLength = nrow(infoSub), # Set because paging option is ignored on some systems
                              buttons = c('csv', 'excel'),
                              columnDefs = list(
                                list(className = 'dt-center', targets = "_all")
@@ -865,6 +889,7 @@ output$genePlot <- renderPlotly({
 
     if(!is.null(values$nodeSelDGEp)){
 
+      values$gp <- TRUE
       plotGenePathway(eSet,
                values$Genep,
                K2res[[values$nodeSelDGEp]]$obs[[1]],
@@ -1029,13 +1054,14 @@ Row {data-height=500}
 output$pathwayPlot <- renderPlotly({
   if(!is.null(values$nodeSelHEp)){
 
-    ## Plot Pathway
+    values$gp <- TRUE
     plotGenePathway(gSet,
          values$GeneSetp,
          K2res[[values$nodeSelHEp]]$obs[[1]],
          K2res[[values$nodeSelHEp]]$obs[[2]],
          meta$cohorts,
-         meta$vehicle)
+         meta$vehicle,
+         "Enrichment Score")
 
     } else {
 
@@ -1077,7 +1103,7 @@ Compare Multiple {data-orientation=rows}
 output$dendroSelect <- renderVisNetwork({
 
   values$Held
-
+  values$gp <- TRUE
   vNetOut %>%
     visOptions(autoResize = T,
                nodesIdSelection = list(enabled = TRUE,
@@ -1486,6 +1512,8 @@ plotly::plotlyOutput("genePlotCluster")
 output$genePlotCluster <- renderPlotly({
 
   if (!is.null(values$GeneMultip)) {
+    
+    values$gp <- TRUE
     plotGenePathwayClusters(eSet,
                      values$GeneMultip,
                      values$groupListClicked,
@@ -1651,11 +1679,13 @@ output$hePlotCluster <- renderPlotly({
 
   if (!is.null(values$GeneSetMultip)) {
 
+    values$gp <- TRUE
     plotGenePathwayClusters(gSet,
                    values$GeneSetMultip,
                    values$groupListClicked,
                    cohorts = meta$cohorts,
-                   vehicle = meta$vehicle)
+                   vehicle = meta$vehicle,
+                   "Enrichment Score")
 
   } else {
 
