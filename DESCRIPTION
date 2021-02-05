@@ -1,13 +1,16 @@
 Package: K2Taxonomer
 Type: Package
 Title: Creating annotated submodules of high-throughput data through iteratively bootstrapping K=2 clusters
-Version: 1.0.2
-Date: 2020-10-27
+Version: 1.0.3
+Date: 2021-05-02
 Author: Eric Reed
 Maintainer: Eric Reed <reeder@bu.edu>
 Description: Perform and annotate divisive hierarchical clusters of high-throughput data by iteratively clustering bootstrapped features and estimating K=2 clusters. User may input any clustering method that splits observations into 2 clusters. Results can be summarized in a interactive dashboard.
 License: GPL-3 + file LICENSE
+biocViews:
 Imports:
+  BiocManager,
+  BiocStyle,
   plotly,
   limma,
   parallel,
@@ -23,16 +26,16 @@ Imports:
   GSVA,
   dendextend,
   scRNAseq,
-  Rdpack
+  Rdpack,
+  statmod
 Suggests:
     knitr,
     ggdendro,
     rmarkdown
 Depends:
-  R (>= 3.5)
-biocViews: Clustering, Visualization
+  R (>= 4.0)
 BugReports: https://github.com/montilab
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 RdMacros: Rdpack
 Collate:
     'AllClasses.R'
