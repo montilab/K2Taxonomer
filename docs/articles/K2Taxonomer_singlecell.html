@@ -312,38 +312,38 @@
 <span class="co">## Get differential results for one split</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/K2results.html">K2results</a></span><span class="op">(</span><span class="va">K2res</span><span class="op">)</span><span class="op">$</span><span class="va">A</span><span class="op">$</span><span class="va">dsse</span><span class="op">)</span>
 <span class="co">#&gt;   category        coef        mean         t         pval          fdr</span>
-<span class="co">#&gt; 1      GS3 0.094055818 -0.02630978 5.9081012 7.282563e-09 6.008115e-08</span>
-<span class="co">#&gt; 2      GS2 0.036609829 -0.01437239 2.0141414 4.464767e-02 9.208582e-02</span>
-<span class="co">#&gt; 3      GS1 0.004505419 -0.02296779 0.2822545 7.778909e-01 8.280774e-01</span>
+<span class="co">#&gt; 1      GS3 0.124656266 -0.02988168 7.2616665 1.926477e-12 3.178687e-11</span>
+<span class="co">#&gt; 2      GS2 0.049090375 -0.01559724 2.6263013 8.953867e-03 1.846735e-02</span>
+<span class="co">#&gt; 3      GS1 0.005320382 -0.02537272 0.3299682 7.415919e-01 7.894365e-01</span>
 <span class="co">#&gt;           B edge</span>
-<span class="co">#&gt; 1  9.797420    1</span>
-<span class="co">#&gt; 2 -4.767568    2</span>
-<span class="co">#&gt; 3 -6.724949    2</span>
+<span class="co">#&gt; 1 17.669875    1</span>
+<span class="co">#&gt; 2 -3.572061    2</span>
+<span class="co">#&gt; 3 -6.916551    2</span>
 
 <span class="co">## Extract table of all hyper and sample-level enrichment tests</span>
 <span class="va">K2enrRes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getEnrichmentTable.html">getEnrichmentTable</a></span><span class="op">(</span><span class="va">K2res</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">K2enrRes</span><span class="op">)</span>
 <span class="co">#&gt;   category node edge direction   pval_hyper    fdr_hyper nhits ndrawn ncats</span>
-<span class="co">#&gt; 1      GS2    F    1        up 4.989686e-16 1.219475e-14    14    238    50</span>
-<span class="co">#&gt; 2      GS1    E    1        up 4.993019e-16 1.219475e-14    23   1142    50</span>
-<span class="co">#&gt; 3      GS2    C    1        up 5.543069e-16 1.219475e-14    17    462    50</span>
-<span class="co">#&gt; 4      GS2    J    2        up 2.712990e-15 4.476433e-14    13    207    50</span>
-<span class="co">#&gt; 5      GS2    E    1        up 6.936672e-15 9.156407e-14    22   1142    50</span>
-<span class="co">#&gt; 6      GS3    A    1        up 8.752576e-15 9.266266e-14    19    762    50</span>
-<span class="co">#&gt;    ntot   pval_limma    fdr_limma       coef         mean         t         B</span>
-<span class="co">#&gt; 1 20000 3.427385e-02 7.540246e-02 0.07661344 -0.073563087  2.155600 -3.757621</span>
-<span class="co">#&gt; 2 20000 1.091726e-14 1.200899e-13 0.14183945 -0.039726006  7.939786 22.485698</span>
-<span class="co">#&gt; 3 20000 1.567275e-05 8.620013e-05 0.09102656 -0.005382406  4.376928  2.672034</span>
-<span class="co">#&gt; 4 20000 4.716834e-05 2.223650e-04 0.10983631  0.106501651  4.136353  1.771177</span>
-<span class="co">#&gt; 5 20000 7.349951e-23 2.425484e-21 0.18838007  0.017463477 10.283674 41.022878</span>
-<span class="co">#&gt; 6 20000 7.282563e-09 6.008115e-08 0.09405582 -0.026309780  5.908101  9.797420</span>
-<span class="co">#&gt;                                                                                                                                                 hits</span>
-<span class="co">#&gt; 1                                                                Nos1ap,Crym,Gucy1a3,Enc1,Dkk3,Fstl5,Ldb2,Luzp2,Dynll1,Meis2,Bcl11b,Ntrk3,Cck,Igfbp4</span>
-<span class="co">#&gt; 2 Ptn,Neurod6,Fam84a,Cux2,Srgap3,Slc30a3,Rorb,Plcxd2,Atp1b2,Btbd3,Olfm1,Utrn,Camk2d,Cdh10,Cbln4,Fam19a1,Per3,Cacna2d3,Ucma,Serpine2,Vat1l,Hpca,Grik1</span>
-<span class="co">#&gt; 3                                    Unc5d,Zdhhc22,Car10,Kcnv1,Pamr1,Deptor,Tmsb10,Dkk3,Spock1,Alcam,Tspan7,Ccdc80,Gpm6a,S100a10,Fxyd7,Abracl,Scube1</span>
-<span class="co">#&gt; 4                                                                   Ptchd1,Deptor,Enc1,Snx10,Tmsb10,Dkk3,Tmsb4x,Alcam,Rasgrf1,Gpm6a,Etv1,Cck,Galnt14</span>
-<span class="co">#&gt; 5  Unc5d,Nrxn1,Car10,Gucy1a3,Kcnv1,Pamr1,Deptor,Spock1,Tmem200a,Alcam,Ccdc80,Krt12,Rasgrf1,S100a10,Cnih3,Etv1,Chrm2,Bhlhe40,Scube1,Cck,Galnt14,Igfn1</span>
-<span class="co">#&gt; 6                               Camk2n1,Lin7a,Sphkap,Chgb,Pou3f2,Rims3,Cpne9,Fam19a2,Npcd,Dcdc2a,Mapk4,Dkkl1,Whrn,Ppm1h,Pcdh20,Nrep,Coch,Scnn1a,Rgs4</span></code></pre></div>
+<span class="co">#&gt; 1      GS2    C    1        up 2.223463e-17 1.467486e-15    18    461    50</span>
+<span class="co">#&gt; 2      GS3    G    1        up 7.899686e-17 2.606896e-15    16    335    50</span>
+<span class="co">#&gt; 3      GS1    C    2        up 1.068936e-15 2.351659e-14    26   1657    50</span>
+<span class="co">#&gt; 4      GS1    E    1        up 6.570906e-15 8.673595e-14    22   1139    50</span>
+<span class="co">#&gt; 5      GS2    E    1        up 6.570906e-15 8.673595e-14    22   1139    50</span>
+<span class="co">#&gt; 6      GS3    A    1        up 8.547355e-15 9.402091e-14    19    761    50</span>
+<span class="co">#&gt;    ntot   pval_limma    fdr_limma       coef         mean        t         B</span>
+<span class="co">#&gt; 1 20000 9.181423e-11 7.545724e-10 0.13841783 -0.003542505 6.687175 13.968782</span>
+<span class="co">#&gt; 2 20000 4.592668e-08 2.525967e-07 0.14681796 -0.003491838 5.604604  8.766456</span>
+<span class="co">#&gt; 3 20000 2.616468e-07 1.233478e-06 0.09694812 -0.024066237 5.253619  6.285439</span>
+<span class="co">#&gt; 4 20000 1.143291e-10 7.545724e-10 0.12429612 -0.048398313 6.569617 14.285495</span>
+<span class="co">#&gt; 5 20000 1.088998e-17 3.593694e-16 0.16749365  0.031197656 8.852804 31.789295</span>
+<span class="co">#&gt; 6 20000 1.926477e-12 3.178687e-11 0.12465627 -0.029881683 7.261667 17.669875</span>
+<span class="co">#&gt;                                                                                                                                                               hits</span>
+<span class="co">#&gt; 1                                          Unc5d,Zdhhc22,Car10,Kcnv1,Pamr1,Deptor,Tmsb10,Dkk3,Spock1,Alcam,Tspan7,Ccdc80,Gpm6a,S100a10,Fxyd7,Abracl,Scube1,Gadd45a</span>
+<span class="co">#&gt; 2                                                           Nav1,Camk2n1,Rims3,Lypd1,Galntl6,Ccl27b,Gm13306,Coro6,Fam19a2,Lamp5,Hs3st4,Dkkl1,Whrn,Nrep,Coch,Scnn1a</span>
+<span class="co">#&gt; 3 Bcl6,Fam84a,Reln,Fam84b,Robo1,Qrfpr,Srgap3,Parm1,Prkcg,Gng7,Nfib,Atp2b1,Lmo3,Btbd3,Klk8,Lrrtm4,Id2,Utrn,Pou3f1,Fam19a1,Nrp1,Cacna2d3,B3galt2,Serpine2,Vat1l,Npr3</span>
+<span class="co">#&gt; 4                    Ptn,Neurod6,Fam84a,Cux2,Srgap3,Slc30a3,Rorb,Plcxd2,Atp1b2,Btbd3,Olfm1,Utrn,Camk2d,Cdh10,Cbln4,Fam19a1,Per3,Cacna2d3,Serpine2,Vat1l,Hpca,Grik1</span>
+<span class="co">#&gt; 5                Unc5d,Nrxn1,Car10,Gucy1a3,Kcnv1,Pamr1,Deptor,Spock1,Tmem200a,Alcam,Ccdc80,Krt12,Rasgrf1,S100a10,Cnih3,Etv1,Chrm2,Bhlhe40,Scube1,Cck,Galnt14,Igfn1</span>
+<span class="co">#&gt; 6                                             Camk2n1,Lin7a,Sphkap,Chgb,Pou3f2,Rims3,Cpne9,Fam19a2,Npcd,Dcdc2a,Mapk4,Dkkl1,Whrn,Ppm1h,Pcdh20,Nrep,Coch,Scnn1a,Rgs4</span></code></pre></div>
 </div>
 </div>
 <div id="generate-interactive-dashboard-to-explore-results" class="section level2">
@@ -359,7 +359,7 @@
 <div id="runtime-for-this-example" class="section level1">
 <h1 class="hasAnchor">
 <a href="#runtime-for-this-example" class="anchor"></a>Runtime for this example</h1>
-<pre><code>#&gt; Time difference of 1.983346 mins</code></pre>
+<pre><code>#&gt; Time difference of 1.622972 mins</code></pre>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">
