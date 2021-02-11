@@ -202,7 +202,7 @@
 <strong>maxIter</strong>: The maximum number of iterations for running <code>lcvqe()</code>, which uses 10 as the default.</li>
 </ul>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Create clustList </span>
+<code class="sourceCode R"><span class="co"># Create clustList</span>
 <span class="va">wrapperList</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
   eMat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/exprs.html">exprs</a></span><span class="op">(</span><span class="va">eSet</span><span class="op">)</span>,
   labs <span class="op">=</span> <span class="va">eSet</span><span class="op">$</span><span class="va">celltype</span>,
@@ -288,7 +288,7 @@
 <span class="op">)</span>
 
 <span class="co">## Run gene set hyperenrichment</span>
-<span class="va">K2res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runGSEmods.html">runGSEmods</a></span><span class="op">(</span><span class="va">K2res</span>, 
+<span class="va">K2res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runGSEmods.html">runGSEmods</a></span><span class="op">(</span><span class="va">K2res</span>,
                      genesets <span class="op">=</span> <span class="va">genesetsMadeUp</span>,
                      qthresh <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></code></pre></div>
 </div>
@@ -297,7 +297,7 @@
 <a href="#single-sample-gene-set-enrichment" class="anchor"></a>Single-sample gene set enrichment</h3>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Create expression matrix with ssGSEA(GSVA) estimates</span>
-<span class="va">K2res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runGSVAmods.html">runGSVAmods</a></span><span class="op">(</span><span class="va">K2res</span>, 
+<span class="va">K2res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runGSVAmods.html">runGSVAmods</a></span><span class="op">(</span><span class="va">K2res</span>,
                       ssGSEAalg <span class="op">=</span> <span class="st">"gsva"</span>,
                       ssGSEAcores <span class="op">=</span> <span class="fl">1</span>,
                       verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
@@ -313,7 +313,7 @@
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/K2results.html">K2results</a></span><span class="op">(</span><span class="va">K2res</span><span class="op">)</span><span class="op">$</span><span class="va">A</span><span class="op">$</span><span class="va">dsse</span><span class="op">)</span>
 <span class="co">#&gt;   category        coef        mean         t         pval          fdr</span>
 <span class="co">#&gt; 1      GS3 0.124656266 -0.02988168 7.2616665 1.926477e-12 3.178687e-11</span>
-<span class="co">#&gt; 2      GS2 0.049090375 -0.01559724 2.6263013 8.953867e-03 1.846735e-02</span>
+<span class="co">#&gt; 2      GS2 0.049090375 -0.01559724 2.6263013 8.953867e-03 1.969851e-02</span>
 <span class="co">#&gt; 3      GS1 0.005320382 -0.02537272 0.3299682 7.415919e-01 7.894365e-01</span>
 <span class="co">#&gt;           B edge</span>
 <span class="co">#&gt; 1 17.669875    1</span>
@@ -325,8 +325,8 @@
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">K2enrRes</span><span class="op">)</span>
 <span class="co">#&gt;   category node edge direction   pval_hyper    fdr_hyper nhits ndrawn ncats</span>
 <span class="co">#&gt; 1      GS2    C    1        up 2.223463e-17 1.467486e-15    18    461    50</span>
-<span class="co">#&gt; 2      GS3    G    1        up 7.899686e-17 2.606896e-15    16    335    50</span>
-<span class="co">#&gt; 3      GS1    C    2        up 1.068936e-15 2.351659e-14    26   1657    50</span>
+<span class="co">#&gt; 2      GS3    G    1        up 8.679872e-17 2.864358e-15    16    337    50</span>
+<span class="co">#&gt; 3      GS1    C    2        up 1.100495e-15 2.421089e-14    26   1659    50</span>
 <span class="co">#&gt; 4      GS1    E    1        up 6.570906e-15 8.673595e-14    22   1139    50</span>
 <span class="co">#&gt; 5      GS2    E    1        up 6.570906e-15 8.673595e-14    22   1139    50</span>
 <span class="co">#&gt; 6      GS3    A    1        up 8.547355e-15 9.402091e-14    19    761    50</span>
@@ -359,7 +359,7 @@
 <div id="runtime-for-this-example" class="section level1">
 <h1 class="hasAnchor">
 <a href="#runtime-for-this-example" class="anchor"></a>Runtime for this example</h1>
-<pre><code>#&gt; Time difference of 1.622972 mins</code></pre>
+<pre><code>#&gt; Time difference of 1.573904 mins</code></pre>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">
