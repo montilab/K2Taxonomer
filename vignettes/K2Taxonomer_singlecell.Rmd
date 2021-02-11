@@ -5,11 +5,11 @@ author:
   affiliation: Boston University School of Medicine, Section of Computational Biomedicine, 72 E Concord St, Boston, MA 02118
   email: reeder@bu.edu
 date: "Created: October 21, 2020; Compiled: `r Sys.Date()`"
-output: 
+output:
   BiocStyle::html_document
 package: K2Taxonomer
 vignette: >
-  %\VignetteIndexEntry{K2Taxonomer_singlecell}
+  %\VignetteIndexEntry{02_K2Taxonomer_singlecell}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: "`r system.file('REFERENCES.bib', package='K2Taxonomer')`"
@@ -19,7 +19,7 @@ bibliography: "`r system.file('REFERENCES.bib', package='K2Taxonomer')`"
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  message=F, 
+  message=F,
   warning=F
 )
 ```
@@ -109,7 +109,7 @@ In order to run either function, the user must include a named list with the fol
 - **maxIter**: The maximum number of iterations for running `lcvqe()`, which uses 10 as the default.
 
 ```{r clustlist}
-# Create clustList 
+# Create clustList
 wrapperList <- list(
   eMat = exprs(eSet),
   labs = eSet$celltype,
@@ -176,7 +176,7 @@ genesetsMadeUp <- list(
 )
 
 ## Run gene set hyperenrichment
-K2res <- runGSEmods(K2res, 
+K2res <- runGSEmods(K2res,
                      genesets = genesetsMadeUp,
                      qthresh = 0.1)
 ```
@@ -185,7 +185,7 @@ K2res <- runGSEmods(K2res,
 
 ```{r Run ssSGEA, warning=FALSE}
 ## Create expression matrix with ssGSEA(GSVA) estimates
-K2res <- runGSVAmods(K2res, 
+K2res <- runGSVAmods(K2res,
                       ssGSEAalg = "gsva",
                       ssGSEAcores = 1,
                       verbose = FALSE)
@@ -219,7 +219,7 @@ K2dashboard(K2res)
 
 # Runtime for this example
 ```{r runtime, echo=FALSE}
-Sys.time() - time 
+Sys.time() - time
 ```
 
 # References

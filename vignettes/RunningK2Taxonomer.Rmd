@@ -7,7 +7,7 @@ date: October 21, 2020
 output: 
   BiocStyle::html_document
 vignette: >
-  %\VignetteIndexEntry{RunningK2Taxonomer}
+  %\VignetteIndexEntry{01_RunningK2Taxonomer}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: "`r system.file('REFERENCES.bib', package='K2Taxonomer')`"

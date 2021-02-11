@@ -80,7 +80,7 @@ genesetsMadeUp <- list(
   GS3 = genes[101:150]
 )
 
-K2res <- runGSEmods(K2res, 
+K2res <- runGSEmods(K2res,
                      genesets = genesetsMadeUp,
                      qthresh = 0.1)
 ```
@@ -88,7 +88,7 @@ K2res <- runGSEmods(K2res,
 #### Run single-sample enrichment on toy gene sets with *GSVA*
 
 ```r
-K2res <- runGSVAmods(K2res, 
+K2res <- runGSVAmods(K2res,
                       ssGSEAalg = "gsva",
                       ssGSEAcores = 1,
                       verbose = FALSE)
