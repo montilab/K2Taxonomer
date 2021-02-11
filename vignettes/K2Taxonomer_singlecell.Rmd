@@ -1,5 +1,5 @@
 ---
-title: "Running K2Taxonomer on single-cell RNA sequencing data"
+title: "2. Running K2Taxonomer on Single-cell RNA Sequencing Data"
 author:
 - name: Eric R. Reed
   affiliation: Boston University School of Medicine, Section of Computational Biomedicine, 72 E Concord St, Boston, MA 02118
