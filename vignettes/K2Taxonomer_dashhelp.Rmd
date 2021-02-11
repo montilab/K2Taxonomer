@@ -7,7 +7,7 @@ date: November 2, 2020
 output: 
   BiocStyle::html_document
 vignette: >
-  %\VignetteIndexEntry{K2Taxonomer_dashhelp}
+  %\VignetteIndexEntry{04_K2Taxonomer_dashhelp}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: "`r system.file('REFERENCES.bib', package='K2Taxonomer')`"
@@ -57,7 +57,7 @@ Annotation of each of these tabs is presented below. **Click on any of these ima
 
 ***
 
-[![](https://montilab.github.io/K2Taxonomer/articles/page2.png)](https://montilab.github.io/K2Taxonomer/articles/page2.png)
+[![](https://montilab.github.io/K2Taxonomer/articles/page2.jpg)](https://montilab.github.io/K2Taxonomer/articles/page2.png)
 
 ***
 
@@ -65,7 +65,7 @@ Annotation of each of these tabs is presented below. **Click on any of these ima
 
 ***
 
-[![](https://montilab.github.io/K2Taxonomer/articles/page3.png)](https://montilab.github.io/K2Taxonomer/articles/page3.png)
+[![](https://montilab.github.io/K2Taxonomer/articles/page3.jpg)](https://montilab.github.io/K2Taxonomer/articles/page3.png)
 
 ***
 
@@ -73,7 +73,7 @@ Annotation of each of these tabs is presented below. **Click on any of these ima
 
 ***
 
-[![](https://montilab.github.io/K2Taxonomer/articles/page4.png){width=50%}](https://montilab.github.io/K2Taxonomer/articles/page4.png)
+[![](https://montilab.github.io/K2Taxonomer/articles/page4.jpg)](https://montilab.github.io/K2Taxonomer/articles/page4.png)
 
 ***
 
