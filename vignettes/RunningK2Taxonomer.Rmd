@@ -5,9 +5,7 @@ author:
   affiliation: Boston University School of Medicine, Section of Computational Biomedicine, 72 E Concord St, Boston, MA 02118
 date: October 21, 2020
 output: 
-  BiocStyle::html_document:
-    toc: true
-    df_print: paged
+  BiocStyle::html_document
 vignette: >
   %\VignetteIndexEntry{RunningK2Taxonomer}
   %\VignetteEngine{knitr::rmarkdown}
@@ -39,7 +37,7 @@ This vignette describes the general workflow for running `r Githubpkg("montilab/
 ## K2Taxonomer package
 library(K2Taxonomer)
 
-## For creating and manipulating expression sets
+## For example expression data
 library(Biobase)
 
 ## For drawing dendrograms

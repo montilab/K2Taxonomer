@@ -1,2 +1,14 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+.DS_Store
+.Rhistory
+.gitignore
+R/.DS_Store
+R/.Rapp.history
+edits
+inst/.DS_Store
+inst/extdata/.DS_Store
+vignettes/.DS_Store
+vignettes/.gitignore
+.Rproj.user
+.git

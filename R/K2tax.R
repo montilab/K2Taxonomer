@@ -5,7 +5,7 @@
 #'
 #' @param K2res An object of class K2. The output of K2preproc().
 #' @param nFeats A numeric value <= P of subsets of the data to use.
-#' @param featMatric Metric to use to assign variance/signal score. Options are
+#' @param featMetric Metric to use to assign variance/signal score. Options are
 #' 'square' (default), 'mad' to use MAD scores, 'sd' to use standard deviation
 #' @param recalcDataMatrix Recalculate dataMatrix for each partion?
 #' @param nBoots A numeric value of the number of bootstraps to run at each

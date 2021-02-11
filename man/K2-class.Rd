@@ -10,7 +10,13 @@ This class is the output of runK2Taxonomer() and K2preproc().
 \section{Slots}{
 
 \describe{
+\item{\code{eSet}}{An Expression Set object}
+
+\item{\code{meta}}{A named list of K2Taxonomer information}
+
 \item{\code{dataMatrix}}{An P x N numeric matrix of data}
+
+\item{\code{results}}{A named list of K2Taxonomer partitioning reuslts}
 
 \item{\code{info}}{A data frame with rownames that match column names in dataMatrix}
 
@@ -19,11 +25,7 @@ This class is the output of runK2Taxonomer() and K2preproc().
 \item{\code{gene2Pathway}}{A vector of collapsed genesets names, mapping features to
 genesets}
 
-\item{\code{eSet}}{An Expression Set object}
-
 \item{\code{gSet}}{An Expression Set object}
-
-\item{\code{meta}}{A named list of K2 Taxonomer information}
 
 \item{\code{geneURL}}{A named vector of gene URLs}
 

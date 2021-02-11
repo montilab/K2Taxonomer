@@ -2,12 +2,23 @@
 % Please edit documentation in R/AllGenerics.R
 \name{K2genesetURL}
 \alias{K2genesetURL}
+\alias{K2genesetURL<-}
+\alias{K2genesetURL,K2-method}
+\alias{K2genesetURL<-,K2-method}
 \title{Assign URLs to genesets included in K2Taxonomer run}
 \usage{
 K2genesetURL(K2res)
+
+K2genesetURL(K2res) <- value
+
+\S4method{K2genesetURL}{K2}(K2res)
+
+\S4method{K2genesetURL}{K2}(K2res) <- value
 }
 \arguments{
 \item{K2res}{K2 class object.}
+
+\item{value}{Named vector. A vector with a URL string for each geneset.}
 }
 \value{
 Named vector. A vector with a URL string for each geneset.

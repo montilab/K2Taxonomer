@@ -2,12 +2,23 @@
 % Please edit documentation in R/AllGenerics.R
 \name{K2gSet}
 \alias{K2gSet}
+\alias{K2gSet<-}
+\alias{K2gSet,K2-method}
+\alias{K2gSet<-,K2-method}
 \title{ExpressionSet object of of GSVA output}
 \usage{
 K2gSet(K2res)
+
+K2gSet(K2res) <- value
+
+\S4method{K2gSet}{K2}(K2res)
+
+\S4method{K2gSet}{K2}(K2res) <- value
 }
 \arguments{
 \item{K2res}{K2 class object.}
+
+\item{value}{ExpressionSet.}
 }
 \value{
 ExpressionSet.

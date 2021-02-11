@@ -2,12 +2,23 @@
 % Please edit documentation in R/AllGenerics.R
 \name{K2meta}
 \alias{K2meta}
+\alias{K2meta<-}
+\alias{K2meta,K2-method}
+\alias{K2meta<-,K2-method}
 \title{Meta data defining parameters of K2Taxonomer run}
 \usage{
 K2meta(K2res)
+
+K2meta(K2res) <- value
+
+\S4method{K2meta}{K2}(K2res)
+
+\S4method{K2meta}{K2}(K2res) <- value
 }
 \arguments{
 \item{K2res}{K2 class object.}
+
+\item{value}{Named list. Parameters used in K2Taxonomer run.}
 }
 \value{
 Named list. Parameters used in K2Taxonomer run.

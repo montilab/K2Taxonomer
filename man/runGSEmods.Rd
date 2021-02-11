@@ -20,7 +20,9 @@ runGSEmods(
 \item{qthresh}{A numeric value between 0 and 1 of the FDR cuttoff to define
 feature sets.}
 
-\item{cthresh}{A positive value for the coefficient cuttoff to define
+\item{cthresh}{A positive value for the coefficient cuttoff to define}
+
+\item{ntotal}{The total number of genes sampled from. 
 feature sets.}
 }
 \value{

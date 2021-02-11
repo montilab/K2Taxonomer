@@ -6,6 +6,7 @@
 #' @param qthresh A numeric value between 0 and 1 of the FDR cuttoff to define
 #' feature sets.
 #' @param cthresh A positive value for the coefficient cuttoff to define
+#' @param ntotal The total number of genes sampled from. 
 #' feature sets.
 #' @return An object of class K2.
 #' @references

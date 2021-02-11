@@ -5,8 +5,7 @@ author:
   affiliation: Boston University School of Medicine, Section of Computational Biomedicine, 72 E Concord St, Boston, MA 02118
 date: November 2, 2020
 output: 
-  BiocStyle::html_document:
-    toc: true
+  BiocStyle::html_document
 vignette: >
   %\VignetteIndexEntry{K2Taxonomer_dashhelp}
   %\VignetteEngine{knitr::rmarkdown}
@@ -50,7 +49,7 @@ Annotation of each of these tabs is presented below. **Click on any of these ima
 
 ***
 
-[![](page1.png)](https://montilab.github.io/K2Taxonomer/articles/page1.png)
+[![](https://montilab.github.io/K2Taxonomer/articles/page1.png)](https://montilab.github.io/K2Taxonomer/articles/page1.png)
 
 ***
 
@@ -58,7 +57,7 @@ Annotation of each of these tabs is presented below. **Click on any of these ima
 
 ***
 
-[![](page2.png)](https://montilab.github.io/K2Taxonomer/articles/page2.png)
+[![](https://montilab.github.io/K2Taxonomer/articles/page2.png)](https://montilab.github.io/K2Taxonomer/articles/page2.png)
 
 ***
 
@@ -66,7 +65,7 @@ Annotation of each of these tabs is presented below. **Click on any of these ima
 
 ***
 
-[![](page3.png)](https://montilab.github.io/K2Taxonomer/articles/page3.png)
+[![](https://montilab.github.io/K2Taxonomer/articles/page3.png)](https://montilab.github.io/K2Taxonomer/articles/page3.png)
 
 ***
 
@@ -74,7 +73,7 @@ Annotation of each of these tabs is presented below. **Click on any of these ima
 
 ***
 
-[![](page4.png)](https://montilab.github.io/K2Taxonomer/articles/page4.png)
+[![](https://montilab.github.io/K2Taxonomer/articles/page4.png){width=50%}](https://montilab.github.io/K2Taxonomer/articles/page4.png)
 
 ***
 

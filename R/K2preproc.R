@@ -16,7 +16,7 @@
 #' "MEAN" to use means from differential analysis for clustering.
 #' @param nFeats "sqrt" or a numeric value <= number of features to subset the
 #' features for each partition.
-#' @param featMatric Metric to use to assign variance/signal score. Options are
+#' @param featMetric Metric to use to assign variance/signal score. Options are
 #' 'square' (default) use square values and 'mad' to use MAD scores.
 #' @param recalcDataMatrix Logical. Recalculate dataMatrix for each partion?
 #' Default is FALSE.
