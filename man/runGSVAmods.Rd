@@ -9,15 +9,14 @@ runGSVAmods(K2res, ssGSEAalg = NULL, ssGSEAcores = NULL, ...)
 \arguments{
 \item{K2res}{An object of class K2. The output of runDGEmods().}
 
+\item{ssGSEAalg}{A character string, specifying which algorithm to use for
+running the gsva() function from the GSVA package. Options are "gsva",
+"ssgsea", "zscore", and "plage". "gsva" by default.}
+
+\item{ssGSEAcores}{Number of cores to use for running gsva() from the GSVA
+package. Default is 1.}
+
 \item{...}{Additional arguments passed onto GSVA::gsva()}
-
-\item{genesets}{A named list of feature IDs}
-
-\item{qthresh}{A numeric value between 0 and 1 of the FDR cuttoff to define
-feature sets.}
-
-\item{cthresh}{A positive value for the coefficient cuttoff to define
-feature sets.}
 }
 \value{
 An object of class K2.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/runK2Taxonomer.R
 \name{runK2Taxonomer}
 \alias{runK2Taxonomer}
-\title{Wrapper function to perform K=2 clustering and annotation}
+\title{Wrapper function to run K2Taxonomer algorithm and annotation}
 \usage{
 runK2Taxonomer(
   eSet,
@@ -58,6 +58,9 @@ counts or log normalized counts from RNA-seq. Default is FALSE.}
 \item{nFeats}{"sqrt" or a numeric value <= number of features to subset the
 features for each partition.}
 
+\item{featMetric}{Metric to use to assign variance/signal score. Options are:
+'mad' (default), "mad", "Sn", "Qn", "F", and "square".}
+
 \item{recalcDataMatrix}{Logical. Recalculate dataMatrix for each partion?
 Default is FALSE.}
 
@@ -103,9 +106,6 @@ package. Default is 1.}
 \item{geneURL}{Optional. Named list of URLs to gene information.}
 
 \item{genesetURL}{Optional. Named list of URLs to geneset information.}
-
-\item{featMatric}{Metric to use to assign variance/signal score. Options are:
-'mad' (default), "mad", "Sn", "Qn", "F", and "square".}
 }
 \description{
 This function will generate an object of class, K2.  This will run the K2

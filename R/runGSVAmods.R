@@ -2,11 +2,11 @@
 #'
 #' Adds hyperenrichment analysis results to the output of runDGEmods().
 #' @param K2res An object of class K2. The output of runDGEmods().
-#' @param genesets A named list of feature IDs
-#' @param qthresh A numeric value between 0 and 1 of the FDR cuttoff to define
-#' feature sets.
-#' @param cthresh A positive value for the coefficient cuttoff to define
-#' feature sets.
+#' @param ssGSEAalg A character string, specifying which algorithm to use for
+#' running the gsva() function from the GSVA package. Options are "gsva",
+#' "ssgsea", "zscore", and "plage". "gsva" by default.
+#' @param ssGSEAcores Number of cores to use for running gsva() from the GSVA
+#' package. Default is 1.
 #' @param ... Additional arguments passed onto GSVA::gsva()
 #' @return An object of class K2.
 #' @references

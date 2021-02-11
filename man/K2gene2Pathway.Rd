@@ -2,12 +2,23 @@
 % Please edit documentation in R/AllGenerics.R
 \name{K2gene2Pathway}
 \alias{K2gene2Pathway}
+\alias{K2gene2Pathway<-}
+\alias{K2gene2Pathway,K2-method}
+\alias{K2gene2Pathway<-,K2-method}
 \title{Vector of collapsed pathways for which each gene belongs}
 \usage{
 K2gene2Pathway(K2res)
+
+K2gene2Pathway(K2res) <- value
+
+\S4method{K2gene2Pathway}{K2}(K2res)
+
+\S4method{K2gene2Pathway}{K2}(K2res) <- value
 }
 \arguments{
 \item{K2res}{K2 class object.}
+
+\item{value}{Named vector. A vector with collapse pathway names for each gene.}
 }
 \value{
 Named vector. A vector with collapse pathway names for each gene.

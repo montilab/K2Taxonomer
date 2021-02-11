@@ -6,9 +6,7 @@ author:
   email: reeder@bu.edu
 date: "Created: October 21, 2020; Compiled: `r Sys.Date()`"
 output: 
-  BiocStyle::html_document:
-    toc: true
-    df_print: paged
+  BiocStyle::html_document
 package: K2Taxonomer
 vignette: >
   %\VignetteIndexEntry{K2Taxonomer_singlecell}
@@ -41,9 +39,6 @@ This vignette describes the workflow for running `r Githubpkg("montilab/K2Taxono
 ```{r setup}
 ## K2Taxonomer package
 library(K2Taxonomer)
-
-## For creating and manipulating expression sets
-library(Biobase)
 
 ## For drawing dendrograms
 library(ggdendro)

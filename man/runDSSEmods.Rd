@@ -51,7 +51,7 @@ K2res <- runGSVAmods(K2res,
                      ssGSEAcores = 1,
                      verbose = FALSE)
 
-## Run differential analysis on enrichment results
+## Run differential analysis on GSVA results
 K2res <- runDSSEmods(K2res)
 
 }

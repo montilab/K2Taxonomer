@@ -27,18 +27,7 @@ if(file.exists("about.md")) {
 
 ```{r setup, context="setup", include=FALSE}
 
-library(shiny)
 library(K2Taxonomer)
-library(visNetwork)
-library(plotly)
-library(heatmaply)
-library(DT)
-library(GSVA)
-library(Biobase)
-library(RColorBrewer)
-library(limma)
-library(dendextend)
-
 
 ## Read in helper functions
 source(system.file("dashboard", "DashHelper.R", package = "K2Taxonomer"))

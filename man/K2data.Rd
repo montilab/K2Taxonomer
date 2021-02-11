@@ -2,12 +2,23 @@
 % Please edit documentation in R/AllGenerics.R
 \name{K2data}
 \alias{K2data}
+\alias{K2data<-}
+\alias{K2data,K2-method}
+\alias{K2data<-,K2-method}
 \title{Data matrix from K2 object}
 \usage{
 K2data(K2res)
+
+K2data(K2res) <- value
+
+\S4method{K2data}{K2}(K2res)
+
+\S4method{K2data}{K2}(K2res) <- value
 }
 \arguments{
 \item{K2res}{K2 class object.}
+
+\item{value}{Matrix. Numeric data used for K2Taxonomer run.}
 }
 \value{
 Matrix. Numeric data used for K2Taxonomer run.

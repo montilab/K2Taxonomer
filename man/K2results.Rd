@@ -2,12 +2,23 @@
 % Please edit documentation in R/AllGenerics.R
 \name{K2results}
 \alias{K2results}
+\alias{K2results<-}
+\alias{K2results,K2-method}
+\alias{K2results<-,K2-method}
 \title{Annotated list of partition assignments from K2Taxonomer run}
 \usage{
 K2results(K2res)
+
+K2results(K2res) <- value
+
+\S4method{K2results}{K2}(K2res)
+
+\S4method{K2results}{K2}(K2res) <- value
 }
 \arguments{
 \item{K2res}{K2 class object.}
+
+\item{value}{List. A list with an element for each partition.}
 }
 \value{
 List. A list with an element for each partition.

@@ -2,12 +2,23 @@
 % Please edit documentation in R/AllGenerics.R
 \name{K2info}
 \alias{K2info}
+\alias{K2info<-}
+\alias{K2info,K2-method}
+\alias{K2info<-,K2-method}
 \title{Data frame of phenotypic information from K2 object}
 \usage{
 K2info(K2res)
+
+K2info(K2res) <- value
+
+\S4method{K2info}{K2}(K2res)
+
+\S4method{K2info}{K2}(K2res) <- value
 }
 \arguments{
 \item{K2res}{K2 class object.}
+
+\item{value}{Data frame. Observation information from K2Taxonomer run.}
 }
 \value{
 Data frame. Observation information from K2Taxonomer run.

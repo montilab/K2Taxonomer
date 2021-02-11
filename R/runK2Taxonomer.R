@@ -1,4 +1,4 @@
-#' Wrapper function to perform K=2 clustering and annotation
+#' Wrapper function to run K2Taxonomer algorithm and annotation
 #'
 #' This function will generate an object of class, K2.  This will run the K2
 #' Taxonomer procedure, differential analysis, and finally hyperenrichment on a
@@ -17,7 +17,7 @@
 #' "MEAN" to use means from differential analysis for clustering.
 #' @param nFeats "sqrt" or a numeric value <= number of features to subset the
 #' features for each partition.
-#' @param featMatric Metric to use to assign variance/signal score. Options are:
+#' @param featMetric Metric to use to assign variance/signal score. Options are:
 #' 'mad' (default), "mad", "Sn", "Qn", "F", and "square".
 #' @param recalcDataMatrix Logical. Recalculate dataMatrix for each partion?
 #' Default is FALSE.

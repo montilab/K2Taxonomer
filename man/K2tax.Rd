@@ -23,6 +23,9 @@ K2tax(
 
 \item{nFeats}{A numeric value <= P of subsets of the data to use.}
 
+\item{featMetric}{Metric to use to assign variance/signal score. Options are
+'square' (default), 'mad' to use MAD scores, 'sd' to use standard deviation}
+
 \item{recalcDataMatrix}{Recalculate dataMatrix for each partion?}
 
 \item{nBoots}{A numeric value of the number of bootstraps to run at each
@@ -41,9 +44,6 @@ hclust).}
 
 \item{stabThresh}{A numeric value < 1, to set stopping threshold (use any
 negative value for no threshold).}
-
-\item{featMatric}{Metric to use to assign variance/signal score. Options are
-'square' (default), 'mad' to use MAD scores, 'sd' to use standard deviation}
 }
 \value{
 An object of class K2.
