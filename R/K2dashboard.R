@@ -18,9 +18,7 @@
 #' data(K2res)
 #' 
 #' ## Generate interactive dashboard
-#' \dontrun{
-#' K2dashboard(K2res)
-#' }
+#' K2dashboard(K2res, output_dir = tempdir())
 #'
 
 K2dashboard <- function(K2res, 

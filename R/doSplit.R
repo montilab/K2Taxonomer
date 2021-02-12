@@ -49,14 +49,14 @@
         ## Get number of features
         modVec <- do.call(c, mclapply(seq(nBoots), function(x, clustFunc, SCORE, 
             nFeats, dataMatrix, clustList) {
-            SCOREboot <- sort(sample(SCORE, length(SCORE), replace = T), decreasing = TRUE)[1:nFeats]
+            SCOREboot <- sort(sample(SCORE, length(SCORE), replace = TRUE), decreasing = TRUE)[seq_len(nFeats)]
             Dboot <- dataMatrix[names(SCOREboot), ]
             mods <- clustFunc(Dboot, clustList)
             return(mods)
         }, clustFunc, SCORE, nFeats, dataMatrix, clustList, mc.cores = clustCors))
         
         ## Create table of results
-        modTab <- sort(table(modVec), decreasing = T)
+        modTab <- sort(table(modVec), decreasing = TRUE)
         
         ## Get all clustering
         modList <- strsplit(modVec, "")
@@ -67,8 +67,8 @@
         
         ## For each cluster get mean cosine distance in each cluster
         mat <- matrix(NA, ncol(modataMatrix), ncol(modataMatrix))
-        for (i in 1:ncol(modataMatrix)) {
-            for (j in 1:ncol(modataMatrix)) {
+        for (i in seq_len(ncol(modataMatrix))) {
+            for (j in seq_len(ncol(modataMatrix))) {
                 ## Convert to -1 and 1
                 vec1 <- c(-1, 1)[as.numeric(modataMatrix[, i] == "2") + 1]
                 vec2 <- c(-1, 1)[as.numeric(modataMatrix[, j] == "2") + 1]
@@ -90,7 +90,7 @@
         }
         
         ## Get cluster stability (first eigenvalue in each)
-        mod_stability <- vapply(1:2, function(x, mods, mat) {
+        mod_stability <- vapply(seq_len(2), function(x, mods, mat) {
             
             ## Get matrix
             matMod <- as.matrix(mat[mods == x, mods == x, drop = FALSE])

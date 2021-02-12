@@ -107,6 +107,9 @@ package. Default is 1.}
 
 \item{genesetURL}{Optional. Named list of URLs to geneset information.}
 }
+\value{
+An object of class, `K2`.
+}
 \description{
 This function will generate an object of class, K2.  This will run the K2
 Taxonomer procedure, differential analysis, and finally hyperenrichment on a
@@ -137,4 +140,3 @@ K2Res <- runK2Taxonomer(sample.ExpressionSet,
 \references{
 \insertRef{reed_2020}{K2Taxonomer}
 }
-\keyword{clustering}

@@ -91,7 +91,7 @@ runDSSEmods <- function(K2res) {
             K2meta(K2res)$covariates, K2meta(K2res)$block)
         if (!is.null(x$dsse)) {
             x$dsse$category <- rownames(x$dsse)
-            x$dsse <- x$dsse[, c(ncol(x$dsse), 1:(ncol(x$dsse) - 1))]
+            x$dsse <- x$dsse[, c(ncol(x$dsse), seq_len(ncol(x$dsse) - 1))]
         }
         
         return(x)

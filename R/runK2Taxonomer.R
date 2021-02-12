@@ -47,9 +47,9 @@
 #' @param stabThresh Threshold for ending clustering.
 #' @param geneURL Optional. Named list of URLs to gene information.
 #' @param genesetURL Optional. Named list of URLs to geneset information.
+#' @return An object of class, `K2`.
 #' @references
 #'  \insertRef{reed_2020}{K2Taxonomer}
-#' @keywords clustering
 #' @export
 #' @import limma
 #' @import Biobase

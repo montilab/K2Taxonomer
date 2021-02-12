@@ -107,6 +107,9 @@ package. Default is 1.}
 
 \item{genesetURL}{Optional. Named list of URLs to geneset information.}
 }
+\value{
+An object of class, `K2`.
+}
 \description{
 This function will generate an object of class, K2.  This will run
 pre-processing functions for running K2 Taxonomer procedure.

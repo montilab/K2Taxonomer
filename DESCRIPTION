@@ -2,13 +2,13 @@ Package: K2Taxonomer
 Type: Package
 Title: Creating annotated submodules of high-throughput data through recursive partitioning
 Version: 1.0.4
-Date: 2021-05-11
-Author: Eric Reed
-Maintainer: Eric Reed <reeder@bu.edu>
+Date: 2021-02-11
+Authors@R: person("Eric", "Reed", email = "reeder@bu.edu",
+                  role = c("aut", "cre"))
 Description: Perform and annotate subgroups of high-throughput data by repeated partioning of bootstrapped features. User may input any clustering method that splits observations into 2 clusters. Results can be summarized in a interactive dashboard.
 License: GPL-3 + file LICENSE
 VignetteBuilder: knitr
-biocViews:
+biocViews: StatisticalMethod, Clustering
 Imports:
   BiocManager,
   plotly,
@@ -34,7 +34,9 @@ Suggests:
     ggdendro,
     BiocStyle,
     knitr,
-    rmarkdown
+    rmarkdown,
+    RUnit, 
+    BiocGenerics
 Depends:
   R (>= 4.0)
 BugReports: https://github.com/montilab/K2Taxonomer

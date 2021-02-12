@@ -5,7 +5,7 @@
     if(!is.null(vehicle)) {
         mods <- mods[names(mods) != vehicle]
     }
-    mods <- data.frame(mods = as.character(mods), GROUP = names(mods), stringsAsFactors = F)
+    mods <- data.frame(mods = as.character(mods), GROUP = names(mods), stringsAsFactors = FALSE)
 
     modStats <- NULL
     if (length(unique(mods$mods)) > 1) {
@@ -34,7 +34,7 @@
         pData(eSub)$Rownames <- rownames(pData(eSub))
         pD <- merge(pData(eSub), mods, all.x = TRUE)
         rownames(pD) <- pD$Rownames
-        pD <- pD[colnames(eSub), , drop = F]
+        pD <- pD[colnames(eSub), , drop = FALSE]
 
         ## Add vehicle mod
         pD$mods[is.na(pD$mods)] <- "0"
@@ -148,7 +148,7 @@
         }
 
         ## Create just one data.frame
-        modStats <- as.data.frame(t(vapply(1:nrow(modFit[[1]]), function(row, one2,
+        modStats <- as.data.frame(t(vapply(seq_len(nrow(modFit[[1]])), function(row, one2,
             modFit) {
             unlist(as.numeric(modFit[[one2[row]]][row, ]))
         }, one2, modFit, FUN.VALUE = double(7))))
@@ -158,13 +158,13 @@
         ## Order by p-value
         modStats <- modStats[order(modStats$P.Value), ]
         modStats$adj.P.Val <- p.adjust(modStats$P.Value, method = "BH")
-        
+
         ## Remove large objects
         rm(fit, modFit, design, mods, gUnique, one2, eSet, eSub, pD)
-        
+
         ## Save mods as character
         modStats$edge <- as.character(modStats$edge)
-        
+
         ## Change column names
         colnames(modStats) <- c("coef", "mean", "t", "pval", "fdr", "B", "edge")
     }

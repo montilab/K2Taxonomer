@@ -102,7 +102,7 @@ K2tax <- function(K2res, nFeats = NULL, featMetric = NULL, recalcDataMatrix = NU
         taxList[[iter]] <- list()
         outMods <- lapply(outList, function(x) x[[1]])
         slot <- 1
-        for (i in 1:length(outMods)) {
+        for (i in seq_len(length(outMods))) {
             taxList[[iter]][[slot]] <- names(outMods[[i]])[outMods[[i]] == 1]
             slot <- slot + 1
             taxList[[iter]][[slot]] <- names(outMods[[i]])[outMods[[i]] == 2]
@@ -118,7 +118,7 @@ K2tax <- function(K2res, nFeats = NULL, featMetric = NULL, recalcDataMatrix = NU
         outRes <- lapply(outList, function(x) x[[2]])
         outStab <- lapply(outList, function(x) x[[3]])
         slot <- 1
-        for (i in 1:length(outRes)) {
+        for (i in seq_len(length(outRes))) {
             resList[[iter]][[slot]] <- outRes[[i]]
             stabList[[iter]][[slot]] <- outStab[[i]]
             slot <- slot + 1
@@ -132,7 +132,7 @@ K2tax <- function(K2res, nFeats = NULL, featMetric = NULL, recalcDataMatrix = NU
 
     ## Get instances where the split had > 1 samples in cluster
     modList <- lapply(taxList[-1], function(x) {
-        combs <- 1:(length(x)/2)
+        combs <- seq_len(length(x)/2)
         combList <- list()
         for (i in combs) {
             combList[[i]] <- list()
@@ -148,8 +148,8 @@ K2tax <- function(K2res, nFeats = NULL, featMetric = NULL, recalcDataMatrix = NU
     })
 
     ## Create list of modules and bootstrap stats
-    K2c <- lapply(1:length(modList), function(x) {
-        lapply(1:length(modList[[x]]), function(y) {
+    K2c <- lapply(seq_len(length(modList)), function(x) {
+        lapply(seq_len(length(modList[[x]])), function(y) {
             modSub <- modList[[x]][[y]]
             if (length(modSub) > 0) {
                 resSub <- resList[[x]][[y]]
@@ -160,15 +160,15 @@ K2tax <- function(K2res, nFeats = NULL, featMetric = NULL, recalcDataMatrix = NU
             }
         })
     })
-    K2c <- unlist(K2c, recursive = F)
+    K2c <- unlist(K2c, recursive = FALSE)
     K2c <- K2c[!unlist(lapply(K2c, is.null))]
 
     ## Add names
     len <- length(K2c)
     nAlphabets <- ceiling(len/length(LETTERS))
-    ALPHABETS <- unlist(lapply(1:nAlphabets, function(x) vapply(LETTERS, function(y) paste(rep(y,
+    ALPHABETS <- unlist(lapply(seq_len(nAlphabets), function(x) vapply(LETTERS, function(y) paste(rep(y,
         x), collapse = ""), FUN.VALUE = character(1))))
-    names(K2c) <- ALPHABETS[1:length(K2c)]
+    names(K2c) <- ALPHABETS[seq_len(length(K2c))]
 
     ## Add to K2res and return
     K2results(K2res) <- K2c
