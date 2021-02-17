@@ -34,9 +34,7 @@ clustering results in a specified directory.
 data(K2res)
 
 ## Generate interactive dashboard
-\dontrun{
-K2dashboard(K2res)
-}
+K2dashboard(K2res, output_dir = tempdir())
 
 }
 \references{

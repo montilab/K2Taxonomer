@@ -8,10 +8,10 @@
 
     ## Remove vehicle from mods and make a data frame
     mods <- mods[names(mods) != "Vehicle"]
-    mods <- data.frame(mods = as.character(mods), GROUP = names(mods), stringsAsFactors = F)
+    mods <- data.frame(mods = as.character(mods), GROUP = names(mods), stringsAsFactors = FALSE)
 
     modStats <- NULL
-    if (length(unique(mods$mods)) > 1) {
+    if (length(unique(mods$mods)) > 1 && nrow(mods) > 2) {
 
         ## If replicates in data get unique cohorts
         if (is.null(cohorts)) {
@@ -37,7 +37,7 @@
         pData(eSub)$Rownames <- rownames(pData(eSub))
         pD <- merge(pData(eSub), mods, all.x = TRUE)
         rownames(pD) <- pD$Rownames
-        pD <- pD[colnames(eSub), , drop = F]
+        pD <- pD[colnames(eSub), , drop = FALSE]
 
         ## Add vehicle mod
         pD$mods[is.na(pD$mods)] <- "0"
@@ -157,12 +157,12 @@ geneTable <- function(DGETABLE, nodeID = NULL, geneList = NULL) {
         nodeID <- paste0("^", nodeID, "$")
 
     ## Create data table obect
-    datatable(DGETABLE, rownames = F, extensions = "Buttons", escape = F, filter = list(position = "top",
+    datatable(DGETABLE, rownames = FALSE, extensions = "Buttons", escape = FALSE, filter = list(position = "top",
         clear = FALSE), options = list(columnDefs = list(list(searchable = FALSE,
         orderable = FALSE, width = "3px", targets = c(8, 9, 10)), list(className = "dt-center",
         targets = "_all")), search = list(regex = TRUE), searchCols = list(list(search = geneList),
         list(search = nodeID), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-        scrollX = TRUE, scrollY = "325px", dom = "Brtp", paging = T, pageLength = 50,
+        scrollX = TRUE, scrollY = "325px", dom = "Brtp", paging = TRUE, pageLength = 50,
         buttons = list(list(extend = "collection", text = "Help", action = DT::JS("function ( e, dt, node, config ) {
                                   Shiny.setInputValue('geneHelp', true, {priority: 'event'});
                                   }")),
@@ -190,14 +190,14 @@ genesetTable <- function(ENRTABLE, nodeID = NULL, edgeID = NULL, dgeHits = NULL)
     colnames(ENRTABLE) <- gsub("_", "<br>", colnames(ENRTABLE))
 
     ## Create DT object
-    outDT <- datatable(ENRTABLE, rownames = F, extensions = "Buttons", escape = FALSE,
+    outDT <- datatable(ENRTABLE, rownames = FALSE, extensions = "Buttons", escape = FALSE,
         filter = list(position = "top", clear = FALSE), options = list(columnDefs = list(list(searchable = FALSE,
             orderable = FALSE, width = "3px", targets = c(14, 15, 16)), list(visible = FALSE,
             targets = c(12, 13)), list(className = "dt-center", targets = "_all")),
             search = list(regex = TRUE), searchCols = list(list(search = dgeHits),
                 list(search = nodeID), list(search = edgeID), NULL, NULL, NULL,
                 NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-            scrollX = TRUE, scrollY = "325px", dom = "Brtp", paging = T, pageLength = 50,
+            scrollX = TRUE, scrollY = "325px", dom = "Brtp", paging = TRUE, pageLength = 50,
             buttons = list(list(extend = "collection", text = "Help", action = DT::JS("function ( e, dt, node, config ) {
                                            Shiny.setInputValue('hyperHelp', true, {priority: 'event'});
 }")),
@@ -226,7 +226,7 @@ plotGenePathway <- function(eSet, gene, obs1, obs2, cohorts, vehicle, yaxis = "E
 
         ## Create data.frame of expression values
         e <- Biobase::exprs(eSet)[gene, ]
-        df <- data.frame(e = e, ch = nams, stringsAsFactors = F)
+        df <- data.frame(e = e, ch = nams, stringsAsFactors = FALSE)
 
         ## Subset for obs in groups
         df <- df[df$ch %in% c(obs1, obs2, "Vehicle"), ]
@@ -237,7 +237,7 @@ plotGenePathway <- function(eSet, gene, obs1, obs2, cohorts, vehicle, yaxis = "E
         ## Get per Observation mean
         dfMeans <- df %>% group_by(ch) %>% summarise(me = mean(e))
         dfMeans$ch <- as.character(dfMeans$ch)
-        dfMeans <- dfMeans[order(dfMeans$me, decreasing = T), ]
+        dfMeans <- dfMeans[order(dfMeans$me, decreasing = TRUE), ]
 
         ## Sort levels by mean expression
         df$ch <- factor(df$ch, levels = dfMeans$ch)
@@ -344,7 +344,7 @@ plotGenePathwayClusters <- function(eSet, gene, groupList, cohorts, vehicle, yax
 
         ## Create data.frame of expression values
         e <- Biobase::exprs(eSet)[gene, ]
-        df <- data.frame(e = e, ch = nams, stringsAsFactors = F)
+        df <- data.frame(e = e, ch = nams, stringsAsFactors = FALSE)
 
         ## Get clusters
         obs <- unlist(groupList)
@@ -470,12 +470,12 @@ geneTableClusters <- function(clusterRes, subgroupID = NULL, geneList = NULL) {
     }
 
     ## Create data table obect
-    datatable(clusterRes, rownames = F, extensions = "Buttons", escape = F, filter = list(position = "top",
+    datatable(clusterRes, rownames = FALSE, extensions = "Buttons", escape = FALSE, filter = list(position = "top",
         clear = FALSE), options = list(columnDefs = list(list(searchable = FALSE,
         orderable = FALSE, width = "3px", targets = c(6, 7, 8)), list(className = "dt-center",
         targets = "_all")), search = list(regex = TRUE), searchCols = list(list(search = geneList),
         list(search = subgroupID), NULL, NULL, NULL, NULL, NULL), scrollX = TRUE,
-        scrollY = "325px", dom = "Brtp", paging = T, pageLength = 50, buttons = list(list(extend = "collection",
+        scrollY = "325px", dom = "Brtp", paging = TRUE, pageLength = 50, buttons = list(list(extend = "collection",
             text = "Help", action = DT::JS("function ( e, dt, node, config ) {
                                   Shiny.setInputValue('geneHelp', true, {priority: 'event'});
                                   }")),
@@ -500,13 +500,13 @@ genesetTableClusters <- function(ENRTABLE, subgroupID = NULL, dgeHits = NULL) {
     colnames(ENRTABLE) <- gsub("_", "<br>", colnames(ENRTABLE))
 
     ## Create DT object
-    outDT <- datatable(ENRTABLE, rownames = F, extensions = "Buttons", escape = FALSE,
+    outDT <- datatable(ENRTABLE, rownames = FALSE, extensions = "Buttons", escape = FALSE,
         filter = list(position = "top", clear = FALSE), options = list(columnDefs = list(list(searchable = FALSE,
             orderable = FALSE, width = "3px", targets = c(12, 13, 14)), list(visible = FALSE,
             targets = 11), list(className = "dt-center", targets = "_all")), search = list(regex = TRUE),
             searchCols = list(list(search = dgeHits), list(search = subgroupID),
                 NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                NULL, NULL), scrollX = TRUE, scrollY = "325px", dom = "Brtp", paging = T,
+                NULL, NULL), scrollX = TRUE, scrollY = "325px", dom = "Brtp", paging = TRUE,
             pageLength = 50, buttons = list(list(extend = "collection", text = "Help",
                 action = DT::JS("function ( e, dt, node, config ) {
                                            Shiny.setInputValue('hyperHelpMulti', true, {priority: 'event'});
@@ -550,9 +550,9 @@ hyperenrichmentClusters <- function(clusterRes, groupList, genesets, qthresh, ct
             ndrawn <- length(sig)
             ncats <- vapply(genesets, length, FUN.VALUE = integer(1))
             nleft <- ntotal - ncats
-            pval <- phyper(q = nhits - 1, m = ncats, n = nleft, k = ndrawn, lower.tail = F)
+            pval <- phyper(q = nhits - 1, m = ncats, n = nleft, k = ndrawn, lower.tail = FALSE)
             enrichFram <- data.frame(category = names(genesets), pval = pval, nhits = nhits,
-                ndrawn = ndrawn, ncats = ncats, ntot = ntotal, hits = hits, stringsAsFactors = F)
+                ndrawn = ndrawn, ncats = ncats, ntot = ntotal, hits = hits, stringsAsFactors = FALSE)
         }
         return(enrichFram)
     }, genesets, ntotal)

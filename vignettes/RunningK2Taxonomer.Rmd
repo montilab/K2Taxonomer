@@ -4,7 +4,7 @@ author:
 - name: Eric R. Reed
   affiliation: Boston University School of Medicine, Section of Computational Biomedicine, 72 E Concord St, Boston, MA 02118
 date: October 21, 2020
-output: 
+output:
   BiocStyle::html_document
 vignette: >
   %\VignetteIndexEntry{01_RunningK2Taxonomer}
@@ -17,8 +17,8 @@ bibliography: "`r system.file('REFERENCES.bib', package='K2Taxonomer')`"
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  message = F, 
-  warning = F
+  message = FALSE,
+  warning = FALSE
 )
 ```
 
@@ -104,7 +104,7 @@ names(K2meta(K2res))
 
 ## Running `r Githubpkg("montilab/K2Taxonomer")` algorithm
 
-The `r Githubpkg("montilab/K2Taxonomer")` is run by `K2tax()`.  At each recursion of the algorithm, the observations in **dataMatrix** are partitioned into two sub-groups based on a compilation of repeated K=2 clustering on bootstrapped sampling of features. For each partition in the recursion, a stability metric is used to estimate robustness, which takes on values between 0 and 1, where values close to 1 represent the instance in which the same clustering occured in every or nearly every perturbation of a large set of observations. As the number of observations decreasing down the taxonomy the largest possible stability estimate decreases, such that the largest possible stability estimate of triplets and duplets, is 0.67 and 0.50, respectively. 
+The `r Githubpkg("montilab/K2Taxonomer")` is run by `K2tax()`.  At each recursion of the algorithm, the observations in **dataMatrix** are partitioned into two sub-groups based on a compilation of repeated K=2 clustering on bootstrapped sampling of features. For each partition in the recursion, a stability metric is used to estimate robustness, which takes on values between 0 and 1, where values close to 1 represent the instance in which the same clustering occured in every or nearly every perturbation of a large set of observations. As the number of observations decreasing down the taxonomy the largest possible stability estimate decreases, such that the largest possible stability estimate of triplets and duplets, is 0.67 and 0.50, respectively.
 
 The parameter, **stabThresh**, controls the minimum value of the stability metric to continue partitioning the observations.  By default, **stabThresh** is set to 0, which will run the algorithm until until all observations fall into singlets. If we set **stabThresh = 0.5** the algorithm can not separate duplets, as well as larger sets that demonstrate poor stability when a partition is attempted. This can also be set during initialization with `K2preproc()`.
 
@@ -154,8 +154,8 @@ partitionAstability <- as.matrix(K2results(K2res)$A$stability$samples)
 ## Show heatmap
 hcols <- c("grey", "black")[colnames(partitionAstability) %in% K2results(K2res)$A$obs[[1]] + 1]
 
-heatmap(partitionAstability, 
-        distfun = function(x) as.dist(1-x), 
+heatmap(partitionAstability,
+        distfun = function(x) as.dist(1-x),
         hclustfun = function(x) hclust(x, method = "mcquitty"),
         col = hcl.colors(12, "Blue-Red"),
         scale = "none",
@@ -204,7 +204,7 @@ See *?getDGETable* for a description of the columns in this data frame.
 
 #### Interpretting differential analysis results
 
-In this example, we are running `r Githubpkg("montilab/K2Taxonomer")` without information specifying a set of observations to treat as a *control* group, for which to make comparisons in regards to the directionality of differential expression. In the absence of this designation, `r Githubpkg("montilab/K2Taxonomer")` assigns genes to the partition-specific subgroup with the larger mean. Accordingly, the of coeficient (the *"coef"* in the output of `getDGETable()`) is always positive, indicating the difference of mean of the gene expression of the assigned subgroup from the other subgroup. Moreover, the *"direction"* of this gene will always be assigned to *up*. 
+In this example, we are running `r Githubpkg("montilab/K2Taxonomer")` without information specifying a set of observations to treat as a *control* group, for which to make comparisons in regards to the directionality of differential expression. In the absence of this designation, `r Githubpkg("montilab/K2Taxonomer")` assigns genes to the partition-specific subgroup with the larger mean. Accordingly, the of coeficient (the *"coef"* in the output of `getDGETable()`) is always positive, indicating the difference of mean of the gene expression of the assigned subgroup from the other subgroup. Moreover, the *"direction"* of this gene will always be assigned to *up*.
 
 Following the full description of this analysis, we describe methods for running `r Githubpkg("montilab/K2Taxonomer")`, specifying a **cohort** variable in the data set. When including this variable, the user may assign one of the levels of this variable as the *control* group. With the inclusion of this designation, `r Githubpkg("montilab/K2Taxonomer")` will assign directionality to the differences in gene expression.
 
@@ -223,7 +223,7 @@ genesetsMadeUp <- list(
   GS3 = genes[101:150])
 
 ## Run gene set hyperenrichment
-K2res <- runGSEmods(K2res, 
+K2res <- runGSEmods(K2res,
                      genesets = genesetsMadeUp,
                      qthresh = 0.1)
 ```
@@ -234,7 +234,7 @@ Single-sample enrichment is performed in two steps.  First, the `r Biocpkg("GSVA
 
 ```{r Run ssSGEA}
 ## Create expression matrix with ssGSEA(GSVA) estimates
-K2res <- runGSVAmods(K2res, 
+K2res <- runGSVAmods(K2res,
                       ssGSEAalg = "gsva",
                       ssGSEAcores = 1,
                       verbose = FALSE)
@@ -260,7 +260,7 @@ See *?getEnrichmentTable* for a description of the columns in this data frame.
 
 ### Phenotypic variable tests (optional)
 
-In addition to annotating subgroups based on gene and pathway activity, `r Githubpkg("montilab/K2Taxonomer")` includes functionality to perform statistical testing of these subgroups based on known "phenotypic" information. For example this data set includes three phenotypic variables, including two binary variables, "**sex**" and "**type**", and a continuos variable, "**score**". 
+In addition to annotating subgroups based on gene and pathway activity, `r Githubpkg("montilab/K2Taxonomer")` includes functionality to perform statistical testing of these subgroups based on known "phenotypic" information. For example this data set includes three phenotypic variables, including two binary variables, "**sex**" and "**type**", and a continuos variable, "**score**".
 
 ```{r varPrint}
 print(str(pData(sample.ExpressionSet)))
@@ -322,7 +322,7 @@ See *?getTestsModTable* for a description of the columns in this data frame.
 
 `r Githubpkg("montilab/K2Taxonomer")` can automatically generate an interactive dashboard for which to parse through the differential analysis results. This creates it's own sub-directory with a compilable .Rmd file.
 
-For more information see the [K2Taxonomer Dashboards](https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_dashboard.html) vignette. 
+For more information see the [K2Taxonomer Dashboards](https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_dashboard.html) vignette.
 
 ```{r dashboard, eval=FALSE}
 ## NOT RUN
@@ -403,7 +403,7 @@ Accordingly, `r Githubpkg("montilab/K2Taxonomer")` can now establish sets of gen
 
 ```{r, hyper controls}
 ## Run gene set hyperenrichment
-K2res <- runGSEmods(K2res, 
+K2res <- runGSEmods(K2res,
                      genesets = genesetsMadeUp,
                      qthresh = 0.1)
 ```
@@ -412,7 +412,7 @@ Finally, differential analysis of single-sample gene set enrichment scores is pe
 
 ```{r Run ssSGEA controls}
 ## Create expression matrix with ssGSEA(GSVA) estimates
-K2res <- runGSVAmods(K2res, 
+K2res <- runGSVAmods(K2res,
                       ssGSEAalg = "gsva",
                       ssGSEAcores = 1,
                       verbose = FALSE)
@@ -424,7 +424,7 @@ K2res <- runDSSEmods(K2res)
 K2enrRes <- getEnrichmentTable(K2res)
 head(K2enrRes)
 ```
-Here, we see that, although not statistically significant (**"fdr_limma"** = 0.25), the enrichment score of *"GS2"* deviated further from the control group in subgroup, **"node"** = "B"; **"edge"** = "2", compared to subgroup, **"node"** = "B"; **"edge"** = "1". 
+Here, we see that, although not statistically significant (**"fdr_limma"** = 0.25), the enrichment score of *"GS2"* deviated further from the control group in subgroup, **"node"** = "B"; **"edge"** = "2", compared to subgroup, **"node"** = "B"; **"edge"** = "1".
 
 Missing values for hyperenrichment analysis indicated that no genes were assigned to these specific subgroups and direction combinations. Missing values for differential enrichment score analysis indicate that, while genes were assigned to these specific subgroups and direction combinations, the enrichment score of the gene set deviated further from control in the alternative subgroup for that partition.
 
@@ -432,7 +432,7 @@ Missing values for hyperenrichment analysis indicated that no genes were assigne
 
 ## Multiple hypothesis correction
 
-For each of the four statistical testing steps: differential gene expression, gene set hyperenrichment, differential single-sample gene set enrichment, and phenotypic variable testing, multiple hypothesis correction is performed across the aggregate set of p-values across all partitions using the Benjamini-Hochberg FDR correction [@bh]. This correction is performed independently for each of the four testing steps. 
+For each of the four statistical testing steps: differential gene expression, gene set hyperenrichment, differential single-sample gene set enrichment, and phenotypic variable testing, multiple hypothesis correction is performed across the aggregate set of p-values across all partitions using the Benjamini-Hochberg FDR correction [@bh]. This correction is performed independently for each of the four testing steps.
 
 ## Unsupported combinations of arguments
 
@@ -444,7 +444,7 @@ For each of the four statistical testing steps: differential gene expression, ge
 - **covariates != NULL** with **featMetric = "F"** or  **recalcDataMatrix = TRUE**
 
   - Adjustments of gene expression values for covariates is performed prior to recursive partitioning. Either of these two argument specifications recalculate cohort-level statistics at each partition, some of which will not will not have any variation of this  one or more of the covariates.
-  
+
 
 - **cohorts != NULL** with **infoClass != NULL**
 
@@ -453,7 +453,7 @@ For each of the four statistical testing steps: differential gene expression, ge
 ## Runtime for this example
 
 ```{r runtime, echo=FALSE}
-Sys.time() - time 
+Sys.time() - time
 ```
 
 # References

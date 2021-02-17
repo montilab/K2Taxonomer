@@ -106,10 +106,10 @@ runGSEmods <- function(K2res, genesets = NULL, qthresh = NULL, cthresh = NULL, n
                 ndrawn <- length(sig)
                 ncats <- vapply(K2genesets(K2res), length, FUN.VALUE = integer(1))
                 nleft <- K2meta(K2res)$ntotal - ncats
-                pval <- phyper(q = nhits - 1, m = ncats, n = nleft, k = ndrawn, lower.tail = F)
+                pval <- phyper(q = nhits - 1, m = ncats, n = nleft, k = ndrawn, lower.tail = FALSE)
                 enrichFram <- data.frame(category = names(K2genesets(K2res)), pval = pval,
                   nhits = nhits, ndrawn = ndrawn, ncats = ncats, ntot = K2meta(K2res)$ntotal,
-                  hits = hits, stringsAsFactors = F)
+                  hits = hits, stringsAsFactors = FALSE)
             }
             return(enrichFram)
         })

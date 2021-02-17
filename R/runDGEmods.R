@@ -51,7 +51,7 @@ runDGEmods <- function(K2res) {
             K2meta(K2res)$covariates, K2meta(K2res)$block, K2meta(K2res)$logCounts)
         if (!is.null(x$dge)) {
             x$dge$gene <- rownames(x$dge)
-            x$dge <- x$dge[, c(ncol(x$dge), 1:(ncol(x$dge) - 1))]
+            x$dge <- x$dge[, c(ncol(x$dge), seq_len(ncol(x$dge) - 1))]
         }
         
         ## Set x$gse to NULL, if values are here they need to be re-run

@@ -17,9 +17,9 @@ bibliography: "`r system.file('REFERENCES.bib', package='K2Taxonomer')`"
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  message=F,
-  warning=F,
-  eval=F
+  message=FALSE,
+  warning=FALSE,
+  eval=FALSE
 )
 ```
 

@@ -102,6 +102,22 @@ getEnrichmentTable <- function(K2res) {
         return(GSEtab)
         
     }, K2resList))
+    
+    if(nrow(EnrTable) == 0) {
+        EnrTable <- data.frame(
+            category = NA,
+            pval_hyper = NA,
+            fdr_hyper = NA,
+            nhits = NA,
+            ndrawn = NA,
+            ncats = NA,
+            ntot = NA,
+            hits = NA,
+            node = NA,   
+            edge = NA,
+            direction = NA
+        )
+    }
 
     ## Format single-sample enrichment results
     ssEnrTable <- do.call(rbind, lapply(names(K2resList), function(x, K2resList) {
@@ -128,6 +144,7 @@ getEnrichmentTable <- function(K2res) {
     
     ## Merge the two and sort by hyper p-value
     EnrTable <- merge(EnrTable, ssEnrTable, all = TRUE)
+    EnrTable <- EnrTable[!is.na(EnrTable$category),]
     
     ## Sort columns
     EnrTable <- EnrTable[, c("category", "node", "edge", "direction", "pval_hyper", 

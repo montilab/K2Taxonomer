@@ -165,7 +165,7 @@ varOptions <- c("Add Annotation to Heatmap:" = "", "RESET" = "RESET", varOptions
 labs <- get_leaves_attr(K2dendrogram, "label")
 
 ## Get IDs of each group
-obsMap <- unlist(lapply(K2res, function(x) x$obs), recursive = F)
+obsMap <- unlist(lapply(K2res, function(x) x$obs), recursive = FALSE)
 
 ```
 
@@ -212,10 +212,10 @@ output$Search <- renderUI({
 output$Match <- renderUI({
 
   ## Get info matches for this string
-  if(!is.null(input$mstring) && (input$mstring != "" & sum(grepl(input$mstring, infoMat, ignore.case = T)) != 0)) {
+  if(!is.null(input$mstring) && (input$mstring != "" & sum(grepl(input$mstring, infoMat, ignore.case = TRUE)) != 0)) {
 
       ## Find matches in the terminal leafs
-      infoInd <- unique(which(`dim<-`(grepl(input$mstring, infoMat, ignore.case = T), dim(infoMat)), arr.ind=TRUE)[,1])
+      infoInd <- unique(which(`dim<-`(grepl(input$mstring, infoMat, ignore.case = TRUE), dim(infoMat)), arr.ind=TRUE)[,1])
 
       ## Generate string to show
       showString <- vapply(infoInd, function(row) paste0(paste(paste0(colnames(infoMat), ":", infoMat[row,]), collapse = "\n"), "\n"), FUN.VALUE = character(1))
@@ -291,7 +291,7 @@ output$dendro <- renderVisNetwork({
   values$reset
   values$gp <- TRUE
   vNetOut %>%
-    visOptions(autoResize = T,
+    visOptions(autoResize = TRUE,
                height = "100%",
                nodesIdSelection = list(enabled = TRUE,
                                        main = "Node ID",
@@ -306,7 +306,7 @@ output$dendro <- renderVisNetwork({
                background = "white",
                border = "#2B7CE9",
                highlight = "red")) %>%
-    visEdges(width = 11, smooth = T) %>%
+    visEdges(width = 11, smooth = TRUE) %>%
     visPhysics(hierarchicalRepulsion = list(nodeDistance = 200)) %>%
     visHierarchicalLayout(direction = "LR", levelSeparation = 300) %>%
     visInteraction(dragNodes = FALSE)
@@ -535,7 +535,7 @@ if (!is.null(K2res[[1]]$modTests)) {
     K2modTestFram$`P Value` <- signif(K2modTestFram$`P Value`, 2)
     K2modTestFram$`Q Value` <- signif(K2modTestFram$`Q Value`, 2)
     datatable(K2modTestFram,
-              rownames = F,
+              rownames = FALSE,
               extensions = 'Buttons',
               escape = FALSE,
               filter = list(position = 'top', clear = FALSE),
@@ -564,7 +564,7 @@ if (!is.null(K2res[[1]]$modTests)) {
     values$mvTab <- NULL
     K2modTestFramNULL <- data.frame("No phenotypic variable results."); colnames(K2modTestFramNULL) <- NULL
     datatable(K2modTestFramNULL,
-              rownames = F,
+              rownames = FALSE,
               extensions = 'Buttons',
               escape = FALSE,
               options = list(dom = 'Brt',
@@ -709,7 +709,7 @@ output$infoTab <- renderDataTable({
     infoSub <- infoSub[ , c(ncol(infoSub), seq(ncol(infoSub) - 1)) ]
 
     datatable(infoSub,
-              rownames = F,
+              rownames = FALSE,
               filter = list(position = 'top', clear = FALSE),
               extensions = 'Buttons',
               options = list(dom = 'Brt',
@@ -1094,7 +1094,7 @@ output$dendroSelect <- renderVisNetwork({
   values$Held
   values$gp <- TRUE
   vNetOut %>%
-    visOptions(autoResize = T,
+    visOptions(autoResize = TRUE,
                nodesIdSelection = list(enabled = TRUE,
                          style = 'width: 0px; height: 0px;'),
                highlightNearest = list(enabled = TRUE,
@@ -1103,7 +1103,7 @@ output$dendroSelect <- renderVisNetwork({
     visNodes(font = list(size = 50),
              size = 40) %>%
     visEdges(width = 11,
-             smooth = T,
+             smooth = TRUE,
              color = list(inherit = 'to')) %>%
     visPhysics(hierarchicalRepulsion = list(nodeDistance = 200)) %>%
     visHierarchicalLayout(direction = "LR", levelSeparation = 300) %>%

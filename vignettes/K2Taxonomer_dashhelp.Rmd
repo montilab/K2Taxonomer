@@ -4,7 +4,7 @@ author:
 - name: Eric R. Reed
   affiliation: Boston University School of Medicine, Section of Computational Biomedicine, 72 E Concord St, Boston, MA 02118
 date: November 2, 2020
-output: 
+output:
   BiocStyle::html_document
 vignette: >
   %\VignetteIndexEntry{04_K2Taxonomer_dashhelp}
@@ -23,8 +23,8 @@ bibliography: "`r system.file('REFERENCES.bib', package='K2Taxonomer')`"
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  message=F, 
-  warning=F
+  message=FALSE,
+  warning=FALSE
 )
 ```
 

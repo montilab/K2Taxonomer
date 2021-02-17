@@ -47,7 +47,7 @@ K2dendro <- function(K2res) {
     ## Create Matric of results
     mat <- matrix(0, nrow = length(K2res), ncol = length(K2res[[1]]$obs[[1]]) + length(K2res[[1]]$obs[[2]]))
     colnames(mat) <- c(K2res[[1]]$obs[[1]], K2res[[1]]$obs[[2]])
-    for (i in 1:length(K2res)) {
+    for (i in seq_len(length(K2res))) {
         mat[i, K2res[[i]]$obs[[1]]] <- 1
         mat[i, K2res[[i]]$obs[[2]]] <- 2
     }
@@ -59,7 +59,7 @@ K2dendro <- function(K2res) {
     ## Get branchlist
     bList <- c()
     j <- 1
-    for (i in 1:max(nchar(matUnique))) {
+    for (i in seq_len(max(nchar(matUnique)))) {
         sLength <- matUnique[nchar(matUnique) >= i]
         sLength <- unique(substr(sLength, 1, i))
         for (k in sLength) {
@@ -73,7 +73,7 @@ K2dendro <- function(K2res) {
         for (i in 2:nrow(mat)) {
             matNow <- mat[i, ]
             wn0 <- which(matNow != 0)[1]
-            matPrev <- mat[1:(i - 1), wn0]
+            matPrev <- mat[seq_len(i - 1), wn0]
             matPrev <- paste(matPrev[matPrev != 0], collapse = "")
             names(splitNames)[i] <- matPrev
         }
@@ -131,7 +131,7 @@ K2dendro <- function(K2res) {
         ## Add leaves
         leaves <- matCollapse[matCollapse == i]
         if (length(leaves) > 0) {
-            for (l in 1:length(leaves)) {
+            for (l in seq_len(length(leaves))) {
                 
                 ## Get attributes
                 members <- 1
