@@ -100,8 +100,8 @@ runK2Taxonomer <- function(eSet, cohorts = NULL, vehicle = NULL, covariates = NU
     K2res <- K2tax(K2res)
 
     ## Check clusters for significance of specified variables
-    cat("Checking clusters for significant associations with meta-variables.\n")
     if (!is.null(infoClass)) {
+        cat("Checking clusters for significant associations with meta-variables.\n")
         K2res <- runTestsMods(K2res)
     }
 

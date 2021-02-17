@@ -8,7 +8,9 @@
     mods <- data.frame(mods = as.character(mods), GROUP = names(mods), stringsAsFactors = FALSE)
 
     modStats <- NULL
-    if (length(unique(mods$mods)) > 1) {
+    
+    ## Run if there are subgroups to compare and at least three observations
+    if (length(unique(mods$mods)) > 1 && nrow(mods) > 2) {
 
         ## If replicates in data get unique cohorts
         if (is.null(cohorts)) {
