@@ -12,9 +12,9 @@
 #' @param block Block parameter in limma for modelling random-like effects.
 #' @param logCounts Logical. Whether or not expression values are log-scale
 #' counts or log normalized counts from RNA-seq. Default is FALSE.
-#' @param use Character string. Options are "Z" to generate test statistics or
-#' "MEAN" to use means from differential analysis for clustering.
-#' @param nFeats "sqrt" or a numeric value <= number of features to subset the
+#' @param use Character string. Options are 'Z' to generate test statistics or
+#' 'MEAN' to use means from differential analysis for clustering.
+#' @param nFeats 'sqrt' or a numeric value <= number of features to subset the
 #' features for each partition.
 #' @param featMetric Metric to use to assign variance/signal score. Options are
 #' 'square' (default) use square values and 'mad' to use MAD scores.
@@ -38,8 +38,8 @@
 #' @param ntotal A positive value to use as the background feature count. 20000
 #' by default.
 #' @param ssGSEAalg A character string, specifying which algorithm to use for
-#' running the gsva() function from the GSVA package. Options are "gsva",
-#' "ssgsea", "zscore", and "plage". "gsva" by default.
+#' running the gsva() function from the GSVA package. Options are 'gsva',
+#' 'ssgsea', 'zscore', and 'plage'. 'gsva' by default.
 #' @param ssGSEAcores Number of cores to use for running gsva() from the GSVA
 #' package. Default is 1.
 #' @param oneoff Logical. Allow 1 member clusters?
@@ -58,19 +58,21 @@
 #' ## Read in ExpressionSet object
 #' library(Biobase)
 #' data(sample.ExpressionSet)
-#' 
+#'
 #' ## Pre-process and create K2 object
 #' K2res <- K2preproc(sample.ExpressionSet)
-#' 
+#'
 
-K2preproc <- function(eSet, cohorts = NULL, vehicle = NULL, covariates = NULL, block = NULL,
-    logCounts = FALSE, use = c("Z", "MEAN"), nFeats = "sqrt", featMetric = c("mad",
-        "sd", "Sn", "Qn", "F", "square"), recalcDataMatrix = FALSE, nBoots = 500,
-    clustFunc = hclustWrapper, clustCors = 1, clustList = list(), linkage = c("mcquitty",
-        "ward.D", "ward.D2", "single", "complete", "average", "centroid"), info = NULL,
-    infoClass = NULL, genesets = NULL, qthresh = 0.05, cthresh = 0, ntotal = 20000,
-    ssGSEAalg = c("gsva", "ssgsea", "zscore", "plage"), ssGSEAcores = 1,
-    oneoff = TRUE, stabThresh = 0, geneURL = NULL, genesetURL = NULL) {
+K2preproc <- function(eSet, cohorts=NULL, vehicle=NULL, covariates=NULL,
+    block=NULL, logCounts=FALSE, use=c("Z", "MEAN"), nFeats="sqrt",
+    featMetric=c("mad", "sd", "Sn", "Qn", "F", "square"),
+    recalcDataMatrix=FALSE, nBoots=500, clustFunc=hclustWrapper,
+    clustCors=1, clustList=list(), linkage=c("mcquitty", "ward.D",
+    "ward.D2", "single", "complete", "average", "centroid"), info=NULL,
+    infoClass=NULL, genesets=NULL, qthresh=0.05, cthresh=0,
+    ntotal=20000, ssGSEAalg=c("gsva", "ssgsea", "zscore", "plage"),
+    ssGSEAcores=1, oneoff=TRUE, stabThresh=0, geneURL=NULL,
+    genesetURL=NULL) {
 
     ## Match arguments
     use <- match.arg(use)
@@ -78,13 +80,13 @@ K2preproc <- function(eSet, cohorts = NULL, vehicle = NULL, covariates = NULL, b
     linkage <- match.arg(linkage)
     ssGSEAalg <- match.arg(ssGSEAalg)
 
-    ## Set nFeats if argument == "sqrt"
+    ## Set nFeats if argument == 'sqrt'
     if (nFeats == "sqrt") {
         nFeats <- sqrt(nrow(eSet))
     }
 
     ## Create K2 object from eSet
-    K2res <- new("K2", eSet = eSet)
+    K2res <- new("K2", eSet=eSet)
 
     ## Add genesets to K2res
     if (!is.null(genesets)) {
@@ -104,17 +106,20 @@ K2preproc <- function(eSet, cohorts = NULL, vehicle = NULL, covariates = NULL, b
     }
 
     ## Add meta information
-    K2meta(K2res) <- list(cohorts = cohorts, vehicle = vehicle, covariates = covariates,
-        block = block, logCounts = logCounts, infoClass = infoClass, use = use, nFeats = nFeats,
-        featMetric = featMetric, recalcDataMatrix = recalcDataMatrix, nBoots = nBoots,
-        clustFunc = clustFunc, clustCors = clustCors, clustList = clustList, linkage = linkage,
-        qthresh = qthresh, cthresh = cthresh, ntotal = ntotal, ssGSEAalg = ssGSEAalg,
-        ssGSEAcores = ssGSEAcores, oneoff = oneoff, stabThresh = stabThresh)
-    
-    # Check inputs
-    k2Check <- .checkK2(K2res, inputsOnly = TRUE)
+    K2meta(K2res) <- list(cohorts=cohorts, vehicle=vehicle,
+        covariates=covariates, block=block, logCounts=logCounts,
+        infoClass=infoClass, use=use, nFeats=nFeats, featMetric=featMetric,
+        recalcDataMatrix=recalcDataMatrix, nBoots=nBoots,
+        clustFunc=clustFunc, clustCors=clustCors, clustList=clustList,
+        linkage=linkage, qthresh=qthresh, cthresh=cthresh,
+        ntotal=ntotal, ssGSEAalg=ssGSEAalg, ssGSEAcores=ssGSEAcores,
+        oneoff=oneoff, stabThresh=stabThresh)
 
-    ## Perform differential analysis if cohort information is given
+    # Check inputs
+    k2Check <- .checkK2(K2res, inputsOnly=TRUE)
+
+    ## Perform differential analysis if cohort information is
+    ## given
     if (is.null(cohorts)) {
 
         dataMatrix <- exprs(eSet)
@@ -123,18 +128,20 @@ K2preproc <- function(eSet, cohorts = NULL, vehicle = NULL, covariates = NULL, b
         if (is.null(info)) {
             info <- pData(eSet)
         }
-        info <- data.frame(sampleID = colnames(dataMatrix), info, stringsAsFactors = FALSE)
+        info <- data.frame(sampleID=colnames(dataMatrix), info,
+            stringsAsFactors=FALSE)
 
     } else {
 
         cat("Collapsing group-level values with LIMMA.\n")
-        dataMatrix <- suppressWarnings(.dgeWrapper(eSet, cohorts, vehicle, covariates, use, logCounts = logCounts))
+        dataMatrix <- suppressWarnings(.dgeWrapper(eSet, cohorts,
+            vehicle, covariates, use, logCounts=logCounts))
 
         ## Format info
         if (is.null(info)) {
             info <- pData(eSet)
         }
-        info <- info[!duplicated(info[, cohorts]), , drop = FALSE]
+        info <- info[!duplicated(info[, cohorts]), , drop=FALSE]
         rownames(info) <- info[, cohorts]
         info <- droplevels(info)
 
@@ -146,6 +153,6 @@ K2preproc <- function(eSet, cohorts = NULL, vehicle = NULL, covariates = NULL, b
 
     ## Check K2 object
     k2Check <- .checkK2(K2res)
-    
+
     return(K2res)
 }

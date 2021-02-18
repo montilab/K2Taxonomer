@@ -26,7 +26,7 @@ K2res <- K2preproc(sample.ExpressionSet)
 
 ## Run K2 Taxonomer algorithm
 K2res <- K2tax(K2res,
-               stabThresh = 0.5)
+            stabThresh=0.5)
 
 ## Create dendrogram object from K2 Taxonomer results
 K2dendro(K2res)

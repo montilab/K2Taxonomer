@@ -30,7 +30,7 @@ K2res <- K2preproc(sample.ExpressionSet)
 
 ## Run K2 Taxonomer algorithm
 K2res <- K2tax(K2res,
-               stabThresh = 0.5)
+            stabThresh=0.5)
 
 ## Run differential analysis on each partition
 K2res <- runDGEmods(K2res)
@@ -39,29 +39,28 @@ K2res <- runDGEmods(K2res)
 DGEtable <- getDGETable(K2res)
 genes <- unique(DGEtable$gene)
 genesetsMadeUp <- list(
-    GS1 = genes[1:50],
-    GS2 = genes[51:100],
-    GS3 = genes[101:150]
-)
+    GS1=genes[1:50],
+    GS2=genes[51:100],
+    GS3=genes[101:150])
 
 ## Run gene set hyperenrichment
-K2res <- runGSEmods(K2res, 
-                    genesets = genesetsMadeUp,
-                    qthresh = 0.1)
-                    
-## Run GSVA on genesets           
-K2res <- runGSVAmods(K2res, 
-                     ssGSEAalg = "gsva",
-                     ssGSEAcores = 1,
-                     verbose = FALSE)
+K2res <- runGSEmods(K2res,
+                genesets=genesetsMadeUp,
+                qthresh=0.1)
+
+## Run GSVA on genesets
+K2res <- runGSVAmods(K2res,
+                ssGSEAalg='gsva',
+                ssGSEAcores=1,
+                verbose=FALSE)
 
 ## Aggregate paired gene sets
-aggList <- list(c("GS12", "GS1", "GS2"))
+aggList <- list(c('GS12', 'GS1', 'GS2'))
 K2res <- aggregateGSVAscores(aggList, K2res)
 
 }
 \references{
 \insertRef{reed_2020}{K2Taxonomer}
- \insertRef{gsva}{K2Taxonomer}
+   \insertRef{gsva}{K2Taxonomer}
 }
 \keyword{clustering}

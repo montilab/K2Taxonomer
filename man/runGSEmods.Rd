@@ -22,7 +22,7 @@ feature sets.}
 
 \item{cthresh}{A positive value for the coefficient cuttoff to define}
 
-\item{ntotal}{The total number of genes sampled from. 
+\item{ntotal}{The total number of genes sampled from.
 feature sets.}
 }
 \value{
@@ -41,7 +41,7 @@ K2res <- K2preproc(sample.ExpressionSet)
 
 ## Run K2 Taxonomer algorithm
 K2res <- K2tax(K2res,
-               stabThresh = 0.5)
+            stabThresh=0.5)
 
 ## Run differential analysis on each partition
 K2res <- runDGEmods(K2res)
@@ -50,19 +50,18 @@ K2res <- runDGEmods(K2res)
 DGEtable <- getDGETable(K2res)
 genes <- unique(DGEtable$gene)
 genesetsMadeUp <- list(
-    GS1 = genes[1:50],
-    GS2 = genes[51:100],
-    GS3 = genes[101:150]
-)
+    GS1=genes[1:50],
+    GS2=genes[51:100],
+    GS3=genes[101:150])
 
 ## Run gene set hyperenrichment
-K2res <- runGSEmods(K2res, 
-                    genesets = genesetsMadeUp,
-                    qthresh = 0.1)
-                    
+K2res <- runGSEmods(K2res,
+                genesets=genesetsMadeUp,
+                qthresh=0.1)
+
 }
 \references{
 \insertRef{reed_2020}{K2Taxonomer}
- \insertRef{bh}{K2Taxonomer}
+   \insertRef{bh}{K2Taxonomer}
 }
 \keyword{clustering}

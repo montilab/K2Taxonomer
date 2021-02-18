@@ -2,7 +2,10 @@
 title: "4. Navigating the K2Taxonomer Dashboard"
 author:
 - name: Eric R. Reed
-  affiliation: Boston University School of Medicine, Section of Computational Biomedicine, 72 E Concord St, Boston, MA 02118
+  affiliation:
+    Boston University School of Medicine,
+    Section of Computational Biomedicine,
+    72 E Concord St, Boston, MA 02118
 date: November 2, 2020
 output:
   BiocStyle::html_document
@@ -19,10 +22,10 @@ bibliography: "`r system.file('REFERENCES.bib', package='K2Taxonomer')`"
     }
 </style>
 
-```{r, include = FALSE}
+```{r, include=FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
+  collapse=TRUE,
+  comment="#>",
   message=FALSE,
   warning=FALSE
 )
@@ -30,26 +33,51 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-To facilitate the comprehensive interrogation the output of `r Githubpkg("montilab/K2Taxonomer")` this package includes functionality for generating interactive dashboards, which include full compendia of results [@reed_2020]. In addition to the partition-level molecular comparisons included in these dashboards, they include functionality for performing molecular comparisons of gene expression and gene set enrichment on user-specified sets of two-or-more subgroups. Here we describe the layout and usage of these dashboards.
+To facilitate the comprehensive interrogation the output of
+`r Githubpkg("montilab/K2Taxonomer")` this package includes functionality for
+generating interactive dashboards, which include full compendia of results
+[@reed_2020]. In addition to the partition-level molecular comparisons included
+in these dashboards, they include functionality for performing molecular
+comparisons of gene expression and gene set enrichment on user-specified sets
+of two-or-more subgroups. Here we describe the layout and usage of these
+dashboards.
 
-For more information for how to generate these dashboards go [here](https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_dashboard.html).
+For more information for how to generate these dashboards go
+[here](https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_dashboard).
 
 
-The `r Githubpkg("montilab/K2Taxonomer")` dashboards include three tabs, described below:
+The `r Githubpkg("montilab/K2Taxonomer")` dashboards include three tabs,
+described below:
 
-- __**About**__: This is an optional tab with which the user can include information about the analysis being performed. This page is populated by a file, "**about.md**", included in the same directory as the dashboard file. More information about formatting this file can be found [here](https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_dashboard.html#the-about-md-file).
+- __**About**__: This is an optional tab with which the user can include
+information about the analysis being performed. This page is populated by a
+file, "**about.md**", included in the same directory as the dashboard file.
+More information about formatting this file can be found
+[here](https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_dashboard).
 
-- __***K2Taxonomer* Results**__: This tab includes all of the results generated throughout the `r Githubpkg("montilab/K2Taxonomer")` workflow, including: *partitioning results*, *partition stability*, *gene expression analysis*, *gene set enrichment*, and *phenotypic variable testing (optional)*. More information for how `r Githubpkg("montilab/K2Taxonomer")` estimates these results can be found [here](https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_dashboard.html#the-about-md-file).
+- __***K2Taxonomer* Results**__: This tab includes all of the results generated
+throughout the `r Githubpkg("montilab/K2Taxonomer")` workflow, including:
+*partitioning results*, *partition stability*, *gene expression analysis*,
+*gene set enrichment*, and *phenotypic variable testing (optional)*.
+More information for how `r Githubpkg("montilab/K2Taxonomer")` estimates these
+results can be found
+[here](https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_dashboard).
 
-- __**Compare Multiple**__: This tab allows the user to perform additional molecular comparisons between subgroups, beyond the partition-level comparisons performed by `r Githubpkg("montilab/K2Taxonomer")` functions.
+- __**Compare Multiple**__: This tab allows the user to perform additional
+molecular comparisons between subgroups, beyond the partition-level comparisons
+performed by `r Githubpkg("montilab/K2Taxonomer")` functions.
 
-Annotation of each of these tabs is presented below. **Click on any of these images to view in higher resolution**
+Annotation of each of these tabs is presented below. **Click on any of these
+images to view in higher resolution**
 
 # __**About**__
 
 ***
 
-[![](https://montilab.github.io/K2Taxonomer/articles/page1.png)](https://montilab.github.io/K2Taxonomer/articles/page1.png)
+<a href="https://montilab.github.io/K2Taxonomer/articles/page1.png">
+  <img alt="page1"
+  src="https://montilab.github.io/K2Taxonomer/articles/page1.png">
+</a>
 
 ***
 
@@ -57,7 +85,10 @@ Annotation of each of these tabs is presented below. **Click on any of these ima
 
 ***
 
-[![](https://montilab.github.io/K2Taxonomer/articles/page2.jpg)](https://montilab.github.io/K2Taxonomer/articles/page2.png)
+<a href="https://montilab.github.io/K2Taxonomer/articles/page2.png">
+  <img alt="page2"
+  src="https://montilab.github.io/K2Taxonomer/articles/page2.jpg">
+</a>
 
 ***
 
@@ -65,15 +96,21 @@ Annotation of each of these tabs is presented below. **Click on any of these ima
 
 ***
 
-[![](https://montilab.github.io/K2Taxonomer/articles/page3.jpg)](https://montilab.github.io/K2Taxonomer/articles/page3.png)
+<a href="https://montilab.github.io/K2Taxonomer/articles/page3.png">
+  <img alt="page3"
+  src="https://montilab.github.io/K2Taxonomer/articles/page3.jpg">
+</a>
 
 ***
 
-# __**Compare Multiple** __
+# __**Compare Multiple**__
 
 ***
 
-[![](https://montilab.github.io/K2Taxonomer/articles/page4.jpg)](https://montilab.github.io/K2Taxonomer/articles/page4.png)
+<a href="https://montilab.github.io/K2Taxonomer/articles/page4.png">
+  <img alt="page4"
+  src="https://montilab.github.io/K2Taxonomer/articles/page4.jpg">
+</a>
 
 ***
 

@@ -52,14 +52,14 @@ differential analysis.}
 \item{logCounts}{Logical. Whether or not expression values are log-scale
 counts or log normalized counts from RNA-seq. Default is FALSE.}
 
-\item{use}{Character string. Options are "Z" to generate test statistics or
-"MEAN" to use means from differential analysis for clustering.}
+\item{use}{Character string. Options are 'Z' to generate test statistics or
+'MEAN' to use means from differential analysis for clustering.}
 
-\item{nFeats}{"sqrt" or a numeric value <= number of features to subset the
+\item{nFeats}{'sqrt' or a numeric value <= number of features to subset the
 features for each partition.}
 
 \item{featMetric}{Metric to use to assign variance/signal score. Options are:
-'mad' (default), "mad", "Sn", "Qn", "F", and "square".}
+'mad' (default), 'mad', 'Sn', 'Qn', 'F', and 'square'.}
 
 \item{recalcDataMatrix}{Logical. Recalculate dataMatrix for each partion?
 Default is FALSE.}
@@ -93,8 +93,8 @@ feature sets.}
 by default.}
 
 \item{ssGSEAalg}{A character string, specifying which algorithm to use for
-running the gsva() function from the GSVA package. Options are "gsva",
-"ssgsea", "zscore", and "plage". "gsva" by default.}
+running the gsva() function from the GSVA package. Options are 'gsva',
+'ssgsea', 'zscore', and 'plage'. 'gsva' by default.}
 
 \item{ssGSEAcores}{Number of cores to use for running gsva() from the GSVA
 package. Default is 1.}
@@ -123,19 +123,18 @@ data(sample.ExpressionSet)
 ## Create dummy set of gene sets
 genes <- rownames(sample.ExpressionSet)
 genesetsMadeUp <- list(
-    GS1 = genes[1:50],
-    GS2 = genes[51:100],
-    GS3 = genes[101:150]
-)
+    GS1=genes[1:50],
+    GS2=genes[51:100],
+    GS3=genes[101:150])
 
 ## Run K2 Taxonomer wrapper
-K2Res <- runK2Taxonomer(sample.ExpressionSet, 
-                        genesets = genesetsMadeUp,
-                        qthresh = 0.1,
-                        ssGSEAalg = "gsva",
-                        ssGSEAcores = 1,
-                        stabThresh = 0.5)
-                        
+K2Res <- runK2Taxonomer(sample.ExpressionSet,
+                    genesets=genesetsMadeUp,
+                    qthresh=0.1,
+                    ssGSEAalg='gsva',
+                    ssGSEAcores=1,
+                    stabThresh=0.5)
+
 }
 \references{
 \insertRef{reed_2020}{K2Taxonomer}

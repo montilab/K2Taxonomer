@@ -10,7 +10,7 @@ getTestsModTable(K2res)
 \item{K2res}{An object of class K2 or K2results().}
 }
 \value{
-A data.frame object with the following columns: 
+A data.frame object with the following columns:
 \itemize{
  \item{value: }{The variable being tested}
  \item{node: }{The partition label}
@@ -43,14 +43,13 @@ K2res <- K2preproc(sample.ExpressionSet)
 
 ## Run K2 Taxonomer algorithm
 K2res <- K2tax(K2res,
-               stabThresh = 0.5)
+            stabThresh=0.5)
 
 K2res <- infoClassVector <- c(
-sex = "factor",
-score = "numeric1"
-)
+sex='factor',
+score='numeric1')
 
-runTestsMods <- function(K2res, infoClass = infoClassVector)
+runTestsMods(K2res, infoClass=infoClassVector)
 
 head(getTestsModTable(K2res))
 
