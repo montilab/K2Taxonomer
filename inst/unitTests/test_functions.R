@@ -80,12 +80,12 @@ test_K2Tworkflow <- function() {
 
     ## Wrapper
     K2check <- runK2Taxonomer(K2eSet(K2res),
-                   genesets=K2genesets(K2res),
-                   infoClass=c(
-                       sex="factor",
-                       type="factor1",
-                       score="numeric1")
-                   )
+                  genesets=K2genesets(K2res),
+                  infoClass=c(
+                    sex="factor",
+                    type="factor1",
+                    score="numeric1")
+                )
     checkTrue(is(K2check, "K2"),
         "runK2Taxonomer() did not return 'K2' object.\n")
 

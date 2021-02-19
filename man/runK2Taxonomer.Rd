@@ -5,34 +5,34 @@
 \title{Wrapper function to run K2Taxonomer algorithm and annotation}
 \usage{
 runK2Taxonomer(
-  eSet,
-  cohorts = NULL,
-  vehicle = NULL,
-  covariates = NULL,
-  block = NULL,
-  logCounts = FALSE,
-  use = c("Z", "MEAN"),
-  nFeats = "sqrt",
-  featMetric = c("mad", "sd", "Sn", "Qn", "F", "square"),
-  recalcDataMatrix = FALSE,
-  nBoots = 500,
-  clustFunc = hclustWrapper,
-  clustCors = 1,
-  clustList = list(),
-  linkage = c("mcquitty", "ward.D", "ward.D2", "single", "complete", "average",
-    "centroid"),
-  info = NULL,
-  infoClass = NULL,
-  genesets = NULL,
-  qthresh = 0.05,
-  cthresh = 0,
-  ntotal = 20000,
-  ssGSEAalg = c("gsva", "ssgsea", "zscore", "plage"),
-  ssGSEAcores = 1,
-  oneoff = TRUE,
-  stabThresh = 0,
-  geneURL = NULL,
-  genesetURL = NULL
+    eSet,
+    cohorts = NULL,
+    vehicle = NULL,
+    covariates = NULL,
+    block = NULL,
+    logCounts = FALSE,
+    use = c("Z", "MEAN"),
+    nFeats = "sqrt",
+    featMetric = c("mad", "sd", "Sn", "Qn", "F", "square"),
+    recalcDataMatrix = FALSE,
+    nBoots = 500,
+    clustFunc = hclustWrapper,
+    clustCors = 1,
+    clustList = list(),
+    linkage = c("mcquitty", "ward.D", "ward.D2", "single", "complete",
+        "average", "centroid"),
+    info = NULL,
+    infoClass = NULL,
+    genesets = NULL,
+    qthresh = 0.05,
+    cthresh = 0,
+    ntotal = 20000,
+    ssGSEAalg = c("gsva", "ssgsea", "zscore", "plage"),
+    ssGSEAcores = 1,
+    oneoff = TRUE,
+    stabThresh = 0,
+    geneURL = NULL,
+    genesetURL = NULL
 )
 }
 \arguments{
@@ -137,5 +137,5 @@ K2Res <- runK2Taxonomer(sample.ExpressionSet,
 
 }
 \references{
-\insertRef{reed_2020}{K2Taxonomer}
+    \insertRef{reed_2020}{K2Taxonomer}
 }

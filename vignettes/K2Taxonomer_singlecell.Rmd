@@ -2,28 +2,28 @@
 title: "2. Running K2Taxonomer on Single-cell RNA Sequencing Data"
 author:
 - name: Eric R. Reed
-  affiliation:
-    Boston University School of Medicine,
-    Section of Computational Biomedicine,
-    72 E Concord St, Boston, MA 02118
-  email: reeder@bu.edu
+    affiliation:
+        Boston University School of Medicine,
+        Section of Computational Biomedicine,
+        72 E Concord St, Boston, MA 02118
+    email: reeder@bu.edu
 date: "Created: October 21, 2020; Compiled: `r Sys.Date()`"
 output:
-  BiocStyle::html_document
+    BiocStyle::html_document
 package: K2Taxonomer
 vignette: >
-  %\VignetteIndexEntry{02_K2Taxonomer_singlecell}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+    %\VignetteIndexEntry{02_K2Taxonomer_singlecell}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
 bibliography: "`r system.file('REFERENCES.bib', package='K2Taxonomer')`"
 ---
 
 ```{r, include=FALSE}
 knitr::opts_chunk$set(
-  collapse=TRUE,
-  comment="#>",
-  message=FALSE,
-  warning=FALSE
+    collapse=TRUE,
+    comment="#>",
+    message=FALSE,
+    warning=FALSE
 )
 ```
 
@@ -37,7 +37,7 @@ time <- Sys.time()
 This vignette describes the workflow for running
 `r Githubpkg("montilab/K2Taxonomer")` on single-cell gene expression data
 [@reed_2020]. Many steps in this workflow is shared with that of bulk gene
-expression. Accordingly, these steps are described in more detail 
+expression. Accordingly, these steps are described in more detail
 [here](https://montilab.github.io/K2Taxonomer/articles/RunningK2Taxonomer).
 
 # Requirements
@@ -143,9 +143,9 @@ uses 10 as the default.
 ```{r clustlist}
 # Create clustList
 wrapperList <- list(
-  eMat=exprs(eSet),
-  labs=eSet$celltype,
-  maxIter=10
+    eMat=exprs(eSet),
+    labs=eSet$celltype,
+    maxIter=10
 )
 ```
 
@@ -156,12 +156,12 @@ wrapperList <- list(
 ```{r k2preproc}
 # Run K2Taxonomer
 K2res <- K2preproc(eSet,
-                   cohorts="celltype",
-                   featMetric="F",
-                   logCounts=TRUE,
-                   nBoots=100,
-                   clustFunc=cKmeansWrapperSubsample,
-                   clustList=wrapperList)
+                cohorts="celltype",
+                featMetric="F",
+                logCounts=TRUE,
+                nBoots=100,
+                clustFunc=cKmeansWrapperSubsample,
+                clustList=wrapperList)
 ```
 
 ## Run recursive partitioning algorithm
@@ -206,15 +206,15 @@ head(DGEtable)
 ## Create dummy set of gene sets
 genes <- unique(DGEtable$gene)
 genesetsMadeUp <- list(
-  GS1=genes[1:50],
-  GS2=genes[51:100],
-  GS3=genes[101:150]
+    GS1=genes[1:50],
+    GS2=genes[51:100],
+    GS3=genes[101:150]
 )
 
 ## Run gene set hyperenrichment
 K2res <- runGSEmods(K2res,
-                     genesets=genesetsMadeUp,
-                     qthresh=0.1)
+                genesets=genesetsMadeUp,
+                qthresh=0.1)
 ```
 
 ### Single-sample gene set enrichment
@@ -222,9 +222,9 @@ K2res <- runGSEmods(K2res,
 ```{r Run ssSGEA, warning=FALSE}
 ## Create expression matrix with ssGSEA(GSVA) estimates
 K2res <- runGSVAmods(K2res,
-                      ssGSEAalg="gsva",
-                      ssGSEAcores=1,
-                      verbose=FALSE)
+                ssGSEAalg="gsva",
+                ssGSEAcores=1,
+                verbose=FALSE)
 ```
 
 

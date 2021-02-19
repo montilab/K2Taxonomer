@@ -2,16 +2,16 @@
 title: "K2TITLEPLACEHOLDER"
 runtime: shiny
 output:
-  flexdashboard::flex_dashboard:
-    theme: simplex
-    vertical_layout: scroll
-    orientation: rows
+    flexdashboard::flex_dashboard:
+        theme: simplex
+        vertical_layout: scroll
+        orientation: rows
 ---
 
 <style type="text/css">
 
 .chart-title {
-   font-size: 20px;
+    font-size: 20px;
 }
 
 </style>
@@ -60,7 +60,7 @@ enrTable <- getEnrichmentTable(K2summary)
 
 # Get phenotypic variable results
 if (!is.null(K2res[[1]]$modTests)) {
-  modTestsTable <- getTestsModTable(K2summary)
+    modTestsTable <- getTestsModTable(K2summary)
 }
 
 ## Create interactive dendrogram
@@ -91,11 +91,11 @@ K2res <- lapply(K2res, function(x) {x$gse <- NULL; return(x)} )
 
 ## Add aliases for plotting and looking up
 enrTable$Plot <- paste0("<label for='PlotRow",
-                          seq(nrow(enrTable)),
-                          "'>&#128202;</label>")
+                            seq(nrow(enrTable)),
+                            "'>&#128202;</label>")
 enrTable$Send <- paste0("<label for='SendRow",
-                          seq(nrow(enrTable)),
-                          "'>&#9992;</label>")
+                            seq(nrow(enrTable)),
+                            "'>&#9992;</label>")
 
 ## Add links to gene sets
 geneSetStringL <- "<a href='"
@@ -105,11 +105,11 @@ enrTable$Link <- paste0(geneSetStringL, genesetURLsub, geneSetStringR)
 
 ## Format numbers to fit in table
 for (i in c("pval_hyper", "fdr_hyper", "pval_limma", "fdr_limma")) {
-  enrTable[,i] <- signif(enrTable[,i], digits=2)
+    enrTable[,i] <- signif(enrTable[,i], digits=2)
 }
 ## Format numbers to fit in table
 for (i in c("coef", "mean")) {
-  enrTable[,i] <- round(enrTable[,i], digits=2)
+    enrTable[,i] <- round(enrTable[,i], digits=2)
 }
 
 colnames(enrTable) <- c("Gene Set", "Node", "Edge", "Direction",
@@ -121,7 +121,7 @@ colnames(enrTable) <- c("Gene Set", "Node", "Edge", "Direction",
 
 ## Remove gse from K2res
 K2res <- lapply(K2res, function(x) {
-  x$dge <- NULL; return(x)
+    x$dge <- NULL; return(x)
 })
 
 
@@ -146,11 +146,11 @@ dgeTable <- dgeTable[,c("gene", "node", "edge", "direction", "pval", "fdr",
 
 ## Format numbers to fit in table
 for (i in c("pval", "fdr")) {
-  dgeTable[,i] <- signif(dgeTable[,i], digits=2)
+    dgeTable[,i] <- signif(dgeTable[,i], digits=2)
 }
 ## Format numbers to fit in table
 for (i in c("coef", "mean")) {
-  dgeTable[,i] <- round(dgeTable[,i], digits=2)
+    dgeTable[,i] <- round(dgeTable[,i], digits=2)
 }
 
 ## Rename columns
@@ -178,8 +178,7 @@ obsMap <- unlist(lapply(K2res, function(x) x$obs), recursive=FALSE)
 ```{r values, context="server"}
 
 ## Reactive values
-values <- reactiveValues(nodeSel="A",
-                         pathSel="A")
+values <- reactiveValues(nodeSel="A", pathSel="A")
 
 ```
 
@@ -187,15 +186,15 @@ values <- reactiveValues(nodeSel="A",
 
 observeEvent(values$gp, {
 
-  withProgress({
-    input$`plotly_afterplot-A`
-    for(i in seq(10)) {
-        incProgress(1/10)
-        Sys.sleep(0.05)
-    }
-  }, message="Rendering...", min=0, max=1, value=1)
+    withProgress({
+        input$`plotly_afterplot-A`
+        for(i in seq(10)) {
+            incProgress(1/10)
+            Sys.sleep(0.05)
+        }
+    }, message="Rendering...", min=0, max=1, value=1)
 
-  values$gp <- NULL
+    values$gp <- NULL
 
 })
 
@@ -212,47 +211,47 @@ Selections {.sidebar}
 ```{r createButtons, context="server"}
 
 output$Search <- renderUI({
-   textInput("mstring", "Member Search:", value="")
+    textInput("mstring", "Member Search:", value="")
 })
 
 output$Match <- renderUI({
 
-  ## Get info matches for this string
-  if(!is.null(input$mstring) && (input$mstring != "" & sum(grepl(input$mstring,
-        infoMat, ignore.case=TRUE)) != 0)) {
+    ## Get info matches for this string
+    if(!is.null(input$mstring) && (input$mstring != "" &
+        sum(grepl(input$mstring, infoMat, ignore.case=TRUE)) != 0)) {
 
-      ## Find matches in the terminal leafs
-      infoInd <- unique(which(`dim<-`(grepl(input$mstring, infoMat,
-          ignore.case=TRUE), dim(infoMat)), arr.ind=TRUE)[,1])
+            ## Find matches in the terminal leafs
+            infoInd <- unique(which(`dim<-`(grepl(input$mstring, infoMat,
+                ignore.case=TRUE), dim(infoMat)), arr.ind=TRUE)[,1])
 
-      ## Generate string to show
-      showString <- vapply(infoInd, function(row) paste0(
-          paste(paste0(colnames(infoMat), ":", infoMat[row,]),
-          collapse="\n"), "\n"), FUN.VALUE=character(1))
+            ## Generate string to show
+            showString <- vapply(infoInd, function(row) paste0(
+                paste(paste0(colnames(infoMat), ":", infoMat[row,]),
+                collapse="\n"), "\n"), FUN.VALUE=character(1))
 
-      ## Get number of matches
-      nMatches <- paste0(length(infoInd), " matche(s)")
-      valueString <- c("NOMATCH", rownames(infoMat)[infoInd])
-      names(valueString) <- c(nMatches, showString)
+            ## Get number of matches
+            nMatches <- paste0(length(infoInd), " matche(s)")
+            valueString <- c("NOMATCH", rownames(infoMat)[infoInd])
+            names(valueString) <- c(nMatches, showString)
 
     } else {
     valueString <- c("No Matches")
-  }
-  selectInput("mVal", "Select a Match:", valueString)
+    }
+    selectInput("mVal", "Select a Match:", valueString)
 })
 
 ## Reactive row selection
 observeEvent({input$mVal}, {
-  ## Select path to a specific member by searching
-  if(!is.null(input$mVal) && input$mVal %in% rownames(info) &&
-    input$mVal != values$nodeSel){
+    ## Select path to a specific member by searching
+    if(!is.null(input$mVal) && input$mVal %in% rownames(info) &&
+        input$mVal != values$nodeSel){
 
-    values$pathSel <- as.character(vNetOut$x$nodes$id[
-      grep(paste0("^", input$mVal, "<br>|<br>", input$mVal,
-      "<br>|", input$mVal, "$"), vNetOut$x$nodes$title)])
-    updateTextInput(session, "mstring", value="")
-    values$reset <- runif(1, 0, 1)
-  }
+        values$pathSel <- as.character(vNetOut$x$nodes$id[
+            grep(paste0("^", input$mVal, "<br>|<br>", input$mVal,
+            "<br>|", input$mVal, "$"), vNetOut$x$nodes$title)])
+        updateTextInput(session, "mstring", value="")
+        values$reset <- runif(1, 0, 1)
+    }
 })
 
 
@@ -276,49 +275,47 @@ Row {data-height=600}
 ## Render Dendrogram
 output$dendro <- renderVisNetwork({
 
-  if(!is.null(values$mvTabSub)) {
-    if(nrow(values$mvTabSub) > 0) {
+    if(!is.null(values$mvTabSub)) {
+        if(nrow(values$mvTabSub) > 0) {
 
-      ## Change width of edges
-      mEdge <- values$mvTabSub[, c("node", "Child", "width")]
-      colnames(mEdge) <- c("from", "to", "width")
-      edgeFram <- merge(vNetOut$x$edges, mEdge, all.x=TRUE, sort=FALSE)
-      edgeFram$width[is.na(edgeFram$width)] <- 1
-      edgeFram$color.inherit <- 'to'
-      vNetOut$x$edges <- edgeFram
+            ## Change width of edges
+            mEdge <- values$mvTabSub[, c("node", "Child", "width")]
+            colnames(mEdge) <- c("from", "to", "width")
+            edgeFram <- merge(vNetOut$x$edges, mEdge, all.x=TRUE, sort=FALSE)
+            edgeFram$width[is.na(edgeFram$width)] <- 1
+            edgeFram$color.inherit <- 'to'
+            vNetOut$x$edges <- edgeFram
 
-      ## Change color of edges
-      mNode <- values$mvTabSub[, c("Child", "color")]
-      colnames(mNode) <- c("id", "color.border")
-      nodeFram <- merge(vNetOut$x$nodes, mNode, all.x=TRUE, sort=FALSE)
-      nodeFram$color.border[is.na(nodeFram$color.border)] <- brewer.pal(6,
-          "Greens")[1]
-      nodeFram$color.background <- nodeFram$color.border
-      nodeFram$color.highlight <- 'red'
-      vNetOut$x$nodes <- nodeFram
-
-      ## Highlight path
+            ## Change color of edges
+            mNode <- values$mvTabSub[, c("Child", "color")]
+            colnames(mNode) <- c("id", "color.border")
+            nodeFram <- merge(vNetOut$x$nodes, mNode, all.x=TRUE, sort=FALSE)
+            nodeFram$color.border[is.na(nodeFram$color.border)] <- brewer.pal(6,
+                "Greens")[1]
+                nodeFram$color.background <- nodeFram$color.border
+                nodeFram$color.highlight <- 'red'
+                vNetOut$x$nodes <- nodeFram
+        }
     }
-  }
 
-  values$reset
-  values$gp <- TRUE
-  vNetOut %>%
-    visOptions(autoResize=TRUE,
-               height="100%",
-               nodesIdSelection=list(enabled=TRUE,
-                                       main="Node ID",
-                                       style='width: 100px; height: 25px;',
-                                       selected=values$pathSel),
-               highlightNearest=list(enabled=TRUE,
-                                       algorithm="hierarchical",
-                                       degree=1E10)) %>%
-    visNodes(font=list(size=50),
-             size=40,
-             color=list(
-               background="white",
-               border="#2B7CE9",
-               highlight="red")) %>%
+    values$reset
+    values$gp <- TRUE
+    vNetOut %>%
+        visOptions(autoResize=TRUE,
+            height="100%",
+            nodesIdSelection=list(enabled=TRUE,
+                            main="Node ID",
+                            style='width: 100px; height: 25px;',
+                            selected=values$pathSel),
+            highlightNearest=list(enabled=TRUE,
+                                algorithm="hierarchical",
+                                degree=1E10)) %>%
+            visNodes(font=list(size=50),
+                size=40,
+                color=list(
+                    background="white",
+                    border="#2B7CE9",
+                    highlight="red")) %>%
     visEdges(width=11, smooth=TRUE) %>%
     visPhysics(hierarchicalRepulsion=list(nodeDistance=200)) %>%
     visHierarchicalLayout(direction="LR", levelSeparation=300) %>%
@@ -339,27 +336,25 @@ visNetworkOutput("dendro")
 
 ## Selections of dendrogram
 observeEvent({
-    input$dendro_selected
-  }, {
-    node=input$dendro_selected
-    if (node %in% names(K2res) & node != values$nodeSel) {
+        input$dendro_selected
+    }, {
+        node=input$dendro_selected
+        if (node %in% names(K2res) & node != values$nodeSel) {
 
-      values$nodeSel <- node
-      values$nodeSelDGE <- node
-      values$nodeSelHE <- node
+            values$nodeSel <- node
+            values$nodeSelDGE <- node
+            values$nodeSelHE <- node
+            values$geneList <-
+            values$groupDGE <-
+            values$dgeHits <-
+            values$Hits <-
+            values$nodeSelDGE <-
+            values$groupDGE <- NULL
 
-      values$geneList <-
-        values$groupDGE <-
-        values$dgeHits <-
-        values$Hits <-
-        values$nodeSelDGE <-
-        values$groupDGE <-
-        NULL
-
-    }
-  },
-  ignoreNULL=TRUE,
-  ignoreInit=TRUE
+        }
+    },
+    ignoreNULL=TRUE,
+    ignoreInit=TRUE
 )
 
 ```
@@ -370,7 +365,7 @@ observeEvent({
 
 ## Create input selector for cluster info
 output$AddVariable <- renderUI({
-  selectInput("selCov", NULL, varOptions)
+    selectInput("selCov", NULL, varOptions)
 })
 
 ```
@@ -380,26 +375,26 @@ output$AddVariable <- renderUI({
 ## Render heatmap of cluster stability
 output$heatmapPlot <- renderPlotly({
 
-  ## Get values to add
-  if(!is.null(input$selCov) && input$selCov %in% colnames(info)) {
-    values$selCov <- unique(c(values$selCov, input$selCov))
-  } else {
-    values$selCov <- NULL
-  }
+    ## Get values to add
+    if(!is.null(input$selCov) && input$selCov %in% colnames(info)) {
+        values$selCov <- unique(c(values$selCov, input$selCov))
+    } else {
+        values$selCov <- NULL
+    }
 
-  if(values$nodeSel %in% names(K2res)){
+    if(values$nodeSel %in% names(K2res)){
 
-    ## Get matrix and sort
-    samp_stab <- as.matrix(K2res[[values$nodeSel]]$stability$samples)
-    ord <- order(match(colnames(samp_stab), labs))
-    samp_stab <- as.matrix(samp_stab)[ord, ord]
+        ## Get matrix and sort
+        samp_stab <- as.matrix(K2res[[values$nodeSel]]$stability$samples)
+        ord <- order(match(colnames(samp_stab), labs))
+        samp_stab <- as.matrix(samp_stab)[ord, ord]
 
     ## Get sample groups
     modList <- K2res[[values$nodeSel]]$obs
 
     ## Create column annotation
     colrowAnnot <- data.frame(Group=c(rep("Edge:1", length(modList[[1]])),
-                              rep("Edge:2", length(modList[[2]]))),
+                                rep("Edge:2", length(modList[[2]]))),
                             row.names=c(modList[[1]], modList[[2]])
                             )[colnames(samp_stab), , drop=FALSE]
 
@@ -410,48 +405,48 @@ output$heatmapPlot <- renderPlotly({
     ## If selections are made add colors
     if(!is.null(values$selCov)){
 
-      ## Initialize
-      colValues <- c()
-      colSidePalette <- c()
+        ## Initialize
+        colValues <- c()
+        colSidePalette <- c()
 
-      ## Get info for these samples
-      infoSub <- info[colnames(samp_stab), values$selCov]
-      colrowAnnot <- cbind(infoSub, colrowAnnot)
-      colnames(colrowAnnot) <- c(values$selCov, "Edge")
+        ## Get info for these samples
+        infoSub <- info[colnames(samp_stab), values$selCov]
+        colrowAnnot <- cbind(infoSub, colrowAnnot)
+        colnames(colrowAnnot) <- c(values$selCov, "Edge")
 
-      ## SET VALUES AND COLOR PALLETES
-      for (i in values$selCov) {
-          colrowAnnot[,i] <- paste(i, colrowAnnot[,i], sep=":")
-          addValues <- info[,i]; addValues <- addValues[!is.na(addValues)]
-          addValuesUnique <- unique(addValues)
-          colValues <- c(colValues, paste(i, addValuesUnique, sep=":"))
+        ## SET VALUES AND COLOR PALLETES
+        for (i in values$selCov) {
+            colrowAnnot[,i] <- paste(i, colrowAnnot[,i], sep=":")
+            addValues <- info[,i]; addValues <- addValues[!is.na(addValues)]
+            addValuesUnique <- unique(addValues)
+            colValues <- c(colValues, paste(i, addValuesUnique, sep=":"))
 
-          ## If a factor or character add unique values for each unique value
-          if ( class(addValues) %in% c("character", "factor") ) {
-              colSidePalette <- c(colSidePalette,
-                  heatmaply:::default_side_colors(length(addValuesUnique)))
+            ## If a factor or character add unique values for each unique value
+            if ( class(addValues) %in% c("character", "factor") ) {
+                colSidePalette <- c(colSidePalette,
+                    heatmaply:::default_side_colors(length(addValuesUnique)))
 
-          ## Otherwise use a color gradient based on z-scored quantile
-          } else {
-              addValuesNorm <- unique(qnorm(rank(addValues)/
-                (length(addValues)+1)))
-              addValuesCut <- rep(NA, length(addValuesNorm))
-              cuts <- c(-Inf, -2, -1.5, -1, -0.5, 0.5, 1, 1.5, 2)
+                ## Otherwise use a color gradient based on z-scored quantile
+            } else {
+                addValuesNorm <- unique(qnorm(rank(addValues)/
+                    (length(addValues)+1)))
+                addValuesCut <- rep(NA, length(addValuesNorm))
+                cuts <- c(-Inf, -2, -1.5, -1, -0.5, 0.5, 1, 1.5, 2)
 
-              for (j in seq(length(cuts))) {
-                addValuesCut[addValuesNorm > cuts[j]] <- j
-              }
+                for (j in seq(length(cuts))) {
+                    addValuesCut[addValuesNorm > cuts[j]] <- j
+                }
 
-              contPallete <- brewer.pal(9, "Greens")[addValuesCut]
-              colSidePalette <- c(colSidePalette, contPallete)
-          }
-      }
+                contPallete <- brewer.pal(9, "Greens")[addValuesCut]
+                colSidePalette <- c(colSidePalette, contPallete)
+            }
+        }
 
-      ## Create pallette of all possible factors
-      colSidePalette <- c(colSidePalette, "#000000", "#808080",
-        rep("#D3D3D3", length(values$selCov)))
-      names(colSidePalette) <- c(colValues, "Edge:1", "Edge:2",
-        paste0(values$selCov, ":NA"))
+        ## Create pallette of all possible factors
+        colSidePalette <- c(colSidePalette, "#000000", "#808080",
+            rep("#D3D3D3", length(values$selCov)))
+        names(colSidePalette) <- c(colValues, "Edge:1", "Edge:2",
+            paste0(values$selCov, ":NA"))
 
     }
 
@@ -481,11 +476,11 @@ output$heatmapPlot <- renderPlotly({
 
     } else {
 
-      text=paste("\n No node selected. \n")
+        text=paste("\n No node selected. \n")
         hm <- ggplot() +
-          annotate("text", x=0, y=0, size=8, label=text) +
-          theme_bw() +
-          theme(axis.line=element_blank(),
+            annotate("text", x=0, y=0, size=8, label=text) +
+            theme_bw() +
+            theme(axis.line=element_blank(),
             axis.text.x=element_blank(),
             axis.text.y=element_blank(),
             axis.ticks=element_blank(),
@@ -508,24 +503,24 @@ output$heatmapPlot <- renderPlotly({
 
 ## Render stability statistics
 output$stabStats <- renderUI({
-  if(values$nodeSel %in% names(K2res)){
+    if(values$nodeSel %in% names(K2res)){
 
-    bootProb <- K2res[[values$nodeSel]]$bootP
-    nodeStab <- K2res[[values$nodeSel]]$stability$node
-    sampStab <- K2res[[values$nodeSel]]$stability$clusters
-    outBoot <- paste0("<br> Bootstrap Probability: <b>", bootProb, "</b>")
-    outNode <- paste0("<br> Partition Stability: <b>", signif(nodeStab, 2),
-        "</b> <br>")
-    outStab <- paste0("Subgroup Stability <br> &emsp; Edge:1= <b>",
-        signif(sampStab[1], 2), "</b> &emsp; Edge:2= <b>",
-        signif(sampStab[2], 2))
-    HTML(paste(outBoot, outNode, outStab))
+        bootProb <- K2res[[values$nodeSel]]$bootP
+        nodeStab <- K2res[[values$nodeSel]]$stability$node
+        sampStab <- K2res[[values$nodeSel]]$stability$clusters
+        outBoot <- paste0("<br> Bootstrap Probability: <b>", bootProb, "</b>")
+        outNode <- paste0("<br> Partition Stability: <b>", signif(nodeStab, 2),
+            "</b> <br>")
+            outStab <- paste0("Subgroup Stability <br> &emsp; Edge:1= <b>",
+            signif(sampStab[1], 2), "</b> &emsp; Edge:2= <b>",
+            signif(sampStab[2], 2))
+        HTML(paste(outBoot, outNode, outStab))
 
-  } else {
+    } else {
 
-    HTML("")
+        HTML("")
 
-  }
+    }
 })
 
 ```
@@ -535,43 +530,43 @@ output$stabStats <- renderUI({
 ## Generate table of phenotypic variable tests
 if (!is.null(K2res[[1]]$modTests)) {
 
-  K2modTestFram <- modTestsTable[,c("node", "edge", "value", "pval", "fdr")]
+    K2modTestFram <- modTestsTable[,c("node", "edge", "value", "pval", "fdr")]
 
-  ## Get child
-  K2modTestFram$Child <- apply(K2modTestFram[, c("node", "edge")], 1,
-    function(x){
-        vSub <- vNetOut$x$edges[vNetOut$x$edges$from == x[1],]
-        vSub$to[as.numeric(x[2])]
-  })
+    ## Get child
+    K2modTestFram$Child <- apply(K2modTestFram[, c("node", "edge")], 1,
+        function(x){
+            vSub <- vNetOut$x$edges[vNetOut$x$edges$from == x[1],]
+            vSub$to[as.numeric(x[2])]
+    })
 
-  ## Get node
-  K2modTestFram$Subgroup <- paste0(K2modTestFram$node, K2modTestFram$edge)
+    ## Get node
+    K2modTestFram$Subgroup <- paste0(K2modTestFram$node, K2modTestFram$edge)
 
-  ## Format p-values
-  K2modTestFram <- K2modTestFram[!is.na(K2modTestFram$pval),]
-  K2modTestFram <- K2modTestFram[order(K2modTestFram$pval),]
+    ## Format p-values
+    K2modTestFram <- K2modTestFram[!is.na(K2modTestFram$pval),]
+    K2modTestFram <- K2modTestFram[order(K2modTestFram$pval),]
 
-  output$metaVarTab <- renderDataTable({
+    output$metaVarTab <- renderDataTable({
 
-    values$mvTab <- K2modTestFram
-    K2modTestFram <- K2modTestFram[, c("Subgroup", "Child", "value", "pval",
-        "fdr")]
-    colnames(K2modTestFram) <- c("Subgroup", "Child", "Variable", "P Value",
-        "Q Value")
-    K2modTestFram$`P Value` <- signif(K2modTestFram$`P Value`, 2)
-    K2modTestFram$`Q Value` <- signif(K2modTestFram$`Q Value`, 2)
-    datatable(K2modTestFram,
+        values$mvTab <- K2modTestFram
+        K2modTestFram <- K2modTestFram[, c("Subgroup", "Child", "value", "pval",
+            "fdr")]
+            colnames(K2modTestFram) <- c("Subgroup", "Child", "Variable",
+                "P Value", "Q Value")
+        K2modTestFram$`P Value` <- signif(K2modTestFram$`P Value`, 2)
+        K2modTestFram$`Q Value` <- signif(K2modTestFram$`Q Value`, 2)
+        datatable(K2modTestFram,
               rownames=FALSE,
               extensions='Buttons',
               escape=FALSE,
               filter=list(position='top', clear=FALSE),
               options=list(dom='Brt',
-                             search=list(regex=TRUE, caseInsensitive=FALSE),
-                             scrollX=TRUE,
-                             scrollY="400px",
-                             paging=FALSE,
-                             pageLength=nrow(K2modTestFram),
-                             buttons=list(list(extend="collection", text="Help",
+                            search=list(regex=TRUE, caseInsensitive=FALSE),
+                            scrollX=TRUE,
+                            scrollY="400px",
+                            paging=FALSE,
+                            pageLength=nrow(K2modTestFram),
+                            buttons=list(list(extend="collection", text="Help",
                     action=DT::JS("function ( e, dt, node, config ) {
                     Shiny.setInputValue('phenoHelp', true, {priority: 'event'});
                     }")),
@@ -582,31 +577,31 @@ if (!is.null(K2res[[1]]$modTests)) {
             columnDefs=list(list(className='dt-center', targets="_all"))),
                 selection="single")
 
-  })
+    })
 
 } else {
 
-  output$metaVarTab <- renderDataTable({
+    output$metaVarTab <- renderDataTable({
 
-    ## Set null data table
-    values$mvTab <- NULL
-    K2modTestFramNULL <- data.frame("No phenotypic variable results.")
-    colnames(K2modTestFramNULL) <- NULL
-    datatable(K2modTestFramNULL,
-              rownames=FALSE,
-              extensions='Buttons',
-              escape=FALSE,
-              options=list(dom='Brt',
-                             search=list(regex=TRUE, caseInsensitive=FALSE),
-                             scrollX=TRUE,
-                             scrollY="400px",
-                             paging=FALSE,
-                             pageLength=nrow(K2modTestFramNULL),
-                             columnDefs=list(list(className='dt-center',
-                                targets="_all"))),
-              selection="single")
+        ## Set null data table
+        values$mvTab <- NULL
+        K2modTestFramNULL <- data.frame("No phenotypic variable results.")
+        colnames(K2modTestFramNULL) <- NULL
+        datatable(K2modTestFramNULL,
+            rownames=FALSE,
+            extensions='Buttons',
+            escape=FALSE,
+            options=list(dom='Brt',
+                    search=list(regex=TRUE, caseInsensitive=FALSE),
+                    scrollX=TRUE,
+                    scrollY="400px",
+                    paging=FALSE,
+                    pageLength=nrow(K2modTestFramNULL),
+                    columnDefs=list(list(className='dt-center',
+                        targets="_all"))),
+            selection="single")
 
-  })
+    })
 
 }
 
@@ -617,31 +612,31 @@ if (!is.null(K2res[[1]]$modTests)) {
 ## Functions for help and download the data
 if (!is.null(K2res[[1]]$modTests)) {
 
-  phenoHelpShow <- function() {
-    div(id="phenoHelp",
-              modalDialog("1) Select row to visualize results in dendrogram.",
-                    br(),
-                    tags$div("2) Download table to view full set of statistical
+    phenoHelpShow <- function() {
+        div(id="phenoHelp",
+            modalDialog("1) Select row to visualize results in dendrogram.",
+                br(),
+                tags$div("2) Download table to view full set of statistical
 values. For description of this table go",
-                    tags$a(href=
+                tags$a(href=
 'https://montilab.github.io/K2Taxonomer/reference/getTestsModTable.html',
 'here'),
-                    "."),
-                    br(),
-                    easyClose=TRUE, title="Help")
-    )
-  }
+                "."),
+                br(),
+                easyClose=TRUE, title="Help")
+        )
+    }
 
-  ## Functions to download the data
-  phenoTabDL <- function() {
-    div(id="phenoDL",
-        modalDialog(downloadButton("downloadPhenoCSV",
-            "Download Table as CSV file"),
-                    br(),
-                    br(),
-                    easyClose=TRUE, title="Download Table")
-    )
-  }
+    ## Functions to download the data
+    phenoTabDL <- function() {
+        div(id="phenoDL",
+            modalDialog(downloadButton("downloadPhenoCSV",
+                "Download Table as CSV file"),
+                br(),
+                br(),
+                easyClose=TRUE, title="Download Table")
+        )
+    }
 }
 
 ```

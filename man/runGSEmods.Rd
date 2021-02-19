@@ -5,11 +5,11 @@
 \title{Perform hyperenrichment of split specific gene signatures}
 \usage{
 runGSEmods(
-  K2res,
-  genesets = NULL,
-  qthresh = NULL,
-  cthresh = NULL,
-  ntotal = NULL
+    K2res,
+    genesets = NULL,
+    qthresh = NULL,
+    cthresh = NULL,
+    ntotal = NULL
 )
 }
 \arguments{
@@ -62,6 +62,6 @@ K2res <- runGSEmods(K2res,
 }
 \references{
 \insertRef{reed_2020}{K2Taxonomer}
-   \insertRef{bh}{K2Taxonomer}
+    \insertRef{bh}{K2Taxonomer}
 }
 \keyword{clustering}

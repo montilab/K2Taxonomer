@@ -12,22 +12,22 @@ getTestsModTable(K2res)
 \value{
 A data.frame object with the following columns:
 \itemize{
- \item{value: }{The variable being tested}
- \item{node: }{The partition label}
- \item{edge: }{The subgroup for the given partition}
- \item{pval: }{Nominal p-value of test}
- \item{fdr: }{Benjamini-Hochberg FDR corrected p-value}
- \item{df: }{Degrees of freedom of test}
- \item{stat: }{Test statistic}
- \item{obsMean: }{Mean value across partition members}
- \item{altMean: }{Mean value for all other observations}
- \item{diffMean: }{Difference is mean}
- \item{nhits: }{The number of second label values in subgroup}
- \item{ncase: }{The total second-level label value}
- \item{nalt: }{The total first-level label value}
- \item{ndrawn: }{The total members in the subgroup}
- \item{hits: }{Members of subgroup with second-level label value}
- \item{test: }{The statistical test that produced this result}
+    \item{value: }{The variable being tested}
+    \item{node: }{The partition label}
+    \item{edge: }{The subgroup for the given partition}
+    \item{pval: }{Nominal p-value of test}
+    \item{fdr: }{Benjamini-Hochberg FDR corrected p-value}
+    \item{df: }{Degrees of freedom of test}
+    \item{stat: }{Test statistic}
+    \item{obsMean: }{Mean value across partition members}
+    \item{altMean: }{Mean value for all other observations}
+    \item{diffMean: }{Difference is mean}
+    \item{nhits: }{The number of second label values in subgroup}
+    \item{ncase: }{The total second-level label value}
+    \item{nalt: }{The total first-level label value}
+    \item{ndrawn: }{The total members in the subgroup}
+    \item{hits: }{Members of subgroup with second-level label value}
+    \item{test: }{The statistical test that produced this result}
 }
 }
 \description{
@@ -55,7 +55,7 @@ head(getTestsModTable(K2res))
 
 }
 \references{
-\insertRef{reed_2020}{K2Taxonomer}
- \insertRef{bh}{K2Taxonomer}
+    \insertRef{reed_2020}{K2Taxonomer}
+    \insertRef{bh}{K2Taxonomer}
 }
 \keyword{clustering}

@@ -55,9 +55,9 @@ K2res <- runDSSEmods(K2res)
 
 }
 \references{
-\insertRef{reed_2020}{K2Taxonomer}
- \insertRef{limma}{K2Taxonomer}
- \insertRef{bh}{K2Taxonomer}
- \insertRef{gsva}{K2Taxonomer}
+    \insertRef{reed_2020}{K2Taxonomer}
+    \insertRef{limma}{K2Taxonomer}
+    \insertRef{bh}{K2Taxonomer}
+    \insertRef{gsva}{K2Taxonomer}
 }
 \keyword{clustering}

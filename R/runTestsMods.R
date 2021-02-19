@@ -21,11 +21,9 @@
 #' K2res <- K2tax(K2res,
 #'             stabThresh=0.5)
 #'
-#' K2res <- infoClassVector <- c(
-#' sex='factor',
-#' score='numeric1')
+#' K2res <- infoClassVector <- c(sex='factor', score='numeric1')
 #'
-#' runTestsMods <- function(K2res, infoClass=infoClassVector)
+#' runTestsMods(K2res, infoClass=infoClassVector)
 #'
 #' head(getTestsModTable(K2res))
 #'

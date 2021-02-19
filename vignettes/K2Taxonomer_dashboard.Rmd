@@ -2,27 +2,27 @@
 title: "3. K2Taxonomer Dashboard Generation"
 author:
 - name: Eric R. Reed
-  affiliation:
-    Boston University School of Medicine,
-    Section of Computational Biomedicine,
-    72 E Concord St, Boston, MA 02118
+    affiliation:
+        Boston University School of Medicine,
+        Section of Computational Biomedicine,
+        72 E Concord St, Boston, MA 02118
 date: October 21, 2020
 output:
-  BiocStyle::html_document
+    BiocStyle::html_document
 vignette: >
-  %\VignetteIndexEntry{03_K2Taxonomer_dashboard}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+    %\VignetteIndexEntry{03_K2Taxonomer_dashboard}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
 bibliography: "`r system.file('REFERENCES.bib', package='K2Taxonomer')`"
 ---
 
 ```{r, include=FALSE}
 knitr::opts_chunk$set(
-  collapse=TRUE,
-  comment="#>",
-  message=FALSE,
-  warning=FALSE,
-  eval=FALSE
+    collapse=TRUE,
+    comment="#>",
+    message=FALSE,
+    warning=FALSE,
+    eval=FALSE
 )
 ```
 
@@ -75,9 +75,9 @@ levels(pData(sample.ExpressionSet)$type) <- c("Control", "Case")
 # Use toy set of gene sets
 genes <- rownames(sample.ExpressionSet)
 genesetsMadeUp <- list(
-  geneset1=genes[1:100],
-  geneset2=genes[101:200],
-  geneset3=genes[201:300])
+    geneset1=genes[1:100],
+    geneset2=genes[101:200],
+    geneset3=genes[201:300])
 
 # Run phenotypic variable tests
 infoClassVector <- c(
@@ -86,10 +86,10 @@ infoClassVector <- c(
     score="numeric1")
 
 K2res <- runK2Taxonomer(
-  eSet=sample.ExpressionSet,
-  genesets=genesetsMadeUp,
-  infoClass=infoClassVector,
-  stabThresh=0.5)
+    eSet=sample.ExpressionSet,
+    genesets=genesetsMadeUp,
+    infoClass=infoClassVector,
+    stabThresh=0.5)
 ```
 
 ## Creating the dashboard

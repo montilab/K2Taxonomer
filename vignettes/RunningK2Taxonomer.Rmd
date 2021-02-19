@@ -2,26 +2,26 @@
 title: "1. Introduction to Running K2Taxonomer (Bulk Expression Data)"
 author:
 - name: Eric R. Reed
-  affiliation:
-    Boston University School of Medicine,
-    Section of Computational Biomedicine,
-    72 E Concord St, Boston, MA 02118
+    affiliation:
+        Boston University School of Medicine,
+        Section of Computational Biomedicine,
+        72 E Concord St, Boston, MA 02118
 date: October 21, 2020
 output:
-  BiocStyle::html_document
+    BiocStyle::html_document
 vignette: >
-  %\VignetteIndexEntry{01_RunningK2Taxonomer}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+    %\VignetteIndexEntry{01_RunningK2Taxonomer}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
 bibliography: "`r system.file('REFERENCES.bib', package='K2Taxonomer')`"
 ---
 
 ```{r, include=FALSE}
 knitr::opts_chunk$set(
-  collapse=TRUE,
-  comment="#>",
-  message=FALSE,
-  warning=FALSE
+    collapse=TRUE,
+    comment="#>",
+    message=FALSE,
+    warning=FALSE
 )
 ```
 
@@ -88,7 +88,7 @@ expression analyses with the `r Biocpkg("limma")` R package [@limma].
 ```{r createCounts, eval=FALSE}
 ## NOT RUN
 K2res <- K2preproc(sample.ExpressionSet,
-                   logCounts=TRUE)
+                    logCounts=TRUE)
 ```
 
 ### `K2` object structre
@@ -163,7 +163,7 @@ and values between 0.8 and 0.7, are generally recommended.
 ```{r partition}
 ## Run K2Taxonomer aglorithm
 K2res <- K2tax(K2res,
-               stabThresh=0.5)
+            stabThresh=0.5)
 ```
 
 ## `r Githubpkg("montilab/K2Taxonomer")` results structure
@@ -311,14 +311,14 @@ given partition.
 ## Create dummy set of gene sets
 genes <- unique(DGEtable$gene)
 genesetsMadeUp <- list(
-  GS1=genes[1:50],
-  GS2=genes[51:100],
-  GS3=genes[101:150])
+    GS1=genes[1:50],
+    GS2=genes[51:100],
+    GS3=genes[101:150])
 
 ## Run gene set hyperenrichment
 K2res <- runGSEmods(K2res,
-                     genesets=genesetsMadeUp,
-                     qthresh=0.1)
+                genesets=genesetsMadeUp,
+                qthresh=0.1)
 ```
 
 ### Single-sample gene set enrichment
@@ -336,9 +336,9 @@ the arguments shown are the defaults.
 ```{r Run ssSGEA}
 ## Create expression matrix with ssGSEA(GSVA) estimates
 K2res <- runGSVAmods(K2res,
-                      ssGSEAalg="gsva",
-                      ssGSEAcores=1,
-                      verbose=FALSE)
+                    ssGSEAalg="gsva",
+                    ssGSEAcores=1,
+                    verbose=FALSE)
 
 ## Extract ernichment score Expression Set object
 K2gSet(K2res)
@@ -465,10 +465,10 @@ function, and runs all of the steps above.
 
 ```{r RunWrapper, eval=FALSE}
 K2res <- runK2Taxonomer(
-  eSet=sample.ExpressionSet,
-  genesets=genesetsMadeUp,
-  infoClass=infoClassVector,
-  stabThresh=0.5)
+    eSet=sample.ExpressionSet,
+    genesets=genesetsMadeUp,
+    infoClass=infoClassVector,
+    stabThresh=0.5)
 ```
 
 # Additional options
@@ -487,7 +487,7 @@ sample.ExpressionSet$group <- paste0(sample.ExpressionSet$sex,
 
 ## Run pre-processing
 K2res <- K2preproc(sample.ExpressionSet,
-                   cohorts="group")
+                cohorts="group")
 
 ## Cluster the data
 K2res <- K2tax(K2res)
@@ -507,8 +507,8 @@ values of each of the other cohorts will be evaluated in relation to this value.
 ```{r, fig.align='center', fig.width=5, fig.height=3}
 ## Run pre-processing
 K2res <- K2preproc(sample.ExpressionSet,
-                   cohorts="group",
-                   vehicle="FemaleControl")
+                cohorts="group",
+                vehicle="FemaleControl")
 
 ## Cluster the data
 K2res <- K2tax(K2res)
@@ -547,8 +547,8 @@ now perform hyperenrichment with these additional gene sets.
 ```{r, hyper controls}
 ## Run gene set hyperenrichment
 K2res <- runGSEmods(K2res,
-                     genesets=genesetsMadeUp,
-                     qthresh=0.1)
+                    genesets=genesetsMadeUp,
+                    qthresh=0.1)
 ```
 
 Finally, differential analysis of single-sample gene set enrichment scores is
@@ -559,9 +559,9 @@ comparisons to the assigned control group.
 ```{r Run ssSGEA controls}
 ## Create expression matrix with ssGSEA(GSVA) estimates
 K2res <- runGSVAmods(K2res,
-                      ssGSEAalg="gsva",
-                      ssGSEAcores=1,
-                      verbose=FALSE)
+                    ssGSEAalg="gsva",
+                    ssGSEAcores=1,
+                    verbose=FALSE)
 
 ## Run differential analysis on enrichment score Expression Set
 K2res <- runDSSEmods(K2res)

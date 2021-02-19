@@ -2,17 +2,17 @@
 title: "4. Navigating the K2Taxonomer Dashboard"
 author:
 - name: Eric R. Reed
-  affiliation:
-    Boston University School of Medicine,
-    Section of Computational Biomedicine,
-    72 E Concord St, Boston, MA 02118
+    affiliation:
+        Boston University School of Medicine,
+        Section of Computational Biomedicine,
+        72 E Concord St, Boston, MA 02118
 date: November 2, 2020
 output:
-  BiocStyle::html_document
+    BiocStyle::html_document
 vignette: >
-  %\VignetteIndexEntry{04_K2Taxonomer_dashhelp}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+    %\VignetteIndexEntry{04_K2Taxonomer_dashhelp}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
 bibliography: "`r system.file('REFERENCES.bib', package='K2Taxonomer')`"
 ---
 
@@ -24,10 +24,10 @@ bibliography: "`r system.file('REFERENCES.bib', package='K2Taxonomer')`"
 
 ```{r, include=FALSE}
 knitr::opts_chunk$set(
-  collapse=TRUE,
-  comment="#>",
-  message=FALSE,
-  warning=FALSE
+    collapse=TRUE,
+    comment="#>",
+    message=FALSE,
+    warning=FALSE
 )
 ```
 
@@ -75,8 +75,8 @@ images to view in higher resolution**
 ***
 
 <a href="https://montilab.github.io/K2Taxonomer/articles/page1.png">
-  <img alt="page1"
-  src="https://montilab.github.io/K2Taxonomer/articles/page1.png">
+    <img alt="page1"
+    src="https://montilab.github.io/K2Taxonomer/articles/page1.png">
 </a>
 
 ***
@@ -86,8 +86,8 @@ images to view in higher resolution**
 ***
 
 <a href="https://montilab.github.io/K2Taxonomer/articles/page2.png">
-  <img alt="page2"
-  src="https://montilab.github.io/K2Taxonomer/articles/page2.jpg">
+    <img alt="page2"
+    src="https://montilab.github.io/K2Taxonomer/articles/page2.jpg">
 </a>
 
 ***
@@ -97,8 +97,8 @@ images to view in higher resolution**
 ***
 
 <a href="https://montilab.github.io/K2Taxonomer/articles/page3.png">
-  <img alt="page3"
-  src="https://montilab.github.io/K2Taxonomer/articles/page3.jpg">
+    <img alt="page3"
+    src="https://montilab.github.io/K2Taxonomer/articles/page3.jpg">
 </a>
 
 ***
@@ -108,8 +108,8 @@ images to view in higher resolution**
 ***
 
 <a href="https://montilab.github.io/K2Taxonomer/articles/page4.png">
-  <img alt="page4"
-  src="https://montilab.github.io/K2Taxonomer/articles/page4.jpg">
+    <img alt="page4"
+    src="https://montilab.github.io/K2Taxonomer/articles/page4.jpg">
 </a>
 
 ***

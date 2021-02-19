@@ -12,8 +12,8 @@ hclustWrapper(dataMatrix, clustList)
 \item{clustList}{Named list of objects to use for clustering procedure. Or
 `NULL` to use Euclidean distance with Ward's method.
 \itemize{
- \item{'distMetric'}{Distance method to use. See ?dist.}
- \item{'aggMethod'}{Agglomerative method to use. See ?hclust.}
+    \item{'distMetric'}{Distance method to use. See ?dist.}
+    \item{'aggMethod'}{Agglomerative method to use. See ?hclust.}
 }}
 }
 \value{
@@ -43,6 +43,6 @@ hclustWrapper(dm, cL)
 
 }
 \references{
-\insertRef{reed_2020}{K2Taxonomer}
+    \insertRef{reed_2020}{K2Taxonomer}
 }
 \keyword{clustering}
