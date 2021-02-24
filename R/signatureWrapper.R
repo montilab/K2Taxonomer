@@ -1,15 +1,17 @@
-.signatureWrapper <- function(eSet, cohorts, mods, vehicle = NULL, covariates = NULL,
-    block = NULL, logCounts = FALSE) {
+.signatureWrapper <- function(eSet, cohorts, mods, vehicle=NULL,
+    covariates=NULL, block=NULL, logCounts=FALSE) {
 
     ## Remove vehicle from mods and make a data frame
-    if(!is.null(vehicle)) {
+    if (!is.null(vehicle)) {
         mods <- mods[names(mods) != vehicle]
     }
-    mods <- data.frame(mods = as.character(mods), GROUP = names(mods), stringsAsFactors = FALSE)
+    mods <- data.frame(mods=as.character(mods), GROUP=names(mods),
+        stringsAsFactors=FALSE)
 
     modStats <- NULL
-    
-    ## Run if there are subgroups to compare and at least three observations
+
+    ## Run if there are subgroups to compare and at least three
+    ## observations
     if (length(unique(mods$mods)) > 1 && nrow(mods) > 2) {
 
         ## If replicates in data get unique cohorts
@@ -26,17 +28,20 @@
         }
 
         ## Subset data for mods
-        eSub <- eSet[, pData(eSet)[, cohorts] %in% c(vehicle, mods$GROUP)]
+        eSub <- eSet[, pData(eSet)[, cohorts] %in% c(vehicle,
+            mods$GROUP)]
 
         ## Drop levels
         pData(eSub) <- droplevels(pData(eSub))
 
-        ## Create new variable in pData by merging with mods data.frame
-        pData(eSub)$GROUP <- factor(pData(eSub)[, cohorts], levels = c(vehicle, mods$GROUP))
+        ## Create new variable in pData by merging with mods
+        ## data.frame
+        pData(eSub)$GROUP <- factor(pData(eSub)[, cohorts], levels=c(vehicle,
+            mods$GROUP))
         pData(eSub)$Rownames <- rownames(pData(eSub))
-        pD <- merge(pData(eSub), mods, all.x = TRUE)
+        pD <- merge(pData(eSub), mods, all.x=TRUE)
         rownames(pD) <- pD$Rownames
-        pD <- pD[colnames(eSub), , drop = FALSE]
+        pD <- pD[colnames(eSub), , drop=FALSE]
 
         ## Add vehicle mod
         pD$mods[is.na(pD$mods)] <- "0"
@@ -50,21 +55,23 @@
         if (!is.null(cohorts)) {
 
             ## Create design matrix
-            design <- model.matrix(as.formula(paste0("~ 0 +", "mods", .formatCov(covariates))),
-                data = pData(eSub))
+            design <- model.matrix(as.formula(paste0("~ 0 +",
+                "mods", .formatCov(covariates))), data=pData(eSub))
             colnames(design) <- sub("mods", "X", colnames(design))
 
             ## Run duplicateCorrelation
             if (!is.null(block)) {
                 ## Create contrasts between chemicals
-                corfit <- duplicateCorrelation(eSub, design, block = pData(eSub)[,
-                  block])
+                corfit <- duplicateCorrelation(eSub, design,
+                    block=pData(eSub)[, block])
 
-                if (corfit$consensus.correlation %in% c(-1, 1) | is.na(corfit$consensus.correlation)) {
-                  fit <- lmFit(eSub, design)
+                if (corfit$consensus.correlation %in% c(-1, 1) |
+                    is.na(corfit$consensus.correlation)) {
+                    fit <- lmFit(eSub, design)
                 } else {
-                  fit <- lmFit(eSub, design, correlation = corfit$consensus.correlation,
-                    block = pData(eSub)[, block])
+                    fit <- lmFit(eSub, design,
+                        correlation=corfit$consensus.correlation,
+                        block=pData(eSub)[, block])
                 }
             } else {
                 ## Fit model
@@ -72,36 +79,42 @@
             }
 
             ## Fit contrasts
-            modFit <- lapply(paste0("X", unique(mods$mods)), function(x, design,
-                fit) {
-                conString <- paste0(x, " - (", paste(pDmods[pDmods != x], collapse = "+"),
-                  ")/", sum(pDmods != x))
-                contrasts <- makeContrasts(contrasts = conString, levels = design)
-                contFit <- suppressWarnings(topTable(eBayes(contrasts.fit(fit, contrasts),
-                  trend = logCounts, robust = logCounts), number = Inf, sort.by = "none"))
-                contFit <- contFit[, c("logFC", "AveExpr", "t", "P.Value", "adj.P.Val",
-                  "B")]
-                contFit$edge <- sub("X", "", x)
-                return(contFit)
-            }, design, fit)
+            modFit <- lapply(paste0("X", unique(mods$mods)),
+                function(x, design, fit) {
+                    conString <- paste0(x, " - (", paste(pDmods[pDmods !=
+                    x], collapse="+"), ")/", sum(pDmods !=
+                    x))
+                    contrasts <- makeContrasts(contrasts=conString,
+                    levels=design)
+                    contFit <- suppressWarnings(topTable(eBayes(
+                        contrasts.fit(fit, contrasts),
+                        trend=logCounts, robust=logCounts),
+                    number=Inf, sort.by="none"))
+                    contFit <- contFit[, c("logFC", "AveExpr",
+                    "t", "P.Value", "adj.P.Val", "B")]
+                    contFit$edge <- sub("X", "", x)
+                    return(contFit)
+                }, design, fit)
 
         } else {
 
-            design <- model.matrix(as.formula(paste0("~ 0 + ", "GROUP", .formatCov(covariates))),
-                data = pData(eSub))
+            design <- model.matrix(as.formula(paste0("~ 0 + ",
+                "GROUP", .formatCov(covariates))), data=pData(eSub))
             colnames(design) <- sub("GROUP", "X", colnames(design))
 
             ## Run duplicateCorrelation
             if (!is.null(block)) {
                 ## Create contrasts between chemicals
-                corfit <- duplicateCorrelation(eSub, design, block = pData(eSub)[,
-                  block])
+                corfit <- duplicateCorrelation(eSub, design,
+                    block=pData(eSub)[, block])
 
-                if (corfit$consensus.correlation %in% c(-1, 1) | is.na(corfit$consensus.correlation)) {
-                  fit <- lmFit(eSub, design)
+                if (corfit$consensus.correlation %in% c(-1, 1) |
+                    is.na(corfit$consensus.correlation)) {
+                    fit <- lmFit(eSub, design)
                 } else {
-                  fit <- lmFit(eSub, design, correlation = corfit$consensus.correlation,
-                    block = pData(eSub)[, block])
+                    fit <- lmFit(eSub, design,
+                        correlation=corfit$consensus.correlation,
+                        block=pData(eSub)[, block])
                 }
             } else {
                 ## Fit model
@@ -112,63 +125,72 @@
             modsFull <- unique(pD[, c("GROUP", "mods")])
             modsTable <- table(modsFull$mods)
             cVec <- vapply(names(modsTable), function(x) {
-                paste0("(", paste(paste0("X", modsFull$GROUP[modsFull$mods == x],
-                  collapse = "+")), ")/", sum(modsFull$mods == x))
-            }, FUN.VALUE = integer(1))
+                paste0("(", paste(paste0("X", modsFull$GROUP[modsFull$mods ==
+                    x], collapse="+")), ")/", sum(modsFull$mods ==
+                    x))
+            }, FUN.VALUE=integer(1))
 
             ## Run each contrast
-            modFit <- lapply(as.character(unique(mods$mods)), function(x, cVec, design,
-                fit) {
-                conString <- paste0(cVec[x], " - (", paste(cVec[names(cVec) != x],
-                  collapse = "+"), ")/", sum(names(cVec) != x))
-                contrasts <- makeContrasts(contrasts = conString, levels = design)
-                contFit <- topTable(eBayes(contrasts.fit(fit, contrasts), trend = logCounts,
-                  robust = logCounts), number = Inf, sort.by = "none")
-                contFit <- contFit[, c("logFC", "AveExpr", "t", "P.Value", "adj.P.Val",
-                  "B")]
-                contFit$edge <- x
-                return(contFit)
-            }, cVec, design, fit)
+            modFit <- lapply(as.character(unique(mods$mods)),
+                function(x, cVec, design, fit) {
+                    conString <- paste0(cVec[x], " - (",
+                    paste(cVec[names(cVec) !=x], collapse="+"), ")/",
+                    sum(names(cVec) != x))
+                    contrasts <- makeContrasts(contrasts=conString,
+                    levels=design)
+                    contFit <- topTable(eBayes(contrasts.fit(fit,
+                    contrasts), trend=logCounts, robust=logCounts),
+                    number=Inf, sort.by="none")
+                    contFit <- contFit[, c("logFC", "AveExpr",
+                    "t", "P.Value", "adj.P.Val", "B")]
+                    contFit$edge <- x
+                    return(contFit)
+                }, cVec, design, fit)
         }
 
         ## Create vector of where to assign result
         if (is.null(vehicle)) {
             if (length(modFit) == 2) {
-                one2 <- c(1, 2)[as.numeric(modFit[[1]]$t < 0) + 1]
+                one2 <- c(1, 2)[as.numeric(modFit[[1]]$t < 0) +
+                    1]
             } else {
-                one2 <- vapply(seq(nrow(modFit[[1]])), function(row, modFit) {
-                  which.max(vapply(seq(length(modFit)), function(g, modFit, row) {
+                one2 <- vapply(seq(nrow(modFit[[1]])), function(row,
+                    modFit) {
+                    which.max(vapply(seq(length(modFit)), function(g,
+                    modFit, row) {
                     modFit[[g]][row, "t"]
-                }, modFit, row, FUN.VALUE = numeric(1)))
-              }, modFit, FUN.VALUE = integer(1))
+                    }, modFit, row, FUN.VALUE=numeric(1)))
+                }, modFit, FUN.VALUE=integer(1))
             }
         } else {
-            one2 <- c(1, 2)[as.numeric(vapply(seq(nrow(modFit[[1]])), function(row,
-                modFit) {
-                modFit[[1]]$P.Value[row] > modFit[[2]]$P.Value[row]
-            }, modFit, FUN.VALUE = logical(1))) + 1]
+            one2 <- c(1, 2)[as.numeric(vapply(seq(nrow(modFit[[1]])),
+                function(row, modFit) {
+                    modFit[[1]]$P.Value[row] > modFit[[2]]$P.Value[row]
+                }, modFit, FUN.VALUE=logical(1))) + 1]
         }
 
         ## Create just one data.frame
-        modStats <- as.data.frame(t(vapply(seq_len(nrow(modFit[[1]])), function(row, one2,
-            modFit) {
-            unlist(as.numeric(modFit[[one2[row]]][row, ]))
-        }, one2, modFit, FUN.VALUE = double(7))))
+        modStats <- as.data.frame(t(vapply(seq_len(nrow(modFit[[1]])),
+            function(row, one2, modFit) {
+                unlist(as.numeric(modFit[[one2[row]]][row, ]))
+            }, one2, modFit, FUN.VALUE=double(7))))
         colnames(modStats) <- colnames(modFit[[1]])
         rownames(modStats) <- rownames(modFit[[1]])
 
         ## Order by p-value
         modStats <- modStats[order(modStats$P.Value), ]
-        modStats$adj.P.Val <- p.adjust(modStats$P.Value, method = "BH")
+        modStats$adj.P.Val <- p.adjust(modStats$P.Value, method="BH")
 
         ## Remove large objects
-        rm(fit, modFit, design, mods, gUnique, one2, eSet, eSub, pD)
+        rm(fit, modFit, design, mods, gUnique, one2, eSet, eSub,
+            pD)
 
         ## Save mods as character
         modStats$edge <- as.character(modStats$edge)
 
         ## Change column names
-        colnames(modStats) <- c("coef", "mean", "t", "pval", "fdr", "B", "edge")
+        colnames(modStats) <- c("coef", "mean", "t", "pval",
+            "fdr", "B", "edge")
     }
 
     ## Return

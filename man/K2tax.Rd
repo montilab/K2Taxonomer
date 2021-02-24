@@ -5,17 +5,17 @@
 \title{Function K2 Taxonomer}
 \usage{
 K2tax(
-  K2res,
-  nFeats = NULL,
-  featMetric = NULL,
-  recalcDataMatrix = NULL,
-  nBoots = NULL,
-  clustFunc = NULL,
-  clustCors = NULL,
-  clustList = NULL,
-  linkage = NULL,
-  oneoff = NULL,
-  stabThresh = NULL
+    K2res,
+    nFeats = NULL,
+    featMetric = NULL,
+    recalcDataMatrix = NULL,
+    nBoots = NULL,
+    clustFunc = NULL,
+    clustCors = NULL,
+    clustList = NULL,
+    linkage = NULL,
+    oneoff = NULL,
+    stabThresh = NULL
 )
 }
 \arguments{
@@ -62,10 +62,10 @@ K2res <- K2preproc(sample.ExpressionSet)
 
 ## Run K2 Taxonomer algorithm
 K2res <- K2tax(K2res,
-               stabThresh = 0.5)
-               
+            stabThresh=0.5)
+
 }
 \references{
-\insertRef{reed_2020}{K2Taxonomer}
+    \insertRef{reed_2020}{K2Taxonomer}
 }
 \keyword{clustering}

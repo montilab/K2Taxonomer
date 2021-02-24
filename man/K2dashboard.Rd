@@ -5,10 +5,10 @@
 \title{Generate interactive dashboard of K2 Taxonomer results}
 \usage{
 K2dashboard(
-  K2res,
-  analysis_name = "K2Taxonomer",
-  about = TRUE,
-  output_dir = "."
+    K2res,
+    analysis_name = "K2Taxonomer",
+    about = TRUE,
+    output_dir = "."
 )
 }
 \arguments{
@@ -17,7 +17,7 @@ K2dashboard(
 \item{analysis_name}{Character string of the name of analysis to write files
 and generate title of report.}
 
-\item{about}{Logical. Whether to create an "about" tab in the dashboard.}
+\item{about}{Logical. Whether to create an 'about' tab in the dashboard.}
 
 \item{output_dir}{Base directory to put report.}
 }
@@ -34,10 +34,10 @@ clustering results in a specified directory.
 data(K2res)
 
 ## Generate interactive dashboard
-K2dashboard(K2res, output_dir = tempdir())
+K2dashboard(K2res, output_dir=tempdir())
 
 }
 \references{
-\insertRef{reed_2020}{K2Taxonomer}
+    \insertRef{reed_2020}{K2Taxonomer}
 }
 \keyword{clustering}

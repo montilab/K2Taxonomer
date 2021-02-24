@@ -10,8 +10,8 @@ runGSVAmods(K2res, ssGSEAalg = NULL, ssGSEAcores = NULL, ...)
 \item{K2res}{An object of class K2. The output of runDGEmods().}
 
 \item{ssGSEAalg}{A character string, specifying which algorithm to use for
-running the gsva() function from the GSVA package. Options are "gsva",
-"ssgsea", "zscore", and "plage". "gsva" by default.}
+running the gsva() function from the GSVA package. Options are 'gsva',
+'ssgsea', 'zscore', and 'plage'. 'gsva' by default.}
 
 \item{ssGSEAcores}{Number of cores to use for running gsva() from the GSVA
 package. Default is 1.}
@@ -34,7 +34,7 @@ K2res <- K2preproc(sample.ExpressionSet)
 
 ## Run K2 Taxonomer algorithm
 K2res <- K2tax(K2res,
-               stabThresh = 0.5)
+            stabThresh=0.5)
 
 ## Run differential analysis on each partition
 K2res <- runDGEmods(K2res)
@@ -43,25 +43,24 @@ K2res <- runDGEmods(K2res)
 DGEtable <- getDGETable(K2res)
 genes <- unique(DGEtable$gene)
 genesetsMadeUp <- list(
-    GS1 = genes[1:50],
-    GS2 = genes[51:100],
-    GS3 = genes[101:150]
-)
+    GS1=genes[1:50],
+    GS2=genes[51:100],
+    GS3=genes[101:150])
 
 ## Run gene set hyperenrichment
-K2res <- runGSEmods(K2res, 
-                    genesets = genesetsMadeUp,
-                    qthresh = 0.1)
-                    
-## Run GSVA on genesets           
-K2res <- runGSVAmods(K2res, 
-                     ssGSEAalg = "gsva",
-                     ssGSEAcores = 1,
-                     verbose = FALSE)
+K2res <- runGSEmods(K2res,
+                genesets=genesetsMadeUp,
+                qthresh=0.1)
+
+## Run GSVA on genesets
+K2res <- runGSVAmods(K2res,
+                ssGSEAalg='gsva',
+                ssGSEAcores=1,
+                verbose=FALSE)
 
 }
 \references{
-\insertRef{reed_2020}{K2Taxonomer}
- \insertRef{gsva}{K2Taxonomer}
+    \insertRef{reed_2020}{K2Taxonomer}
+    \insertRef{gsva}{K2Taxonomer}
 }
 \keyword{clustering}

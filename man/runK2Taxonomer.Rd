@@ -5,34 +5,34 @@
 \title{Wrapper function to run K2Taxonomer algorithm and annotation}
 \usage{
 runK2Taxonomer(
-  eSet,
-  cohorts = NULL,
-  vehicle = NULL,
-  covariates = NULL,
-  block = NULL,
-  logCounts = FALSE,
-  use = c("Z", "MEAN"),
-  nFeats = "sqrt",
-  featMetric = c("mad", "sd", "Sn", "Qn", "F", "square"),
-  recalcDataMatrix = FALSE,
-  nBoots = 500,
-  clustFunc = hclustWrapper,
-  clustCors = 1,
-  clustList = list(),
-  linkage = c("mcquitty", "ward.D", "ward.D2", "single", "complete", "average",
-    "centroid"),
-  info = NULL,
-  infoClass = NULL,
-  genesets = NULL,
-  qthresh = 0.05,
-  cthresh = 0,
-  ntotal = 20000,
-  ssGSEAalg = c("gsva", "ssgsea", "zscore", "plage"),
-  ssGSEAcores = 1,
-  oneoff = TRUE,
-  stabThresh = 0,
-  geneURL = NULL,
-  genesetURL = NULL
+    eSet,
+    cohorts = NULL,
+    vehicle = NULL,
+    covariates = NULL,
+    block = NULL,
+    logCounts = FALSE,
+    use = c("Z", "MEAN"),
+    nFeats = "sqrt",
+    featMetric = c("mad", "sd", "Sn", "Qn", "F", "square"),
+    recalcDataMatrix = FALSE,
+    nBoots = 500,
+    clustFunc = hclustWrapper,
+    clustCors = 1,
+    clustList = list(),
+    linkage = c("mcquitty", "ward.D", "ward.D2", "single", "complete",
+        "average", "centroid"),
+    info = NULL,
+    infoClass = NULL,
+    genesets = NULL,
+    qthresh = 0.05,
+    cthresh = 0,
+    ntotal = 20000,
+    ssGSEAalg = c("gsva", "ssgsea", "zscore", "plage"),
+    ssGSEAcores = 1,
+    oneoff = TRUE,
+    stabThresh = 0,
+    geneURL = NULL,
+    genesetURL = NULL
 )
 }
 \arguments{
@@ -52,14 +52,14 @@ differential analysis.}
 \item{logCounts}{Logical. Whether or not expression values are log-scale
 counts or log normalized counts from RNA-seq. Default is FALSE.}
 
-\item{use}{Character string. Options are "Z" to generate test statistics or
-"MEAN" to use means from differential analysis for clustering.}
+\item{use}{Character string. Options are 'Z' to generate test statistics or
+'MEAN' to use means from differential analysis for clustering.}
 
-\item{nFeats}{"sqrt" or a numeric value <= number of features to subset the
+\item{nFeats}{'sqrt' or a numeric value <= number of features to subset the
 features for each partition.}
 
 \item{featMetric}{Metric to use to assign variance/signal score. Options are:
-'mad' (default), "mad", "Sn", "Qn", "F", and "square".}
+'mad' (default), 'mad', 'Sn', 'Qn', 'F', and 'square'.}
 
 \item{recalcDataMatrix}{Logical. Recalculate dataMatrix for each partion?
 Default is FALSE.}
@@ -93,8 +93,8 @@ feature sets.}
 by default.}
 
 \item{ssGSEAalg}{A character string, specifying which algorithm to use for
-running the gsva() function from the GSVA package. Options are "gsva",
-"ssgsea", "zscore", and "plage". "gsva" by default.}
+running the gsva() function from the GSVA package. Options are 'gsva',
+'ssgsea', 'zscore', and 'plage'. 'gsva' by default.}
 
 \item{ssGSEAcores}{Number of cores to use for running gsva() from the GSVA
 package. Default is 1.}
@@ -123,20 +123,19 @@ data(sample.ExpressionSet)
 ## Create dummy set of gene sets
 genes <- rownames(sample.ExpressionSet)
 genesetsMadeUp <- list(
-    GS1 = genes[1:50],
-    GS2 = genes[51:100],
-    GS3 = genes[101:150]
-)
+    GS1=genes[1:50],
+    GS2=genes[51:100],
+    GS3=genes[101:150])
 
 ## Run K2 Taxonomer wrapper
-K2Res <- runK2Taxonomer(sample.ExpressionSet, 
-                        genesets = genesetsMadeUp,
-                        qthresh = 0.1,
-                        ssGSEAalg = "gsva",
-                        ssGSEAcores = 1,
-                        stabThresh = 0.5)
-                        
+K2Res <- runK2Taxonomer(sample.ExpressionSet,
+                    genesets=genesetsMadeUp,
+                    qthresh=0.1,
+                    ssGSEAalg='gsva',
+                    ssGSEAcores=1,
+                    stabThresh=0.5)
+
 }
 \references{
-\insertRef{reed_2020}{K2Taxonomer}
+    \insertRef{reed_2020}{K2Taxonomer}
 }

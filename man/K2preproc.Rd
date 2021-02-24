@@ -5,34 +5,34 @@
 \title{Function to create K2 object for pre-processing}
 \usage{
 K2preproc(
-  eSet,
-  cohorts = NULL,
-  vehicle = NULL,
-  covariates = NULL,
-  block = NULL,
-  logCounts = FALSE,
-  use = c("Z", "MEAN"),
-  nFeats = "sqrt",
-  featMetric = c("mad", "sd", "Sn", "Qn", "F", "square"),
-  recalcDataMatrix = FALSE,
-  nBoots = 500,
-  clustFunc = hclustWrapper,
-  clustCors = 1,
-  clustList = list(),
-  linkage = c("mcquitty", "ward.D", "ward.D2", "single", "complete", "average",
-    "centroid"),
-  info = NULL,
-  infoClass = NULL,
-  genesets = NULL,
-  qthresh = 0.05,
-  cthresh = 0,
-  ntotal = 20000,
-  ssGSEAalg = c("gsva", "ssgsea", "zscore", "plage"),
-  ssGSEAcores = 1,
-  oneoff = TRUE,
-  stabThresh = 0,
-  geneURL = NULL,
-  genesetURL = NULL
+    eSet,
+    cohorts = NULL,
+    vehicle = NULL,
+    covariates = NULL,
+    block = NULL,
+    logCounts = FALSE,
+    use = c("Z", "MEAN"),
+    nFeats = "sqrt",
+    featMetric = c("mad", "sd", "Sn", "Qn", "F", "square"),
+    recalcDataMatrix = FALSE,
+    nBoots = 500,
+    clustFunc = hclustWrapper,
+    clustCors = 1,
+    clustList = list(),
+    linkage = c("mcquitty", "ward.D", "ward.D2", "single", "complete",
+        "average", "centroid"),
+    info = NULL,
+    infoClass = NULL,
+    genesets = NULL,
+    qthresh = 0.05,
+    cthresh = 0,
+    ntotal = 20000,
+    ssGSEAalg = c("gsva", "ssgsea", "zscore", "plage"),
+    ssGSEAcores = 1,
+    oneoff = TRUE,
+    stabThresh = 0,
+    geneURL = NULL,
+    genesetURL = NULL
 )
 }
 \arguments{
@@ -52,10 +52,10 @@ differential analysis.}
 \item{logCounts}{Logical. Whether or not expression values are log-scale
 counts or log normalized counts from RNA-seq. Default is FALSE.}
 
-\item{use}{Character string. Options are "Z" to generate test statistics or
-"MEAN" to use means from differential analysis for clustering.}
+\item{use}{Character string. Options are 'Z' to generate test statistics or
+'MEAN' to use means from differential analysis for clustering.}
 
-\item{nFeats}{"sqrt" or a numeric value <= number of features to subset the
+\item{nFeats}{'sqrt' or a numeric value <= number of features to subset the
 features for each partition.}
 
 \item{featMetric}{Metric to use to assign variance/signal score. Options are
@@ -93,8 +93,8 @@ feature sets.}
 by default.}
 
 \item{ssGSEAalg}{A character string, specifying which algorithm to use for
-running the gsva() function from the GSVA package. Options are "gsva",
-"ssgsea", "zscore", and "plage". "gsva" by default.}
+running the gsva() function from the GSVA package. Options are 'gsva',
+'ssgsea', 'zscore', and 'plage'. 'gsva' by default.}
 
 \item{ssGSEAcores}{Number of cores to use for running gsva() from the GSVA
 package. Default is 1.}
@@ -125,6 +125,6 @@ K2res <- K2preproc(sample.ExpressionSet)
 }
 \references{
 \insertRef{reed_2020}{K2Taxonomer}
- \insertRef{limma}{K2Taxonomer}
+    \insertRef{limma}{K2Taxonomer}
 }
 \keyword{clustering}
