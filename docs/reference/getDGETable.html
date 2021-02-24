@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">K2Taxonomer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.5</span>
       </span>
     </div>
 
@@ -153,15 +153,17 @@
 
     <p>A data.frame object with the following columns:</p><ul>
 <li><p>gene: The gene ids from the `ExpressionSet` object</p></li>
-<li><p>coef: The difference between the means of each subgroup at 
- a given partition</p></li>
-<li><p>mean: The mean across all observations at the given 
- partition</p></li>
+<li><p>coef: The difference between the means of each subgroup at
+a given partition</p></li>
+<li><p>mean: The mean across all observations at the given
+partition</p></li>
 <li><p>t: The test statistic estimated by the `limma` R package</p></li>
 <li><p>pval: The p-value estimated by the `limma` R package</p></li>
-<li><p>fdr: The multiple hypothesis corrected fdr p-value, adjusted across all partitions</p></li>
+<li><p>fdr: The multiple hypothesis corrected fdr p-value, adjusted across
+all partitions</p></li>
 <li><p>B: The B-statistic estimated by the `limma` R package</p></li>
-<li><p>edge: Indication of which subgroup the gene was assigned at a given partition</p></li>
+<li><p>edge: Indication of which subgroup the gene was assigned at a given
+partition</p></li>
 <li><p>node: The identifier of the partition</p></li>
 <li><p>direction: The direction of coefficient for the assigned gene</p></li>
 </ul>
@@ -174,13 +176,13 @@ Bioinformatics.
 doi: <a href='https://doi.org/10.1101/2020.11.05.370197'>10.1101/2020.11.05.370197</a>
 , <a href='http://biorxiv.org/lookup/doi/10.1101/2020.11.05.370197'>http://biorxiv.org/lookup/doi/10.1101/2020.11.05.370197</a>.
 
- Ritchie ME, Phipson B, Wu D, Hu Y, Law CW, Shi W, Smyth GK (2015).
+    Ritchie ME, Phipson B, Wu D, Hu Y, Law CW, Shi W, Smyth GK (2015).
 &#8220;limma powers differential expression analyses for RNA-sequencing and microarray studies.&#8221;
 <em>Nucleic Acids Research</em>, <b>43</b>(7), e47--e47.
 ISSN 1362-4962, 0305-1048, doi: <a href='https://doi.org/10.1093/nar/gkv007'>10.1093/nar/gkv007</a>
 , <a href='http://academic.oup.com/nar/article/43/7/e47/2414268/limma-powers-differential-expression-analyses-for'>http://academic.oup.com/nar/article/43/7/e47/2414268/limma-powers-differential-expression-analyses-for</a>.
 
- Benjamini Y, Hochberg Y (1995).
+    Benjamini Y, Hochberg Y (1995).
 &#8220;Controlling the False Discovery Rate: A Practical and Powerful Approach to Multiple Testing.&#8221;
 <em>Journal of the Royal Statistical Society: Series B (Methodological)</em>, <b>57</b>(1), 289--300.
 ISSN 00359246, doi: <a href='https://doi.org/10.1111/j.2517-6161.1995.tb02031.x'>10.1111/j.2517-6161.1995.tb02031.x</a>
@@ -196,27 +198,27 @@ ISSN 00359246, doi: <a href='https://doi.org/10.1111/j.2517-6161.1995.tb02031.x'
 
 <span class='co'>## Run K2 Taxonomer algorithm</span>
 <span class='va'>K2res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='K2tax.html'>K2tax</a></span><span class='op'>(</span><span class='va'>K2res</span>,
-               stabThresh <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>
+            stabThresh<span class='op'>=</span><span class='fl'>0.5</span><span class='op'>)</span>
 
 <span class='co'>## Run differential analysis on each partition</span>
 <span class='va'>K2res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='runDGEmods.html'>runDGEmods</a></span><span class='op'>(</span><span class='va'>K2res</span><span class='op'>)</span>
 
 <span class='co'>## Extract table of differential results</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'>getDGETable</span><span class='op'>(</span><span class='va'>K2res</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;       gene     coef      mean          t         pval          fdr         B
-#&gt; 1 31737_at 1445.129  264.7562 119.688475 9.341821e-10 4.203820e-06 -4.445513
-#&gt; 2 31583_at 1519.998 2819.3481   8.373340 1.046179e-08 2.353902e-05 -2.345377
-#&gt; 3 31546_at 1242.405 1963.0257   8.138876 1.768093e-08 2.652140e-05 -2.384707
-#&gt; 4 31573_at 1229.790 2034.8062   7.396055 9.781121e-08 1.100376e-04 -2.523671
-#&gt; 5 31511_at 1300.542 3256.3362   7.292037 1.250010e-07 1.125009e-04 -2.545017
-#&gt; 6 31568_at 1422.450 2866.9177   7.147891 1.760053e-07 1.320040e-04 -2.575418
+</div><div class='output co'>#&gt;       gene       coef       mean        t         pval          fdr         B
+#&gt; 1 31583_at 1519.99764 2819.34808 8.373340 1.046179e-08 3.536186e-05 -2.345377
+#&gt; 2 31546_at 1242.40521 1963.02569 8.138876 1.768093e-08 3.536186e-05 -2.384707
+#&gt; 3 31573_at 1229.79000 2034.80623 7.396055 9.781121e-08 1.250010e-04 -2.523671
+#&gt; 4 31511_at 1300.54170 3256.33615 7.292037 1.250010e-07 1.250010e-04 -2.545017
+#&gt; 5 31568_at 1422.44970 2866.91769 7.147891 1.760053e-07 1.408043e-04 -2.575418
+#&gt; 6 31607_at   57.28619   60.23165 8.151911 1.148684e-06 7.657893e-04 -3.781940
 #&gt;   edge node direction
-#&gt; 1    2    I        up
+#&gt; 1    2    A        up
 #&gt; 2    2    A        up
 #&gt; 3    2    A        up
 #&gt; 4    2    A        up
 #&gt; 5    2    A        up
-#&gt; 6    2    A        up</div><div class='input'>
+#&gt; 6    2    C        up</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

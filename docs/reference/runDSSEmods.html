@@ -73,7 +73,7 @@ to to the output of K2tax()." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">K2Taxonomer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.5</span>
       </span>
     </div>
 
@@ -162,19 +162,19 @@ Bioinformatics.
 doi: <a href='https://doi.org/10.1101/2020.11.05.370197'>10.1101/2020.11.05.370197</a>
 , <a href='http://biorxiv.org/lookup/doi/10.1101/2020.11.05.370197'>http://biorxiv.org/lookup/doi/10.1101/2020.11.05.370197</a>.
 
- Ritchie ME, Phipson B, Wu D, Hu Y, Law CW, Shi W, Smyth GK (2015).
+    Ritchie ME, Phipson B, Wu D, Hu Y, Law CW, Shi W, Smyth GK (2015).
 &#8220;limma powers differential expression analyses for RNA-sequencing and microarray studies.&#8221;
 <em>Nucleic Acids Research</em>, <b>43</b>(7), e47--e47.
 ISSN 1362-4962, 0305-1048, doi: <a href='https://doi.org/10.1093/nar/gkv007'>10.1093/nar/gkv007</a>
 , <a href='http://academic.oup.com/nar/article/43/7/e47/2414268/limma-powers-differential-expression-analyses-for'>http://academic.oup.com/nar/article/43/7/e47/2414268/limma-powers-differential-expression-analyses-for</a>.
 
- Benjamini Y, Hochberg Y (1995).
+    Benjamini Y, Hochberg Y (1995).
 &#8220;Controlling the False Discovery Rate: A Practical and Powerful Approach to Multiple Testing.&#8221;
 <em>Journal of the Royal Statistical Society: Series B (Methodological)</em>, <b>57</b>(1), 289--300.
 ISSN 00359246, doi: <a href='https://doi.org/10.1111/j.2517-6161.1995.tb02031.x'>10.1111/j.2517-6161.1995.tb02031.x</a>
 , <a href='http://doi.wiley.com/10.1111/j.2517-6161.1995.tb02031.x'>http://doi.wiley.com/10.1111/j.2517-6161.1995.tb02031.x</a>.
 
- Hanzelmann S, Castelo R, Guinney J (2013).
+    Hanzelmann S, Castelo R, Guinney J (2013).
 &#8220;GSVA: gene set variation analysis for microarray and RNA-Seq data.&#8221;
 <em>BMC Bioinformatics</em>, <b>14</b>(1), 7.
 ISSN 1471-2105, doi: <a href='https://doi.org/10.1186/1471-2105-14-7'>10.1186/1471-2105-14-7</a>
@@ -190,7 +190,7 @@ ISSN 1471-2105, doi: <a href='https://doi.org/10.1186/1471-2105-14-7'>10.1186/14
 
 <span class='co'>## Run K2 Taxonomer algorithm</span>
 <span class='va'>K2res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='K2tax.html'>K2tax</a></span><span class='op'>(</span><span class='va'>K2res</span>,
-               stabThresh <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>
+            stabThresh<span class='op'>=</span><span class='fl'>0.5</span><span class='op'>)</span>
 
 <span class='co'>## Run differential analysis on each partition</span>
 <span class='va'>K2res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='runDGEmods.html'>runDGEmods</a></span><span class='op'>(</span><span class='va'>K2res</span><span class='op'>)</span>
@@ -199,21 +199,20 @@ ISSN 1471-2105, doi: <a href='https://doi.org/10.1186/1471-2105-14-7'>10.1186/14
 <span class='va'>DGEtable</span> <span class='op'>&lt;-</span> <span class='fu'><a href='getDGETable.html'>getDGETable</a></span><span class='op'>(</span><span class='va'>K2res</span><span class='op'>)</span>
 <span class='va'>genes</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='op'>(</span><span class='va'>DGEtable</span><span class='op'>$</span><span class='va'>gene</span><span class='op'>)</span>
 <span class='va'>genesetsMadeUp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-    GS1 <span class='op'>=</span> <span class='va'>genes</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>50</span><span class='op'>]</span>,
-    GS2 <span class='op'>=</span> <span class='va'>genes</span><span class='op'>[</span><span class='fl'>51</span><span class='op'>:</span><span class='fl'>100</span><span class='op'>]</span>,
-    GS3 <span class='op'>=</span> <span class='va'>genes</span><span class='op'>[</span><span class='fl'>101</span><span class='op'>:</span><span class='fl'>150</span><span class='op'>]</span>
-<span class='op'>)</span>
+    GS1<span class='op'>=</span><span class='va'>genes</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>50</span><span class='op'>]</span>,
+    GS2<span class='op'>=</span><span class='va'>genes</span><span class='op'>[</span><span class='fl'>51</span><span class='op'>:</span><span class='fl'>100</span><span class='op'>]</span>,
+    GS3<span class='op'>=</span><span class='va'>genes</span><span class='op'>[</span><span class='fl'>101</span><span class='op'>:</span><span class='fl'>150</span><span class='op'>]</span><span class='op'>)</span>
 
 <span class='co'>## Run gene set hyperenrichment</span>
-<span class='va'>K2res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='runGSEmods.html'>runGSEmods</a></span><span class='op'>(</span><span class='va'>K2res</span>, 
-                    genesets <span class='op'>=</span> <span class='va'>genesetsMadeUp</span>,
-                    qthresh <span class='op'>=</span> <span class='fl'>0.1</span><span class='op'>)</span>
-                    
-<span class='co'>## Run GSVA on genesets           </span>
-<span class='va'>K2res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='runGSVAmods.html'>runGSVAmods</a></span><span class='op'>(</span><span class='va'>K2res</span>, 
-                     ssGSEAalg <span class='op'>=</span> <span class='st'>"gsva"</span>,
-                     ssGSEAcores <span class='op'>=</span> <span class='fl'>1</span>,
-                     verbose <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+<span class='va'>K2res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='runGSEmods.html'>runGSEmods</a></span><span class='op'>(</span><span class='va'>K2res</span>,
+                genesets<span class='op'>=</span><span class='va'>genesetsMadeUp</span>,
+                qthresh<span class='op'>=</span><span class='fl'>0.1</span><span class='op'>)</span>
+
+<span class='co'>## Run GSVA on genesets</span>
+<span class='va'>K2res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='runGSVAmods.html'>runGSVAmods</a></span><span class='op'>(</span><span class='va'>K2res</span>,
+                ssGSEAalg<span class='op'>=</span><span class='st'>'gsva'</span>,
+                ssGSEAcores<span class='op'>=</span><span class='fl'>1</span>,
+                verbose<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
 
 <span class='co'>## Run differential analysis on GSVA results</span>
 <span class='va'>K2res</span> <span class='op'>&lt;-</span> <span class='fu'>runDSSEmods</span><span class='op'>(</span><span class='va'>K2res</span><span class='op'>)</span>

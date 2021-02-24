@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">K2Taxonomer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.5</span>
       </span>
     </div>
 
@@ -94,7 +94,7 @@
       Boston University School of Medicine, Section of Computational Biomedicine, 72 E Concord St, Boston, MA 02118<br><a class="author_email" href="mailto:#"></a><a href="mailto:reeder@bu.edu" class="email">reeder@bu.edu</a>
       </address>
                   
-            <h4 class="date">Created: October 21, 2020; Compiled: 2021-02-11</h4>
+            <h4 class="date">Created: October 21, 2020; Compiled: 2021-02-24</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/montilab/K2Taxonomer/blob/master/vignettes/K2Taxonomer_singlecell.Rmd"><code>vignettes/K2Taxonomer_singlecell.Rmd</code></a></small>
       <div class="hidden name"><code>K2Taxonomer_singlecell.Rmd</code></div>
@@ -106,7 +106,7 @@
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
-<p>This vignette describes the workflow for running <em><a href="https://github.com/montilab/K2Taxonomer">K2Taxonomer</a></em> on single-cell gene expression data <span class="citation">(Reed and Monti 2020)</span>. Many steps in this workflow is shared with that of bulk gene expression. Accordingly, these steps are described in more detail in the <a href="https://montilab.github.io/K2Taxonomer/articles/RunningK2Taxonomer.html">Running K2Taxonomer</a> vignette.</p>
+<p>This vignette describes the workflow for running <em><a href="https://github.com/montilab/K2Taxonomer">K2Taxonomer</a></em> on single-cell gene expression data <span class="citation">(Reed and Monti 2020)</span>. Many steps in this workflow is shared with that of bulk gene expression. Accordingly, these steps are described in more detail <a href="https://montilab.github.io/K2Taxonomer/articles/RunningK2Taxonomer">here</a>.</p>
 </div>
 <div id="requirements" class="section level1">
 <h1 class="hasAnchor">
@@ -127,7 +127,7 @@
 <p>For this example we will use a single-cell RNAseq dat set a of 379 cells from the mouse visual cortex which is a subset from <span class="citation">(Tasic et al. 2016)</span>, made available by the <em><a href="https://bioconductor.org/packages/3.12/scRNAseq">scRNAseq</a></em> package.</p>
 <p>This data set includes identifiers of 17 cell types belonging to three major classes of cells based on surface markers vasoactive intestinal peptide (Vip), parvalbumin (Pvalp) and somatostatin (Sst). Vip cells include additional subclasses based on additional surface markers: L4, L5, L5a, L5b and L6a. Finally, all of these classes are further subtyped based on additional markers genes.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">scRNAseq</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/scRNAseq/man/ReprocessedData.html">ReprocessedAllenData</a></span><span class="op">(</span>assays <span class="op">=</span> <span class="st">"rsem_tpm"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">scRNAseq</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/scRNAseq/man/ReprocessedData.html">ReprocessedAllenData</a></span><span class="op">(</span>assays<span class="op">=</span><span class="st">"rsem_tpm"</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
 <div id="data-processing" class="section level1">
@@ -140,7 +140,7 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co"># Convert to expression set</span>
-<span class="va">eSet</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/class.ExpressionSet.html">ExpressionSet</a></span><span class="op">(</span>assayData <span class="op">=</span> <span class="fu">assay</span><span class="op">(</span><span class="va">dat</span><span class="op">)</span><span class="op">)</span>
+<span class="va">eSet</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/class.ExpressionSet.html">ExpressionSet</a></span><span class="op">(</span>assayData<span class="op">=</span><span class="fu">assay</span><span class="op">(</span><span class="va">dat</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/phenoData.html">pData</a></span><span class="op">(</span><span class="va">eSet</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="fu">colData</span><span class="op">(</span><span class="va">dat</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">## Log the data</span>
@@ -152,7 +152,7 @@
 <p>Given that this data set is relatively small, we will need to remove lowly represented cell types. These will include six cell types with fewer than 5 cells. Additionally, we will remove 30 cells without cell type labels.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Table of cell types</span>
-<span class="va">typeTable</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">eSet</span><span class="op">$</span><span class="va">Primary.Type</span>, useNA <span class="op">=</span> <span class="st">"ifany"</span><span class="op">)</span>
+<span class="va">typeTable</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">eSet</span><span class="op">$</span><span class="va">Primary.Type</span>, useNA<span class="op">=</span><span class="st">"ifany"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">typeTable</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     L4 Arf5    L4 Ctxn3   L4 Scnn1a     L5 Ucma   L5a Batf3 L5a Hsd11b1 </span>
@@ -204,9 +204,9 @@
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Create clustList</span>
 <span class="va">wrapperList</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-  eMat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/exprs.html">exprs</a></span><span class="op">(</span><span class="va">eSet</span><span class="op">)</span>,
-  labs <span class="op">=</span> <span class="va">eSet</span><span class="op">$</span><span class="va">celltype</span>,
-  maxIter <span class="op">=</span> <span class="fl">10</span>
+    eMat<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/exprs.html">exprs</a></span><span class="op">(</span><span class="va">eSet</span><span class="op">)</span>,
+    labs<span class="op">=</span><span class="va">eSet</span><span class="op">$</span><span class="va">celltype</span>,
+    maxIter<span class="op">=</span><span class="fl">10</span>
 <span class="op">)</span></code></pre></div>
 </div>
 </div>
@@ -220,18 +220,18 @@
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Run K2Taxonomer</span>
 <span class="va">K2res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/K2preproc.html">K2preproc</a></span><span class="op">(</span><span class="va">eSet</span>,
-                   cohorts <span class="op">=</span> <span class="st">"celltype"</span>,
-                   featMetric <span class="op">=</span> <span class="st">"F"</span>,
-                   logCounts <span class="op">=</span> <span class="cn">TRUE</span>,
-                   nBoots <span class="op">=</span> <span class="fl">100</span>,
-                   clustFunc <span class="op">=</span> <span class="va">cKmeansWrapperSubsample</span>,
-                   clustList <span class="op">=</span> <span class="va">wrapperList</span><span class="op">)</span>
+                cohorts<span class="op">=</span><span class="st">"celltype"</span>,
+                featMetric<span class="op">=</span><span class="st">"F"</span>,
+                logCounts<span class="op">=</span><span class="cn">TRUE</span>,
+                nBoots<span class="op">=</span><span class="fl">100</span>,
+                clustFunc<span class="op">=</span><span class="va">cKmeansWrapperSubsample</span>,
+                clustList<span class="op">=</span><span class="va">wrapperList</span><span class="op">)</span>
 <span class="co">#&gt; Collapsing group-level values with LIMMA.</span></code></pre></div>
 </div>
 <div id="run-recursive-partitioning-algorithm" class="section level2">
 <h2 class="hasAnchor">
 <a href="#run-recursive-partitioning-algorithm" class="anchor"></a>Run recursive partitioning algorithm</h2>
-<p>At this point the rest of the analysis identical to that of the basic analysis as presented in the <a href="https://montilab.github.io/K2Taxonomer/articles/RunningK2Taxonomer.html">Basic run of K2Taxonomer</a> vignette <span class="citation">(Reed and Monti 2020)</span>. Please refer to this document for further description of these steps.</p>
+<p>At this point the rest of the analysis identical to that of the basic analysis as presented <a href="https://montilab.github.io/K2Taxonomer/articles/RunningK2Taxonomer">here</a> <span class="citation">(Reed and Monti 2020)</span>. Please refer to this document for further description of these steps.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Run K2Taxonomer aglorithm</span>
 <span class="va">K2res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/K2tax.html">K2tax</a></span><span class="op">(</span><span class="va">K2res</span><span class="op">)</span></code></pre></div>
@@ -261,12 +261,12 @@
 <span class="va">DGEtable</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getDGETable.html">getDGETable</a></span><span class="op">(</span><span class="va">K2res</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">DGEtable</span><span class="op">)</span>
 <span class="co">#&gt;      gene     coef     mean        t          pval           fdr        B edge</span>
-<span class="co">#&gt; 1   Pde1a 7.607703 6.795236 33.04659 1.191313e-107 2.727820e-102 234.4221    2</span>
-<span class="co">#&gt; 2     Ptn 8.753100 6.087870 40.05787  2.249965e-94  2.575940e-89 203.6672    1</span>
-<span class="co">#&gt; 3    Bcl6 3.989053 1.105827 31.13960  1.406226e-88  1.073306e-83 190.8268    2</span>
-<span class="co">#&gt; 4 Neurod6 7.148083 6.023724 29.42144  1.107549e-83  6.340056e-79 179.7376    1</span>
-<span class="co">#&gt; 5  Fam84a 6.077725 2.119998 29.36922  1.569144e-83  7.185924e-79 179.3947    2</span>
-<span class="co">#&gt; 6   Foxp2 5.197925 2.479363 33.31899  4.130923e-81  1.576470e-76 173.8696    2</span>
+<span class="co">#&gt; 1   Pde1a 7.607703 6.795236 33.04659 1.191313e-107 1.487902e-102 234.4221    2</span>
+<span class="co">#&gt; 2     Ptn 8.753100 6.087870 40.05787  2.249965e-94  1.405058e-89 203.6672    1</span>
+<span class="co">#&gt; 3    Bcl6 3.989053 1.105827 31.13960  1.406226e-88  5.854398e-84 190.8268    2</span>
+<span class="co">#&gt; 4 Neurod6 7.148083 6.023724 29.42144  1.107549e-83  3.458212e-79 179.7376    1</span>
+<span class="co">#&gt; 5  Fam84a 6.077725 2.119998 29.36922  1.569144e-83  3.919595e-79 179.3947    2</span>
+<span class="co">#&gt; 6   Foxp2 5.197925 2.479363 33.31899  4.130923e-81  8.598930e-77 173.8696    2</span>
 <span class="co">#&gt;   node direction</span>
 <span class="co">#&gt; 1    A        up</span>
 <span class="co">#&gt; 2    E        up</span>
@@ -282,15 +282,15 @@
 <code class="sourceCode R"><span class="co">## Create dummy set of gene sets</span>
 <span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">DGEtable</span><span class="op">$</span><span class="va">gene</span><span class="op">)</span>
 <span class="va">genesetsMadeUp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-  GS1 <span class="op">=</span> <span class="va">genes</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">50</span><span class="op">]</span>,
-  GS2 <span class="op">=</span> <span class="va">genes</span><span class="op">[</span><span class="fl">51</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span>,
-  GS3 <span class="op">=</span> <span class="va">genes</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">150</span><span class="op">]</span>
+    GS1<span class="op">=</span><span class="va">genes</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">50</span><span class="op">]</span>,
+    GS2<span class="op">=</span><span class="va">genes</span><span class="op">[</span><span class="fl">51</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span>,
+    GS3<span class="op">=</span><span class="va">genes</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">150</span><span class="op">]</span>
 <span class="op">)</span>
 
 <span class="co">## Run gene set hyperenrichment</span>
 <span class="va">K2res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runGSEmods.html">runGSEmods</a></span><span class="op">(</span><span class="va">K2res</span>,
-                     genesets <span class="op">=</span> <span class="va">genesetsMadeUp</span>,
-                     qthresh <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></code></pre></div>
+                genesets<span class="op">=</span><span class="va">genesetsMadeUp</span>,
+                qthresh<span class="op">=</span><span class="fl">0.1</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="single-sample-gene-set-enrichment" class="section level3">
 <h3 class="hasAnchor">
@@ -298,9 +298,9 @@
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Create expression matrix with ssGSEA(GSVA) estimates</span>
 <span class="va">K2res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runGSVAmods.html">runGSVAmods</a></span><span class="op">(</span><span class="va">K2res</span>,
-                      ssGSEAalg <span class="op">=</span> <span class="st">"gsva"</span>,
-                      ssGSEAcores <span class="op">=</span> <span class="fl">1</span>,
-                      verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+                ssGSEAalg<span class="op">=</span><span class="st">"gsva"</span>,
+                ssGSEAcores<span class="op">=</span><span class="fl">1</span>,
+                verbose<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="differential-single-sample-enrichment-analysis" class="section level3">
 <h3 class="hasAnchor">
@@ -312,44 +312,44 @@
 <span class="co">## Get differential results for one split</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/K2results.html">K2results</a></span><span class="op">(</span><span class="va">K2res</span><span class="op">)</span><span class="op">$</span><span class="va">A</span><span class="op">$</span><span class="va">dsse</span><span class="op">)</span>
 <span class="co">#&gt;   category        coef        mean         t         pval          fdr</span>
-<span class="co">#&gt; 1      GS3 0.124656266 -0.02988168 7.2616665 1.926477e-12 3.178687e-11</span>
-<span class="co">#&gt; 2      GS2 0.049090375 -0.01559724 2.6263013 8.953867e-03 1.969851e-02</span>
-<span class="co">#&gt; 3      GS1 0.005320382 -0.02537272 0.3299682 7.415919e-01 7.894365e-01</span>
+<span class="co">#&gt; 1      GS3 0.126609098 -0.02959331 7.3074367 1.423274e-12 1.280947e-11</span>
+<span class="co">#&gt; 2      GS2 0.049090375 -0.01559724 2.6250996 8.984562e-03 1.347684e-02</span>
+<span class="co">#&gt; 3      GS1 0.005320382 -0.02537272 0.3296895 7.418021e-01 7.854375e-01</span>
 <span class="co">#&gt;           B edge</span>
-<span class="co">#&gt; 1 17.669875    1</span>
-<span class="co">#&gt; 2 -3.572061    2</span>
-<span class="co">#&gt; 3 -6.916551    2</span>
+<span class="co">#&gt; 1 17.961540    1</span>
+<span class="co">#&gt; 2 -3.581029    2</span>
+<span class="co">#&gt; 3 -6.922921    2</span>
 
 <span class="co">## Extract table of all hyper and sample-level enrichment tests</span>
 <span class="va">K2enrRes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getEnrichmentTable.html">getEnrichmentTable</a></span><span class="op">(</span><span class="va">K2res</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">K2enrRes</span><span class="op">)</span>
 <span class="co">#&gt;   category node edge direction   pval_hyper    fdr_hyper nhits ndrawn ncats</span>
-<span class="co">#&gt; 1      GS2    C    1        up 2.223463e-17 1.467486e-15    18    461    50</span>
-<span class="co">#&gt; 2      GS3    G    1        up 8.679872e-17 2.864358e-15    16    337    50</span>
-<span class="co">#&gt; 3      GS1    C    2        up 1.100495e-15 2.421089e-14    26   1659    50</span>
-<span class="co">#&gt; 4      GS1    E    1        up 6.570906e-15 8.673595e-14    22   1139    50</span>
-<span class="co">#&gt; 5      GS2    E    1        up 6.570906e-15 8.673595e-14    22   1139    50</span>
-<span class="co">#&gt; 6      GS3    A    1        up 8.547355e-15 9.402091e-14    19    761    50</span>
-<span class="co">#&gt;    ntot   pval_limma    fdr_limma       coef         mean        t         B</span>
-<span class="co">#&gt; 1 20000 9.181423e-11 7.545724e-10 0.13841783 -0.003542505 6.687175 13.968782</span>
-<span class="co">#&gt; 2 20000 4.592668e-08 2.525967e-07 0.14681796 -0.003491838 5.604604  8.766456</span>
-<span class="co">#&gt; 3 20000 2.616468e-07 1.233478e-06 0.09694812 -0.024066237 5.253619  6.285439</span>
-<span class="co">#&gt; 4 20000 1.143291e-10 7.545724e-10 0.12429612 -0.048398313 6.569617 14.285495</span>
-<span class="co">#&gt; 5 20000 1.088998e-17 3.593694e-16 0.16749365  0.031197656 8.852804 31.789295</span>
-<span class="co">#&gt; 6 20000 1.926477e-12 3.178687e-11 0.12465627 -0.029881683 7.261667 17.669875</span>
-<span class="co">#&gt;                                                                                                                                                               hits</span>
-<span class="co">#&gt; 1                                          Unc5d,Zdhhc22,Car10,Kcnv1,Pamr1,Deptor,Tmsb10,Dkk3,Spock1,Alcam,Tspan7,Ccdc80,Gpm6a,S100a10,Fxyd7,Abracl,Scube1,Gadd45a</span>
-<span class="co">#&gt; 2                                                           Nav1,Camk2n1,Rims3,Lypd1,Galntl6,Ccl27b,Gm13306,Coro6,Fam19a2,Lamp5,Hs3st4,Dkkl1,Whrn,Nrep,Coch,Scnn1a</span>
-<span class="co">#&gt; 3 Bcl6,Fam84a,Reln,Fam84b,Robo1,Qrfpr,Srgap3,Parm1,Prkcg,Gng7,Nfib,Atp2b1,Lmo3,Btbd3,Klk8,Lrrtm4,Id2,Utrn,Pou3f1,Fam19a1,Nrp1,Cacna2d3,B3galt2,Serpine2,Vat1l,Npr3</span>
-<span class="co">#&gt; 4                    Ptn,Neurod6,Fam84a,Cux2,Srgap3,Slc30a3,Rorb,Plcxd2,Atp1b2,Btbd3,Olfm1,Utrn,Camk2d,Cdh10,Cbln4,Fam19a1,Per3,Cacna2d3,Serpine2,Vat1l,Hpca,Grik1</span>
-<span class="co">#&gt; 5                Unc5d,Nrxn1,Car10,Gucy1a3,Kcnv1,Pamr1,Deptor,Spock1,Tmem200a,Alcam,Ccdc80,Krt12,Rasgrf1,S100a10,Cnih3,Etv1,Chrm2,Bhlhe40,Scube1,Cck,Galnt14,Igfn1</span>
-<span class="co">#&gt; 6                                             Camk2n1,Lin7a,Sphkap,Chgb,Pou3f2,Rims3,Cpne9,Fam19a2,Npcd,Dcdc2a,Mapk4,Dkkl1,Whrn,Ppm1h,Pcdh20,Nrep,Coch,Scnn1a,Rgs4</span></code></pre></div>
+<span class="co">#&gt; 1      GS3    G    1        up 1.079260e-18 3.885337e-17    19    467    50</span>
+<span class="co">#&gt; 2      GS2    F    1        up 2.192957e-17 3.947323e-16    16    309    50</span>
+<span class="co">#&gt; 3      GS1    C    1        up 3.680606e-16 3.312545e-15    18    541    50</span>
+<span class="co">#&gt; 4      GS2    C    1        up 3.680606e-16 3.312545e-15    18    541    50</span>
+<span class="co">#&gt; 5      GS3    A    1        up 4.612150e-16 3.320748e-15    21    875    50</span>
+<span class="co">#&gt; 6      GS1    E    1        up 3.002425e-14 1.801455e-13    23   1382    50</span>
+<span class="co">#&gt;    ntot   pval_limma    fdr_limma      coef         mean        t        B</span>
+<span class="co">#&gt; 1 20000 1.437757e-08 4.313270e-08 0.1524040 -0.001945461 5.822848  9.97524</span>
+<span class="co">#&gt; 2 20000 3.187581e-02 4.413574e-02 0.0813716 -0.107220173 2.189929 -4.02103</span>
+<span class="co">#&gt; 3 20000           NA           NA        NA           NA       NA       NA</span>
+<span class="co">#&gt; 4 20000 1.015150e-10 4.568173e-10 0.1384178 -0.003542505 6.675373 13.87399</span>
+<span class="co">#&gt; 5 20000 1.423274e-12 1.280947e-11 0.1266091 -0.029593310 7.307437 17.96154</span>
+<span class="co">#&gt; 6 20000 1.297947e-10 4.672610e-10 0.1242961 -0.048398313 6.549259 14.15506</span>
+<span class="co">#&gt;                                                                                                                                                   hits</span>
+<span class="co">#&gt; 1                            Nav1,Tmem47,Camk2n1,Sphkap,Rims3,Lypd1,Galntl6,Ccl27b,Gm13306,Coro6,Fam19a2,Lamp5,Npcd,Hs3st4,Dkkl1,Whrn,Nrep,Coch,Scnn1a</span>
+<span class="co">#&gt; 2                                             Nos1ap,Crym,Gucy1a3,Stk17b,Enc1,Dkk3,Fstl5,Ldb2,6430573F11Rik,Luzp2,Dynll1,Meis2,Bcl11b,Ntrk3,Cck,Igfbp4</span>
+<span class="co">#&gt; 3                                         Pde1a,Neurod6,Foxp2,Pcp4,Cux2,Slc1a2,Nptx1,Ncald,Slc30a3,Rorb,Atp1b2,Olfm1,Camk2d,Cdh10,Cbln4,Per3,Tle4,Hpca</span>
+<span class="co">#&gt; 4                              Unc5d,Zdhhc22,Car10,Kcnv1,Pamr1,Deptor,Tmsb10,Dkk3,Spock1,Alcam,Tspan7,Ccdc80,Gpm6a,S100a10,Fxyd7,Abracl,Scube1,Gadd45a</span>
+<span class="co">#&gt; 5                     Camk2n1,Lin7a,Sphkap,Chgb,Pou3f2,Rims3,Rph3a,Cpne9,Fam19a2,Npcd,Dcdc2a,Mapk4,Dkkl1,Whrn,Ppm1h,Pcdh20,Kcna2,Nrep,Coch,Scnn1a,Rgs4</span>
+<span class="co">#&gt; 6 Ptn,Neurod6,Fam84a,Cux2,Srgap3,Slc30a3,Rorb,Plcxd2,Atp1b2,Btbd3,Lrrtm4,Olfm1,Utrn,Camk2d,Cdh10,Cbln4,Fam19a1,Per3,Cacna2d3,Serpine2,Vat1l,Hpca,Grik1</span></code></pre></div>
 </div>
 </div>
 <div id="generate-interactive-dashboard-to-explore-results" class="section level2">
 <h2 class="hasAnchor">
 <a href="#generate-interactive-dashboard-to-explore-results" class="anchor"></a>Generate interactive dashboard to explore results</h2>
-<p>For more information see the <a href="https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_dashboard.html">K2Taxonomer Dashboards</a> vignette.</p>
+<p>For more information see go <a href="https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_dashboard">here</a>.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co">## NOT RUN</span>
@@ -359,7 +359,7 @@
 <div id="runtime-for-this-example" class="section level1">
 <h1 class="hasAnchor">
 <a href="#runtime-for-this-example" class="anchor"></a>Runtime for this example</h1>
-<pre><code>#&gt; Time difference of 1.617192 mins</code></pre>
+<pre><code>#&gt; Time difference of 1.7465 mins</code></pre>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">

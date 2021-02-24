@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">K2Taxonomer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.5</span>
       </span>
     </div>
 
@@ -91,20 +91,22 @@
       <h1 data-toc-skip>3. K2Taxonomer Dashboard Generation</h1>
                         <h4 class="author">Eric R. Reed</h4>
             <address class="author_afil">
-      Boston University School of Medicine, Section of Computational Biomedicine, 72 E Concord St, Boston, MA 02118<br><h4 class="date">October 21, 2020</h4>
+      Boston University School of Medicine, Section of Computational Biomedicine, 72 E Concord St, Boston, MA 02118<br><a class="author_email" href="mailto:#"></a><a href="mailto:reeder@bu.edu" class="email">reeder@bu.edu</a>
+      </address>
+                  
+            <h4 class="date">October 21, 2020</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/montilab/K2Taxonomer/blob/master/vignettes/K2Taxonomer_dashboard.Rmd"><code>vignettes/K2Taxonomer_dashboard.Rmd</code></a></small>
       <div class="hidden name"><code>K2Taxonomer_dashboard.Rmd</code></div>
 
-    </address>
-</div>
+    </div>
 
     
     
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
-<p>In this vignette we describe the steps for creating and editing interactive dashoboards from the output of the <em><a href="https://github.com/montilab/K2Taxonomer">K2Taxonomer</a></em> workflow <span class="citation">(Reed and Monti 2020)</span>. For a more detailed description for running <em><a href="https://github.com/montilab/K2Taxonomer">K2Taxonomer</a></em> visit the vignettes describing <a href="https://montilab.github.io/K2Taxonomer/articles/RunningK2Taxonomer.html">bulk</a> and <a href="https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_singlecell.html">single-cell</a> workflows.</p>
+<p>In this vignette we describe the steps for creating and editing interactive dashoboards from the output of the <em><a href="https://github.com/montilab/K2Taxonomer">K2Taxonomer</a></em> workflow <span class="citation">(Reed and Monti 2020)</span>. For a more detailed description for running <em><a href="https://github.com/montilab/K2Taxonomer">K2Taxonomer</a></em> visit the vignettes describing bulk and single-cell workflows <a href="https://montilab.github.io/K2Taxonomer/articles/RunningK2Taxonomer">here</a> and <a href="https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_singlecell">here</a>, respectively.</p>
 </div>
 <div id="requirements" class="section level1">
 <h1 class="hasAnchor">
@@ -141,21 +143,21 @@
 <code class="sourceCode R"><span class="co"># Use toy set of gene sets</span>
 <span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">sample.ExpressionSet</span><span class="op">)</span>
 <span class="va">genesetsMadeUp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-  geneset1 <span class="op">=</span> <span class="va">genes</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span>,
-  geneset2 <span class="op">=</span> <span class="va">genes</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">200</span><span class="op">]</span>,
-  geneset3 <span class="op">=</span> <span class="va">genes</span><span class="op">[</span><span class="fl">201</span><span class="op">:</span><span class="fl">300</span><span class="op">]</span><span class="op">)</span>
+    geneset1<span class="op">=</span><span class="va">genes</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span>,
+    geneset2<span class="op">=</span><span class="va">genes</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">200</span><span class="op">]</span>,
+    geneset3<span class="op">=</span><span class="va">genes</span><span class="op">[</span><span class="fl">201</span><span class="op">:</span><span class="fl">300</span><span class="op">]</span><span class="op">)</span>
 
 <span class="co"># Run phenotypic variable tests</span>
 <span class="va">infoClassVector</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
-    sex <span class="op">=</span> <span class="st">"factor"</span>,
-    type <span class="op">=</span> <span class="st">"factor1"</span>,
-    score <span class="op">=</span> <span class="st">"numeric1"</span><span class="op">)</span>
+    sex<span class="op">=</span><span class="st">"factor"</span>,
+    type<span class="op">=</span><span class="st">"factor1"</span>,
+    score<span class="op">=</span><span class="st">"numeric1"</span><span class="op">)</span>
 
 <span class="va">K2res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runK2Taxonomer.html">runK2Taxonomer</a></span><span class="op">(</span>
-  eSet <span class="op">=</span> <span class="va">sample.ExpressionSet</span>,
-  genesets <span class="op">=</span> <span class="va">genesetsMadeUp</span>,
-  infoClass <span class="op">=</span> <span class="va">infoClassVector</span>,
-  stabThresh <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></code></pre></div>
+    eSet<span class="op">=</span><span class="va">sample.ExpressionSet</span>,
+    genesets<span class="op">=</span><span class="va">genesetsMadeUp</span>,
+    infoClass<span class="op">=</span><span class="va">infoClassVector</span>,
+    stabThresh<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="creating-the-dashboard" class="section level2">
 <h2 class="hasAnchor">
@@ -170,9 +172,9 @@
 </ul>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/K2dashboard.html">K2dashboard</a></span><span class="op">(</span><span class="va">K2res</span>,
-            analysis_name <span class="op">=</span> <span class="st">"K2Taxonomer Example"</span>,
-            about <span class="op">=</span> <span class="cn">TRUE</span>,
-            output_dir <span class="op">=</span> <span class="st">"."</span><span class="op">)</span></code></pre></div>
+            analysis_name<span class="op">=</span><span class="st">"K2Taxonomer Example"</span>,
+            about<span class="op">=</span><span class="cn">TRUE</span>,
+            output_dir<span class="op">=</span><span class="st">"."</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="additional-considerations" class="section level2">
 <h2 class="hasAnchor">
@@ -190,7 +192,7 @@
 <h3 class="hasAnchor">
 <a href="#the-about-md-file" class="anchor"></a>The “<strong>about.md</strong>” file</h3>
 <p><em><a href="https://github.com/montilab/K2Taxonomer">K2Taxonomer</a></em> allows users to include information about their study in the interactive dashboards by editing" the “<strong>about.md</strong>” <em>markdown</em> file. When the “<strong>about.md</strong>” is included in the dashboard directory, it is read in and the <em>markdown</em> code is compiled along with the code in the dashboard file.</p>
-<p>This file uses <em>markdown</em> syntax specific to the CRANpkg(“flexdashboard”)` “Multiple Pages” layout, which can be reviewed <a href="https://rmarkdown.rstudio.com/flexdashboard/layouts.html#multiple_pages">here</a>. Mainly, the first two lines of the default “<strong>about.md</strong>” file.</p>
+<p>This file uses <em>markdown</em> syntax specific to the CRANpkg(“flexdashboard”) “Multiple Pages” layout, which can be reviewed <a href="https://rmarkdown.rstudio.com/flexdashboard/layouts.html">here</a>. Mainly, the first two lines of the default “<strong>about.md</strong>” file.</p>
 <pre><code>about
 =====================================</code></pre>
 <p>Will result in a tab, named <em>About</em>, as the first tab in the dashboard. Furthermore, lines with headers should start at three hashes, “###”.</p>

@@ -42,7 +42,10 @@
 <meta property="og:title" content="Wrapper for constrained K-means on subsampled data — cKmeansWrapperSubsample" />
 <meta property="og:description" content="This fuction is a wrapper for the constrained Kmeans algorithm using
 `lcvqe` from the `conclust` package. This function will subset each
-cohort down to that with the smallest number of observations." />
+cohort down to that with the smallest number of observations.This
+function is not meant to be run individually, but as a 'clustFunc'
+argument for running `K2preproc()`, `runK2Taxonomer()`, and
+`K2tax()`." />
 
 
 
@@ -74,7 +77,7 @@ cohort down to that with the smallest number of observations." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">K2Taxonomer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.5</span>
       </span>
     </div>
 
@@ -139,7 +142,10 @@ cohort down to that with the smallest number of observations." />
     <div class="ref-description">
     <p>This fuction is a wrapper for the constrained Kmeans algorithm using
 `lcvqe` from the `conclust` package. This function will subset each
-cohort down to that with the smallest number of observations.</p>
+cohort down to that with the smallest number of observations.This
+function is not meant to be run individually, but as a 'clustFunc'
+argument for running `K2preproc()`, `runK2Taxonomer()`, and
+`K2tax()`.</p>
     </div>
 
     <pre class="usage"><span class='fu'>cKmeansWrapperSubsample</span><span class='op'>(</span><span class='va'>dataMatrix</span>, <span class='va'>clustList</span><span class='op'>)</span></pre>
@@ -149,11 +155,16 @@ cohort down to that with the smallest number of observations.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>dataMatrix</th>
-      <td><p>An P x N numeric matrix of data</p></td>
+      <td><p>An P x C numeric matrix of data. Where C is the number of
+cohort labels.</p></td>
     </tr>
     <tr>
       <th>clustList</th>
-      <td><p>List of objects to use for clustering procedure.</p></td>
+      <td><p>List of objects to use for clustering procedure.</p><ul>
+<li><p>'eMat'P x N Expression matrix of data set. See `?Biobase::exprs()`.</p></li>
+<li><p>'labs'Vector of cohort labels of observations in data set,
+corresponding to columns of `clustList$eMat`.</p></li>
+</ul></td>
     </tr>
     </table>
 
@@ -169,10 +180,44 @@ Bioinformatics.
 doi: <a href='https://doi.org/10.1101/2020.11.05.370197'>10.1101/2020.11.05.370197</a>
 , <a href='http://biorxiv.org/lookup/doi/10.1101/2020.11.05.370197'>http://biorxiv.org/lookup/doi/10.1101/2020.11.05.370197</a>.
 
- Wagstaff K, Cardie C, Rogers S, Schrodl S (2001).
+    Wagstaff K, Cardie C, Rogers S, Schrodl S (2001).
 &#8220;Constrained K-means Clustering with Background Knowledge.&#8221;
 In <em>ICML</em>, 577--584.</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='va'>dat</span> <span class='op'>&lt;-</span> <span class='fu'>scRNAseq</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/scRNAseq/man/ReprocessedData.html'>ReprocessedAllenData</a></span><span class='op'>(</span>assays<span class='op'>=</span><span class='st'>'rsem_tpm'</span><span class='op'>)</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_len</a></span><span class='op'>(</span><span class='fl'>50</span><span class='op'>)</span>,<span class='op'>]</span>
+</div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2020-10-27</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='input'>
+<span class='va'>eSet</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/Biobase/man/class.ExpressionSet.html'>ExpressionSet</a></span><span class='op'>(</span>assayData<span class='op'>=</span><span class='fu'>assay</span><span class='op'>(</span><span class='va'>dat</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/pkg/Biobase/man/phenoData.html'>pData</a></span><span class='op'>(</span><span class='va'>eSet</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='fu'>colData</span><span class='op'>(</span><span class='va'>dat</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/pkg/Biobase/man/exprs.html'>exprs</a></span><span class='op'>(</span><span class='va'>eSet</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log2</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/Biobase/man/exprs.html'>exprs</a></span><span class='op'>(</span><span class='va'>eSet</span><span class='op'>)</span> <span class='op'>+</span> <span class='fl'>1</span><span class='op'>)</span>
+
+<span class='co'>## Subset for fewer cluster labels for this example</span>
+<span class='va'>eSet</span> <span class='op'>&lt;-</span> <span class='va'>eSet</span><span class='op'>[</span>, <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>eSet</span><span class='op'>$</span><span class='va'>Primary.Type</span><span class='op'>)</span> <span class='op'>&amp;</span>
+            <span class='va'>eSet</span><span class='op'>$</span><span class='va'>Primary.Type</span> <span class='op'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'L4 Arf5'</span>,
+                <span class='st'>'L4 Ctxn3'</span>, <span class='st'>'L4 Scnn1a'</span>, <span class='st'>'L5 Ucma'</span>, <span class='st'>'L5a Batf3'</span><span class='op'>)</span><span class='op'>]</span>
+
+<span class='co'>## Create cell type variable with spaces</span>
+<span class='va'>eSet</span><span class='op'>$</span><span class='va'>celltype</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='op'>(</span><span class='st'>' '</span>, <span class='st'>'_'</span>, <span class='va'>eSet</span><span class='op'>$</span><span class='va'>Primary.Type</span><span class='op'>)</span>
+
+<span class='co'>## Create clustList</span>
+<span class='va'>cL</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    eMat<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/Biobase/man/exprs.html'>exprs</a></span><span class='op'>(</span><span class='va'>eSet</span><span class='op'>)</span>,
+    labs<span class='op'>=</span><span class='va'>eSet</span><span class='op'>$</span><span class='va'>celltype</span>,
+    maxIter<span class='op'>=</span><span class='fl'>10</span><span class='op'>)</span>
+
+<span class='co'>## Run K2preproc to generate generate data matrix</span>
+<span class='co'>## with a column for each celltype.</span>
+<span class='va'>K2res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='K2preproc.html'>K2preproc</a></span><span class='op'>(</span><span class='va'>eSet</span>,
+                cohorts<span class='op'>=</span><span class='st'>'celltype'</span>,
+                featMetric<span class='op'>=</span><span class='st'>'F'</span>,
+                logCounts<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Collapsing group-level values with LIMMA.</div><div class='input'><span class='va'>dm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='K2data.html'>K2data</a></span><span class='op'>(</span><span class='va'>K2res</span><span class='op'>)</span>
+
+<span class='co'>## Generate K=2 split with constrained K-means</span>
+<span class='fu'>cKmeansWrapperSubsample</span><span class='op'>(</span><span class='va'>dm</span>, <span class='va'>cL</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "11222"</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

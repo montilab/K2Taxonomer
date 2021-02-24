@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">K2Taxonomer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.5</span>
       </span>
     </div>
 
@@ -154,17 +154,25 @@
     <p>A data.frame object with the following columns:</p><ul>
 <li><p>category: The user-specified gene set names</p></li>
 <li><p>node: The identifier of the partition</p></li>
-<li><p>edge: Indication of which subgroup the gene was assigned at a given partition</p></li>
+<li><p>edge: Indication of which subgroup the gene was assigned at a
+given partition</p></li>
 <li><p>direction: The direction of coefficient for the assigned gene set</p></li>
-<li><p>pval_hyper: The p-value of the hyperenrichment test comparing the subgroup-assigned gene set to the user-specified gene set</p></li>
-<li><p>fdr_hyper: The multiple hypothesis corrected FDR (Benjamini-Hochberg) p-value of hyperenrichment, adjusted across all partitions</p></li>
-<li><p>nhits: The intersection of subgroup-assigned genes and the user-specified gene set</p></li>
+<li><p>pval_hyper: The p-value of the hyperenrichment test comparing the
+subgroup-assigned gene set to the user-specified gene set</p></li>
+<li><p>fdr_hyper: The multiple hypothesis corrected FDR
+(Benjamini-Hochberg) p-value of hyperenrichment, adjusted across all
+partitions</p></li>
+<li><p>nhits: The intersection of subgroup-assigned genes and the
+user-specified gene set</p></li>
 <li><p>ndrawn: The number of subgroup-assigned genes</p></li>
 <li><p>ncats: The number of genes in the user-specified gene set</p></li>
 <li><p>ntot: The background population of possible genes</p></li>
 <li><p>pval_limma: The p-value estimated by the `limma` R package</p></li>
-<li><p>fdr_limma: The multiple hypothesis corrected FDR (Benjamini-Hochberg) p-value of differential analysis, adjusted across all partitions</p></li>
-<li><p>coef: The difference between the means of each subgroup at a given partition</p></li>
+<li><p>fdr_limma: The multiple hypothesis corrected FDR
+(Benjamini-Hochberg) p-value of differential analysis, adjusted across all
+partitions</p></li>
+<li><p>coef: The difference between the means of each subgroup at a given
+partition</p></li>
 <li><p>mean: The mean across all observations at the given partition</p></li>
 <li><p>t: The test statistic estimated by the `limma` R package</p></li>
 <li><p>B: The B-statistic estimated by the `limma` R package</p></li>
@@ -178,19 +186,19 @@ Bioinformatics.
 doi: <a href='https://doi.org/10.1101/2020.11.05.370197'>10.1101/2020.11.05.370197</a>
 , <a href='http://biorxiv.org/lookup/doi/10.1101/2020.11.05.370197'>http://biorxiv.org/lookup/doi/10.1101/2020.11.05.370197</a>.
 
- Ritchie ME, Phipson B, Wu D, Hu Y, Law CW, Shi W, Smyth GK (2015).
+    Ritchie ME, Phipson B, Wu D, Hu Y, Law CW, Shi W, Smyth GK (2015).
 &#8220;limma powers differential expression analyses for RNA-sequencing and microarray studies.&#8221;
 <em>Nucleic Acids Research</em>, <b>43</b>(7), e47--e47.
 ISSN 1362-4962, 0305-1048, doi: <a href='https://doi.org/10.1093/nar/gkv007'>10.1093/nar/gkv007</a>
 , <a href='http://academic.oup.com/nar/article/43/7/e47/2414268/limma-powers-differential-expression-analyses-for'>http://academic.oup.com/nar/article/43/7/e47/2414268/limma-powers-differential-expression-analyses-for</a>.
 
- Benjamini Y, Hochberg Y (1995).
+    Benjamini Y, Hochberg Y (1995).
 &#8220;Controlling the False Discovery Rate: A Practical and Powerful Approach to Multiple Testing.&#8221;
 <em>Journal of the Royal Statistical Society: Series B (Methodological)</em>, <b>57</b>(1), 289--300.
 ISSN 00359246, doi: <a href='https://doi.org/10.1111/j.2517-6161.1995.tb02031.x'>10.1111/j.2517-6161.1995.tb02031.x</a>
 , <a href='http://doi.wiley.com/10.1111/j.2517-6161.1995.tb02031.x'>http://doi.wiley.com/10.1111/j.2517-6161.1995.tb02031.x</a>.
 
- Hanzelmann S, Castelo R, Guinney J (2013).
+    Hanzelmann S, Castelo R, Guinney J (2013).
 &#8220;GSVA: gene set variation analysis for microarray and RNA-Seq data.&#8221;
 <em>BMC Bioinformatics</em>, <b>14</b>(1), 7.
 ISSN 1471-2105, doi: <a href='https://doi.org/10.1186/1471-2105-14-7'>10.1186/1471-2105-14-7</a>
@@ -206,7 +214,7 @@ ISSN 1471-2105, doi: <a href='https://doi.org/10.1186/1471-2105-14-7'>10.1186/14
 
 <span class='co'>## Run K2 Taxonomer algorithm</span>
 <span class='va'>K2res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='K2tax.html'>K2tax</a></span><span class='op'>(</span><span class='va'>K2res</span>,
-               stabThresh <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>
+            stabThresh<span class='op'>=</span><span class='fl'>0.5</span><span class='op'>)</span>
 
 <span class='co'>## Run differential analysis on each partition</span>
 <span class='va'>K2res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='runDGEmods.html'>runDGEmods</a></span><span class='op'>(</span><span class='va'>K2res</span><span class='op'>)</span>
@@ -215,47 +223,46 @@ ISSN 1471-2105, doi: <a href='https://doi.org/10.1186/1471-2105-14-7'>10.1186/14
 <span class='va'>DGEtable</span> <span class='op'>&lt;-</span> <span class='fu'><a href='getDGETable.html'>getDGETable</a></span><span class='op'>(</span><span class='va'>K2res</span><span class='op'>)</span>
 <span class='va'>genes</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='op'>(</span><span class='va'>DGEtable</span><span class='op'>$</span><span class='va'>gene</span><span class='op'>)</span>
 <span class='va'>genesetsMadeUp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-    GS1 <span class='op'>=</span> <span class='va'>genes</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>50</span><span class='op'>]</span>,
-    GS2 <span class='op'>=</span> <span class='va'>genes</span><span class='op'>[</span><span class='fl'>51</span><span class='op'>:</span><span class='fl'>100</span><span class='op'>]</span>,
-    GS3 <span class='op'>=</span> <span class='va'>genes</span><span class='op'>[</span><span class='fl'>101</span><span class='op'>:</span><span class='fl'>150</span><span class='op'>]</span>
-<span class='op'>)</span>
+    GS1<span class='op'>=</span><span class='va'>genes</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>50</span><span class='op'>]</span>,
+    GS2<span class='op'>=</span><span class='va'>genes</span><span class='op'>[</span><span class='fl'>51</span><span class='op'>:</span><span class='fl'>100</span><span class='op'>]</span>,
+    GS3<span class='op'>=</span><span class='va'>genes</span><span class='op'>[</span><span class='fl'>101</span><span class='op'>:</span><span class='fl'>150</span><span class='op'>]</span><span class='op'>)</span>
 
 <span class='co'>## Run gene set hyperenrichment</span>
-<span class='va'>K2res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='runGSEmods.html'>runGSEmods</a></span><span class='op'>(</span><span class='va'>K2res</span>, 
-                    genesets <span class='op'>=</span> <span class='va'>genesetsMadeUp</span>,
-                    qthresh <span class='op'>=</span> <span class='fl'>0.1</span><span class='op'>)</span>
-                    
-<span class='co'>## Run GSVA on genesets           </span>
-<span class='va'>K2res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='runGSVAmods.html'>runGSVAmods</a></span><span class='op'>(</span><span class='va'>K2res</span>, 
-                     ssGSEAalg <span class='op'>=</span> <span class='st'>"gsva"</span>,
-                     ssGSEAcores <span class='op'>=</span> <span class='fl'>1</span>,
-                     verbose <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-                     
+<span class='va'>K2res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='runGSEmods.html'>runGSEmods</a></span><span class='op'>(</span><span class='va'>K2res</span>,
+                genesets<span class='op'>=</span><span class='va'>genesetsMadeUp</span>,
+                qthresh<span class='op'>=</span><span class='fl'>0.1</span><span class='op'>)</span>
+
+<span class='co'>## Run GSVA on genesets</span>
+<span class='va'>K2res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='runGSVAmods.html'>runGSVAmods</a></span><span class='op'>(</span><span class='va'>K2res</span>,
+                    ssGSEAalg<span class='op'>=</span><span class='st'>'gsva'</span>,
+                    ssGSEAcores<span class='op'>=</span><span class='fl'>1</span>,
+                    verbose<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
+
 <span class='co'>## Run differential analysis on GSVA results</span>
-<span class='va'>K2res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='runDSSEmods.html'>runDSSEmods</a></span><span class='op'>(</span><span class='va'>K2res</span><span class='op'>)</span>                      
+<span class='va'>K2res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='runDSSEmods.html'>runDSSEmods</a></span><span class='op'>(</span><span class='va'>K2res</span><span class='op'>)</span>
 
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'>getEnrichmentTable</span><span class='op'>(</span><span class='va'>K2res</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;   category node edge direction   pval_hyper    fdr_hyper nhits ndrawn ncats
-#&gt; 1      GS1    A    2        up 7.331993e-38 3.079437e-36    15     18    50
-#&gt; 2      GS1    E    2        up 2.903476e-34 6.097300e-33    15     25    50
-#&gt; 3      GS2    A    1        up 3.625585e-24 5.075819e-23    10     14    50
-#&gt; 4      GS2    E    2        up 1.160450e-20 1.218473e-19    10     25    50
-#&gt; 5      GS1    J    2        up 4.760649e-13 3.998945e-12     5      6    50
-#&gt; 6      GS2    C    2        up 9.941221e-12 6.958854e-11     5      9    50
-#&gt;    ntot   pval_limma    fdr_limma      coef         mean        t         B
-#&gt; 1 20000 9.326729e-08 2.798019e-06 0.4396544  0.012341040 6.251576  7.635368
-#&gt; 2 20000 1.139858e-01 4.885105e-01 0.2766753  0.181366105 1.633438 -4.676965
-#&gt; 3 20000 3.620436e-02 1.810218e-01 0.1587672  0.007135922 2.153348 -4.581485
-#&gt; 4 20000 1.169777e-02 7.018663e-02 0.4580882 -0.144252564 2.704465 -2.519444
-#&gt; 5 20000 3.651418e-01 6.443679e-01 0.1643369  0.148928483 1.068291 -6.695834
-#&gt; 6 20000 4.141818e-03 4.141818e-02 0.3158165 -0.060034819 3.046296 -1.675093
-#&gt;                                                                                                                                                                 hits
-#&gt; 1                           31583_at,31546_at,31573_at,31511_at,31568_at,31527_at,31545_at,31708_at,31330_at,31492_at,31509_at,31385_at,31538_at,31697_s_at,31722_at
-#&gt; 2 31397_at,31589_at,AFFX-YEL021w/URA3_at,AFFX-BioC-3_st,31564_at,31425_g_at,AFFX-MurIL2_at,31502_at,31507_at,31726_at,31556_at,31574_i_at,31466_at,31571_at,31554_at
-#&gt; 3                                                           31461_at,31529_at,AFFX-TrpnX-5_at,31694_at,31471_at,31618_at,AFFX-MurIL4_at,31537_at,31345_at,31465_g_at
-#&gt; 4                                         AFFX-PheX-M_at,31379_at,AFFX-HUMGAPDH/M33197_3_at,31417_at,31404_at,31586_f_at,31478_at,31364_i_at,AFFX-CreX-5_at,31406_at
-#&gt; 5                                                                                                     31737_at,31708_at,31670_s_at,AFFX-HUMTFRR/M11507_3_at,31655_at
-#&gt; 6                                                                                                     31321_at,31579_at,31441_at,AFFX-YEL024w/RIP1_at,AFFX-BioB-5_at</div><div class='input'>
+#&gt; 1      GS1    E    2        up 8.289318e-40 2.984154e-38    17     26    50
+#&gt; 2      GS1    A    2        up 1.388507e-36 2.499313e-35    15     20    50
+#&gt; 3      GS2    A    1        up 2.616509e-28 3.139810e-27    12     18    50
+#&gt; 4      GS2    E    2        up 5.386442e-18 4.847798e-17     9     26    50
+#&gt; 5      GS2    C    2        up 8.187727e-14 5.895164e-13     6     11    50
+#&gt; 6      GS1    A    1        up 3.246781e-12 1.948068e-11     6     18    50
+#&gt;    ntot   pval_limma    fdr_limma      coef          mean        t         B
+#&gt; 1 20000 0.0167604129 0.2011249549 0.4158121  0.0981111115 2.550020 -2.855639
+#&gt; 2 20000 0.0000102174 0.0002452175 0.3421021  0.0009537613 4.969924  3.240044
+#&gt; 3 20000 0.1016447486 0.3484962808 0.1183511  0.0112973465 1.671177 -5.225981
+#&gt; 4 20000 0.0255329069 0.2042632552 0.3854695 -0.0930926814 2.363940 -3.274470
+#&gt; 5 20000 0.0493914221 0.2370788260 0.2036941 -0.0387742566 2.028366 -3.769405
+#&gt; 6 20000           NA           NA        NA            NA       NA        NA
+#&gt;                                                                                                                                                                                         hits
+#&gt; 1 31397_at,31589_at,AFFX-YEL021w/URA3_at,AFFX-BioC-3_st,31564_at,31425_g_at,AFFX-MurIL2_at,31502_at,31507_at,31726_at,31556_at,31574_i_at,31466_at,31571_at,31554_at,AFFX-PheX-M_at,31379_at
+#&gt; 2                                                   31583_at,31546_at,31573_at,31511_at,31568_at,31527_at,31545_at,31708_at,31330_at,31492_at,31509_at,31385_at,31538_at,31697_s_at,31722_at
+#&gt; 3                                                               AFFX-TrpnX-5_at,31694_at,31471_at,31618_at,AFFX-MurIL4_at,31537_at,31345_at,31465_g_at,31335_at,31428_at,31566_at,31419_r_at
+#&gt; 4                                                                                AFFX-HUMGAPDH/M33197_3_at,31417_at,31404_at,31586_f_at,31478_at,31364_i_at,AFFX-CreX-5_at,31406_at,31569_at
+#&gt; 5                                                                                                   31579_at,31441_at,AFFX-YEL024w/RIP1_at,AFFX-BioB-5_at,AFFX-HUMGAPDH/M33197_3_st,31560_at
+#&gt; 6                                                                                                                                  31396_r_at,31649_at,31580_at,31535_i_at,31461_at,31529_at</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">K2Taxonomer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.5</span>
       </span>
     </div>
 
@@ -160,13 +160,13 @@ Bioinformatics.
 doi: <a href='https://doi.org/10.1101/2020.11.05.370197'>10.1101/2020.11.05.370197</a>
 , <a href='http://biorxiv.org/lookup/doi/10.1101/2020.11.05.370197'>http://biorxiv.org/lookup/doi/10.1101/2020.11.05.370197</a>.
 
- Ritchie ME, Phipson B, Wu D, Hu Y, Law CW, Shi W, Smyth GK (2015).
+    Ritchie ME, Phipson B, Wu D, Hu Y, Law CW, Shi W, Smyth GK (2015).
 &#8220;limma powers differential expression analyses for RNA-sequencing and microarray studies.&#8221;
 <em>Nucleic Acids Research</em>, <b>43</b>(7), e47--e47.
 ISSN 1362-4962, 0305-1048, doi: <a href='https://doi.org/10.1093/nar/gkv007'>10.1093/nar/gkv007</a>
 , <a href='http://academic.oup.com/nar/article/43/7/e47/2414268/limma-powers-differential-expression-analyses-for'>http://academic.oup.com/nar/article/43/7/e47/2414268/limma-powers-differential-expression-analyses-for</a>.
 
- Benjamini Y, Hochberg Y (1995).
+    Benjamini Y, Hochberg Y (1995).
 &#8220;Controlling the False Discovery Rate: A Practical and Powerful Approach to Multiple Testing.&#8221;
 <em>Journal of the Royal Statistical Society: Series B (Methodological)</em>, <b>57</b>(1), 289--300.
 ISSN 00359246, doi: <a href='https://doi.org/10.1111/j.2517-6161.1995.tb02031.x'>10.1111/j.2517-6161.1995.tb02031.x</a>
@@ -182,7 +182,7 @@ ISSN 00359246, doi: <a href='https://doi.org/10.1111/j.2517-6161.1995.tb02031.x'
 
 <span class='co'>## Run K2 Taxonomer algorithm</span>
 <span class='va'>K2res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='K2tax.html'>K2tax</a></span><span class='op'>(</span><span class='va'>K2res</span>,
-               stabThresh <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>
+            stabThresh<span class='op'>=</span><span class='fl'>0.5</span><span class='op'>)</span>
 
 <span class='co'>## Run differential analysis on each partition</span>
 <span class='va'>K2res</span> <span class='op'>&lt;-</span> <span class='fu'>runDGEmods</span><span class='op'>(</span><span class='va'>K2res</span><span class='op'>)</span>

@@ -73,7 +73,7 @@ pre-processing functions for running K2 Taxonomer procedure." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">K2Taxonomer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.5</span>
       </span>
     </div>
 
@@ -141,34 +141,34 @@ pre-processing functions for running K2 Taxonomer procedure.</p>
     </div>
 
     <pre class="usage"><span class='fu'>K2preproc</span><span class='op'>(</span>
-  <span class='va'>eSet</span>,
-  cohorts <span class='op'>=</span> <span class='cn'>NULL</span>,
-  vehicle <span class='op'>=</span> <span class='cn'>NULL</span>,
-  covariates <span class='op'>=</span> <span class='cn'>NULL</span>,
-  block <span class='op'>=</span> <span class='cn'>NULL</span>,
-  logCounts <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  use <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Z"</span>, <span class='st'>"MEAN"</span><span class='op'>)</span>,
-  nFeats <span class='op'>=</span> <span class='st'>"sqrt"</span>,
-  featMetric <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"mad"</span>, <span class='st'>"sd"</span>, <span class='st'>"Sn"</span>, <span class='st'>"Qn"</span>, <span class='st'>"F"</span>, <span class='st'>"square"</span><span class='op'>)</span>,
-  recalcDataMatrix <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  nBoots <span class='op'>=</span> <span class='fl'>500</span>,
-  clustFunc <span class='op'>=</span> <span class='va'>hclustWrapper</span>,
-  clustCors <span class='op'>=</span> <span class='fl'>1</span>,
-  clustList <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
-  linkage <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"mcquitty"</span>, <span class='st'>"ward.D"</span>, <span class='st'>"ward.D2"</span>, <span class='st'>"single"</span>, <span class='st'>"complete"</span>, <span class='st'>"average"</span>,
-    <span class='st'>"centroid"</span><span class='op'>)</span>,
-  info <span class='op'>=</span> <span class='cn'>NULL</span>,
-  infoClass <span class='op'>=</span> <span class='cn'>NULL</span>,
-  genesets <span class='op'>=</span> <span class='cn'>NULL</span>,
-  qthresh <span class='op'>=</span> <span class='fl'>0.05</span>,
-  cthresh <span class='op'>=</span> <span class='fl'>0</span>,
-  ntotal <span class='op'>=</span> <span class='fl'>20000</span>,
-  ssGSEAalg <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"gsva"</span>, <span class='st'>"ssgsea"</span>, <span class='st'>"zscore"</span>, <span class='st'>"plage"</span><span class='op'>)</span>,
-  ssGSEAcores <span class='op'>=</span> <span class='fl'>1</span>,
-  oneoff <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  stabThresh <span class='op'>=</span> <span class='fl'>0</span>,
-  geneURL <span class='op'>=</span> <span class='cn'>NULL</span>,
-  genesetURL <span class='op'>=</span> <span class='cn'>NULL</span>
+    <span class='va'>eSet</span>,
+    cohorts <span class='op'>=</span> <span class='cn'>NULL</span>,
+    vehicle <span class='op'>=</span> <span class='cn'>NULL</span>,
+    covariates <span class='op'>=</span> <span class='cn'>NULL</span>,
+    block <span class='op'>=</span> <span class='cn'>NULL</span>,
+    logCounts <span class='op'>=</span> <span class='cn'>FALSE</span>,
+    use <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Z"</span>, <span class='st'>"MEAN"</span><span class='op'>)</span>,
+    nFeats <span class='op'>=</span> <span class='st'>"sqrt"</span>,
+    featMetric <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"mad"</span>, <span class='st'>"sd"</span>, <span class='st'>"Sn"</span>, <span class='st'>"Qn"</span>, <span class='st'>"F"</span>, <span class='st'>"square"</span><span class='op'>)</span>,
+    recalcDataMatrix <span class='op'>=</span> <span class='cn'>FALSE</span>,
+    nBoots <span class='op'>=</span> <span class='fl'>500</span>,
+    clustFunc <span class='op'>=</span> <span class='va'>hclustWrapper</span>,
+    clustCors <span class='op'>=</span> <span class='fl'>1</span>,
+    clustList <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+    linkage <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"mcquitty"</span>, <span class='st'>"ward.D"</span>, <span class='st'>"ward.D2"</span>, <span class='st'>"single"</span>, <span class='st'>"complete"</span>,
+        <span class='st'>"average"</span>, <span class='st'>"centroid"</span><span class='op'>)</span>,
+    info <span class='op'>=</span> <span class='cn'>NULL</span>,
+    infoClass <span class='op'>=</span> <span class='cn'>NULL</span>,
+    genesets <span class='op'>=</span> <span class='cn'>NULL</span>,
+    qthresh <span class='op'>=</span> <span class='fl'>0.05</span>,
+    cthresh <span class='op'>=</span> <span class='fl'>0</span>,
+    ntotal <span class='op'>=</span> <span class='fl'>20000</span>,
+    ssGSEAalg <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"gsva"</span>, <span class='st'>"ssgsea"</span>, <span class='st'>"zscore"</span>, <span class='st'>"plage"</span><span class='op'>)</span>,
+    ssGSEAcores <span class='op'>=</span> <span class='fl'>1</span>,
+    oneoff <span class='op'>=</span> <span class='cn'>TRUE</span>,
+    stabThresh <span class='op'>=</span> <span class='fl'>0</span>,
+    geneURL <span class='op'>=</span> <span class='cn'>NULL</span>,
+    genesetURL <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -204,12 +204,12 @@ counts or log normalized counts from RNA-seq. Default is FALSE.</p></td>
     </tr>
     <tr>
       <th>use</th>
-      <td><p>Character string. Options are "Z" to generate test statistics or
-"MEAN" to use means from differential analysis for clustering.</p></td>
+      <td><p>Character string. Options are 'Z' to generate test statistics or
+'MEAN' to use means from differential analysis for clustering.</p></td>
     </tr>
     <tr>
       <th>nFeats</th>
-      <td><p>"sqrt" or a numeric value &lt;= number of features to subset the
+      <td><p>'sqrt' or a numeric value &lt;= number of features to subset the
 features for each partition.</p></td>
     </tr>
     <tr>
@@ -275,8 +275,8 @@ by default.</p></td>
     <tr>
       <th>ssGSEAalg</th>
       <td><p>A character string, specifying which algorithm to use for
-running the gsva() function from the GSVA package. Options are "gsva",
-"ssgsea", "zscore", and "plage". "gsva" by default.</p></td>
+running the gsva() function from the GSVA package. Options are 'gsva',
+'ssgsea', 'zscore', and 'plage'. 'gsva' by default.</p></td>
     </tr>
     <tr>
       <th>ssGSEAcores</th>
@@ -301,6 +301,9 @@ package. Default is 1.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>An object of class, `K2`.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Reed ER, Monti S (2020).
@@ -309,7 +312,7 @@ Bioinformatics.
 doi: <a href='https://doi.org/10.1101/2020.11.05.370197'>10.1101/2020.11.05.370197</a>
 , <a href='http://biorxiv.org/lookup/doi/10.1101/2020.11.05.370197'>http://biorxiv.org/lookup/doi/10.1101/2020.11.05.370197</a>.
 
- Ritchie ME, Phipson B, Wu D, Hu Y, Law CW, Shi W, Smyth GK (2015).
+    Ritchie ME, Phipson B, Wu D, Hu Y, Law CW, Shi W, Smyth GK (2015).
 &#8220;limma powers differential expression analyses for RNA-sequencing and microarray studies.&#8221;
 <em>Nucleic Acids Research</em>, <b>43</b>(7), e47--e47.
 ISSN 1362-4962, 0305-1048, doi: <a href='https://doi.org/10.1093/nar/gkv007'>10.1093/nar/gkv007</a>

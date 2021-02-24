@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">K2Taxonomer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.5</span>
       </span>
     </div>
 
@@ -91,20 +91,22 @@
       <h1 data-toc-skip>1. Introduction to Running K2Taxonomer (Bulk Expression Data)</h1>
                         <h4 class="author">Eric R. Reed</h4>
             <address class="author_afil">
-      Boston University School of Medicine, Section of Computational Biomedicine, 72 E Concord St, Boston, MA 02118<br><h4 class="date">October 21, 2020</h4>
+      Boston University School of Medicine, Section of Computational Biomedicine, 72 E Concord St, Boston, MA 02118<br><a class="author_email" href="mailto:#"></a><a href="mailto:reeder@bu.edu" class="email">reeder@bu.edu</a>
+      </address>
+                  
+            <h4 class="date">October 21, 2020</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/montilab/K2Taxonomer/blob/master/vignettes/RunningK2Taxonomer.Rmd"><code>vignettes/RunningK2Taxonomer.Rmd</code></a></small>
       <div class="hidden name"><code>RunningK2Taxonomer.Rmd</code></div>
 
-    </address>
-</div>
+    </div>
 
     
     
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
-<p>This vignette describes the general workflow for running <em><a href="https://github.com/montilab/K2Taxonomer">K2Taxonomer</a></em> on gene expression data <span class="citation">(Reed and Monti 2020)</span>. While this vignette describes an analysis of bulk gene expression data, many of these steps are shared with that of single-cell expression analyses. A vignette for running <em><a href="https://github.com/montilab/K2Taxonomer">K2Taxonomer</a></em> on single-cell expression data can be found <a href="https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_singlecell.html">here</a>.</p>
+<p>This vignette describes the general workflow for running <em><a href="https://github.com/montilab/K2Taxonomer">K2Taxonomer</a></em> on gene expression data <span class="citation">(Reed and Monti 2020)</span>. While this vignette describes an analysis of bulk gene expression data, many of these steps are shared with that of single-cell expression analyses. A vignette for running <em><a href="https://github.com/montilab/K2Taxonomer">K2Taxonomer</a></em> on single-cell expression data can be found <a href="https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_singlecell">here</a>.</p>
 </div>
 <div id="requirements" class="section level1">
 <h1 class="hasAnchor">
@@ -136,16 +138,16 @@
 <div id="initialize-k2-object" class="section level2">
 <h2 class="hasAnchor">
 <a href="#initialize-k2-object" class="anchor"></a>Initialize <code>K2</code> object</h2>
-<p>The <code><a href="../reference/K2preproc.html">K2preproc()</a></code> initializes the <code>K2</code> object and runs pre-processing steps. Here, you can specify all arguments used throughout the analysis. Otherwise, you can specify these arguments within the specific functions for which they are implements. See help pages for more information.</p>
+<p>The <code><a href="../reference/K2preproc.html">K2preproc()</a></code> initializes the <code>K2</code> object and runs pre-processing steps. Here, you can specify all arguments used throughout the analysis. Otherwise, you can specify these arguments within the specific functions for which they are implemented. See help pages for more information.</p>
 <p>Here we will start by using the defaults.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Run pre-processing</span>
 <span class="va">K2res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/K2preproc.html">K2preproc</a></span><span class="op">(</span><span class="va">sample.ExpressionSet</span><span class="op">)</span></code></pre></div>
-<p><strong>Note: This data set is microarray expression data. If using normalized and log-transformed count data then it’s generally recommended that you set <em>logCounts = TRUE</em> </strong>. This will more appropriately perform differential gene expression analyses with the <em><a href="https://bioconductor.org/packages/3.12/limma">limma</a></em> R package <span class="citation">(Ritchie et al. 2015)</span>.</p>
+<p><strong>Note: This data set is microarray expression data. If using normalized and log-transformed count data then it’s generally recommended that you set <em>logCounts=TRUE</em> </strong>. This will more appropriately perform differential gene expression analyses with the <em><a href="https://bioconductor.org/packages/3.12/limma">limma</a></em> R package <span class="citation">(Ritchie et al. 2015)</span>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## NOT RUN</span>
 <span class="va">K2res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/K2preproc.html">K2preproc</a></span><span class="op">(</span><span class="va">sample.ExpressionSet</span>,
-                   logCounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+                    logCounts<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <div id="k2-object-structre" class="section level3">
 <h3 class="hasAnchor">
 <a href="#k2-object-structre" class="anchor"></a><code>K2</code> object structre</h3>
@@ -206,12 +208,12 @@
 <h2 class="hasAnchor">
 <a href="#running-k2taxonomer-algorithm" class="anchor"></a>Running <em><a href="https://github.com/montilab/K2Taxonomer">K2Taxonomer</a></em> algorithm</h2>
 <p>The <em><a href="https://github.com/montilab/K2Taxonomer">K2Taxonomer</a></em> is run by <code><a href="../reference/K2tax.html">K2tax()</a></code>. At each recursion of the algorithm, the observations in <strong>dataMatrix</strong> are partitioned into two sub-groups based on a compilation of repeated K=2 clustering on bootstrapped sampling of features. For each partition in the recursion, a stability metric is used to estimate robustness, which takes on values between 0 and 1, where values close to 1 represent the instance in which the same clustering occured in every or nearly every perturbation of a large set of observations. As the number of observations decreasing down the taxonomy the largest possible stability estimate decreases, such that the largest possible stability estimate of triplets and duplets, is 0.67 and 0.50, respectively.</p>
-<p>The parameter, <strong>stabThresh</strong>, controls the minimum value of the stability metric to continue partitioning the observations. By default, <strong>stabThresh</strong> is set to 0, which will run the algorithm until until all observations fall into singlets. If we set <strong>stabThresh = 0.5</strong> the algorithm can not separate duplets, as well as larger sets that demonstrate poor stability when a partition is attempted. This can also be set during initialization with <code><a href="../reference/K2preproc.html">K2preproc()</a></code>.</p>
+<p>The parameter, <strong>stabThresh</strong>, controls the minimum value of the stability metric to continue partitioning the observations. By default, <strong>stabThresh</strong> is set to 0, which will run the algorithm until until all observations fall into singlets. If we set <strong>stabThresh=0.5</strong> the algorithm can not separate duplets, as well as larger sets that demonstrate poor stability when a partition is attempted. This can also be set during initialization with <code><a href="../reference/K2preproc.html">K2preproc()</a></code>.</p>
 <p>Choosing an appropriate threshold is dependent on the size of the original data set. For large data sets, choosing small values will greatly increase runtime, and values between 0.8 and 0.7, are generally recommended.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Run K2Taxonomer aglorithm</span>
 <span class="va">K2res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/K2tax.html">K2tax</a></span><span class="op">(</span><span class="va">K2res</span>,
-               stabThresh <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></code></pre></div>
+            stabThresh<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="k2taxonomer-results-structure" class="section level2">
 <h2 class="hasAnchor">
@@ -221,7 +223,7 @@
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Labels of each partition</span>
 <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="fu"><a href="../reference/K2results.html">K2results</a></span><span class="op">(</span><span class="va">K2res</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; [1] "A" "B" "C" "D" "E" "F" "G"</span></code></pre></div>
+<span class="co">#&gt;  [1] "A" "B" "C" "D" "E" "F" "G" "H" "I" "J"</span></code></pre></div>
 <div id="partition-results" class="section level3">
 <h3 class="hasAnchor">
 <a href="#partition-results" class="anchor"></a>Partition results</h3>
@@ -229,10 +231,10 @@
 <code class="sourceCode R"><span class="co">## Get observations defined in each partition</span>
 <span class="fu"><a href="../reference/K2results.html">K2results</a></span><span class="op">(</span><span class="va">K2res</span><span class="op">)</span><span class="op">$</span><span class="va">A</span><span class="op">$</span><span class="va">obs</span>
 <span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt;  [1] "A" "B" "E" "F" "H" "I" "K" "L" "N" "P" "Q" "S" "T" "W" "X" "Y" "Z"</span>
+<span class="co">#&gt;  [1] "A" "C" "D" "F" "G" "J" "M" "O" "Q" "R" "S" "U" "V" "W" "X"</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[2]]</span>
-<span class="co">#&gt; [1] "C" "D" "G" "J" "M" "O" "R" "U" "V"</span></code></pre></div>
+<span class="co">#&gt;  [1] "B" "E" "H" "I" "K" "L" "N" "P" "T" "Y" "Z"</span></code></pre></div>
 </div>
 <div id="stability-metrics" class="section level3">
 <h3 class="hasAnchor">
@@ -241,33 +243,34 @@
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Get bootstrap probability of this partition</span>
 <span class="fu"><a href="../reference/K2results.html">K2results</a></span><span class="op">(</span><span class="va">K2res</span><span class="op">)</span><span class="op">$</span><span class="va">A</span><span class="op">$</span><span class="va">bootP</span>
-<span class="co">#&gt; [1] 0.038</span>
+<span class="co">#&gt; [1] 0.044</span>
 
 <span class="co">## Node stability (Value between 0 and 1. 1 indicating high stability)</span>
 <span class="fu"><a href="../reference/K2results.html">K2results</a></span><span class="op">(</span><span class="va">K2res</span><span class="op">)</span><span class="op">$</span><span class="va">A</span><span class="op">$</span><span class="va">stability</span><span class="op">$</span><span class="va">node</span>
-<span class="co">#&gt; [1] 0.7018808</span>
+<span class="co">#&gt; [1] 0.701604</span>
 
 <span class="co">## Stability of each subseqent subgroup.</span>
 <span class="fu"><a href="../reference/K2results.html">K2results</a></span><span class="op">(</span><span class="va">K2res</span><span class="op">)</span><span class="op">$</span><span class="va">A</span><span class="op">$</span><span class="va">stability</span><span class="op">$</span><span class="va">clusters</span>
-<span class="co">#&gt; [1] 0.6513123 0.7020244</span>
+<span class="co">#&gt; [1] 0.6512075 0.7092654</span>
 
 <span class="co">## Distance matrix indicating pairwise cosine similarity of each observation</span>
 <span class="va">partitionAstability</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="../reference/K2results.html">K2results</a></span><span class="op">(</span><span class="va">K2res</span><span class="op">)</span><span class="op">$</span><span class="va">A</span><span class="op">$</span><span class="va">stability</span><span class="op">$</span><span class="va">samples</span><span class="op">)</span>
 
 <span class="co">## Show heatmap</span>
-<span class="va">hcols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"grey"</span>, <span class="st">"black"</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">partitionAstability</span><span class="op">)</span> <span class="op">%in%</span> <span class="fu"><a href="../reference/K2results.html">K2results</a></span><span class="op">(</span><span class="va">K2res</span><span class="op">)</span><span class="op">$</span><span class="va">A</span><span class="op">$</span><span class="va">obs</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span>
+<span class="va">hcols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"grey"</span>, <span class="st">"black"</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">partitionAstability</span><span class="op">)</span> <span class="op">%in%</span>
+    <span class="fu"><a href="../reference/K2results.html">K2results</a></span><span class="op">(</span><span class="va">K2res</span><span class="op">)</span><span class="op">$</span><span class="va">A</span><span class="op">$</span><span class="va">obs</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span>
 
-<span class="fu"><a href="https://rdrr.io/r/stats/heatmap.html">heatmap</a></span><span class="op">(</span><span class="va">partitionAstability</span>, 
-        distfun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/dist.html">as.dist</a></span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">x</span><span class="op">)</span>, 
-        hclustfun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"mcquitty"</span><span class="op">)</span>,
-        col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html">hcl.colors</a></span><span class="op">(</span><span class="fl">12</span>, <span class="st">"Blue-Red"</span><span class="op">)</span>,
-        scale <span class="op">=</span> <span class="st">"none"</span>,
-        cexRow <span class="op">=</span> <span class="fl">0.7</span>,
-        cexCol <span class="op">=</span> <span class="fl">0.7</span>,
-        symm <span class="op">=</span> <span class="cn">TRUE</span>,
-        ColSideColors <span class="op">=</span> <span class="va">hcols</span>,
-        RowSideColors <span class="op">=</span> <span class="va">hcols</span>,
-        keep.dendro <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/stats/heatmap.html">heatmap</a></span><span class="op">(</span><span class="va">partitionAstability</span>,
+        distfun<span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/dist.html">as.dist</a></span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">x</span><span class="op">)</span>,
+        hclustfun<span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span><span class="va">x</span>, method<span class="op">=</span><span class="st">"mcquitty"</span><span class="op">)</span>,
+        col<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html">hcl.colors</a></span><span class="op">(</span><span class="fl">12</span>, <span class="st">"Blue-Red"</span><span class="op">)</span>,
+        scale<span class="op">=</span><span class="st">"none"</span>,
+        cexRow<span class="op">=</span><span class="fl">0.7</span>,
+        cexCol<span class="op">=</span><span class="fl">0.7</span>,
+        symm<span class="op">=</span><span class="cn">TRUE</span>,
+        ColSideColors<span class="op">=</span><span class="va">hcols</span>,
+        RowSideColors<span class="op">=</span><span class="va">hcols</span>,
+        keep.dendro<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <p><img src="RunningK2Taxonomer_files/figure-html/stability-1.png" width="480" style="display: block; margin: auto;"></p>
 </div>
 </div>
@@ -298,38 +301,38 @@
 
 <span class="co">## Get differential results for one partition</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/K2results.html">K2results</a></span><span class="op">(</span><span class="va">K2res</span><span class="op">)</span><span class="op">$</span><span class="va">A</span><span class="op">$</span><span class="va">dge</span><span class="op">)</span>
-<span class="co">#&gt;       gene       coef      mean        t         pval         fdr         B</span>
-<span class="co">#&gt; 1 31527_at 1599.64399 3428.9188 6.265271 1.512471e-06 0.002646825 -2.865008</span>
-<span class="co">#&gt; 2 31471_at   62.91179  214.0319 5.534596 9.547005e-06 0.005811632 -3.059713</span>
-<span class="co">#&gt; 3 31330_at 1641.88804 2986.0188 5.517900 9.962798e-06 0.005811632 -3.064506</span>
-<span class="co">#&gt; 4 31546_at 1112.43179 1963.0257 5.409379 1.314992e-05 0.005865908 -3.096044</span>
-<span class="co">#&gt; 5 31385_at 1274.33536 3490.1604 5.401797 1.340779e-05 0.005865908 -3.098273</span>
-<span class="co">#&gt; 6 31492_at  259.74456  307.9889 5.182541 2.354546e-05 0.009156568 -3.164113</span>
-<span class="co">#&gt;   edge</span>
-<span class="co">#&gt; 1    1</span>
-<span class="co">#&gt; 2    2</span>
-<span class="co">#&gt; 3    1</span>
-<span class="co">#&gt; 4    1</span>
-<span class="co">#&gt; 5    1</span>
-<span class="co">#&gt; 6    1</span>
+<span class="co">#&gt;                        gene       coef       mean        t         pval</span>
+<span class="co">#&gt; 1                  31492_at  282.13664  307.98895 6.955755 2.796513e-07</span>
+<span class="co">#&gt; 2                  31461_at   27.57876   41.53356 5.633815 7.423551e-06</span>
+<span class="co">#&gt; 3 AFFX-HUMGAPDH/M33197_5_at 1709.65597 2262.19365 5.398349 1.354315e-05</span>
+<span class="co">#&gt; 4                  31321_at   36.15622  141.04954 5.358643 1.499377e-05</span>
+<span class="co">#&gt; 5                  31385_at 1202.02188 3490.16038 5.169070 2.440299e-05</span>
+<span class="co">#&gt; 6                31675_s_at   33.12332   30.28507 5.020459 3.579310e-05</span>
+<span class="co">#&gt;            fdr         B edge</span>
+<span class="co">#&gt; 1 0.0009254537 -2.520401    2</span>
+<span class="co">#&gt; 2 0.0051501718 -2.879747    1</span>
+<span class="co">#&gt; 3 0.0061559792 -2.954549    2</span>
+<span class="co">#&gt; 4 0.0062474062 -2.967498    1</span>
+<span class="co">#&gt; 5 0.0081343312 -3.030659    2</span>
+<span class="co">#&gt; 6 0.0094192361 -3.081715    2</span>
 
 <span class="co">## Concatenate all results and generate table</span>
 <span class="va">DGEtable</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getDGETable.html">getDGETable</a></span><span class="op">(</span><span class="va">K2res</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">DGEtable</span><span class="op">)</span>
-<span class="co">#&gt;                      gene       coef      mean         t         pval</span>
-<span class="co">#&gt; 1 AFFX-HSAC07/X00351_M_at 2725.86423 4523.4794  8.872476 1.472443e-07</span>
-<span class="co">#&gt; 2                31527_at 1599.64399 3428.9188  6.265271 1.512471e-06</span>
-<span class="co">#&gt; 3 AFFX-HSAC07/X00351_5_at 2799.86558 3674.8312  6.664478 5.584298e-06</span>
-<span class="co">#&gt; 4                31315_at 3770.93767 1121.4568 67.667895 8.459921e-06</span>
-<span class="co">#&gt; 5                31471_at   62.91179  214.0319  5.534596 9.547005e-06</span>
-<span class="co">#&gt; 6                31330_at 1641.88804 2986.0188  5.517900 9.962798e-06</span>
-<span class="co">#&gt;            fdr         B edge node direction</span>
-<span class="co">#&gt; 1 0.0005153549 -3.629658    1    B        up</span>
-<span class="co">#&gt; 2 0.0026468249 -2.865008    1    A        up</span>
-<span class="co">#&gt; 3 0.0058116319 -3.755986    1    B        up</span>
-<span class="co">#&gt; 4 0.0058116319 -4.540410    2    E        up</span>
-<span class="co">#&gt; 5 0.0058116319 -3.059713    2    A        up</span>
-<span class="co">#&gt; 6 0.0058116319 -3.064506    1    A        up</span></code></pre></div>
+<span class="co">#&gt;         gene       coef       mean         t         pval          fdr</span>
+<span class="co">#&gt; 1   31492_at  282.13664  307.98895  6.955755 2.796513e-07 0.0009254537</span>
+<span class="co">#&gt; 2   31397_at   93.10100   39.35873 11.829624 3.701815e-07 0.0009254537</span>
+<span class="co">#&gt; 3   31589_at  195.18564   97.21551 10.249751 1.385089e-06 0.0022327140</span>
+<span class="co">#&gt; 4   31737_at 1441.28807  388.06395 98.768475 2.165527e-06 0.0022327140</span>
+<span class="co">#&gt; 5 31596_f_at  900.65933 1468.05440 10.679512 2.232714e-06 0.0022327140</span>
+<span class="co">#&gt; 6   31461_at   27.57876   41.53356  5.633815 7.423551e-06 0.0051501718</span>
+<span class="co">#&gt;           B edge node direction</span>
+<span class="co">#&gt; 1 -2.520401    2    A        up</span>
+<span class="co">#&gt; 2 -4.318449    2    C        up</span>
+<span class="co">#&gt; 3 -4.325216    2    C        up</span>
+<span class="co">#&gt; 4 -4.511157    2    J        up</span>
+<span class="co">#&gt; 5 -3.953010    1    F        up</span>
+<span class="co">#&gt; 6 -2.879747    1    A        up</span></code></pre></div>
 <p>See <em>?getDGETable</em> for a description of the columns in this data frame.</p>
 <div id="interpretting-differential-analysis-results" class="section level4">
 <h4 class="hasAnchor">
@@ -342,19 +345,19 @@
 <h3 class="hasAnchor">
 <a href="#gene-set-hyperenrichment" class="anchor"></a>Gene set hyperenrichment</h3>
 <p><em><a href="https://github.com/montilab/K2Taxonomer">K2Taxonomer</a></em> performed both hyperenrichment and differential single-sample enrichment tests based on an input of gene sets using the <strong>genesets</strong> argument, which can be specified in <code><a href="../reference/runGSEmods.html">runGSEmods()</a></code>, as demonstrated here, or during initialization with <code><a href="../reference/K2preproc.html">K2preproc()</a></code>. Here, the gene sets are made up.</p>
-<p>Gene set hyperenrichment is performed on the top genes for each subgroup, as defined by differential analysis with the <code><a href="../reference/runGSEmods.html">runGSEmods()</a></code>. The arguments <strong>qthresh</strong> and <strong>cthresh</strong> specify thresholds for defining top genes, based on <em>FDR Q-value</em> and <em>log fold-change</em>, respectively. Here, <strong>qthresh = 0.1</strong>, such that genes with <em>FDR Q-value &lt; 0.1</em> will be assigned as the top genes for a given partition.</p>
+<p>Gene set hyperenrichment is performed on the top genes for each subgroup, as defined by differential analysis with the <code><a href="../reference/runGSEmods.html">runGSEmods()</a></code>. The arguments <strong>qthresh</strong> and <strong>cthresh</strong> specify thresholds for defining top genes, based on <em>FDR Q-value</em> and <em>log fold-change</em>, respectively. Here, <strong>qthresh=0.1</strong>, such that genes with <em>FDR Q-value &lt; 0.1</em> will be assigned as the top genes for a given partition.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Create dummy set of gene sets</span>
 <span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">DGEtable</span><span class="op">$</span><span class="va">gene</span><span class="op">)</span>
 <span class="va">genesetsMadeUp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-  GS1 <span class="op">=</span> <span class="va">genes</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">50</span><span class="op">]</span>,
-  GS2 <span class="op">=</span> <span class="va">genes</span><span class="op">[</span><span class="fl">51</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span>,
-  GS3 <span class="op">=</span> <span class="va">genes</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">150</span><span class="op">]</span><span class="op">)</span>
+    GS1<span class="op">=</span><span class="va">genes</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">50</span><span class="op">]</span>,
+    GS2<span class="op">=</span><span class="va">genes</span><span class="op">[</span><span class="fl">51</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span>,
+    GS3<span class="op">=</span><span class="va">genes</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">150</span><span class="op">]</span><span class="op">)</span>
 
 <span class="co">## Run gene set hyperenrichment</span>
-<span class="va">K2res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runGSEmods.html">runGSEmods</a></span><span class="op">(</span><span class="va">K2res</span>, 
-                     genesets <span class="op">=</span> <span class="va">genesetsMadeUp</span>,
-                     qthresh <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></code></pre></div>
+<span class="va">K2res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runGSEmods.html">runGSEmods</a></span><span class="op">(</span><span class="va">K2res</span>,
+                genesets<span class="op">=</span><span class="va">genesetsMadeUp</span>,
+                qthresh<span class="op">=</span><span class="fl">0.1</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="single-sample-gene-set-enrichment" class="section level3">
 <h3 class="hasAnchor">
@@ -362,10 +365,10 @@
 <p>Single-sample enrichment is performed in two steps. First, the <em><a href="https://bioconductor.org/packages/3.12/GSVA">GSVA</a></em> package is used to generate observation-level enrichment scores, followed by differential analysis using the <em><a href="https://bioconductor.org/packages/3.12/limma">limma</a></em> package. This is performed by the functions <code><a href="../reference/runGSVAmods.html">runGSVAmods()</a></code> and <code><a href="../reference/runDSSEmods.html">runDSSEmods()</a></code>, respectively. Here, we can specify which enrichment algorithm to use when running the <em><a href="https://bioconductor.org/packages/3.12/GSVA">GSVA</a></em> functionality and the number of CPU cores to use with the <strong>ssGSEAalg</strong> and <strong>ssGSEAcores</strong> arguments, respectively. These can also be set in the <code><a href="../reference/K2preproc.html">K2preproc()</a></code> function. Note, that the arguments shown are the defaults.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Create expression matrix with ssGSEA(GSVA) estimates</span>
-<span class="va">K2res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runGSVAmods.html">runGSVAmods</a></span><span class="op">(</span><span class="va">K2res</span>, 
-                      ssGSEAalg <span class="op">=</span> <span class="st">"gsva"</span>,
-                      ssGSEAcores <span class="op">=</span> <span class="fl">1</span>,
-                      verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="va">K2res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runGSVAmods.html">runGSVAmods</a></span><span class="op">(</span><span class="va">K2res</span>,
+                    ssGSEAalg<span class="op">=</span><span class="st">"gsva"</span>,
+                    ssGSEAcores<span class="op">=</span><span class="fl">1</span>,
+                    verbose<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span>
 
 <span class="co">## Extract ernichment score Expression Set object</span>
 <span class="fu"><a href="../reference/K2gSet.html">K2gSet</a></span><span class="op">(</span><span class="va">K2res</span><span class="op">)</span>
@@ -392,26 +395,26 @@
 <span class="va">K2enrRes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getEnrichmentTable.html">getEnrichmentTable</a></span><span class="op">(</span><span class="va">K2res</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">K2enrRes</span><span class="op">)</span>
 <span class="co">#&gt;   category node edge direction   pval_hyper    fdr_hyper nhits ndrawn ncats</span>
-<span class="co">#&gt; 1      GS1    A    1        up 4.632408e-46 1.945611e-44    19     26    50</span>
-<span class="co">#&gt; 2      GS1    A    2        up 3.157402e-38 6.630543e-37    17     30    50</span>
-<span class="co">#&gt; 3      GS2    A    2        up 3.149542e-27 4.409359e-26    13     30    50</span>
-<span class="co">#&gt; 4      GS1    D    2        up 3.796241e-20 3.986053e-19     8     10    50</span>
-<span class="co">#&gt; 5      GS2    B    2        up 5.378121e-18 4.517622e-17     8     15    50</span>
-<span class="co">#&gt; 6      GS1    B    2        up 2.495617e-15 1.746932e-14     7     15    50</span>
-<span class="co">#&gt;    ntot   pval_limma   fdr_limma       coef       mean         t          B</span>
-<span class="co">#&gt; 1 20000 0.0004575911 0.009609414 0.30702365 0.01041709 3.6729629 -0.2473965</span>
-<span class="co">#&gt; 2 20000           NA          NA         NA         NA        NA         NA</span>
-<span class="co">#&gt; 3 20000           NA          NA         NA         NA        NA         NA</span>
-<span class="co">#&gt; 4 20000 0.0727011527 0.218103458 0.18275408 0.10327044 1.9041499 -4.1262740</span>
-<span class="co">#&gt; 5 20000 0.2436027209 0.465059740 0.14102295 0.03167850 1.1902560 -4.6468188</span>
-<span class="co">#&gt; 6 20000 0.6190228146 0.722193284 0.05705229 0.11669451 0.5026287 -5.0129337</span>
-<span class="co">#&gt;                                                                                                                                                                                                                                  hits</span>
-<span class="co">#&gt; 1 31527_at,31330_at,31546_at,31385_at,31492_at,31568_at,31708_at,AFFX-HUMGAPDH/M33197_M_at,31583_at,31665_s_at,31511_at,AFFX-HUMGAPDH/M33197_3_at,31432_g_at,31463_s_at,31538_at,31505_at,31545_at,31573_at,AFFX-HUMGAPDH/M33197_5_at</span>
-<span class="co">#&gt; 2                                                             31471_at,31529_at,31694_at,31618_at,31520_at,31461_at,31321_at,31313_at,31715_at,31420_at,AFFX-TrpnX-5_at,31428_at,31537_at,31476_g_at,31408_at,31373_at,AFFX-ThrX-3_at</span>
-<span class="co">#&gt; 3                                                                                                 31535_i_at,31424_at,31585_at,31710_at,31335_at,31416_at,31514_at,31530_at,31328_at,AFFX-LysX-M_at,31730_at,AFFX-BioDn-3_st,31457_at</span>
-<span class="co">#&gt; 4                                                                                                                                                           31527_at,31546_at,31492_at,31568_at,31708_at,31583_at,31463_s_at,31545_at</span>
-<span class="co">#&gt; 5                                                                                                                                         31404_at,31571_at,31686_at,31397_at,AFFX-MurIL2_at,31574_i_at,AFFX-YEL024w/RIP1_at,31426_at</span>
-<span class="co">#&gt; 6                                                                                                                                                              31425_g_at,31607_at,AFFX-BioC-3_st,31550_at,31589_at,31726_at,31507_at</span></code></pre></div>
+<span class="co">#&gt; 1      GS2    A    1        up 6.050217e-45 2.904104e-43    21     45    50</span>
+<span class="co">#&gt; 2      GS1    A    2        up 1.581566e-32 3.795758e-31    14     22    50</span>
+<span class="co">#&gt; 3      GS1    C    2        up 5.302408e-28 8.483853e-27    13     27    50</span>
+<span class="co">#&gt; 4      GS1    A    1        up 3.865715e-22 3.711086e-21    12     45    50</span>
+<span class="co">#&gt; 5      GS3    A    1        up 3.865715e-22 3.711086e-21    12     45    50</span>
+<span class="co">#&gt; 6      GS2    C    2        up 2.984094e-20 2.387275e-19    10     27    50</span>
+<span class="co">#&gt;    ntot   pval_limma    fdr_limma      coef         mean        t         B</span>
+<span class="co">#&gt; 1 20000 7.875808e-02 3.811366e-01 0.1185639  0.025661026 1.821531 -5.212000</span>
+<span class="co">#&gt; 2 20000 8.626772e-03 6.470079e-02 0.2524071  0.005037724 2.815406 -3.237921</span>
+<span class="co">#&gt; 3 20000 1.276137e-01 3.811366e-01 0.2862642  0.150657220 1.611915 -4.347279</span>
+<span class="co">#&gt; 4 20000           NA           NA        NA           NA       NA        NA</span>
+<span class="co">#&gt; 5 20000 6.717887e-07 2.015366e-05 0.3051457  0.006653681 6.300508  5.916475</span>
+<span class="co">#&gt; 6 20000 1.271392e-01 3.811366e-01 0.2529412 -0.042741229 1.614090 -4.345997</span>
+<span class="co">#&gt;                                                                                                                                                                                                                              hits</span>
+<span class="co">#&gt; 1 31428_at,31694_at,AFFX-TrpnX-M_at,31721_at,31413_at,31644_at,31579_at,31648_at,31626_i_at,31440_at,31408_at,31715_at,AFFX-DapX-M_at,31353_f_at,AFFX-ThrX-3_at,AFFX-BioB-5_at,31328_at,31607_at,AFFX-LysX-M_at,31441_at,31373_at</span>
+<span class="co">#&gt; 2                                                         31492_at,AFFX-HUMGAPDH/M33197_5_at,31583_at,31385_at,31546_at,31675_s_at,31330_at,31527_at,31665_s_at,31463_s_at,31672_g_at,AFFX-HUMGAPDH/M33197_M_at,31431_at,31573_at</span>
+<span class="co">#&gt; 3                                                                                31397_at,31589_at,AFFX-YEL021w/URA3_at,AFFX-BioC-3_st,31564_at,31425_g_at,AFFX-MurIL2_at,31502_at,31507_at,31726_at,31556_at,31574_i_at,31466_at</span>
+<span class="co">#&gt; 4                                                                                  31461_at,AFFX-YEL021w/URA3_at,31321_at,AFFX-MurIL2_at,31618_at,AFFX-TrpnX-5_at,31457_at,31471_at,31530_at,AFFX-MurIL4_at,31535_i_at,31635_g_at</span>
+<span class="co">#&gt; 5                                                                                         AFFX-ThrX-5_at,AFFX-YEL024w/RIP1_at,31436_s_at,31437_r_at,31459_i_at,31335_at,31345_at,31580_at,31713_s_at,31424_at,31733_at,31465_g_at</span>
+<span class="co">#&gt; 6                                                                                                            31571_at,31554_at,AFFX-PheX-M_at,31379_at,AFFX-HUMGAPDH/M33197_3_at,31417_at,31404_at,31586_f_at,31478_at,31364_i_at</span></code></pre></div>
 <p>See <em>?getEnrichmentTable</em> for a description of the columns in this data frame.</p>
 </div>
 <div id="differential-single-sample-enrichment-analysis-1" class="section level3">
@@ -467,53 +470,60 @@
 </ul>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">infoClassVector</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
-    sex <span class="op">=</span> <span class="st">"factor"</span>,
-    type <span class="op">=</span> <span class="st">"factor1"</span>,
-    score <span class="op">=</span> <span class="st">"numeric1"</span><span class="op">)</span></code></pre></div>
+    sex<span class="op">=</span><span class="st">"factor"</span>,
+    type<span class="op">=</span><span class="st">"factor1"</span>,
+    score<span class="op">=</span><span class="st">"numeric1"</span><span class="op">)</span></code></pre></div>
 <p>After creating the named vector, phenotypic variable testing is performed using the <code><a href="../reference/runTestsMods.html">runTestsMods()</a></code> function.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Run phenotype variable tests</span>
-<span class="va">K2res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runTestsMods.html">runTestsMods</a></span><span class="op">(</span><span class="va">K2res</span>, infoClass <span class="op">=</span> <span class="va">infoClassVector</span><span class="op">)</span>
+<span class="va">K2res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runTestsMods.html">runTestsMods</a></span><span class="op">(</span><span class="va">K2res</span>, infoClass<span class="op">=</span><span class="va">infoClassVector</span><span class="op">)</span>
 
 <span class="co">## Get differential results for one partition</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/K2results.html">K2results</a></span><span class="op">(</span><span class="va">K2res</span><span class="op">)</span><span class="op">$</span><span class="va">A</span><span class="op">$</span><span class="va">modTests</span><span class="op">)</span>
 <span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt;   value      pval       fdr       stat df   obsMean   altMean    diffMean nhits</span>
-<span class="co">#&gt; 1   sex 0.2167048 0.9825889  0.2677410 NA        NA        NA          NA    NA</span>
-<span class="co">#&gt; 2 score 0.6570022 1.0000000 69.5000000 NA 0.5217647 0.5655556 -0.04379085    NA</span>
-<span class="co">#&gt; 3  type 0.9208238 1.0000000  0.4510923 NA        NA        NA          NA     6</span>
-<span class="co">#&gt;   ncase nalt ndrawn             hits                         test</span>
-<span class="co">#&gt; 1    NA   NA     NA             &lt;NA&gt; two-sided Fishers Exact Test</span>
-<span class="co">#&gt; 2    NA   NA     NA             &lt;NA&gt;          1-sided Wilcox Test</span>
-<span class="co">#&gt; 3    11   15     17 A, F, L, P, W, X one-sided Fishers Exact Test</span>
+<span class="co">#&gt;   value      pval       fdr      stat df   obsMean   altMean    diffMean nhits</span>
+<span class="co">#&gt; 1  type 0.0400811 0.7080995  6.234942 NA        NA        NA          NA     9</span>
+<span class="co">#&gt; 2   sex 0.1088690 0.8242936  4.498287 NA        NA        NA          NA    NA</span>
+<span class="co">#&gt; 3 score 0.7741782 1.0000000 68.500000 NA 0.5093333 0.5745455 -0.06521212    NA</span>
+<span class="co">#&gt;   ncase nalt ndrawn                      hits                         test</span>
+<span class="co">#&gt; 1    11   15     15 A, C, F, J, R, U, V, W, X one-sided Fishers Exact Test</span>
+<span class="co">#&gt; 2    NA   NA     NA                      &lt;NA&gt; two-sided Fishers Exact Test</span>
+<span class="co">#&gt; 3    NA   NA     NA                      &lt;NA&gt;          1-sided Wilcox Test</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[2]]</span>
-<span class="co">#&gt;   value      pval       fdr      stat df   obsMean   altMean   diffMean nhits</span>
-<span class="co">#&gt; 1   sex 0.2167048 0.9825889  3.734953 NA        NA        NA         NA    NA</span>
-<span class="co">#&gt; 2  type 0.2810069 0.9825889  2.216841 NA        NA        NA         NA     5</span>
-<span class="co">#&gt; 3 score 0.3630233 0.9825889 83.500000 NA 0.5655556 0.5217647 0.04379085    NA</span>
-<span class="co">#&gt;   ncase nalt ndrawn          hits                         test</span>
-<span class="co">#&gt; 1    NA   NA     NA          &lt;NA&gt; two-sided Fishers Exact Test</span>
-<span class="co">#&gt; 2    11   15      9 C, J, R, U, V one-sided Fishers Exact Test</span>
-<span class="co">#&gt; 3    NA   NA     NA          &lt;NA&gt;          1-sided Wilcox Test</span>
+<span class="co">#&gt;   value      pval       fdr       stat df   obsMean   altMean   diffMean nhits</span>
+<span class="co">#&gt; 1   sex 0.1088690 0.8242936  0.2223068 NA        NA        NA         NA    NA</span>
+<span class="co">#&gt; 2 score 0.2417236 1.0000000 96.5000000 NA 0.5745455 0.5093333 0.06521212    NA</span>
+<span class="co">#&gt; 3  type 0.9955479 1.0000000  0.1603864 NA        NA        NA         NA     2</span>
+<span class="co">#&gt;   ncase nalt ndrawn hits                         test</span>
+<span class="co">#&gt; 1    NA   NA     NA &lt;NA&gt; two-sided Fishers Exact Test</span>
+<span class="co">#&gt; 2    NA   NA     NA &lt;NA&gt;          1-sided Wilcox Test</span>
+<span class="co">#&gt; 3    11   15     11 L, P one-sided Fishers Exact Test</span>
 
 <span class="co">## Concatenate all results and generate table</span>
 <span class="va">modTestsTable</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getTestsModTable.html">getTestsModTable</a></span><span class="op">(</span><span class="va">K2res</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">modTestsTable</span><span class="op">)</span>
-<span class="co">#&gt;    value node edge       pval       fdr      stat df obsMean   altMean</span>
-<span class="co">#&gt; 31  type    F    1 0.06346154 0.9825889       Inf NA      NA        NA</span>
-<span class="co">#&gt; 34 score    F    2 0.12771378 0.9825889 60.500000 NA    0.67 0.5127273</span>
-<span class="co">#&gt; 13  type    C    1 0.18260870 0.9825889  3.520180 NA      NA        NA</span>
-<span class="co">#&gt; 4    sex    A    2 0.21670481 0.9825889  3.734953 NA      NA        NA</span>
-<span class="co">#&gt; 1    sex    A    1 0.21670481 0.9825889  0.267741 NA      NA        NA</span>
-<span class="co">#&gt; 16   sex    C    2 0.23846154 0.9825889       Inf NA      NA        NA</span>
-<span class="co">#&gt;     diffMean nhits ncase nalt ndrawn       hits                         test</span>
-<span class="co">#&gt; 31        NA     3    11   15      3    A, F, W one-sided Fishers Exact Test</span>
-<span class="co">#&gt; 34 0.1572727    NA    NA   NA     NA       &lt;NA&gt;          1-sided Wilcox Test</span>
-<span class="co">#&gt; 13        NA     4    11   15      6 C, R, U, V one-sided Fishers Exact Test</span>
-<span class="co">#&gt; 4         NA    NA    NA   NA     NA       &lt;NA&gt; two-sided Fishers Exact Test</span>
-<span class="co">#&gt; 1         NA    NA    NA   NA     NA       &lt;NA&gt; two-sided Fishers Exact Test</span>
-<span class="co">#&gt; 16        NA    NA    NA   NA     NA       &lt;NA&gt; two-sided Fishers Exact Test</span></code></pre></div>
+<span class="co">#&gt;    value node edge       pval       fdr      stat df obsMean altMean diffMean</span>
+<span class="co">#&gt; 7   type    B    1 0.01048593 0.5557545  9.504328 NA      NA      NA       NA</span>
+<span class="co">#&gt; 19  type    D    1 0.03210702 0.7080995 10.514017 NA      NA      NA       NA</span>
+<span class="co">#&gt; 1   type    A    1 0.04008110 0.7080995  6.234942 NA      NA      NA       NA</span>
+<span class="co">#&gt; 49  type    I    1 0.06346154 0.8242936       Inf NA      NA      NA       NA</span>
+<span class="co">#&gt; 37  type    G    1 0.08227425 0.8242936  7.354815 NA      NA      NA       NA</span>
+<span class="co">#&gt; 2    sex    A    1 0.10886896 0.8242936  4.498287 NA      NA      NA       NA</span>
+<span class="co">#&gt;    nhits ncase nalt ndrawn                      hits</span>
+<span class="co">#&gt; 7      8    11   15     11    A, C, F, J, R, U, V, W</span>
+<span class="co">#&gt; 19     5    11   15      6             A, C, F, J, W</span>
+<span class="co">#&gt; 1      9    11   15     15 A, C, F, J, R, U, V, W, X</span>
+<span class="co">#&gt; 49     3    11   15      3                   A, F, W</span>
+<span class="co">#&gt; 37     4    11   15      5                A, F, J, W</span>
+<span class="co">#&gt; 2     NA    NA   NA     NA                      &lt;NA&gt;</span>
+<span class="co">#&gt;                            test</span>
+<span class="co">#&gt; 7  one-sided Fishers Exact Test</span>
+<span class="co">#&gt; 19 one-sided Fishers Exact Test</span>
+<span class="co">#&gt; 1  one-sided Fishers Exact Test</span>
+<span class="co">#&gt; 49 one-sided Fishers Exact Test</span>
+<span class="co">#&gt; 37 one-sided Fishers Exact Test</span>
+<span class="co">#&gt; 2  two-sided Fishers Exact Test</span></code></pre></div>
 <p>See <em>?getTestsModTable</em> for a description of the columns in this data frame.</p>
 </div>
 </div>
@@ -522,7 +532,7 @@
 <h2 class="hasAnchor">
 <a href="#generate-interactive-dashboard-to-explore-results" class="anchor"></a>Generate interactive dashboard to explore results</h2>
 <p><em><a href="https://github.com/montilab/K2Taxonomer">K2Taxonomer</a></em> can automatically generate an interactive dashboard for which to parse through the differential analysis results. This creates it’s own sub-directory with a compilable .Rmd file.</p>
-<p>For more information see the <a href="https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_dashboard.html">K2Taxonomer Dashboards</a> vignette.</p>
+<p>For more information go <a href="https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_dashboard">here</a>.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## NOT RUN</span>
 <span class="fu"><a href="../reference/K2dashboard.html">K2dashboard</a></span><span class="op">(</span><span class="va">K2res</span><span class="op">)</span></code></pre></div>
@@ -533,10 +543,10 @@
 <p>Alternatively, K2Taxonomer can be run in one step with the <code><a href="../reference/runK2Taxonomer.html">runK2Taxonomer()</a></code> function. This function takes all of the same arguments as the <code><a href="../reference/K2preproc.html">K2preproc()</a></code> function, and runs all of the steps above.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">K2res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runK2Taxonomer.html">runK2Taxonomer</a></span><span class="op">(</span>
-  eSet <span class="op">=</span> <span class="va">sample.ExpressionSet</span>,
-  genesets <span class="op">=</span> <span class="va">genesetsMadeUp</span>,
-  infoClass <span class="op">=</span> <span class="va">infoClassVector</span>,
-  stabThresh <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></code></pre></div>
+    eSet<span class="op">=</span><span class="va">sample.ExpressionSet</span>,
+    genesets<span class="op">=</span><span class="va">genesetsMadeUp</span>,
+    infoClass<span class="op">=</span><span class="va">infoClassVector</span>,
+    stabThresh<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
 <div id="additional-options" class="section level1">
@@ -548,11 +558,12 @@
 <p>If there is replicates in the data or if the user is only interested in capturing subgroup relationships between known groups without partitioning the observations themselves, one can specify the <strong>cohorts</strong> variable of interest in the <code>ExpressionSet</code> object.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Create set of cohorts from data</span>
-<span class="va">sample.ExpressionSet</span><span class="op">$</span><span class="va">group</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">sample.ExpressionSet</span><span class="op">$</span><span class="va">sex</span>, <span class="va">sample.ExpressionSet</span><span class="op">$</span><span class="va">type</span><span class="op">)</span>
+<span class="va">sample.ExpressionSet</span><span class="op">$</span><span class="va">group</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">sample.ExpressionSet</span><span class="op">$</span><span class="va">sex</span>,
+    <span class="va">sample.ExpressionSet</span><span class="op">$</span><span class="va">type</span><span class="op">)</span>
 
 <span class="co">## Run pre-processing</span>
 <span class="va">K2res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/K2preproc.html">K2preproc</a></span><span class="op">(</span><span class="va">sample.ExpressionSet</span>,
-                   cohorts <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span>
+                cohorts<span class="op">=</span><span class="st">"group"</span><span class="op">)</span>
 <span class="co">#&gt; Collapsing group-level values with LIMMA.</span>
 
 <span class="co">## Cluster the data</span>
@@ -569,8 +580,8 @@
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Run pre-processing</span>
 <span class="va">K2res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/K2preproc.html">K2preproc</a></span><span class="op">(</span><span class="va">sample.ExpressionSet</span>,
-                   cohorts <span class="op">=</span> <span class="st">"group"</span>,
-                   vehicle <span class="op">=</span> <span class="st">"FemaleControl"</span><span class="op">)</span>
+                cohorts<span class="op">=</span><span class="st">"group"</span>,
+                vehicle<span class="op">=</span><span class="st">"FemaleControl"</span><span class="op">)</span>
 <span class="co">#&gt; Collapsing group-level values with LIMMA.</span>
 
 <span class="co">## Cluster the data</span>
@@ -591,12 +602,12 @@
 <span class="co">## Get differential results for one partition</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/K2results.html">K2results</a></span><span class="op">(</span><span class="va">K2res</span><span class="op">)</span><span class="op">$</span><span class="va">A</span><span class="op">$</span><span class="va">dge</span><span class="op">)</span>
 <span class="co">#&gt;         gene        coef      mean         t         pval        fdr         B</span>
-<span class="co">#&gt; 1   31328_at    48.56717  129.8394  4.676610 9.560191e-05 0.09560191 -3.663824</span>
-<span class="co">#&gt; 2 31535_i_at    86.65559  266.8695  3.793490 8.923576e-04 0.44617881 -3.888946</span>
-<span class="co">#&gt; 3   31471_at    55.86890  214.0319  3.491058 1.893595e-03 0.52643567 -3.972017</span>
-<span class="co">#&gt; 4 31396_r_at  -479.16461 2504.3938 -3.424283 2.232095e-03 0.52643567 -4.594522</span>
-<span class="co">#&gt; 5   31505_at -1438.84067 3404.9565 -3.357050 2.632178e-03 0.52643567 -4.009510</span>
-<span class="co">#&gt; 6   31573_at   782.24198 2034.8062  3.099066 4.917064e-03 0.54521677 -4.594610</span>
+<span class="co">#&gt; 1   31328_at    48.56717  129.8394  4.676610 9.560191e-05 0.04780096 -3.663824</span>
+<span class="co">#&gt; 2 31535_i_at    86.65559  266.8695  3.793490 8.923576e-04 0.22308941 -3.888946</span>
+<span class="co">#&gt; 3   31471_at    55.86890  214.0319  3.491058 1.893595e-03 0.26321784 -3.972017</span>
+<span class="co">#&gt; 4 31396_r_at  -479.16461 2504.3938 -3.424283 2.232095e-03 0.26321784 -4.594522</span>
+<span class="co">#&gt; 5   31505_at -1438.84067 3404.9565 -3.357050 2.632178e-03 0.26321784 -4.009510</span>
+<span class="co">#&gt; 6   31573_at   782.24198 2034.8062  3.099066 4.917064e-03 0.40163877 -4.594610</span>
 <span class="co">#&gt;   edge</span>
 <span class="co">#&gt; 1    2</span>
 <span class="co">#&gt; 2    2</span>
@@ -608,20 +619,20 @@
 <span class="co">## Concatenate all results and generate table</span>
 <span class="va">DGEtable</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getDGETable.html">getDGETable</a></span><span class="op">(</span><span class="va">K2res</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">DGEtable</span><span class="op">)</span>
-<span class="co">#&gt;         gene        coef        mean         t         pval        fdr</span>
-<span class="co">#&gt; 1   31328_at    48.56717  129.839419  4.676610 9.560191e-05 0.09560191</span>
-<span class="co">#&gt; 2 31535_i_at    86.65559  266.869500  3.793490 8.923576e-04 0.44617881</span>
-<span class="co">#&gt; 3   31471_at    55.86890  214.031923  3.491058 1.893595e-03 0.52643567</span>
-<span class="co">#&gt; 4 31396_r_at  -479.16461 2504.393846 -3.424283 2.232095e-03 0.52643567</span>
-<span class="co">#&gt; 5   31505_at -1438.84067 3404.956538 -3.357050 2.632178e-03 0.52643567</span>
-<span class="co">#&gt; 6   31553_at   -16.59033    6.593918 -3.389187 3.513288e-03 0.54521677</span>
-<span class="co">#&gt;           B edge node direction</span>
-<span class="co">#&gt; 1 -3.663824    2    A        up</span>
-<span class="co">#&gt; 2 -3.888946    2    A        up</span>
-<span class="co">#&gt; 3 -3.972017    2    A        up</span>
-<span class="co">#&gt; 4 -4.594522    1    A      down</span>
-<span class="co">#&gt; 5 -4.009510    2    A      down</span>
-<span class="co">#&gt; 6 -4.594742    2    B      down</span></code></pre></div>
+<span class="co">#&gt;         gene        coef      mean         t         pval        fdr         B</span>
+<span class="co">#&gt; 1   31328_at    48.56717  129.8394  4.676610 9.560191e-05 0.04780096 -3.663824</span>
+<span class="co">#&gt; 2 31535_i_at    86.65559  266.8695  3.793490 8.923576e-04 0.22308941 -3.888946</span>
+<span class="co">#&gt; 3   31471_at    55.86890  214.0319  3.491058 1.893595e-03 0.26321784 -3.972017</span>
+<span class="co">#&gt; 4 31396_r_at  -479.16461 2504.3938 -3.424283 2.232095e-03 0.26321784 -4.594522</span>
+<span class="co">#&gt; 5   31505_at -1438.84067 3404.9565 -3.357050 2.632178e-03 0.26321784 -4.009510</span>
+<span class="co">#&gt; 6   31573_at   782.24198 2034.8062  3.099066 4.917064e-03 0.40163877 -4.594610</span>
+<span class="co">#&gt;   edge node direction</span>
+<span class="co">#&gt; 1    2    A        up</span>
+<span class="co">#&gt; 2    2    A        up</span>
+<span class="co">#&gt; 3    2    A        up</span>
+<span class="co">#&gt; 4    1    A      down</span>
+<span class="co">#&gt; 5    2    A      down</span>
+<span class="co">#&gt; 6    1    A        up</span></code></pre></div>
 </div>
 <div id="gene-set-analysis-with-controls" class="section level4">
 <h4 class="hasAnchor">
@@ -629,16 +640,16 @@
 <p>Accordingly, <em><a href="https://github.com/montilab/K2Taxonomer">K2Taxonomer</a></em> can now establish sets of genes that are both up- and down-regulated within a specific subgroup. We can now perform hyperenrichment with these additional gene sets.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Run gene set hyperenrichment</span>
-<span class="va">K2res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runGSEmods.html">runGSEmods</a></span><span class="op">(</span><span class="va">K2res</span>, 
-                     genesets <span class="op">=</span> <span class="va">genesetsMadeUp</span>,
-                     qthresh <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></code></pre></div>
+<span class="va">K2res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runGSEmods.html">runGSEmods</a></span><span class="op">(</span><span class="va">K2res</span>,
+                    genesets<span class="op">=</span><span class="va">genesetsMadeUp</span>,
+                    qthresh<span class="op">=</span><span class="fl">0.1</span><span class="op">)</span></code></pre></div>
 <p>Finally, differential analysis of single-sample gene set enrichment scores is performed in the same fashion as with differential analysis of gene expression, assessing directionality of differences in enrichment scores based on comparisons to the assigned control group.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Create expression matrix with ssGSEA(GSVA) estimates</span>
-<span class="va">K2res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runGSVAmods.html">runGSVAmods</a></span><span class="op">(</span><span class="va">K2res</span>, 
-                      ssGSEAalg <span class="op">=</span> <span class="st">"gsva"</span>,
-                      ssGSEAcores <span class="op">=</span> <span class="fl">1</span>,
-                      verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="va">K2res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runGSVAmods.html">runGSVAmods</a></span><span class="op">(</span><span class="va">K2res</span>,
+                    ssGSEAalg<span class="op">=</span><span class="st">"gsva"</span>,
+                    ssGSEAcores<span class="op">=</span><span class="fl">1</span>,
+                    verbose<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span>
 
 <span class="co">## Run differential analysis on enrichment score Expression Set</span>
 <span class="va">K2res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runDSSEmods.html">runDSSEmods</a></span><span class="op">(</span><span class="va">K2res</span><span class="op">)</span>
@@ -651,16 +662,14 @@
 <span class="co">#&gt; 2      GS1    A    2        up     1.0000    1.0000     0      1    50 20000</span>
 <span class="co">#&gt; 3      GS3    A    2        up     1.0000    1.0000     0      1    50 20000</span>
 <span class="co">#&gt; 4      GS1    A    1        up         NA        NA    NA     NA    NA    NA</span>
-<span class="co">#&gt; 5      GS1    B    1        up         NA        NA    NA     NA    NA    NA</span>
-<span class="co">#&gt; 6      GS2    B    1        up         NA        NA    NA     NA    NA    NA</span>
-<span class="co">#&gt;   pval_limma fdr_limma      coef        mean        t         B     hits</span>
-<span class="co">#&gt; 1 0.13843349 0.1661202 0.1478003  0.01198832 1.499007 -4.411956 31328_at</span>
-<span class="co">#&gt; 2         NA        NA        NA          NA       NA        NA         </span>
-<span class="co">#&gt; 3         NA        NA        NA          NA       NA        NA         </span>
-<span class="co">#&gt; 4 0.01775552 0.1065331 0.2115623  0.01041709 2.428864 -3.191669     &lt;NA&gt;</span>
-<span class="co">#&gt; 5 0.10607843 0.1591177 0.1731130  0.06624202 1.647058 -4.241485     &lt;NA&gt;</span>
-<span class="co">#&gt; 6 0.10441128 0.1591177 0.1739675 -0.01126806 1.655188 -4.233643     &lt;NA&gt;</span></code></pre></div>
-<p>Here, we see that, although not statistically significant (<strong>“fdr_limma”</strong> = 0.25), the enrichment score of <em>“GS2”</em> deviated further from the control group in subgroup, <strong>“node”</strong> = “B”; <strong>“edge”</strong> = “2”, compared to subgroup, <strong>“node”</strong> = “B”; <strong>“edge”</strong> = “1”.</p>
+<span class="co">#&gt; 5      GS3    A    1      down         NA        NA    NA     NA    NA    NA</span>
+<span class="co">#&gt;   pval_limma fdr_limma       coef        mean         t         B     hits</span>
+<span class="co">#&gt; 1  0.1451658 0.2051743  0.1298603 0.025661026  1.486696 -4.396481 31328_at</span>
+<span class="co">#&gt; 2         NA        NA         NA          NA        NA        NA         </span>
+<span class="co">#&gt; 3         NA        NA         NA          NA        NA        NA         </span>
+<span class="co">#&gt; 4  0.1964986 0.2051743  0.1307425 0.005037724  1.314159 -4.535014     &lt;NA&gt;</span>
+<span class="co">#&gt; 5  0.2051743 0.2051743 -0.1027217 0.006653681 -1.288552 -4.554077     &lt;NA&gt;</span></code></pre></div>
+<p>Here, we see that, although not statistically significant (<strong>“fdr_limma”</strong>=0.25), the enrichment score of <em>“GS2”</em> deviated further from the control group in subgroup, <strong>“node”</strong>=“B”; <strong>“edge”</strong>=“2”, compared to subgroup, <strong>“node”</strong>=“B”; <strong>“edge”</strong>=“1”.</p>
 <p>Missing values for hyperenrichment analysis indicated that no genes were assigned to these specific subgroups and direction combinations. Missing values for differential enrichment score analysis indicate that, while genes were assigned to these specific subgroups and direction combinations, the enrichment score of the gene set deviated further from control in the alternative subgroup for that partition.</p>
 </div>
 </div>
@@ -679,13 +688,13 @@
 <a href="#unsupported-combinations-of-arguments" class="anchor"></a>Unsupported combinations of arguments</h2>
 <ul>
 <li>
-<p><strong>vehicle != NULL</strong> with <strong>featMetric = “F”</strong> or <strong>recalcDataMatrix = TRUE</strong></p>
+<p><strong>vehicle != NULL</strong> with <strong>featMetric=“F”</strong> or <strong>recalcDataMatrix=TRUE</strong></p>
 <ul>
 <li>Associations between the control cohort and remaining cohorts are generated prior to recursive partitioning. Either of these two argument specifications recalculate cohort-level statistics at each partition, many of which will not include the control cohort.</li>
 </ul>
 </li>
 <li>
-<p><strong>covariates != NULL</strong> with <strong>featMetric = “F”</strong> or <strong>recalcDataMatrix = TRUE</strong></p>
+<p><strong>covariates != NULL</strong> with <strong>featMetric=“F”</strong> or <strong>recalcDataMatrix=TRUE</strong></p>
 <ul>
 <li>Adjustments of gene expression values for covariates is performed prior to recursive partitioning. Either of these two argument specifications recalculate cohort-level statistics at each partition, some of which will not will not have any variation of this one or more of the covariates.</li>
 </ul>
@@ -701,7 +710,7 @@
 <div id="runtime-for-this-example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#runtime-for-this-example" class="anchor"></a>Runtime for this example</h2>
-<pre><code>#&gt; Time difference of 20.81087 secs</code></pre>
+<pre><code>#&gt; Time difference of 25.77429 secs</code></pre>
 </div>
 </div>
 <div id="references" class="section level1 unnumbered">

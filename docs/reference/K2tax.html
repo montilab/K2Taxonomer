@@ -73,7 +73,7 @@ extracted from K2meta(K2res) unless othewise specified." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">K2Taxonomer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.5</span>
       </span>
     </div>
 
@@ -141,17 +141,17 @@ extracted from K2meta(K2res) unless othewise specified.</p>
     </div>
 
     <pre class="usage"><span class='fu'>K2tax</span><span class='op'>(</span>
-  <span class='va'>K2res</span>,
-  nFeats <span class='op'>=</span> <span class='cn'>NULL</span>,
-  featMetric <span class='op'>=</span> <span class='cn'>NULL</span>,
-  recalcDataMatrix <span class='op'>=</span> <span class='cn'>NULL</span>,
-  nBoots <span class='op'>=</span> <span class='cn'>NULL</span>,
-  clustFunc <span class='op'>=</span> <span class='cn'>NULL</span>,
-  clustCors <span class='op'>=</span> <span class='cn'>NULL</span>,
-  clustList <span class='op'>=</span> <span class='cn'>NULL</span>,
-  linkage <span class='op'>=</span> <span class='cn'>NULL</span>,
-  oneoff <span class='op'>=</span> <span class='cn'>NULL</span>,
-  stabThresh <span class='op'>=</span> <span class='cn'>NULL</span>
+    <span class='va'>K2res</span>,
+    nFeats <span class='op'>=</span> <span class='cn'>NULL</span>,
+    featMetric <span class='op'>=</span> <span class='cn'>NULL</span>,
+    recalcDataMatrix <span class='op'>=</span> <span class='cn'>NULL</span>,
+    nBoots <span class='op'>=</span> <span class='cn'>NULL</span>,
+    clustFunc <span class='op'>=</span> <span class='cn'>NULL</span>,
+    clustCors <span class='op'>=</span> <span class='cn'>NULL</span>,
+    clustList <span class='op'>=</span> <span class='cn'>NULL</span>,
+    linkage <span class='op'>=</span> <span class='cn'>NULL</span>,
+    oneoff <span class='op'>=</span> <span class='cn'>NULL</span>,
+    stabThresh <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -228,8 +228,8 @@ doi: <a href='https://doi.org/10.1101/2020.11.05.370197'>10.1101/2020.11.05.3701
 
 <span class='co'>## Run K2 Taxonomer algorithm</span>
 <span class='va'>K2res</span> <span class='op'>&lt;-</span> <span class='fu'>K2tax</span><span class='op'>(</span><span class='va'>K2res</span>,
-               stabThresh <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>
-               
+            stabThresh<span class='op'>=</span><span class='fl'>0.5</span><span class='op'>)</span>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
