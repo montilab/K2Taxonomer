@@ -2,17 +2,18 @@
 title: "1. Introduction to Running K2Taxonomer (Bulk Expression Data)"
 author:
 - name: Eric R. Reed
-    affiliation:
-        Boston University School of Medicine,
-        Section of Computational Biomedicine,
-        72 E Concord St, Boston, MA 02118
+  affiliation:
+    Boston University School of Medicine,
+    Section of Computational Biomedicine,
+    72 E Concord St, Boston, MA 02118
+  email: reeder@bu.edu
 date: October 21, 2020
 output:
-    BiocStyle::html_document
+  BiocStyle::html_document
 vignette: >
-    %\VignetteIndexEntry{01_RunningK2Taxonomer}
-    %\VignetteEngine{knitr::rmarkdown}
-    %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{01_RunningK2Taxonomer}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 bibliography: "`r system.file('REFERENCES.bib', package='K2Taxonomer')`"
 ---
 

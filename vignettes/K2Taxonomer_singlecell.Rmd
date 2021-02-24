@@ -2,19 +2,19 @@
 title: "2. Running K2Taxonomer on Single-cell RNA Sequencing Data"
 author:
 - name: Eric R. Reed
-    affiliation:
-        Boston University School of Medicine,
-        Section of Computational Biomedicine,
-        72 E Concord St, Boston, MA 02118
-    email: reeder@bu.edu
+  affiliation:
+    Boston University School of Medicine,
+    Section of Computational Biomedicine,
+    72 E Concord St, Boston, MA 02118
+  email: reeder@bu.edu
 date: "Created: October 21, 2020; Compiled: `r Sys.Date()`"
 output:
-    BiocStyle::html_document
+  BiocStyle::html_document
 package: K2Taxonomer
 vignette: >
-    %\VignetteIndexEntry{02_K2Taxonomer_singlecell}
-    %\VignetteEngine{knitr::rmarkdown}
-    %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{02_K2Taxonomer_singlecell}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 bibliography: "`r system.file('REFERENCES.bib', package='K2Taxonomer')`"
 ---
 
