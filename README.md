@@ -62,7 +62,7 @@ K2res <- K2preproc(sample.ExpressionSet)
 
 ```r
 K2res <- K2tax(K2res,
-               stabThresh = 0.5)
+               stabThresh=0.5)
 ```
 
 #### Run differential analysis on all subgroups
@@ -75,23 +75,23 @@ K2res <- runDGEmods(K2res)
 
 ```r
 genesetsMadeUp <- list(
-  GS1 = genes[1:50],
-  GS2 = genes[51:100],
-  GS3 = genes[101:150]
+  GS1=genes[1:50],
+  GS2=genes[51:100],
+  GS3=genes[101:150]
 )
 
 K2res <- runGSEmods(K2res,
-                     genesets = genesetsMadeUp,
-                     qthresh = 0.1)
+                     genesets=genesetsMadeUp,
+                     qthresh=0.1)
 ```
 
 #### Run single-sample enrichment on toy gene sets with *GSVA*
 
 ```r
 K2res <- runGSVAmods(K2res,
-                      ssGSEAalg = "gsva",
-                      ssGSEAcores = 1,
-                      verbose = FALSE)
+                      ssGSEAalg="gsva",
+                      ssGSEAcores=1,
+                      verbose=FALSE)
 ```
 
 #### Run differential analysis on single-sample enrichment
@@ -104,6 +104,6 @@ K2res <- runDSSEmods(K2res)
 
 ```r
 K2dashboard(K2res,
-            analysis_name = "Example",
-            output_dir = ".")
+            analysis_name="Example",
+            output_dir=".")
 ```

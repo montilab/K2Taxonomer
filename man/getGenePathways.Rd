@@ -24,10 +24,9 @@ data(sample.ExpressionSet)
 ## Create dummy set of gene sets
 genes <- rownames(sample.ExpressionSet)
 genesetsMadeUp <- list(
-    GS1 = genes[1:50],
-    GS2 = genes[51:100],
-    GS3 = genes[101:150]
-)
+    GS1=genes[1:50],
+    GS2=genes[51:100],
+    GS3=genes[101:150])
 
 head(getGenePathways(genesetsMadeUp))
 

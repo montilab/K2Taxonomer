@@ -2,7 +2,7 @@
 % Please edit documentation in R/runTestsMods.R
 \name{runTestsMods}
 \alias{runTestsMods}
-\title{Perform tests to test for associations between subgroups and 
+\title{Perform tests to test for associations between subgroups and
 phenotypic variables}
 \usage{
 runTestsMods(K2res, infoClass = NULL)
@@ -30,14 +30,11 @@ K2res <- K2preproc(sample.ExpressionSet)
 
 ## Run K2 Taxonomer algorithm
 K2res <- K2tax(K2res,
-               stabThresh = 0.5)
+            stabThresh=0.5)
 
-K2res <- infoClassVector <- c(
-sex = "factor",
-score = "numeric1"
-)
+infoClassVector <- c(sex='factor', score='numeric1')
 
-runTestsMods <- function(K2res, infoClass = infoClassVector)
+runTestsMods(K2res, infoClass=infoClassVector)
 
 head(getTestsModTable(K2res))
 

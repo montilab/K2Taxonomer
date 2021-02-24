@@ -56,10 +56,10 @@ import(flexdashboard)
 import(heatmaply)
 import(magrittr)
 import(plotly)
-import(shiny, except = c("dataTableOutput", "renderDataTable", "markdown"))
+import(shiny, except=c("dataTableOutput", "renderDataTable", "markdown"))
 import(statmod)
 import(visNetwork)
 importFrom(methods, is, new)
 importFrom(stats, as.dist, as.formula, dendrapply, dist,
-         fisher.test, hclust, mad, model.matrix, p.adjust,
-         phyper, sd, t.test, wilcox.test)
+        fisher.test, hclust, mad, model.matrix, p.adjust,
+        phyper, sd, t.test, wilcox.test)

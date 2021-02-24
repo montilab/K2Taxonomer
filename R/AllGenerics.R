@@ -6,7 +6,7 @@
 #' @examples
 #' data(K2res)
 #' K2data(K2res)
-#' 
+#'
 #' @export
 setGeneric("K2data", function(K2res) standardGeneric("K2data"))
 
@@ -30,7 +30,7 @@ setMethod("K2data<-", "K2", function(K2res, value) {
 #' @examples
 #' data(K2res)
 #' head(K2info(K2res))
-#' 
+#'
 #' @export
 setGeneric("K2info", function(K2res) standardGeneric("K2info"))
 
@@ -55,7 +55,7 @@ setMethod("K2info<-", "K2", function(K2res, value) {
 #' @examples
 #' data(K2res)
 #' K2resList <- K2results(K2res)
-#' 
+#'
 #' @export
 setGeneric("K2results", function(K2res) standardGeneric("K2results"))
 
@@ -79,7 +79,7 @@ setMethod("K2results<-", "K2", function(K2res, value) {
 #' @examples
 #' data(K2res)
 #' head(K2genesets(K2res))
-#' 
+#'
 #' @export
 setGeneric("K2genesets", function(K2res) standardGeneric("K2genesets"))
 
@@ -100,12 +100,13 @@ setMethod("K2genesets<-", "K2", function(K2res, value) {
 #' @title Vector of collapsed pathways for which each gene belongs
 #' @description Retrieve or assign named vector of pathways for each gene.
 #' @param K2res K2 class object.
-#' @param value Named vector. A vector with collapse pathway names for each gene.
+#' @param value Named vector. A vector with collapse pathway names for each
+#' gene.
 #' @return Named vector. A vector with collapse pathway names for each gene.
 #' @examples
 #' data(K2res)
 #' head(K2gene2Pathway(K2res))
-#' 
+#'
 #' @export
 setGeneric("K2gene2Pathway", function(K2res) standardGeneric("K2gene2Pathway"))
 
@@ -131,7 +132,7 @@ setMethod("K2gene2Pathway<-", "K2", function(K2res, value) {
 #' @examples
 #' data(K2res)
 #' K2eSet(K2res)
-#' 
+#'
 #' @export
 setGeneric("K2eSet", function(K2res) standardGeneric("K2eSet"))
 
@@ -155,7 +156,7 @@ setMethod("K2eSet<-", "K2", function(K2res, value) {
 #' @examples
 #' data(K2res)
 #' K2gSet(K2res)
-#' 
+#'
 #' @export
 setGeneric("K2gSet", function(K2res) standardGeneric("K2gSet"))
 
@@ -179,7 +180,7 @@ setMethod("K2gSet<-", "K2", function(K2res, value) {
 #' @examples
 #' data(K2res)
 #' K2meta(K2res)
-#' 
+#'
 #' @export
 setGeneric("K2meta", function(K2res) standardGeneric("K2meta"))
 
@@ -203,7 +204,7 @@ setMethod("K2meta<-", "K2", function(K2res, value) {
 #' @examples
 #' data(K2res)
 #' K2geneURL(K2res)
-#' 
+#'
 #' @export
 setGeneric("K2geneURL", function(K2res) standardGeneric("K2geneURL"))
 

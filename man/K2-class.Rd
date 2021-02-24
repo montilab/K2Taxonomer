@@ -18,12 +18,13 @@ This class is the output of runK2Taxonomer() and K2preproc().
 
 \item{\code{results}}{A named list of K2Taxonomer partitioning reuslts}
 
-\item{\code{info}}{A data frame with rownames that match column names in dataMatrix}
+\item{\code{info}}{A data frame with rownames that match column names
+in dataMatrix}
 
 \item{\code{genesets}}{A named list of features in row names of dataMatrix}
 
-\item{\code{gene2Pathway}}{A vector of collapsed genesets names, mapping features to
-genesets}
+\item{\code{gene2Pathway}}{A vector of collapsed genesets names, mapping
+features to genesets}
 
 \item{\code{gSet}}{An Expression Set object}
 

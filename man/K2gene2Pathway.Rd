@@ -18,7 +18,8 @@ K2gene2Pathway(K2res) <- value
 \arguments{
 \item{K2res}{K2 class object.}
 
-\item{value}{Named vector. A vector with collapse pathway names for each gene.}
+\item{value}{Named vector. A vector with collapse pathway names for each
+gene.}
 }
 \value{
 Named vector. A vector with collapse pathway names for each gene.
