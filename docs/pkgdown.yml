@@ -2,9 +2,9 @@ pandoc: 2.3.1
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
+  RunningK2Taxonomer: RunningK2Taxonomer.html
+  K2Taxonomer_singlecell: K2Taxonomer_singlecell.html
   K2Taxonomer_dashboard: K2Taxonomer_dashboard.html
   K2Taxonomer_dashhelp: K2Taxonomer_dashhelp.html
-  K2Taxonomer_singlecell: K2Taxonomer_singlecell.html
-  RunningK2Taxonomer: RunningK2Taxonomer.html
 last_built: 2021-02-26T20:35Z
 
