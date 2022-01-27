@@ -12,7 +12,7 @@
 
     ## Run if there are subgroups to compare and at least three
     ## observations
-    if (length(unique(mods$mods)) > 1 && nrow(mods) > 2) {
+    if (length(unique(mods$mods)) > 1 && (nrow(mods) > 2 | !is.null(cohorts))) {
 
         ## If replicates in data get unique cohorts
         if (is.null(cohorts)) {
