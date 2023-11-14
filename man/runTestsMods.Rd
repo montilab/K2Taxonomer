@@ -34,7 +34,7 @@ K2res <- K2tax(K2res,
 
 infoClassVector <- c(sex='factor', score='numeric1')
 
-K2res <- runTestsMods(K2res, infoClass=infoClassVector)
+runTestsMods(K2res, infoClass=infoClassVector)
 
 head(getTestsModTable(K2res))
 

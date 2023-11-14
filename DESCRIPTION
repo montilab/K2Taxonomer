@@ -40,7 +40,7 @@ Suggests:
 Depends:
   R (>= 4.0)
 BugReports: https://github.com/montilab/K2Taxonomer
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.3
 RdMacros: Rdpack
 Collate:
     'data.R'
