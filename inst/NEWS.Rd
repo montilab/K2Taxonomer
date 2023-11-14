@@ -6,7 +6,7 @@
         \item Added runnable examples to all imported functions.
     }
 }
-\section{Changes in version 1.0.5 (2023-11-14)}{
+\section{Changes in version 1.0.6 (2023-11-14)}{
     \itemize{
         \item Fixed bug in differential analysis wrapper.
     }
