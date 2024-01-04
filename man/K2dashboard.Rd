@@ -5,10 +5,10 @@
 \title{Generate interactive dashboard of K2 Taxonomer results}
 \usage{
 K2dashboard(
-    K2res,
-    analysis_name = "K2Taxonomer",
-    about = TRUE,
-    output_dir = "."
+  K2res,
+  analysis_name = "K2Taxonomer",
+  about = TRUE,
+  output_dir = "."
 )
 }
 \arguments{
@@ -38,6 +38,6 @@ K2dashboard(K2res, output_dir=tempdir())
 
 }
 \references{
-    \insertRef{reed_2020}{K2Taxonomer}
+\insertRef{reed_2020}{K2Taxonomer}
 }
 \keyword{clustering}

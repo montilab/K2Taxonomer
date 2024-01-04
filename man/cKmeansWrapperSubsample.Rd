@@ -12,9 +12,9 @@ cohort labels.}
 
 \item{clustList}{List of objects to use for clustering procedure.
 \itemize{
-    \item{'eMat'}{P x N Expression matrix of data set. See `?Biobase::exprs()`.}
-    \item{'labs'}{Vector of cohort labels of observations in data set,
-corresponding to columns of `clustList$eMat`.}
+ \item{'eMat'}{P x N Expression matrix of data set. See `?Biobase::exprs()`.}
+ \item{'labs'}{Vector of cohort labels of observations in data set,
+ corresponding to columns of `clustList$eMat`.}
 }}
 }
 \value{
@@ -64,6 +64,6 @@ cKmeansWrapperSubsample(dm, cL)
 
 }
 \references{
-    \insertRef{reed_2020}{K2Taxonomer}
-    \insertRef{cKm}{K2Taxonomer}
+\insertRef{reed_2020}{K2Taxonomer}
+ \insertRef{cKm}{K2Taxonomer}
 }
