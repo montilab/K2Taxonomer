@@ -30,6 +30,9 @@
         ## Subset data for mods
         eSub <- eSet[, pData(eSet)[, cohorts] %in% c(vehicle,
             mods$GROUP)]
+        
+        ## Remove non-expressed/no variance features
+        eSub <- eSub[apply(eSub, 1, sd) > 0,]
 
         ## Drop levels
         pData(eSub) <- droplevels(pData(eSub))
