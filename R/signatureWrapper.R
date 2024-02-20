@@ -56,7 +56,13 @@
 
             ## Create design matrix
             design <- model.matrix(as.formula(paste0("~ 0 +",
-                "mods", .formatCov(covariates))), data=pData(eSub))
+                                                     "mods", .formatCov(covariates))), data=pData(eSub))
+            
+            ## Check that model is full rank with covariates, if not model w/o covariates
+            if(!is.fullrank(design)) {
+                design <- model.matrix(as.formula(paste0("~ 0 +",
+                                                         "mods", .formatCov(NULL))), data=pData(eSub))
+            }
             colnames(design) <- sub("mods", "X", colnames(design))
 
             ## Run duplicateCorrelation
@@ -99,7 +105,13 @@
         } else {
 
             design <- model.matrix(as.formula(paste0("~ 0 + ",
-                "GROUP", .formatCov(covariates))), data=pData(eSub))
+                                                     "GROUP", .formatCov(covariates))), data=pData(eSub))
+            
+            ## Check that model is full rank with covariates, if not model w/o covariates
+            if(!is.fullrank(design)) {
+                design <- model.matrix(as.formula(paste0("~ 0 +",
+                                                         "GROUP", .formatCov(NULL))), data=pData(eSub))
+            }
             colnames(design) <- sub("GROUP", "X", colnames(design))
 
             ## Run duplicateCorrelation

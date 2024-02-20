@@ -18,6 +18,12 @@
     ## Create formula
     design <- model.matrix(as.formula(paste0("~", "GROUP",
                                              .formatCov(covariates))), data=pData(eSet))
+    
+    ## Check that model is full rank with covariates, if not model w/o covariates
+    if(!is.fullrank(design)) {
+        design <- model.matrix(as.formula(paste0("~", "GROUP",
+                                                 .formatCov(NULL))), data=pData(eSet)) 
+    }
     colnames(design) <- sub("GROUP", "X", colnames(design))
     
     ## Fit model
