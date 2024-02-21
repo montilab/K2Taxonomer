@@ -87,9 +87,11 @@ runDSSEmods <- function(K2res) {
         names(mods) <- c(x$obs[[1]], x$obs[[2]])
 
         ## Perform differential analysis
-        x$dsse <- .signatureWrapper(K2gSet(K2res), K2meta(K2res)$cohorts,
+        dsseRes <- .signatureWrapper(K2gSet(K2res), K2meta(K2res)$cohorts,
             mods, K2meta(K2res)$vehicle, K2meta(K2res)$covariates,
             K2meta(K2res)$block)
+        x$dsse <- dsseRes$modStats
+        x$dsseFormula <- dsseRes$formula
         if (!is.null(x$dsse)) {
             x$dsse$category <- rownames(x$dsse)
             x$dsse <- x$dsse[, c(ncol(x$dsse), seq_len(ncol(x$dsse) -
