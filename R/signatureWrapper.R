@@ -59,12 +59,12 @@
         if (!is.null(cohorts)) {
 
             ## Create design matrix
-            desForm <- paste0("~ 0 +", "mods", .formatCov(covariates))
+            desForm <- paste0("~0+", "mods", .formatCov(covariates))
             design <- model.matrix(as.formula(desForm), data=pData(eSub))
             
             ## Check that model is full rank with covariates, if not model w/o covariates
             if(!is.fullrank(design)) {
-                desForm <- paste0("~ 0 +", "mods", .formatCov(NULL))
+                desForm <- paste0("~0+", "mods", .formatCov(NULL))
                 design <- model.matrix(as.formula(desForm), data=pData(eSub))
             }
             colnames(design) <- sub("mods", "X", colnames(design))
@@ -107,12 +107,12 @@
                 }, design, fit)
 
         } else {
-            desForm <- paste0("~ 0 + ", "GROUP", .formatCov(covariates))
+            desForm <- paste0("~0+ ", "GROUP", .formatCov(covariates))
             design <- model.matrix(as.formula(desForm), data=pData(eSub))
             
             ## Check that model is full rank with covariates, if not model w/o covariates
             if(!is.fullrank(design)) {
-                desForm <- paste0("~ 0 +", "GROUP", .formatCov(NULL))
+                desForm <- paste0("~0+", "GROUP", .formatCov(NULL))
                 design <- model.matrix(as.formula(desForm), data=pData(eSub))
             }
             colnames(design) <- sub("GROUP", "X", colnames(design))
