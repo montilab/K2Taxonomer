@@ -61,22 +61,22 @@ runDSSEmods <- function(K2res) {
 
     ## K2 algorithm
     if (length(K2results(K2res)) == 0) {
-        "No results found. Please run K2tax() or runK2Taxonomer().\n"
+        stop("No results found. Please run K2tax() or runK2Taxonomer().\n")
     }
 
     ## DGE
     if (is.null(K2results(K2res)[[1]]$dge)) {
-        "No differential analysis results found. Please run runDGEmods().\n"
+        stop("No differential analysis results found. Please run runDGEmods().\n")
     }
 
     ## GSE
     if (is.null(K2results(K2res)[[1]]$gse)) {
-        "No enrichment results found. Please run runDGEmods().\n"
+        stop("No enrichment results found. Please run runDGEmods().\n")
     }
 
     ## GSVA
     if (ncol(K2gSet(K2res)) == 0) {
-        "No ssGSEA data found. Please run runGSVAmods().\n"
+        stop("No ssGSEA data found. Please run runGSVAmods().\n")
     }
 
     K2results(K2res) <- lapply(K2results(K2res), function(x) {
