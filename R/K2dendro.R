@@ -32,7 +32,7 @@ K2dendro <- function(K2res) {
 
     ## K2 algorithm
     if (length(K2results(K2res)) == 0) {
-        "No results found. Please run K2tax() or runK2Taxonomer().\n"
+        stop("No results found. Please run K2tax() or runK2Taxonomer().\n")
     }
 
     ## Get labels order
