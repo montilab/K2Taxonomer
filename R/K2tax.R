@@ -11,7 +11,7 @@
 #' @param nBoots A numeric value of the number of bootstraps to run at each
 #' split.
 #' @param clustFunc Wrapper function to cluster a P x N (See details).
-#' @param clustCors Number of cores to use for clustering.
+#' @param useCors Number of cores to use for clustering.
 #' @param clustList List of objects to use for clustering procedure.
 #' @param linkage Linkage criteria for splitting cosine matrix ('method' in
 #' hclust).
@@ -39,33 +39,37 @@
 #'
 
 K2tax <- function(K2res, nFeats=NULL, featMetric=NULL, recalcDataMatrix=NULL,
-    nBoots=NULL, clustFunc=NULL, clustCors=NULL, clustList=NULL,
+    nBoots=NULL, clustFunc=NULL, useCors=NULL, clustList=NULL,
     linkage=NULL, oneoff=NULL, stabThresh=NULL) {
 
     ## Run checks
     .isK2(K2res)
-
+  
     ## Change meta data if new value is specific
-    K2meta(K2res)$nFeats <- nFeats <- .checkK2(K2res, "nFeats",
-        nFeats)
-    K2meta(K2res)$featMetric <- featMetric <- .checkK2(K2res,
-        "featMetric", featMetric)
-    K2meta(K2res)$recalcDataMatrix <- recalcDataMatrix <- .checkK2(K2res,
-        "recalcDataMatrix", recalcDataMatrix)
-    K2meta(K2res)$nBoots <- nBoots <- .checkK2(K2res, "nBoots",
-        nBoots)
-    K2meta(K2res)$clustFunc <- clustFunc <- .checkK2(K2res, "clustFunc",
-        clustFunc)
-    K2meta(K2res)$clustCors <- clustCors <- .checkK2(K2res, "clustCors",
-        clustCors)
-    K2meta(K2res)$clustList <- clustList <- .checkK2(K2res, "clustList",
-        clustList)
-    K2meta(K2res)$linkage <- linkage <- .checkK2(K2res, "linkage",
-        linkage)
-    K2meta(K2res)$oneoff <- oneoff <- .checkK2(K2res, "oneoff",
-        oneoff)
-    K2meta(K2res)$stabThresh <- stabThresh <- .checkK2(K2res,
-        "stabThresh", stabThresh)
+    K2meta(K2res)$nFeats <- .checkK2(K2res, "nFeats", nFeats)
+    K2meta(K2res)$featMetric <- .checkK2(K2res, "featMetric", featMetric)
+    K2meta(K2res)$recalcDataMatrix <- .checkK2(K2res, "recalcDataMatrix", 
+                                               recalcDataMatrix)
+    K2meta(K2res)$nBoots <- .checkK2(K2res, "nBoots", nBoots)
+    K2meta(K2res)$clustFunc <- .checkK2(K2res, "clustFunc", clustFunc)
+    K2meta(K2res)$useCors <- .checkK2(K2res, "useCors", useCors)
+    K2meta(K2res)$clustList <- .checkK2(K2res, "clustList", clustList)
+    K2meta(K2res)$linkage <- .checkK2(K2res, "linkage", linkage)
+    K2meta(K2res)$oneoff <- .checkK2(K2res, "oneoff", oneoff)
+    K2meta(K2res)$stabThresh <- .checkK2(K2res, "stabThresh", stabThresh)
+    
+    ## Set cluster function
+    if(class(K2meta(K2res)$clustFunc) == "character") {
+      clustFunc <- get(K2meta(K2res)$clustFunc)
+    }
+    
+    ## Get parallel parameters
+    if(K2meta(K2res)$useCors > 1) {
+      bF <- get(class(bpparam())[[1]])
+      K2meta(K2res)$BPPARAM_useCors <- bF(workers = K2meta(K2res)$useCors)
+    } else {
+      K2meta(K2res)$BPPARAM_useCors <- SerialParam()
+    }
 
     ## Create Splits of the data
     taxList <- list(list(colnames(K2data(K2res))))
@@ -75,15 +79,11 @@ K2tax <- function(K2res, nFeats=NULL, featMetric=NULL, recalcDataMatrix=NULL,
 
         length(x[x != "Vehicle"])
 
-    }))) > (2 - oneoff)) {
-        outList <- lapply(taxList[[iter]], function(samps, nFeats,
-            nBoots, clustFunc, K2res) {
+    }))) > (2 - K2meta(K2res)$oneoff)) {
+        outList <- lapply(taxList[[iter]], function(samps, K2res) {
             if (length(samps) > 1) {
                 Dsub <- K2data(K2res)[, samps]
-                outList <- .doSplit(Dsub, nFeats=nFeats, featMetric=featMetric,
-                    recalcDataMatrix=recalcDataMatrix, nBoots=nBoots,
-                    clustFunc=clustFunc, clustCors=clustCors,
-                    clustList=clustList, linkage=linkage, K2res=K2res)
+                outList <- .doSplit(Dsub, K2res)
 
                 ## Get minimum size
                 minSize <- min(table(outList$mods))
@@ -92,15 +92,10 @@ K2tax <- function(K2res, nFeats=NULL, featMetric=NULL, recalcDataMatrix=NULL,
                 nodeStab <- outList$stability$node
 
                 ## Check stopping criteria
-                if ((!oneoff & minSize == 1 & iter != 1) | (nodeStab <=
-                    stabThresh & iter != 1)) {
+                if ((!K2meta(K2res)$oneoff & minSize == 1 & iter != 1) | 
+                    (nodeStab <= K2meta(K2res)$stabThresh & iter != 1)) {
                     outList <- list(mods=samps, propBoots=NULL,
                     clustStab=NULL)
-                }
-
-                ## If first split was below threshold, print warning.
-                if (nodeStab <= stabThresh & iter == 1) {
-                    warning("First split below stability threshold.")
                 }
 
             } else {
@@ -108,7 +103,7 @@ K2tax <- function(K2res, nFeats=NULL, featMetric=NULL, recalcDataMatrix=NULL,
                     clustStab=NULL)
             }
             return(outList)
-        }, nFeats, nBoots, clustFunc, K2res)
+        }, K2res)
         iter <- iter + 1
         taxList[[iter]] <- list()
         outMods <- lapply(outList, function(x) x[[1]])
@@ -152,8 +147,8 @@ K2tax <- function(K2res, nFeats=NULL, featMetric=NULL, recalcDataMatrix=NULL,
             combList[[i]][[1]] <- x[[i * 2 - 1]]
             combList[[i]][[2]] <- x[[i * 2]]
             if (length(combList[[i]]) > 0) {
-                if (length(combList[[i]][[1]]) < (2 - oneoff) |
-                    length(combList[[i]][[2]]) < (2 - oneoff))
+                if (length(combList[[i]][[1]]) < (2 - K2meta(K2res)$oneoff) |
+                    length(combList[[i]][[2]]) < (2 - K2meta(K2res)$oneoff))
                     combList[[i]] <- list()
             }
         }

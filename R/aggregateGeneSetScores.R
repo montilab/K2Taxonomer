@@ -1,18 +1,17 @@
-#' Take difference of two paired GSVA scores
+#' Take difference of two paired bi-directional gene set scores
 #'
-#' Replaces GSVA results from paired up- and down- gene sets with the difference
+#' Replaces gene set results from paired up- and down- gene sets with the difference
 #' of the up-regulated genes and down-regulated genes
-#' @param aggList A list where each item is a vector of 3 items:
-#' the new name, the name of the 'up' gene set, and the name of the 'down'
-#' gene set.
 #' @param K2res An object of class K2. The output of runDGEmods().
+#' @param aggList A named list where each item is a character vector of length, 
+#' 2, comprising the name of the 'up' gene set, and the name of the 'down'
+#' gene set.
 #' @return An object of class K2.
 #' @references
 #'    \insertRef{reed_2020}{K2Taxonomer}
 #'    \insertRef{gsva}{K2Taxonomer}
 #' @keywords clustering
 #' @export
-#' @import GSVA
 #' @import Biobase
 #' @examples
 #' ## Read in ExpressionSet object
@@ -50,43 +49,57 @@
 #'
 #' ## Aggregate paired gene sets
 #' aggList <- list(c('GS12', 'GS1', 'GS2'))
-#' K2res <- aggregateGSVAscores(aggList, K2res)
+#' K2res <- aggregateGeneSetscores(K2resaggList, K2res)
 #'
 
-aggregateGSVAscores <- function(aggList, K2res) {
+aggregateGeneSetScores <- function(K2res, aggList) {
 
     ## Run checks
     .isK2(K2res)
 
+    ## Get gMat
+    gMat <- K2gMat(K2res)
+    
     ## Only perform this method for gsva runs
-    if (K2meta(K2res)$ssGSEAalg != "gsva") {
-        stop("Enrichment score aggregation only
-            supported when ssGSEAalg == 'gsva'")
+    if (nrow(gMat) == 0) {
+      stop("No gene set score matrix found. First, run runScoreGeneSets().\n")
     }
-
-    ## Get gSet
-    gSet <- K2gSet(K2res)
+    
+    ## Only perform this method for gsva runs
+    if (!is.list(aggList) | is.null(names(aggList)) | 
+        sum(names(aggList) == "") > 0) {
+      stop("Argument, aggList, must be a list with names for every vector.\n")
+    }
 
     ## For each item in aggList subtract negative signature score
     ## from positive
     gAgg <- do.call(rbind, lapply(aggList, function(agg) {
-        gSubUp <- exprs(gSet)[agg[2], ]
-        gSubDown <- exprs(gSet)[agg[3], ]
+        gSubUp <- gMat[agg[1], ]
+        gSubDown <- gMat[agg[2], ]
         gSubAgg <- gSubUp - gSubDown
+        return(gSubAgg)
     }))
-    rownames(gAgg) <- unlist(lapply(aggList, function(x) x[1]))
+    rownames(gAgg) <- names(aggList)
 
     ## Remove original scores
-    origNames <- unlist(lapply(aggList, function(x) x[-1]))
-    gSet <- gSet[!rownames(gSet) %in% origNames, ]
+    origNames <- unlist(lapply(aggList, function(x) x))
+    gMat <- gMat[!rownames(gMat) %in% origNames, , drop = FALSE]
 
     ## Add new scores
-    gExprs <- rbind(exprs(gSet), gAgg)
-    gNew <- ExpressionSet(assayData=gExprs)
-    pData(gNew) <- pData(gSet)
+    gNew <- rbind(gMat, gAgg)
 
-    ## Replace gSet
-    K2gSet(K2res) <- gNew
+    ## Replace gMat
+    K2gMat(K2res) <- gNew
+    
+    ## Add geneset to K2genesets
+    gsOld <- K2genesets(K2res)
+    gsAdd <- lapply(aggList, function(agg) {
+      return(unique(c(gsOld[[agg[1]]], gsOld[[agg[2]]])))
+    })
+    names(gsAdd) <- names(aggList)
+    gsNew <- unlist(list(gsOld, gsAdd), recursive = FALSE)
+    K2genesets(K2res) <- gsNew
+    K2gene2Pathway(K2res) <- getGenePathways(gsNew)
 
     return(K2res)
 

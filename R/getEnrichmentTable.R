@@ -1,6 +1,6 @@
 #' Extract table of enrichment results from 'K2' object
 #'
-#' Create table hyper- and single-sample enrichment results from 'K2' object.
+#' Create table fisher- and gene set scoring enrichment results from 'K2' object.
 #' @param K2res An object of class K2 or K2results().
 #' @return A data.frame object with the following columns:
 #' \itemize{
@@ -9,10 +9,10 @@
 #'    \item{edge: }{Indication of which subgroup the gene was assigned at a
 #'    given partition}
 #'    \item{direction: }{The direction of coefficient for the assigned gene set}
-#'    \item{pval_hyper: }{The p-value of the hyperenrichment test comparing the
+#'    \item{pval_fisher: }{The p-value of the enrichment test comparing the
 #'    subgroup-assigned gene set to the user-specified gene set}
-#'    \item{fdr_hyper: }{The multiple hypothesis corrected FDR
-#'    (Benjamini-Hochberg) p-value of hyperenrichment, adjusted across all
+#'    \item{fdr_fisher: }{The multiple hypothesis corrected FDR
+#'    (Benjamini-Hochberg) p-value of enrichment, adjusted across all
 #'    partitions}
 #'    \item{nhits: }{The intersection of subgroup-assigned genes and the
 #'    user-specified gene set}
@@ -59,7 +59,7 @@
 #'     GS2=genes[51:100],
 #'     GS3=genes[101:150])
 #'
-#' ## Run gene set hyperenrichment
+#' ## Run gene set enrichment
 #' K2res <- runGSEmods(K2res,
 #'                 genesets=genesetsMadeUp,
 #'                 qthresh=0.1)
@@ -83,7 +83,7 @@ getEnrichmentTable <- function(K2res) {
 
     K2resList <- K2results(K2res)
 
-    ## Format hyperenrichment table
+    ## Format enrichment table
     EnrTable <- do.call(rbind, lapply(names(K2resList), function(x,
         K2resList) {
 
@@ -96,26 +96,28 @@ getEnrichmentTable <- function(K2res) {
             GSEtab <- do.call(rbind, lapply(names(GSEtabList),
                 function(y) {
                     GSEsub <- GSEtabList[[y]]
-                    if (nrow(GSEsub) > 0) {
-                    GSEsub$node <- x    ## Add node ID
-                    GSEsub$edge <- gsub("g|_up|_down", "", y)    ## Add group ID
-                    GSEsub$direction <- gsub("g1_|g2_", "", y)    ## Add    dir
+                    if (!is.null(GSEsub) && nrow(GSEsub) > 0) {
+                      GSEsub$node <- x    ## Add node ID
+                      GSEsub$edge <- gsub("g|_up|_down", "", y)    ## Add group ID
+                      GSEsub$direction <- gsub("g1_|g2_", "", y)    ## Add    dir
+                    } else {
+                      GSEsub <- NULL
                     }
                     return(GSEsub)
-                }))
+              }))
 
             ## Make pval and fdr column names unique
             colnames(GSEtab)[colnames(GSEtab) %in% c("pval",
                 "fdr")] <- paste(colnames(GSEtab)[colnames(GSEtab) %in%
-                c("pval", "fdr")], "hyper", sep="_")
+                c("pval", "fdr")], "fisher", sep="_")
         }
         return(GSEtab)
 
     }, K2resList))
 
     if (nrow(EnrTable) == 0) {
-        EnrTable <- data.frame(category=NA, pval_hyper=NA,
-            fdr_hyper=NA, nhits=NA, ndrawn=NA, ncats=NA,
+        EnrTable <- data.frame(category=NA, pval_fisher=NA,
+            fdr_fisher=NA, nhits=NA, ndrawn=NA, ncats=NA,
             ntot=NA, hits=NA, node=NA, edge=NA, direction=NA)
     }
 
@@ -144,18 +146,18 @@ getEnrichmentTable <- function(K2res) {
         return(SSGSEAtab)
     }, K2resList))
 
-    ## Merge the two and sort by hyper p-value
+    ## Merge the two and sort by fisher p-value
     EnrTable <- merge(EnrTable, ssEnrTable, all=TRUE)
     EnrTable <- EnrTable[!is.na(EnrTable$category), ]
 
     ## Sort columns
     EnrTable <- EnrTable[, c("category", "node", "edge", "direction",
-        "pval_hyper", "fdr_hyper", "nhits", "ndrawn", "ncats",
+        "pval_fisher", "fdr_fisher", "nhits", "ndrawn", "ncats",
         "ntot", "pval_limma", "fdr_limma", "coef", "mean", "t",
-        "B", "hits")]
+        "hits")]
 
     ## Sort by p-value
-    EnrTable <- EnrTable[order(EnrTable$pval_hyper), ]
+    EnrTable <- EnrTable[order(EnrTable$pval_limma, partial = EnrTable$pval_fisher),]
 
     rownames(EnrTable) <- NULL
 

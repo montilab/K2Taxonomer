@@ -63,7 +63,7 @@ getDGETable <- function(K2res) {
             CompTab$node <- x
 
             ## Add direction information
-            CompTab$direction <- c("down", "up")[as.numeric(CompTab$t >
+            CompTab$direction <- c("down", "up")[as.numeric(CompTab$coef >
                 0) + 1]
         }
 
@@ -71,7 +71,7 @@ getDGETable <- function(K2res) {
     }, K2resList))
 
     ## Sort by p-value
-    dgeTable <- dgeTable[order(dgeTable$pval), ]
+    dgeTable <- dgeTable[order(dgeTable$pval, partial = -abs(dgeTable$coef)), ]
 
     rownames(dgeTable) <- NULL
 

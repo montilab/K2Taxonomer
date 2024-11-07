@@ -1,18 +1,25 @@
-#' Wrapper for constrained K-means
+#' Wrapper for constrained K-means on subsampled data
 #'
 #' This fuction is a wrapper for the constrained Kmeans algorithm using
-#' `lcvqe` from the `conclust` package. This function is not meant to
-#' be run individually, but as a 'clustFunc' argument for running
-#' `K2preproc()`, `runK2Taxonomer()`, and `K2tax()`.
+#' `lcvqe` from the `conclust` package. This function will subset each
+#' cohort down to that with the smallest number of observations.This
+#' function is not meant to be run individually, but as a 'clustFunc'
+#' argument for running `K2preproc()`, `runK2Taxonomer()`, and
+#' `K2tax()`.
 #'
-#' @param dataMatrix An P x N numeric matrix of data
+#' @param dataMatrix An P x C numeric matrix of data. Where C is the number of
+#'   cohort labels.
 #' @param clustList List of objects to use for clustering procedure.
+#' \itemize{
+#'  \item{'eMat'}{P x N Expression matrix of data set. See `?Biobase::exprs()`.}
+#'  \item{'labs'}{Vector of cohort labels of observations in data set,
+#'  corresponding to columns of `clustList$eMat`.}
+#' }
 #' @return A character string of concatenated 1's and 2's pertaining to the
 #' cluster assignment of each column in dataMatrix.
 #' @references
 #'  \insertRef{reed_2020}{K2Taxonomer}
 #'  \insertRef{cKm}{K2Taxonomer}
-#' @keywords clustering
 #' @export
 #' @import conclust
 #' @examples
@@ -49,13 +56,28 @@
 #' cKmeansWrapperSubsample(dm, cL)
 #'
 
-cKmeansWrapper <- function(dataMatrix, clustList) {
+## Create wrapper to subsample
+cKmeansDownsampleSmallest <- function(labels, features, K2res) {
 
-    clustList$labs <- as.character(clustList$labs)
+    if("maxIter" %in% names(K2meta(K2res)$clustList)) {
+      MI <- K2meta(K2res)$clustList$maxIter
+    } else {
+      MI <- 25
+    }
+    
+    labs <- as.character(K2colData(K2res)[, K2meta(K2res)$cohorts])
+    obsKeep <- labs %in% labels
+    
+    labsSub <- labs[obsKeep]
+    eMatSub <- K2eMat(K2res)[features, obsKeep]
 
-    eMatSub <- clustList$eMat[rownames(dataMatrix), clustList$labs %in%
-        colnames(dataMatrix)]
-    labsSub <- clustList$labs[clustList$labs %in% colnames(dataMatrix)]
+    ## Subsample the data
+    minSize <- min(table(labsSub))
+    sVec <- unlist(lapply(unique(labsSub), function(x, minSize) {
+        sample(which(labsSub == x), minSize)
+    }, minSize))
+    eMatSub <- eMatSub[, sVec]
+    labsSub <- labsSub[sVec]
 
     ## Get constraints
     mustLink <- outer(labsSub, labsSub, "==")
@@ -64,11 +86,11 @@ cKmeansWrapper <- function(dataMatrix, clustList) {
 
     ## Cluster data
     dClust=factor(lcvqe(t(eMatSub), k=2, mustLink=mustLink,
-        cantLink=matrix(c(1, 1), nrow=1), maxIter=clustList$maxIter),
+        cantLink=matrix(c(1, 1), nrow=1), maxIter=MI),
         levels=c(1, 2))
 
     ## Get label-level clusters
-    dMat <- as.matrix(table(dClust, labsSub))[, colnames(dataMatrix)]
+    dMat <- as.matrix(table(dClust, labsSub))[, labels]
     modVec <- apply(dMat, 2, which.max)
     mods <- paste(modVec, collapse="")
 

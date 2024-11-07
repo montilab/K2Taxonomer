@@ -33,11 +33,19 @@
 #' ## Generate K=2 split with hierarchical clustering
 #' hclustWrapper(dm, cL)
 #'
+#'
+hclustWrapper <- function(labels, features, K2res) {
 
-hclustWrapper <- function(dataMatrix, clustList) {
-
-    if (length(clustList) == 0) {
-        clustList <- list(aggMethod="ward.D2", distMetric="euclidean")
+    if ("aggMethod" %in% names(K2meta(K2res)$clustList)) {
+      aggMethod <- K2meta(K2res)$clustList$aggMethod
+    } else {
+      aggMethod <- "ward.D2"
+    }
+  
+    if ("distMetric" %in% names(K2meta(K2res)$clustList)) {
+      distMetric <- K2meta(K2res)$clustList$distMetric
+    } else {
+      distMetric <- "ward.D2"
     }
 
     dDist <- dist(t(dataMatrix), method=clustList$distMetric)

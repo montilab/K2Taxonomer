@@ -17,23 +17,38 @@
 #' @keywords clustering
 #' @export
 
-setClass("K2", representation(eSet="ExpressionSet", meta="list",
-    dataMatrix="matrix", info="data.frame", results="list",
-    genesets="list", gene2Pathway="character", gSet="ExpressionSet",
-    geneURL="character", genesetURL="character"))
+# setClass("K2", representation(eSet="ExpressionSet", meta="list",
+#     dataMatrix="matrix", info="data.frame", results="list",
+#     genesets="list", gene2Pathway="character", gSet="ExpressionSet",
+#     geneURL="character", genesetURL="character"))
+
+
+setClassUnion("matrixORdgCMatrix", c("matrix", "dgCMatrix"))
+
+setClass("K2", slots = c(meta="list",
+                              eMat="matrixORdgCMatrix",
+                              eMatDS ="matrixORdgCMatrix",
+                              gMat="matrixORdgCMatrix",
+                              colData = "data.frame",
+                              dataMatrix="matrixORdgCMatrix",
+                              results="list",
+                              genesets="list", 
+                              gene2Pathway="character", 
+                              geneURL="character", 
+                              genesetURL="character"))
+
 
 setMethod("show", "K2", function(object) {
     cat("K2Taxonomer results:", "\n",
         " Expression Data: ", ifelse(
-            is.null(object@eSet), "FALSE", "TRUE"), "\n",
+            ncol(object@eMat) == 0, "FALSE", "TRUE"), "\n",
         " Pre-processing: ", ifelse(
-            is.null(object@meta) &
-                is.null(object@meta) &
-                is.null(object@dataMatrix) &
-                is.null(object@info),
+                length(object@meta) == 0 &
+                ncol(object@dataMatrix) == 0 &
+                ncol(object@colData) == 0,
             "FALSE", "TRUE"), "\n",
         " Recursive partitioning: ", ifelse(
-            is.null(object@results), "FALSE", "TRUE"), 
+            length(object@results) == 0, "FALSE", "TRUE"), 
         "\n",
         " Differential Gene Expression: ", ifelse(
             is.null(object@results$A$dge), "FALSE", "TRUE"), 
@@ -42,7 +57,7 @@ setMethod("show", "K2", function(object) {
             is.null(object@results$A$gse), "FALSE", "TRUE"), 
         "\n",
         " Single-sample Enrichment: ", ifelse(
-            is.null(object@gSet), "FALSE", "TRUE"), 
+            ncol(object@gMat) == 0, "FALSE", "TRUE"), 
         "\n",
         " Differential Enrichment Analysis: ", ifelse(
             is.null(object@results$A$dsse), "FALSE", "TRUE"), 
