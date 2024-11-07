@@ -181,8 +181,6 @@ K2preproc <- function(object, cohorts=NULL, eMatDS = NULL, vehicle=NULL, covaria
 
     }
     
-    cat(dim(dataMatrix))
-    
     ## Add dataMatrix and info to K2 object
     K2data(K2res) <- dataMatrix
     
