@@ -2,10 +2,7 @@
 #'
 #' Adds hyperenrichment analysis results to the output of runDGEmods().
 #' @param K2res An object of class K2. The output of runDGEmods().
-#' @param ssGSEAalg A character string, specifying which algorithm to use for
-#' running the gsva() function from the GSVA package. Options are 'gsva',
-#' 'ssgsea', 'zscore', and 'plage'. 'gsva' by default.
-#' @param ssGSEAcores Number of cores to use for running gsva() from the GSVA
+#' @param useCors Number of cores to use for running gsva() from the GSVA
 #' package. Default is 1.
 #' @param ... Additional arguments passed onto GSVA::gsva()
 #' @return An object of class K2.
@@ -46,29 +43,48 @@
 #'
 #' ## Run GSVA on genesets
 #' K2res <- runGSVAmods(K2res,
-#'                 ssGSEAalg='gsva',
-#'                 ssGSEAcores=1,
+#'                 useCors=1,
 #'                 verbose=FALSE)
 #'
 
-runGSVAmods <- function(K2res, ssGSEAalg=NULL, ssGSEAcores=NULL,
-    ...) {
+runScoreGeneSets <- function(K2res, ScoreGeneSetMethod = NULL, useCors=NULL) {
 
     ## Run checks
     .isK2(K2res)
 
     ## Change meta data if new value is specific
-    K2meta(K2res)$ssGSEAalg <- .checkK2(K2res, "ssGSEAalg", ssGSEAalg)
-    K2meta(K2res)$ssGSEAcores <- .checkK2(K2res, "ssGSEAcores",
-        ssGSEAcores)
+    K2meta(K2res)$useCors <- .checkK2(K2res, "useCors",
+        useCors)
+    K2meta(K2res)$ScoreGeneSetMethod <- .checkK2(K2res, "ScoreGeneSetMethod",
+        ScoreGeneSetMethod)
 
     ## Check K2 object
     k2Check <- .checkK2(K2res)
-
-    ## Run GSVA
-    K2gSet(K2res) <- gsva(K2eSet(K2res), method=K2meta(K2res)$ssGSEAalg,
-        gset.idx.list=K2genesets(K2res), parallel.sz=K2meta(K2res)$ssGSEAcores,
-        ...)
+    
+    # Get function for expression data matrix
+    if(nrow(K2eMatDS(K2res)) != 0) {
+      EXPFUNC <- K2eMatDS
+    } else {
+      EXPFUNC <- K2eMat
+    }
+    
+    if(K2meta(K2res)$useCors > 1) {
+      bF <- get(class(bpparam())[[1]])
+      bpp <- bF(workers = K2meta(K2res)$useCors)
+    } else {
+      bpp <- SerialParam()
+    }
+    
+    if(K2meta(K2res)$ScoreGeneSetMethod == "GSVA") {
+      cat("Scoring gene sets with GSVA.\n")
+      gP <- gsvaParam(EXPFUNC(K2res), K2genesets(K2res))
+      K2gMat(K2res) <- suppressWarnings(gsva(gP, BPPARAM = bpp))
+    }
+    
+    if(K2meta(K2res)$ScoreGeneSetMethod == "AUCELL") {
+      cat("Scoring gene sets with AUCell.\n")
+      K2gMat(K2res) <- log2(AUCell_run(EXPFUNC(K2res), K2genesets(K2res), BPPARAM = bpp)@assays@data$AUC * 100 + 1)
+    }
 
     return(K2res)
 }

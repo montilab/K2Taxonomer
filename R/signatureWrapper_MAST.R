@@ -1,4 +1,4 @@
-.signatureWrapper <- function(K2r, mods, GENE = TRUE) {
+.signatureWrapper_MAST <- function(K2r, mods, GENE = TRUE) {
   
     # Get objects from K2r object
     pD <- K2colData(K2r)
@@ -6,9 +6,9 @@
     vehicle <- K2meta(K2r)$vehicle
     covariates <- K2meta(K2r)$covariates
     block <- K2meta(K2r)$block
-    logCounts <- K2meta(K2r)$logCounts
+    useCors <- K2meta(K2r)$useCors
     DGEexpThreshold <- K2meta(K2r)$DGEexpThreshold
-
+      
     # Get function for expression data matrix
     if(GENE) {
       if(nrow(K2eMatDS(K2r)) != 0) {
@@ -18,11 +18,6 @@
       }
     } else {
       EXPFUNC <- K2gMat
-    }
-    
-    # IF !GENE don't assume log counts
-    if(!GENE) {
-      logCounts <- FALSE
     }
     
     ## Remove vehicle from mods and make a data frame
@@ -55,7 +50,7 @@
         ## Subset data for mods
         eSub <- EXPFUNC(K2r)[, pD[, cohorts] %in% c(vehicle,
             modDF$GROUP)]
-
+        
         ## Drop levels
         pD <- droplevels(pD)
 
@@ -79,9 +74,15 @@
         }
         
         ## Remove lowly expressed genes
-        if(DGEexpThreshold > 0 & GENE) {
+        if(DGEexpThreshold > 0) {
           eSub <- .K2filterGenes(eSub, pD$mods, DGEexpThreshold)
         }
+        
+        ## Get mean expression values
+        eMeans <- rowMeans(eSub)
+        
+        ## Create single cell object
+        SCA <- suppressMessages(FromMatrix(as.matrix(eSub), pD))
 
         ## Create design matrix
         if(!(length(pDmods) > 2 & is.null(vehicle))) {
@@ -118,39 +119,33 @@
           
         }
         
-        ## Run duplicateCorrelation
+        options(mc.cores = useCors)
+        
+        ## If block run mixed model
         if (!is.null(block)) {
           
-            ## Create contrasts between chemicals
-            corfit <- duplicateCorrelation(eSub, design, 
-                                           block=pD$block)
-            
-            if (corfit$consensus.correlation %in% c(-1, 1) |
-                is.na(corfit$consensus.correlation)) {
-                fit <- lmFit(eSub, design)
-            } else {
-                fit <- lmFit(eSub, design,
-                    correlation=corfit$consensus.correlation,
-                    block=pD[, block])
-            }
-            
+          # Add random effect
+          desFormMM <- paste0(desForm, "+(1|block)")
+          fit <- suppressMessages(zlm(as.formula(desFormMM), SCA, 
+                                      parallel = TRUE,
+                                      method='glmer', ebayes=FALSE))
+        
         } else {
-            ## Fit model
-            fit <- lmFit(eSub, design)
+        ## Fit model
+          fit <- suppressMessages(zlm(as.formula(desForm), SCA, parallel = TRUE))
         }
         
         if(length(pDmods) == 2 & is.null(vehicle)) {
-          modS <- .limmaTable(pDmods[2], fit, logCounts)
+          modS <- .mastTable(pDmods[2], fit, eMeans)
           modVec <- sub("mods", "", pDmods)
-          modS$edge <- ifelse(modS$t > 0, modVec[2], modVec[1])
+          modS$edge <- ifelse(modS$coef > 0, modVec[2], modVec[1])
           modS$coef <- abs(modS$coef)
-          modS$t <- abs(modS$t)
           modS <- modS[order(modS$pval),]
         }
         
         if(!is.null(vehicle)) {
           modS <- do.call(rbind, lapply(pDmods[-1], function(x) {
-            modM <- .limmaTable(x, fit, logCounts, conVec, design, "mods0")
+            modM <- .mastTable(x, fit, eMeans, conVec, pDmods, design, "mods0")
             return(modM)
           }))
           modS <- modS[order(modS$pvalV, partial = -abs(modS$coefV)),]
@@ -162,18 +157,17 @@
         if(length(pDmods) > 2 & is.null(vehicle)) {
           modS <- do.call(rbind,
                           lapply(pDmods, 
-                                 .limmaTable, fit, logCounts, conVec, design))
-          modS <- modS[order(modS$pval, partial = -abs(modS$coef)),]
-          modS <- modS[!duplicated(modS$feat),]
+                                 .mastTable, 
+                                 fit, eMeans, conVec, pDmods, design))
           modS <- modS[order(modS$pval),]
+          modS <- modS[!duplicated(modS$feat),]
         }
+        rownames(modS) <- NULL
 
         ## Remove large objects
         rm(fit, design, modDF, gUnique, eSub, pD)
-
-        ## Save mods as character
-        modS$edge <- as.character(modS$edge)
         
+        options(mc.cores = 1)
     }
 
     ## Return
