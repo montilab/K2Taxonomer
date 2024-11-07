@@ -11,3 +11,8 @@
         \item Fixed bug in differential analysis wrapper.
     }
 }
+\section{Changes in version 1.0.7 (2023-11-14)}{
+    \itemize{
+        \item Enabled use of covariates in scRNAseq workflows.
+    }
+}

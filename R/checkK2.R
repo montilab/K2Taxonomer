@@ -61,13 +61,13 @@
                 ExpressionSet.\n")
         }
 
-        ## Covariated and recalculating data matrix
-        if (!is.null(K2m$covariates) && (K2m$featMetric == "F" |
-            K2m$recalcDataMatrix)) {
-            stop("Specifying argument, covariates, currently not supported if
-                argument, featMetric='F' or if argument,
-                recalcDataMatrix=TRUE.\n")
-        }
+        # ## Covariated and recalculating data matrix
+        # if (!is.null(K2m$covariates) && (K2m$featMetric == "F" |
+        #     K2m$recalcDataMatrix)) {
+        #     stop("Specifying argument, covariates, currently not supported if
+        #         argument, featMetric='F' or if argument,
+        #         recalcDataMatrix=TRUE.\n")
+        # }
 
         ## block
         if (!is.null(K2m$block) && !K2m$block %in%

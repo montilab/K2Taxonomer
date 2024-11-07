@@ -37,7 +37,7 @@ runDGEmods <- function(K2res) {
 
     ## K2 algorithm
     if (length(K2results(K2res)) == 0) {
-        "No results found. Please run K2tax() or runK2Taxonomer().\n"
+        stop("No results found. Please run K2tax() or runK2Taxonomer().\n")
     }
 
     K2results(K2res) <- lapply(K2results(K2res), function(x) {
@@ -48,9 +48,11 @@ runDGEmods <- function(K2res) {
         names(mods) <- c(x$obs[[1]], x$obs[[2]])
 
         ## Perform differential analysis
-        x$dge <- .signatureWrapper(K2eSet(K2res), K2meta(K2res)$cohorts,
+        dgeRes <- .signatureWrapper(K2eSet(K2res), K2meta(K2res)$cohorts,
             mods, K2meta(K2res)$vehicle, K2meta(K2res)$covariates,
             K2meta(K2res)$block, K2meta(K2res)$logCounts)
+        x$dge <- dgeRes$modStats
+        x$dgeFormula <- dgeRes$formula
         if (!is.null(x$dge)) {
             x$dge$gene <- rownames(x$dge)
             x$dge <- x$dge[, c(ncol(x$dge), seq_len(ncol(x$dge) -

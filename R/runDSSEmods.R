@@ -61,22 +61,22 @@ runDSSEmods <- function(K2res) {
 
     ## K2 algorithm
     if (length(K2results(K2res)) == 0) {
-        "No results found. Please run K2tax() or runK2Taxonomer().\n"
+        stop("No results found. Please run K2tax() or runK2Taxonomer().\n")
     }
 
     ## DGE
     if (is.null(K2results(K2res)[[1]]$dge)) {
-        "No differential analysis results found. Please run runDGEmods().\n"
+        stop("No differential analysis results found. Please run runDGEmods().\n")
     }
 
     ## GSE
     if (is.null(K2results(K2res)[[1]]$gse)) {
-        "No enrichment results found. Please run runDGEmods().\n"
+        stop("No enrichment results found. Please run runDGEmods().\n")
     }
 
     ## GSVA
     if (ncol(K2gSet(K2res)) == 0) {
-        "No ssGSEA data found. Please run runGSVAmods().\n"
+        stop("No ssGSEA data found. Please run runGSVAmods().\n")
     }
 
     K2results(K2res) <- lapply(K2results(K2res), function(x) {
@@ -87,9 +87,11 @@ runDSSEmods <- function(K2res) {
         names(mods) <- c(x$obs[[1]], x$obs[[2]])
 
         ## Perform differential analysis
-        x$dsse <- .signatureWrapper(K2gSet(K2res), K2meta(K2res)$cohorts,
+        dsseRes <- .signatureWrapper(K2gSet(K2res), K2meta(K2res)$cohorts,
             mods, K2meta(K2res)$vehicle, K2meta(K2res)$covariates,
             K2meta(K2res)$block)
+        x$dsse <- dsseRes$modStats
+        x$dsseFormula <- dsseRes$formula
         if (!is.null(x$dsse)) {
             x$dsse$category <- rownames(x$dsse)
             x$dsse <- x$dsse[, c(ncol(x$dsse), seq_len(ncol(x$dsse) -

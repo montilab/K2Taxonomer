@@ -1,7 +1,7 @@
 Package: K2Taxonomer
 Type: Package
 Title: Creating annotated submodules of high-throughput data through recursive partitioning
-Version: 1.0.6
+Version: 1.0.7
 Date: 2023-11-14
 Authors@R: person("Eric", "Reed", email="reeder@bu.edu",
                   role=c("aut", "cre"))

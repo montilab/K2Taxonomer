@@ -9,6 +9,7 @@
         stringsAsFactors=FALSE)
 
     modStats <- NULL
+    desForm <- NULL
 
     ## Run if there are subgroups to compare and at least three
     ## observations
@@ -30,6 +31,9 @@
         ## Subset data for mods
         eSub <- eSet[, pData(eSet)[, cohorts] %in% c(vehicle,
             mods$GROUP)]
+        
+        ## Remove non-expressed/no variance features
+        eSub <- eSub[apply(eSub, 1, sd) > 0,]
 
         ## Drop levels
         pData(eSub) <- droplevels(pData(eSub))
@@ -55,8 +59,14 @@
         if (!is.null(cohorts)) {
 
             ## Create design matrix
-            design <- model.matrix(as.formula(paste0("~ 0 +",
-                "mods", .formatCov(covariates))), data=pData(eSub))
+            desForm <- paste0("~0+", "mods", .formatCov(covariates))
+            design <- model.matrix(as.formula(desForm), data=pData(eSub))
+            
+            ## Check that model is full rank with covariates, if not model w/o covariates
+            if(!is.fullrank(design)) {
+                desForm <- paste0("~0+", "mods", .formatCov(NULL))
+                design <- model.matrix(as.formula(desForm), data=pData(eSub))
+            }
             colnames(design) <- sub("mods", "X", colnames(design))
 
             ## Run duplicateCorrelation
@@ -97,9 +107,14 @@
                 }, design, fit)
 
         } else {
-
-            design <- model.matrix(as.formula(paste0("~ 0 + ",
-                "GROUP", .formatCov(covariates))), data=pData(eSub))
+            desForm <- paste0("~0+ ", "GROUP", .formatCov(covariates))
+            design <- model.matrix(as.formula(desForm), data=pData(eSub))
+            
+            ## Check that model is full rank with covariates, if not model w/o covariates
+            if(!is.fullrank(design)) {
+                desForm <- paste0("~0+", "GROUP", .formatCov(NULL))
+                design <- model.matrix(as.formula(desForm), data=pData(eSub))
+            }
             colnames(design) <- sub("GROUP", "X", colnames(design))
 
             ## Run duplicateCorrelation
@@ -178,7 +193,7 @@
         rownames(modStats) <- rownames(modFit[[1]])
 
         ## Order by p-value
-        modStats <- modStats[order(modStats$P.Value), ]
+        modStats <- modStats[order(modStats$P.Value, -abs(modStats$logFC)), ]
         modStats$adj.P.Val <- p.adjust(modStats$P.Value, method="BH")
 
         ## Remove large objects
@@ -194,5 +209,8 @@
     }
 
     ## Return
-    return(modStats)
+    return(list(
+        modStats = modStats,
+        formula = desForm
+    ))
 }
