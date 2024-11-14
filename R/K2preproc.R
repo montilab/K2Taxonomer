@@ -67,8 +67,9 @@
 #' @param genesetURL Named list. URLs linking gene set to external resources.
 #' @return An object of class, `K2`.
 #' @references
-#'  \insertRef{reed_2020}{K2Taxonomer}
-#'  \insertRef{limma}{K2Taxonomer}
+#' \insertRef{reed_2020}{K2Taxonomer}
+#' \insertRef{limma}{K2Taxonomer}
+#' \insertRef{Rousseeuw1993}{K2Taxonomer}
 #' @keywords clustering
 #' @export
 #' @import limma

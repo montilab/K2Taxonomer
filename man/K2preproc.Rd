@@ -145,6 +145,7 @@ pre-processing functions for running K2 Taxonomer procedure.
 }
 \references{
 \insertRef{reed_2020}{K2Taxonomer}
- \insertRef{limma}{K2Taxonomer}
+\insertRef{limma}{K2Taxonomer}
+\insertRef{Rousseeuw1993}{K2Taxonomer}
 }
 \keyword{clustering}
