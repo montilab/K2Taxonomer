@@ -3,7 +3,7 @@
     pD <- K2colData(K2res)[keep,]
     cohorts <- K2meta(K2res)$cohorts
     vehicle <- K2meta(K2res)$vehicle
-    covariates <- K2meta(K2res)$covariates
+    variables <- K2meta(K2res)$variables
     logCounts <- K2meta(K2res)$logCounts
     use <- K2meta(K2res)$use
     
@@ -26,9 +26,9 @@
     
     ## Create formula
     design <- model.matrix(as.formula(paste0("~", "GROUP",
-                                             .formatCov(covariates))), data=pD)
+                                             .formatCov(variables))), data=pD)
     
-    ## Check that model is full rank with covariates, if not model w/o covariate
+    ## Check that model is full rank with variables, if not model w/o covariate
     if(!is.fullrank(design)) {
         design <- model.matrix(as.formula(paste0("~", "GROUP",
                                                  .formatCov(NULL))), data=pD) 

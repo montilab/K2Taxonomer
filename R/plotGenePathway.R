@@ -1,3 +1,22 @@
+#' Plot gene expression or enrichment scores
+#'
+#' This function creates a plot for visualizing gene expression between
+#' partitions, either as a static plot or interactive with plotly.
+#' @param features Character. Either a gene or gene set identifier.
+#' @param node Character. A specific node identifier in K2res object.
+#' @param type Character. One of 'eMatDS' (default), 'eMat', or 'gMat'.
+#' @param use_plotly Logical. Whether to create a static plot, FALSE, or
+#' interactive plot, TRUE (default).
+#' @param subsample Logical. Whether to downsample the output object in order to
+#' save memory. This minimal impact on plot visual. Default is TRUE.
+#' @return Either a ggplot or ggplotly object.
+#' @references
+#'  \insertRef{reed_2020}{K2Taxonomer}
+#' @inheritParams K2tax
+#' @export
+#' @import ggplot
+#' @import plotly
+
 plotGenePathway <- function(K2res,
                             feature, 
                             node, 

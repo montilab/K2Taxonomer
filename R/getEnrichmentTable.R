@@ -1,7 +1,6 @@
 #' Extract table of enrichment results from 'K2' object
 #'
 #' Create table fisher- and gene set scoring enrichment results from 'K2' object.
-#' @param K2res An object of class K2 or K2results().
 #' @return A data.frame object with the following columns:
 #' \itemize{
 #'    \item{category: }{The user-specified gene set names}
@@ -27,7 +26,7 @@
 #'    partition}
 #'    \item{mean: }{The mean across all observations at the given partition}
 #'    \item{t: }{The test statistic estimated by the `limma` R package}
-#'    \item{B: }{The B-statistic estimated by the `limma` R package}
+#'    \item{hits: }{A comma deliminated string of intersection gene identifers}
 #' }
 #' @references
 #'    \insertRef{reed_2020}{K2Taxonomer}
@@ -35,46 +34,8 @@
 #'    \insertRef{bh}{K2Taxonomer}
 #'    \insertRef{gsva}{K2Taxonomer}
 #' @keywords clustering
+#' @inheritParams K2tax
 #' @export
-#' @examples
-#' ## Read in ExpressionSet object
-#' library(Biobase)
-#' data(sample.ExpressionSet)
-#'
-#' ## Pre-process and create K2 object
-#' K2res <- K2preproc(sample.ExpressionSet)
-#'
-#' ## Run K2 Taxonomer algorithm
-#' K2res <- K2tax(K2res,
-#'             stabThresh=0.5)
-#'
-#' ## Run differential analysis on each partition
-#' K2res <- runDGEmods(K2res)
-#'
-#' ## Create dummy set of gene sets
-#' DGEtable <- getDGETable(K2res)
-#' genes <- unique(DGEtable$gene)
-#' genesetsMadeUp <- list(
-#'     GS1=genes[1:50],
-#'     GS2=genes[51:100],
-#'     GS3=genes[101:150])
-#'
-#' ## Run gene set enrichment
-#' K2res <- runGSEmods(K2res,
-#'                 genesets=genesetsMadeUp,
-#'                 qthresh=0.1)
-#'
-#' ## Run GSVA on genesets
-#' K2res <- runGSVAmods(K2res,
-#'                     ssGSEAalg='gsva',
-#'                     ssGSEAcores=1,
-#'                     verbose=FALSE)
-#'
-#' ## Run differential analysis on GSVA results
-#' K2res <- runDSSEmods(K2res)
-#'
-#' head(getEnrichmentTable(K2res))
-#'
 
 getEnrichmentTable <- function(K2res) {
 

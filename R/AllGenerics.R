@@ -124,7 +124,7 @@ setMethod("K2gene2Pathway<-", "K2", function(K2res, value) {
     K2res
 })
 
-#' @title Expression matrix object used in K2Taxonomer run
+#' @title Expression matrix object used in partitioning
 #' @description Retrieve or assign Matrix object.
 #' @param K2res K2 class object.
 #' @param value Matrix.
@@ -172,8 +172,8 @@ setMethod("K2eMatDS<-", "K2", function(K2res, value) {
   K2res
 })
 
-#' @title Matrix object of of GSVA output
-#' @description Retrieve or assign Matrix object of GSVA output.
+#' @title Numeric matrix of enrichment scores
+#' @description Retrieve or assign matrix of enrichment scores.
 #' @param K2res K2 class object.
 #' @param value Matrix.
 #' @return Matrix.

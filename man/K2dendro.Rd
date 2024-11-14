@@ -7,7 +7,7 @@
 K2dendro(K2res)
 }
 \arguments{
-\item{K2res}{An object of class K2. The output of K2tax().}
+\item{K2res}{A K2 class object.}
 }
 \value{
 An object of class dendrogram.
@@ -15,22 +15,6 @@ An object of class dendrogram.
 \description{
 Reformats the output of K2tax() to an object of class, dendrogram,
 which can be easily plotted.
-}
-\examples{
-## Read in ExpressionSet object
-library(Biobase)
-data(sample.ExpressionSet)
-
-## Pre-process and create K2 object
-K2res <- K2preproc(sample.ExpressionSet)
-
-## Run K2 Taxonomer algorithm
-K2res <- K2tax(K2res,
-            stabThresh=0.5)
-
-## Create dendrogram object from K2 Taxonomer results
-K2dendro(K2res)
-
 }
 \references{
 \insertRef{reed_2020}{K2Taxonomer}

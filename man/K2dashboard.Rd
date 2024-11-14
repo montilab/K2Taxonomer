@@ -12,7 +12,7 @@ K2dashboard(
 )
 }
 \arguments{
-\item{K2res}{Object of class K2.}
+\item{K2res}{A K2 class object.}
 
 \item{analysis_name}{Character string of the name of analysis to write files
 and generate title of report.}
@@ -25,8 +25,8 @@ and generate title of report.}
 Nothing.  Writes files to a specified directory.
 }
 \description{
-This function will generate an interactive dashboard of the annotated K=2
-clustering results in a specified directory.
+This function will generate an interactive dashboard of the annotated K2
+Taxonomer results in a specified directory.
 }
 \examples{
 

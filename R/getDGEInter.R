@@ -1,7 +1,37 @@
+#' Create interactive table of differential gene expression analysis results from 'K2' object
+#'
+#' Create interactive table differential gene expression analysis results from 'K2' object.
+#' @param maxFDR Numeric. A value between 0 and 1 indicating the FDR cutoff for differential gene expressio analysis.
+#' @param minDiff Numeric. A value between 0 and 1 indicating the mean difference cutoff for differential gene expressio analysis.
+#' @param maxPval Numeric. A value between 0 and 1 indicating the p-value cutoff for differential gene expression analysis.
+#' @param genes Character. A vector of gene identifiers to display.
+#' @param nodes Character. A vector of node identifiers to display.
+#' @return An interactive data frame with the following columns:
+#' \itemize{
+#'  \item{Gene: }{The identifier of the gene}
+#'  \item{Node: }{The identifier of the partition}
+#'  \item{Edge: }{The identifier of partition subgroup}
+#'  \item{Direction: }{The direction of coefficient for the assigned gene}
+#'  \item{P Value: }{The p-value estimated by differential analysis}
+#'  \item{FDR: }{The multiple hypothesis corrected FDR p-value, adjusted across
+#'  all partitions}
+#'  \item{Diff: }{The difference between the means of each subgroup at
+#'  a given partition}
+#'  \item{Mean: }{The mean across all observations at the given
+#'  partition}
+#' }
+#' @references
+#'  \insertRef{reed_2020}{K2Taxonomer}
+#'  \insertRef{limma}{K2Taxonomer}
+#'  \insertRef{bh}{K2Taxonomer}
+#' @keywords clustering
+#' @inheritParams K2tax
+#' @export
+
 ## Function to format differential results
 getDGEInter <- function(K2res,
-                        maxFDR = 0.01,
-                        minDiff = 1,
+                        maxFDR = 0.05,
+                        minDiff = NULL,
                         maxPval = NULL,
                         genes = NULL,
                         nodes = NULL) {

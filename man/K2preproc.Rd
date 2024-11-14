@@ -5,30 +5,35 @@
 \title{Function to create K2 object for pre-processing}
 \usage{
 K2preproc(
-  eSet,
+  object,
   cohorts = NULL,
+  eMatDS = NULL,
   vehicle = NULL,
-  covariates = NULL,
+  variables = NULL,
+  seuAssay = "RNA",
+  seuAssayDS = "RNA",
+  sceAssay = "logcounts",
+  sceAssayDS = NULL,
   block = NULL,
-  logCounts = FALSE,
+  logCounts = TRUE,
   use = c("Z", "MEAN"),
   nFeats = "sqrt",
-  featMetric = c("mad", "sd", "Sn", "Qn", "F", "square"),
-  recalcDataMatrix = FALSE,
+  featMetric = c("F", "mad", "sd", "Sn"),
+  DGEmethod = c("limma", "mast"),
+  DGEexpThreshold = 0.25,
+  recalcDataMatrix = TRUE,
   nBoots = 500,
-  clustFunc = hclustWrapper,
-  clustCors = 1,
-  clustList = list(),
+  useCors = 1,
+  clustFunc = "cKmeansDownsampleSqrt",
+  clustList = NULL,
   linkage = c("mcquitty", "ward.D", "ward.D2", "single", "complete", "average",
     "centroid"),
   info = NULL,
-  infoClass = NULL,
   genesets = NULL,
   qthresh = 0.05,
   cthresh = 0,
   ntotal = 20000,
-  ssGSEAalg = c("gsva", "ssgsea", "zscore", "plage"),
-  ssGSEAcores = 1,
+  ScoreGeneSetMethod = c("GSVA", "AUCELL"),
   oneoff = TRUE,
   stabThresh = 0,
   geneURL = NULL,
@@ -36,76 +41,100 @@ K2preproc(
 )
 }
 \arguments{
-\item{eSet}{An expression set object.}
+\item{object}{An object of class Seurat, SingleCellExperiment, or ExpressionSet.}
 
-\item{cohorts}{The column in phenotype data of eSet that has cohort ID's.
-Default NULL if no pre-processing of data.}
+\item{cohorts}{Character. The column in meta data of 'object' that has cohort IDs. Default NULL if no cohorts in data.}
 
-\item{vehicle}{The value in the cohort variable that contains the vehicle
-ID. Default NULL if no vehicle to be used.}
+\item{eMatDS}{Numeric matrix. A matrix with the same number of observations as 'object' containing normalized expression data to be used in analyses downstream of partitioning algorithm.}
 
-\item{covariates}{Covariates in phenotype data of eSet to control for in
-differential analysis.}
+\item{vehicle}{The value in the cohort variable that contains the ID of observation to use as control. Default NULL if no vehicle to be used.}
 
-\item{block}{Block parameter in limma for modelling random-like effects.}
+\item{variables}{Character. Columns in meta data of 'object' to control for in differential analyses.}
 
-\item{logCounts}{Logical. Whether or not expression values are log-scale
-counts or log normalized counts from RNA-seq. Default is FALSE.}
+\item{seuAssay}{Character. Name of assay in Seurat object containing expression data for running partitioning algorithm. If cohorts based on clustering, this should be the assay used.}
 
-\item{use}{Character string. Options are 'Z' to generate test statistics or
-'MEAN' to use means from differential analysis for clustering.}
+\item{seuAssayDS}{Character. Name of assay in Seurat object containing expression data normalized expression data to be used in analyses downstream of partitioning algorithm.}
 
-\item{nFeats}{'sqrt' or a numeric value <= number of features to subset the
-features for each partition.}
+\item{sceAssay}{Character. Name of assay in SingleCellExperimen object containing expression data for running partitioning algorithm. If cohorts based on clustering, this should be the assay used.}
 
-\item{featMetric}{Metric to use to assign variance/signal score. Options are
-'square' (default) use square values and 'mad' to use MAD scores.}
+\item{sceAssayDS}{Character. Name of assay in SingleCellExperiment object containing expression data normalized expression data to be used in analyses downstream of partitioning algorithm.}
 
-\item{recalcDataMatrix}{Logical. Recalculate dataMatrix for each partion?
-Default is FALSE.}
+\item{block}{Character. Block parameter in limma for modeling higherarchical data structure, such as multiple observations per individual.}
 
-\item{nBoots}{A numeric value of the number of bootstraps to run at each
-split.}
+\item{logCounts}{Logical. Whether or not expression values are log-scale counts or log normalized counts from RNA-seq. Default is TRUE.}
 
-\item{clustFunc}{Wrapper function to cluster a P x N (See details).}
+\item{use}{Character. Options are 'Z' to generate test statistics or 'MEAN' to use means from differential analysis for clustering.}
 
-\item{clustCors}{Number of cores to use for clustering.}
+\item{nFeats}{'sqrt' or a numeric value <= number of features to subset for each partition.}
 
-\item{clustList}{List of objects to use for clustering procedure.}
+\item{featMetric}{Character. Metric to use to assign gene-level variance/signal score.
+\itemize{
+ \item{F: }{F-statistic from evaluating differences in means across cohort}
+ \item{mad: }{Median absolute deviation}
+ \item{sd: }{Standard deviation}
+ \item{Sn: }{Robust scale estimator}
+}}
 
-\item{linkage}{Linkage criteria for splitting cosine matrix ('method' in
-hclust). 'average' by default.}
+\item{DGEmethod}{Character. Method for running differential gene expression analyses. Use one of either 'limma' (default) or 'mast'.}
 
-\item{info}{A data frame with rownames that match column names in dataMatrix.}
+\item{DGEexpThreshold}{Numeric. A value between 0 and 1 indicating for filtering lowly expressed genes for partition-specific differential gene expression. Proportion of observations with counts > 0 in at least one subgroup at a specific partition.}
 
-\item{infoClass}{A named vector denoted types of tests to run on
-metavariables.}
+\item{recalcDataMatrix}{Logical. Recalculate dataMatrix for each partion? Default is FALSE.}
 
-\item{genesets}{A named list of features in row names of dataMatrix.}
+\item{nBoots}{nBoots A value of the number of bootstraps to run at each partition. Default is 500.}
 
-\item{qthresh}{A numeric value between 0 and 1 of the FDR cuttoff to define
-feature sets.}
+\item{useCors}{Numeric. Number of cores to use for parallelizable processes.}
 
-\item{cthresh}{A positive value for the coefficient cuttoff to define
-feature sets.}
+\item{clustFunc}{Character. Wrapper function to be used in recursive partitioning.
+\itemize{
+ \item{cKmeansDownsampleSqrt: }{Perform constrained K-means clustering after
+ subsampling each cohort by the square root of the number of observations}
+ \item{cKmeansDownsampleSmallest: }{Perform constrained K-means clustering
+ after subsampling each cohort by the size of the smallest cohort}
+ \item{hclustWrapper: }{Perform hierarchical clustering}
+}}
 
-\item{ntotal}{A positive value to use as the background feature count. 20000
-by default.}
+\item{clustList}{Optional named list of parameters to use with clustFunc.
+\itemize{
+ \item{cKmeansDownsampleSqrt: }{
+   \itemize{
+     \item{maxIter: }{The maximum number of iterations to use with lcvqe()}
+   }
+ }
+ \item{cKmeansDownsampleSmallest: }{
+   \itemize{
+     \item{maxIter: }{The maximum number of iterations to use with lcvqe()}
+   }
+ }
+ \item{hclustWrapper: }{
+   \itemize{
+     \item{aggMethod: }{One of the hierarchichal methods specified by hclust() function}
+     \item{distMetric: }{One of the distance metrics specified by dist() function}
+   }
+ }
+}}
 
-\item{ssGSEAalg}{A character string, specifying which algorithm to use for
-running the gsva() function from the GSVA package. Options are 'gsva',
-'ssgsea', 'zscore', and 'plage'. 'gsva' by default.}
+\item{linkage}{Character. Linkage criteria for splitting cosine matrix ('method' in hclust). 'average' by default.}
 
-\item{ssGSEAcores}{Number of cores to use for running gsva() from the GSVA
-package. Default is 1.}
+\item{info}{Character. A vector of column names in meta data of 'object' that contain information to be used in cohort annotation of dashboard visualization}
 
-\item{oneoff}{Logical. Allow 1 member clusters?}
+\item{genesets}{Named list. Feature sets to be includes in enrichment-based analyses.}
 
-\item{stabThresh}{Threshold for ending clustering.}
+\item{qthresh}{Numeric. A value between 0 and 1 indicating the FDR cuttoff to define feature sets.}
 
-\item{geneURL}{Optional. Named list of URLs to gene information.}
+\item{cthresh}{Numeric. A positive value for the coefficient cuttoff to define feature sets.}
 
-\item{genesetURL}{Optional. Named list of URLs to geneset information.}
+\item{ntotal}{Numeric. A positive value to use as the background feature count. 20000 by default.}
+
+\item{ScoreGeneSetMethod}{Character. Method for gene set scoring. Use one of either 'GSVA' (default) or 'AUCELL'.}
+
+\item{oneoff}{Logical. Allow 1 observation partition groups? Default is TRUE.}
+
+\item{stabThresh}{Numeric. A value between 0 and 1 indicatingThreshold for ending clustering.}
+
+\item{geneURL}{Named list. URLs linking genes to external resources.}
+
+\item{genesetURL}{Named list. URLs linking gene set to external resources.}
 }
 \value{
 An object of class, `K2`.
@@ -113,15 +142,6 @@ An object of class, `K2`.
 \description{
 This function will generate an object of class, K2.  This will run
 pre-processing functions for running K2 Taxonomer procedure.
-}
-\examples{
-## Read in ExpressionSet object
-library(Biobase)
-data(sample.ExpressionSet)
-
-## Pre-process and create K2 object
-K2res <- K2preproc(sample.ExpressionSet)
-
 }
 \references{
 \insertRef{reed_2020}{K2Taxonomer}

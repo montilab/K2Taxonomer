@@ -1069,7 +1069,7 @@ observeEvent(input$compareGo, {
             cohorts=meta$cohorts,
             mods,
             vehicle=meta$vehicle,
-            covariates=meta$covariates,
+            variables=meta$variables,
             logCounts=meta$logCounts,
             DGEexpThreshold=meta$DGEexpThreshold,
             GENE = TRUE)
@@ -1114,7 +1114,7 @@ observeEvent(input$compareGo, {
             cohorts=meta$cohorts,
             mods,
             vehicle=NULL,
-            covariates=meta$covariates,
+            variables=meta$variables,
             DGEexpThreshold=meta$DGEexpThreshold,
             GENE = FALSE)
 

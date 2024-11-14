@@ -1,4 +1,33 @@
-## Function to format differential results
+#' Create interactive table of gene set enrichment results from 'K2' object
+#'
+#' Create table gene set enrichment results from 'K2' object.
+#' @param maxFDR_score Numeric. A value between 0 and 1 indicating the FDR cutoff for differential analysis of enrichment scores.
+#' @param minDiff_score Numeric. A value between 0 and 1 indicating the mean difference cutoff for differential analysis of enrichment scores.
+#' @param maxPval_score Numeric. A value between 0 and 1 indicating the p-value cutoff for differential analysis of enrichment scores.
+#' @param maxFDR_fisher Numeric. A value between 0 and 1 indicating the FDR cutoff for Fisher-based overrepresentation analysis.
+#' @param maxPval_fisher Numeric. A value between 0 and 1 indicating the p-value cutoff for Fisher-based overrepresentation analysis.
+#' @param gsNames Character. A vector of gene sets identifiers to display.
+#' @param nodes Character. A vector of node identifiers to display.
+#' @return An interactive data frame with the following columns:
+#' \itemize{
+#'  \item{Gene Set: }{The identifier of the gene set.}
+#'  \item{Node: }{The identifier of the partition}
+#'  \item{Edge: }{The identifier of partition subgroup}
+#'  \item{Direction: }{The direction of coefficient for the assigned gene sets}
+#'  \item{P Value Fisher: }{The p-value estimated by Fisher-based overrepresentation analysis}
+#'  \item{FDR Fisher: }{The multiple hypothesis corrected FDR Fisher p-value, adjusted across
+#'  all partitions}
+#'  \item{N Overlap: }{The intersection of differentially expressed genes and gene set}
+#'  \item{N Sig. Genes: }{The number differentially expressed genes}
+#'  \item{N Gene Set: }{The number genes comprising the gene set}
+#'  \item{P Value Score: }{The p-value estimated by differential analysis of enrichment scores}
+#'  \item{FDR Score: }{The multiple hypothesis corrected FDR p-value estimated by differential analysis of enrichment scores, adjusted across
+#'  all partitions}
+#'  \item{Diff Score: }{The difference between the mean enrichment score of each subgroup at
+#'  a given partition}
+#' }
+#' @inheritParams K2tax
+#' @export
 getEnrichmentInter <- function(K2res, 
                                maxFDR_score = 0.01,
                                minDiff_score = NULL,

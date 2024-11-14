@@ -1,26 +1,6 @@
-# eM <- eMat
-# cD <- colDat
-# cohorts=meta$cohorts
-# vehicle=meta$vehicle
-# covariates=meta$covariates
-# logCounts=meta$logCounts
-# DGEexpThreshold=meta$DGEexpThreshold
-# GENE = TRUE
-# 
-# 
-# values <- list()
-# values$groupListClicked <- list(
-#   G1 = c("10", "1", "0", "14", "7", "17", "8"),
-#   H1 = c("3", "9")
-# )
-# 
-# mods <- as.factor(unlist(lapply(seq(length(values$groupListClicked)),
-#                                 function(x) rep(x, length(values$groupListClicked[[x]])))))
-# names(mods) <- unlist(values$groupListClicked)
-
 ## Function to generate differential signature
 DashSignatureWrapper <- function(eM, cD, cohorts, mods, vehicle=NULL,
-                                 covariates=NULL, logCounts=FALSE,
+                                 variables=NULL, logCounts=FALSE,
                                  DGEexpThreshold = NULL,
                                  GENE = TRUE) {
   
@@ -51,7 +31,7 @@ DashSignatureWrapper <- function(eM, cD, cohorts, mods, vehicle=NULL,
   }
   K2meta(K2obj)$cohorts <- cohorts
   K2meta(K2obj)$vehicle <- vehicle
-  K2meta(K2obj)$covariates <- cohorts
+  K2meta(K2obj)$variables <- cohorts
   K2meta(K2obj)$logCounts <- logCounts
   K2meta(K2obj)$DGEexpThreshold <- DGEexpThreshold
   
@@ -753,4 +733,3 @@ enrichmentClusters <- function(clusterRes, groupList, genesets, qthresh,
   
   return(gseList)
 }
-

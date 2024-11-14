@@ -2,9 +2,9 @@
 #'
 #' This function will create a named vector of collapsed names of named
 #' genesets list, separated by '; '
-#' @param genesets A named list of features in row names of dataMatrix.
 #' @keywords clustering
 #' @return A named vector
+#' @inheritParams K2preproc
 #' @export
 #' @examples
 #' ## Read in ExpressionSet object

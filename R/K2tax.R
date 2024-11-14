@@ -1,42 +1,16 @@
-#' Function K2 Taxonomer
+#' Function to K2 Taxonomer partitioning
 #'
 #' This function performs K2 Taxonomer procedure only. Arguments values are
-#' extracted from K2meta(K2res) unless othewise specified.
-#'
-#' @param K2res An object of class K2. The output of K2preproc().
-#' @param nFeats A numeric value <= P of subsets of the data to use.
-#' @param featMetric Metric to use to assign variance/signal score. Options are
-#' 'square' (default), 'mad' to use MAD scores, 'sd' to use standard deviation
-#' @param recalcDataMatrix Recalculate dataMatrix for each partion?
-#' @param nBoots A numeric value of the number of bootstraps to run at each
-#' split.
-#' @param clustFunc Wrapper function to cluster a P x N (See details).
-#' @param useCors Number of cores to use for clustering.
-#' @param clustList List of objects to use for clustering procedure.
-#' @param linkage Linkage criteria for splitting cosine matrix ('method' in
-#' hclust).
-#' @param oneoff Logical. Allow 1 member clusters?
-#' @param stabThresh A numeric value < 1, to set stopping threshold (use any
-#' negative value for no threshold).
+#' extracted from K2meta(K2res) unless specified otherwise.
+#' @param K2res A K2 class object.
 #' @return An object of class K2.
 #' @references
 #'    \insertRef{reed_2020}{K2Taxonomer}
 #' @keywords clustering
+#' @inheritParams K2preproc
 #' @export
 #' @import parallel
 #' @import robustbase
-#' @examples
-#' ## Read in ExpressionSet object
-#' library(Biobase)
-#' data(sample.ExpressionSet)
-#'
-#' ## Pre-process and create K2 object
-#' K2res <- K2preproc(sample.ExpressionSet)
-#'
-#' ## Run K2 Taxonomer algorithm
-#' K2res <- K2tax(K2res,
-#'             stabThresh=0.5)
-#'
 
 K2tax <- function(K2res, nFeats=NULL, featMetric=NULL, recalcDataMatrix=NULL,
     nBoots=NULL, clustFunc=NULL, useCors=NULL, clustList=NULL,

@@ -2,7 +2,6 @@
 #'
 #' Replaces gene set results from paired up- and down- gene sets with the difference
 #' of the up-regulated genes and down-regulated genes
-#' @param K2res An object of class K2. The output of runDGEmods().
 #' @param aggList A named list where each item is a character vector of length, 
 #' 2, comprising the name of the 'up' gene set, and the name of the 'down'
 #' gene set.
@@ -11,6 +10,7 @@
 #'    \insertRef{reed_2020}{K2Taxonomer}
 #'    \insertRef{gsva}{K2Taxonomer}
 #' @keywords clustering
+#' @inheritParams K2tax
 #' @export
 #' @import Biobase
 #' @examples

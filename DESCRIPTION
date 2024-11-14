@@ -46,7 +46,7 @@ Suggests:
 Depends:
   R (>= 4.0)
 BugReports: https://github.com/montilab/K2Taxonomer
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 RdMacros: Rdpack
 Collate:
     'aggregateGeneSetScores.R'
@@ -62,7 +62,6 @@ Collate:
     'formatCov.R'
     'formatInfo.R'
     'getDGEInter.R'
-    'getDGEInteractive.R'
     'getDGETable.R'
     'getEnrichmentInter.R'
     'getEnrichmentTable.R'
@@ -81,8 +80,6 @@ Collate:
     'runDGEmods.R'
     'runDSSEmods.R'
     'runFISHERmods.R'
-    'runGSEmods.R'
-    'runK2Taxonomer.R'
     'runScoreGeneSets.R'
     'signatureWrapper_MAST.R'
     'signatureWrapper.R'

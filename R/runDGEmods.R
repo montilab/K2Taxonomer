@@ -1,38 +1,22 @@
-#' Perform differential analysis of gene splits
+#' Perform differential analysis between subgroups at each partition
 #'
-#' Adds limma differential analysis results to the output of K2tax().
-#' @param K2res An object of class K2. The output of K2tax().
+#' Adds differential analysis results to the output of K2tax().
 #' @return An object of class K2.
 #' @references
 #'  \insertRef{reed_2020}{K2Taxonomer}
 #'  \insertRef{limma}{K2Taxonomer}
 #'  \insertRef{bh}{K2Taxonomer}
 #' @keywords clustering
+#' @inheritParams K2preproc
 #' @export
 #' @import limma
 #' @import Biobase
-#' @examples
-#' ## Read in ExpressionSet object
-#' library(Biobase)
-#' data(sample.ExpressionSet)
-#'
-#' ## Pre-process and create K2 object
-#' K2res <- K2preproc(sample.ExpressionSet)
-#'
-#' ## Run K2 Taxonomer algorithm
-#' K2res <- K2tax(K2res,
-#'             stabThresh=0.5)
-#'
-#' ## Run differential analysis on each partition
-#' K2res <- runDGEmods(K2res)
-#'
 
 runDGEmods <- function(K2res,
                        DGEmethod = NULL,
                        DGEexpThreshold = NULL,
-                       cohorts = NULL,
                        vehicle = NULL,
-                       covariates = NULL,
+                       variables = NULL,
                        block = NULL,
                        logCounts = NULL) {
 
@@ -44,12 +28,10 @@ runDGEmods <- function(K2res,
                                                      DGEmethod)
     K2meta(K2res)$DGEexpThreshold <- DGEexpThreshold <- 
       .checkK2(K2res, "DGEexpThreshold", DGEexpThreshold)
-    K2meta(K2res)$cohorts <- cohorts <- .checkK2(K2res, "cohorts",
-                                                 cohorts)
     K2meta(K2res)$vehicle <- vehicle <- .checkK2(K2res, "vehicle",
                                                  vehicle)
-    K2meta(K2res)$covariates <- covariates <- .checkK2(K2res, "covariates",
-                                                       covariates)
+    K2meta(K2res)$variables <- variables <- .checkK2(K2res, "variables",
+                                                       variables)
     K2meta(K2res)$block <- block <- .checkK2(K2res, "block",
                                              block)
     K2meta(K2res)$logCounts <- logCounts <- .checkK2(K2res, "logCounts",

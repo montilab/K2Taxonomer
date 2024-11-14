@@ -1,10 +1,11 @@
 #' Interactive K2 dendrogram
 #'
 #' Create an interactive dendrogram of the K2 Taxonomer results
-#' @param K2res A list object. The output of runK2tax().
+#' @param labelsize Size of labels displayed in window.
 #' @references
 #'  \insertRef{reed_2020}{K2Taxonomer}
-#' @return An interactive dendrogram created by `visNetwork::visNetwork()`.
+#' @return An interactive dendrogram created by visNetwork::visNetwork().
+#' @inheritParams K2tax
 #' @export
 #' @examples
 #'

@@ -1,8 +1,7 @@
 #' Generate interactive dashboard of K2 Taxonomer results
 #'
-#' This function will generate an interactive dashboard of the annotated K=2
-#' clustering results in a specified directory.
-#' @param K2res Object of class K2.
+#' This function will generate an interactive dashboard of the annotated K2
+#' Taxonomer results in a specified directory.
 #' @param analysis_name Character string of the name of analysis to write files
 #' and generate title of report.
 #' @param about Logical. Whether to create an 'about' tab in the dashboard.
@@ -11,6 +10,7 @@
 #' @references
 #'  \insertRef{reed_2020}{K2Taxonomer}
 #' @keywords clustering
+#' @inheritParams K2tax
 #' @export
 #' @examples
 #'

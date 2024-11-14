@@ -1,5 +1,5 @@
-## Function to format covariates string in formula
-.formatCov <- function(covariates) {
-    if (is.null(covariates))
-        "" else paste0("+", paste(covariates, collapse="+"))
+## Function to format variables string in formula
+.formatCov <- function(variables) {
+    if (is.null(variables))
+        "" else paste0("+", paste(variables, collapse="+"))
 }

@@ -7,7 +7,7 @@
 getEnrichmentTable(K2res)
 }
 \arguments{
-\item{K2res}{An object of class K2 or K2results().}
+\item{K2res}{A K2 class object.}
 }
 \value{
 A data.frame object with the following columns:
@@ -17,10 +17,10 @@ A data.frame object with the following columns:
    \item{edge: }{Indication of which subgroup the gene was assigned at a
    given partition}
    \item{direction: }{The direction of coefficient for the assigned gene set}
-   \item{pval_hyper: }{The p-value of the hyperenrichment test comparing the
+   \item{pval_fisher: }{The p-value of the enrichment test comparing the
    subgroup-assigned gene set to the user-specified gene set}
-   \item{fdr_hyper: }{The multiple hypothesis corrected FDR
-   (Benjamini-Hochberg) p-value of hyperenrichment, adjusted across all
+   \item{fdr_fisher: }{The multiple hypothesis corrected FDR
+   (Benjamini-Hochberg) p-value of enrichment, adjusted across all
    partitions}
    \item{nhits: }{The intersection of subgroup-assigned genes and the
    user-specified gene set}
@@ -35,51 +35,11 @@ A data.frame object with the following columns:
    partition}
    \item{mean: }{The mean across all observations at the given partition}
    \item{t: }{The test statistic estimated by the `limma` R package}
-   \item{B: }{The B-statistic estimated by the `limma` R package}
+   \item{hits: }{A comma deliminated string of intersection gene identifers}
 }
 }
 \description{
-Create table hyper- and single-sample enrichment results from 'K2' object.
-}
-\examples{
-## Read in ExpressionSet object
-library(Biobase)
-data(sample.ExpressionSet)
-
-## Pre-process and create K2 object
-K2res <- K2preproc(sample.ExpressionSet)
-
-## Run K2 Taxonomer algorithm
-K2res <- K2tax(K2res,
-            stabThresh=0.5)
-
-## Run differential analysis on each partition
-K2res <- runDGEmods(K2res)
-
-## Create dummy set of gene sets
-DGEtable <- getDGETable(K2res)
-genes <- unique(DGEtable$gene)
-genesetsMadeUp <- list(
-    GS1=genes[1:50],
-    GS2=genes[51:100],
-    GS3=genes[101:150])
-
-## Run gene set hyperenrichment
-K2res <- runGSEmods(K2res,
-                genesets=genesetsMadeUp,
-                qthresh=0.1)
-
-## Run GSVA on genesets
-K2res <- runGSVAmods(K2res,
-                    ssGSEAalg='gsva',
-                    ssGSEAcores=1,
-                    verbose=FALSE)
-
-## Run differential analysis on GSVA results
-K2res <- runDSSEmods(K2res)
-
-head(getEnrichmentTable(K2res))
-
+Create table fisher- and gene set scoring enrichment results from 'K2' object.
 }
 \references{
 \insertRef{reed_2020}{K2Taxonomer}

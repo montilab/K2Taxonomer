@@ -34,17 +34,11 @@
         if (K2meta(K2r)$featMetric == "sd") {
             SCORE <- apply(K2data(K2r), 1, sd)
         }
-        if (K2meta(K2r)$featMetric == "Qn") {
-            SCORE <- apply(K2data(K2r), 1, Qn)
-        }
         if (K2meta(K2r)$featMetric == "Sn") {
             SCORE <- apply(K2data(K2r), 1, Sn)
         }
         if (K2meta(K2r)$featMetric == "F") {
             SCORE <- dgeSeg$Fvec
-        }
-        if (K2meta(K2r)$featMetric == "square") {
-            SCORE <- apply(K2data(K2r), 1, function(x) sum(x^2))
         }
       
         ## Cluster data

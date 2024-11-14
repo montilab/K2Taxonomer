@@ -51,20 +51,20 @@
         #         recalcDataMatrix=TRUE.\n")
         # }
 
-        ## covariates
-        if (!is.null(K2m$covariates) && !K2m$covariates %in%
+        ## variables
+        if (!is.null(K2m$variables) && !K2m$variables %in%
             colnames(K2colData(K2r))) {
-            stop("Argument, covariates, must match column name in column data of
+            stop("Argument, variables, must match column name in column data of
                 ExpressionSet.\n")
-            if(sum(is.na(as.matrix(K2colData(K2r)[, K2m$covariates]))) > 0) {
-              stop("Argument, covariates, includes columns with NAs.\n")
+            if(sum(is.na(as.matrix(K2colData(K2r)[, K2m$variables]))) > 0) {
+              stop("Argument, variables, includes columns with NAs.\n")
             }
         }
 
         # ## Covariated and recalculating data matrix
-        # if (!is.null(K2m$covariates) && (K2m$featMetric == "F" |
+        # if (!is.null(K2m$variables) && (K2m$featMetric == "F" |
         #     K2m$recalcDataMatrix)) {
-        #     stop("Specifying argument, covariates, currently not supported if
+        #     stop("Specifying argument, variables, currently not supported if
         #         argument, featMetric='F' or if argument,
         #         recalcDataMatrix=TRUE.\n")
         # }

@@ -4,7 +4,7 @@
     pD <- K2colData(K2r)
     cohorts <- K2meta(K2r)$cohorts
     vehicle <- K2meta(K2r)$vehicle
-    covariates <- K2meta(K2r)$covariates
+    variables <- K2meta(K2r)$variables
     block <- K2meta(K2r)$block
     logCounts <- K2meta(K2r)$logCounts
     DGEexpThreshold <- K2meta(K2r)$DGEexpThreshold
@@ -86,10 +86,10 @@
         ## Create design matrix
         if(!(length(pDmods) > 2 & is.null(vehicle))) {
         
-          desForm <- paste0("~mods", .formatCov(covariates))
+          desForm <- paste0("~mods", .formatCov(variables))
           design <- model.matrix(as.formula(desForm), data=pD)
           
-          ## Check that model is full rank with covariates, if not model w/o covariates
+          ## Check that model is full rank with variables, if not model w/o variables
           if(!is.fullrank(design)) {
               desForm <- paste0("~mods", .formatCov(NULL))
               design <- model.matrix(as.formula(desForm), data=pD)
@@ -102,10 +102,10 @@
           
         } else {
           
-          desForm <- paste0("~0+mods", .formatCov(covariates))
+          desForm <- paste0("~0+mods", .formatCov(variables))
           design <- model.matrix(as.formula(desForm), data=pD)
           
-          ## Check that model is full rank with covariates, if not model w/o covariates
+          ## Check that model is full rank with variables, if not model w/o variables
           if(!is.fullrank(design)) {
             desForm <- paste0("~0+mods", .formatCov(NULL))
             design <- model.matrix(as.formula(desForm), data=pD)

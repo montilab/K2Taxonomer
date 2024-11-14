@@ -1,51 +1,18 @@
-#' Perform ssGSVA on gene sets and get set signature hits
+#' Enrichment scoring of gene sets on expression data
 #'
-#' Adds hyperenrichment analysis results to the output of runDGEmods().
-#' @param K2res An object of class K2. The output of runDGEmods().
-#' @param useCors Number of cores to use for running gsva() from the GSVA
-#' package. Default is 1.
-#' @param ... Additional arguments passed onto GSVA::gsva()
+#' Performs single-sample enrichment scoring using GSVA or AUCell. When AUCell
+#' is specified, output values reflect the AUC levels scaled by 100 and log2
+#' transformed.
 #' @return An object of class K2.
 #' @references
 #'  \insertRef{reed_2020}{K2Taxonomer}
 #'  \insertRef{gsva}{K2Taxonomer}
 #' @keywords clustering
+#' @inheritParams K2preproc
 #' @export
 #' @import GSVA
 #' @import Biobase
-#' @examples
-#' ## Read in ExpressionSet object
-#' library(Biobase)
-#' data(sample.ExpressionSet)
-#'
-#' ## Pre-process and create K2 object
-#' K2res <- K2preproc(sample.ExpressionSet)
-#'
-#' ## Run K2 Taxonomer algorithm
-#' K2res <- K2tax(K2res,
-#'             stabThresh=0.5)
-#'
-#' ## Run differential analysis on each partition
-#' K2res <- runDGEmods(K2res)
-#'
-#' ## Create dummy set of gene sets
-#' DGEtable <- getDGETable(K2res)
-#' genes <- unique(DGEtable$gene)
-#' genesetsMadeUp <- list(
-#'     GS1=genes[1:50],
-#'     GS2=genes[51:100],
-#'     GS3=genes[101:150])
-#'
-#' ## Run gene set hyperenrichment
-#' K2res <- runGSEmods(K2res,
-#'                 genesets=genesetsMadeUp,
-#'                 qthresh=0.1)
-#'
-#' ## Run GSVA on genesets
-#' K2res <- runGSVAmods(K2res,
-#'                 useCors=1,
-#'                 verbose=FALSE)
-#'
+#' @import AUCell
 
 runScoreGeneSets <- function(K2res, ScoreGeneSetMethod = NULL, useCors=NULL) {
 

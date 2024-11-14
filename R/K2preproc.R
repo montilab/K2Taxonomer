@@ -2,44 +2,69 @@
 #'
 #' This function will generate an object of class, K2.  This will run
 #' pre-processing functions for running K2 Taxonomer procedure.
-#' @param eSet An expression set object.
-#' @param cohorts The column in phenotype data of eSet that has cohort ID's.
-#' Default NULL if no pre-processing of data.
-#' @param vehicle The value in the cohort variable that contains the vehicle
-#' ID. Default NULL if no vehicle to be used.
-#' @param covariates Covariates in phenotype data of eSet to control for in
-#' differential analysis.
-#' @param block Block parameter in limma for modelling random-like effects.
-#' @param logCounts Logical. Whether or not expression values are log-scale
-#' counts or log normalized counts from RNA-seq. Default is FALSE.
-#' @param use Character string. Options are 'Z' to generate test statistics or
-#' 'MEAN' to use means from differential analysis for clustering.
-#' @param nFeats 'sqrt' or a numeric value <= number of features to subset the
-#' features for each partition.
-#' @param featMetric Metric to use to assign variance/signal score. Options are
-#' 'square' (default) use square values and 'mad' to use MAD scores.
-#' @param recalcDataMatrix Logical. Recalculate dataMatrix for each partion?
-#' Default is FALSE.
-#' @param nBoots A numeric value of the number of bootstraps to run at each
-#' split.
-#' @param clustFunc Wrapper function to cluster a P x N (See details).
-#' @param useCors Number of cores to use for clustering.
-#' @param clustList List of objects to use for clustering procedure.
-#' @param linkage Linkage criteria for splitting cosine matrix ('method' in
-#' hclust). 'average' by default.
-#' @param info A data frame with rownames that match column names in dataMatrix.
-
-#' @param genesets A named list of features in row names of dataMatrix.
-#' @param qthresh A numeric value between 0 and 1 of the FDR cuttoff to define
-#' feature sets.
-#' @param cthresh A positive value for the coefficient cuttoff to define
-#' feature sets.
-#' @param ntotal A positive value to use as the background feature count. 20000
-#' by default.
-#' @param oneoff Logical. Allow 1 member clusters?
-#' @param stabThresh Threshold for ending clustering.
-#' @param geneURL Optional. Named list of URLs to gene information.
-#' @param genesetURL Optional. Named list of URLs to geneset information.
+#' @param object An object of class Seurat, SingleCellExperiment, or ExpressionSet.
+#' @param cohorts Character. The column in meta data of 'object' that has cohort IDs. Default NULL if no cohorts in data.
+#' @param eMatDS Numeric matrix. A matrix with the same number of observations as 'object' containing normalized expression data to be used in analyses downstream of partitioning algorithm.
+#' @param vehicle The value in the cohort variable that contains the ID of observation to use as control. Default NULL if no vehicle to be used.
+#' @param variables Character. Columns in meta data of 'object' to control for in differential analyses.
+#' @param seuAssay Character. Name of assay in Seurat object containing expression data for running partitioning algorithm. If cohorts based on clustering, this should be the assay used.
+#' @param seuAssayDS Character. Name of assay in Seurat object containing expression data normalized expression data to be used in analyses downstream of partitioning algorithm.
+#' @param sceAssay Character. Name of assay in SingleCellExperimen object containing expression data for running partitioning algorithm. If cohorts based on clustering, this should be the assay used.
+#' @param sceAssayDS Character. Name of assay in SingleCellExperiment object containing expression data normalized expression data to be used in analyses downstream of partitioning algorithm.
+#' @param block Character. Block parameter in limma for modeling higherarchical data structure, such as multiple observations per individual.
+#' @param logCounts Logical. Whether or not expression values are log-scale counts or log normalized counts from RNA-seq. Default is TRUE.
+#' @param use Character. Options are 'Z' to generate test statistics or 'MEAN' to use means from differential analysis for clustering.
+#' @param nFeats 'sqrt' or a numeric value <= number of features to subset for each partition.
+#' @param featMetric Character. Metric to use to assign gene-level variance/signal score.
+#' \itemize{
+#'  \item{F: }{F-statistic from evaluating differences in means across cohort}
+#'  \item{mad: }{Median absolute deviation}
+#'  \item{sd: }{Standard deviation}
+#'  \item{Sn: }{Robust scale estimator}
+#' }
+#' @param DGEmethod Character. Method for running differential gene expression analyses. Use one of either 'limma' (default) or 'mast'.
+#' @param DGEexpThreshold Numeric. A value between 0 and 1 indicating for filtering lowly expressed genes for partition-specific differential gene expression. Proportion of observations with counts > 0 in at least one subgroup at a specific partition.
+#' @param recalcDataMatrix Logical. Recalculate dataMatrix for each partion? Default is FALSE.
+#' @param nBoots nBoots A value of the number of bootstraps to run at each partition. Default is 500.
+#' @param clustFunc Character. Wrapper function to be used in recursive partitioning.
+#' \itemize{
+#'  \item{cKmeansDownsampleSqrt: }{Perform constrained K-means clustering after
+#'  subsampling each cohort by the square root of the number of observations}
+#'  \item{cKmeansDownsampleSmallest: }{Perform constrained K-means clustering
+#'  after subsampling each cohort by the size of the smallest cohort}
+#'  \item{hclustWrapper: }{Perform hierarchical clustering}
+#' }
+#' @param useCors Numeric. Number of cores to use for parallelizable processes.
+#' @param clustList Optional named list of parameters to use with clustFunc.
+#' \itemize{
+#'  \item{cKmeansDownsampleSqrt: }{
+#'    \itemize{
+#'      \item{maxIter: }{The maximum number of iterations to use with lcvqe()}
+#'    }
+#'  }
+#'  \item{cKmeansDownsampleSmallest: }{
+#'    \itemize{
+#'      \item{maxIter: }{The maximum number of iterations to use with lcvqe()}
+#'    }
+#'  }
+#'  \item{hclustWrapper: }{
+#'    \itemize{
+#'      \item{aggMethod: }{One of the hierarchichal methods specified by hclust() function}
+#'      \item{distMetric: }{One of the distance metrics specified by dist() function}
+#'    }
+#'  }
+#' }
+#' @param linkage Character. Linkage criteria for splitting cosine matrix ('method' in hclust). 'average' by default.
+#' @param genesets Named list. Feature sets to be includes in enrichment-based analyses.
+#' @param qthresh Numeric. A value between 0 and 1 indicating the FDR cuttoff to define feature sets.
+#' @param cthresh Numeric. A positive value for the coefficient cuttoff to define feature sets.
+#' @param ntotal Numeric. A positive value to use as the background feature count. 20000 by default.
+#' @param ScoreGeneSetMethod Character. Method for gene set scoring. Use one of either 'GSVA' (default) or 'AUCELL'.
+#' @param oneoff Logical. Allow 1 observation partition groups? Default is TRUE.
+#' @param stabThresh Numeric. A value between 0 and 1 indicatingThreshold for ending clustering.
+#' @param info Character. A vector of column names in meta data of 'object' that contain information to be used in cohort annotation of dashboard visualization
+#' @param geneURL Named list. URLs linking genes to external resources.
+#' @param genesetURL Named list. URLs linking gene set to external resources.
 #' @return An object of class, `K2`.
 #' @references
 #'  \insertRef{reed_2020}{K2Taxonomer}
@@ -48,24 +73,16 @@
 #' @export
 #' @import limma
 #' @import Biobase
-#' @examples
-#' ## Read in ExpressionSet object
-#' library(Biobase)
-#' data(sample.ExpressionSet)
-#'
-#' ## Pre-process and create K2 object
-#' K2res <- K2preproc(sample.ExpressionSet)
-#'
 
-K2preproc <- function(object, cohorts=NULL, eMatDS = NULL, vehicle=NULL, covariates=NULL,
+K2preproc <- function(object, cohorts=NULL, eMatDS = NULL, vehicle=NULL, variables=NULL,
     seuAssay = "RNA", seuAssayDS = "RNA",
     sceAssay = "logcounts", sceAssayDS = NULL,
-    block=NULL, logCounts=FALSE, use=c("Z", "MEAN"), nFeats="sqrt",
-    featMetric=c("mad", "sd", "Sn", "Qn", "F", "square"),
+    block=NULL, logCounts=TRUE, use=c("Z", "MEAN"), nFeats="sqrt",
+    featMetric=c("F", "mad", "sd", "Sn"),
     DGEmethod = c("limma", "mast"), DGEexpThreshold = 0.25, 
-    recalcDataMatrix=TRUE, nBoots=500, clustFunc="cKmeansDownsampleSqrt",
-    useCors=1, clustList=NULL, linkage=c("mcquitty", "ward.D",
-    "ward.D2", "single", "complete", "afverage", "centroid"), info=NULL, 
+    recalcDataMatrix=TRUE, nBoots=500, useCors=1,
+    clustFunc="cKmeansDownsampleSqrt", clustList=NULL, linkage=c("mcquitty", "ward.D",
+    "ward.D2", "single", "complete", "average", "centroid"), info=NULL, 
     genesets=NULL, qthresh=0.05, cthresh=0, ntotal=20000, 
     ScoreGeneSetMethod = c("GSVA", "AUCELL"), oneoff=TRUE, 
     stabThresh=0, geneURL=NULL, genesetURL=NULL) {
@@ -157,7 +174,7 @@ K2preproc <- function(object, cohorts=NULL, eMatDS = NULL, vehicle=NULL, covaria
 
     ## Add meta information
     K2meta(K2res) <- list(cohorts=cohorts, vehicle=vehicle,
-        covariates=covariates, block=block, logCounts=logCounts,
+        variables=variables, block=block, logCounts=logCounts,
         use=use, nFeats=nFeats, featMetric=featMetric,
         DGEmethod=DGEmethod, DGEexpThreshold=DGEexpThreshold, 
         recalcDataMatrix=recalcDataMatrix, nBoots=nBoots,
