@@ -10,9 +10,7 @@ The recursive partitioning approach utilized by `K2Taxonomer` presents advantage
 - Performing partition-specific feature selection, preventing the need to perform feature selection on the whole data set prior to running the algorithm.
 - Tailoring of analyses to specific data structures through the use of different clustering algorithms for performing partition estimation.
 
-The documentation of this package describes how `K2Taxonomer` can be applied to either bulk or single-cell gene expression data. For analyses of single-cell gene expression data `K2Taxonomer` is designed to characterize nested subgroups of previously identified cell types, such as those previously estimated by scRNAseq clustering analysis.
-
-A preprint of the manuscript describing `K2Taxonomer` is publicly available [here](https://www.biorxiv.org/content/10.1101/2020.11.05.370197v1/).
+A the manuscript describing `K2Taxonomer`, published in Nucleic Acids Research is available [here](https://pmc.ncbi.nlm.nih.gov/articles/PMC8464061/).
 
 ### Documentation
 
@@ -33,7 +31,7 @@ devtools::install_github("montilab/K2Taxonomer", ref = "dev")
 
 ### Usage
 
-In it's current form, this *development* branch is lacking much documentation.
+In it's current form, this *development* branch. Each function has an updated help page, but vignettes are currently forthcoming.
 
 Accordingly, below is a description of running K2Taxonomer with a clustered seurat object. It covers a full workflow.
 
