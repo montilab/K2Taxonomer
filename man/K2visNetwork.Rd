@@ -17,15 +17,6 @@ An interactive dendrogram created by visNetwork::visNetwork().
 \description{
 Create an interactive dendrogram of the K2 Taxonomer results
 }
-\examples{
-
-## Read in K2 Taxonomer results
-data(K2res)
-
-## Generate interactive dendrogram
-K2visNetwork(K2res)
-
-}
 \references{
 \insertRef{reed_2020}{K2Taxonomer}
 }

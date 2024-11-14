@@ -12,14 +12,6 @@
 #' @keywords clustering
 #' @inheritParams K2tax
 #' @export
-#' @examples
-#'
-#' ## Read in K2 Taxonomer results
-#' data(K2res)
-#'
-#' ## Generate interactive dashboard
-#' K2dashboard(K2res, output_dir=tempdir())
-#'
 
 K2dashboard <- function(K2res, analysis_name="K2Taxonomer",
     about=TRUE, output_dir=".") {

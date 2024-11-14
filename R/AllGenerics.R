@@ -177,10 +177,6 @@ setMethod("K2eMatDS<-", "K2", function(K2res, value) {
 #' @param K2res K2 class object.
 #' @param value Matrix.
 #' @return Matrix.
-#' @examples
-#' data(K2res)
-#' K2gMat(K2res)
-#'
 #' @export
 setGeneric("K2gMat", function(K2res) standardGeneric("K2gMat"))
 
@@ -201,10 +197,6 @@ setMethod("K2gMat<-", "K2", function(K2res, value) {
 #' @param K2res K2 class object.
 #' @param value Named list. Parameters used in K2Taxonomer run.
 #' @return Named list. Parameters used in K2Taxonomer run.
-#' @examples
-#' data(K2res)
-#' K2meta(K2res)
-#'
 #' @export
 setGeneric("K2meta", function(K2res) standardGeneric("K2meta"))
 
@@ -225,10 +217,6 @@ setMethod("K2meta<-", "K2", function(K2res, value) {
 #' @param K2res K2 class object.
 #' @param value Named vector. A vector with a URL string for each gene.
 #' @return Named vector. A vector with a URL string for each gene.
-#' @examples
-#' data(K2res)
-#' K2geneURL(K2res)
-#'
 #' @export
 setGeneric("K2geneURL", function(K2res) standardGeneric("K2geneURL"))
 
@@ -249,9 +237,6 @@ setMethod("K2geneURL<-", "K2", function(K2res, value) {
 #' @param K2res K2 class object.
 #' @param value Named vector. A vector with a URL string for each geneset.
 #' @return Named vector. A vector with a URL string for each geneset.
-#' @examples
-#' data(K2res)
-#' K2genesetURL(K2res)
 #' @export
 setGeneric("K2genesetURL", function(K2res) standardGeneric("K2genesetURL"))
 

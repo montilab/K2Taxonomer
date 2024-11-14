@@ -28,6 +28,7 @@
 #' }
 #' @inheritParams K2tax
 #' @export
+
 getEnrichmentInter <- function(K2res, 
                                maxFDR_score = 0.01,
                                minDiff_score = NULL,

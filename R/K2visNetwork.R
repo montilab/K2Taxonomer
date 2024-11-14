@@ -7,14 +7,6 @@
 #' @return An interactive dendrogram created by visNetwork::visNetwork().
 #' @inheritParams K2tax
 #' @export
-#' @examples
-#'
-#' ## Read in K2 Taxonomer results
-#' data(K2res)
-#'
-#' ## Generate interactive dendrogram
-#' K2visNetwork(K2res)
-#'
 
 K2visNetwork <- function(K2res, labelsize = 50) {
 

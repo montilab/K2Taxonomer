@@ -26,8 +26,3 @@ Matrix.
 \description{
 Retrieve or assign matrix of enrichment scores.
 }
-\examples{
-data(K2res)
-K2gMat(K2res)
-
-}

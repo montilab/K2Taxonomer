@@ -28,15 +28,6 @@ Nothing.  Writes files to a specified directory.
 This function will generate an interactive dashboard of the annotated K2
 Taxonomer results in a specified directory.
 }
-\examples{
-
-## Read in K2 Taxonomer results
-data(K2res)
-
-## Generate interactive dashboard
-K2dashboard(K2res, output_dir=tempdir())
-
-}
 \references{
 \insertRef{reed_2020}{K2Taxonomer}
 }
