@@ -2,9 +2,10 @@
 #'
 #' This function will generate an object of class, K2.  This will run
 #' pre-processing functions for running K2 Taxonomer procedure.
-#' @param object An object of class Seurat, SingleCellExperiment, or ExpressionSet.
+#' @param object An object of class matrix, dgCMatrix, Seurat, SingleCellExperiment, or ExpressionSet.
 #' @param cohorts Character. The column in meta data of 'object' that has cohort IDs. Default NULL if no cohorts in data.
 #' @param eMatDS Numeric matrix. A matrix with the same number of observations as 'object' containing normalized expression data to be used in analyses downstream of partitioning algorithm.
+#' @param colData data.frame. Only used if 'object' is a matrix or dgCMatrix. A data frame with named rows and columns containing observation data for each column in 'object'.
 #' @param vehicle The value in the cohort variable that contains the ID of observation to use as control. Default NULL if no vehicle to be used.
 #' @param variables Character. Columns in meta data of 'object' to control for in differential analyses.
 #' @param seuAssay Character. Name of assay in Seurat object containing expression data for running partitioning algorithm. If cohorts based on clustering, this should be the assay used.
@@ -75,7 +76,8 @@
 #' @import limma
 #' @import Biobase
 
-K2preproc <- function(object, cohorts=NULL, eMatDS = NULL, vehicle=NULL, variables=NULL,
+K2preproc <- function(object, cohorts=NULL, eMatDS = NULL, colData = NULL, 
+    vehicle=NULL, variables=NULL,
     seuAssay = "RNA", seuAssayDS = "RNA",
     sceAssay = "logcounts", sceAssayDS = NULL,
     block=NULL, logCounts=TRUE, use=c("Z", "MEAN"), nFeats="sqrt",
@@ -96,8 +98,17 @@ K2preproc <- function(object, cohorts=NULL, eMatDS = NULL, vehicle=NULL, variabl
     DGEmethod <- match.arg(DGEmethod)
 
     ## Initialize K2 object with expression data
-    if(!class(object) %in% c("Seurat", "ExpressionSet", "SingleCellExperiment")) {
+    if(!class(object)[1] %in% c("matrix", "dgCMatrix", "Seurat", "ExpressionSet", "SingleCellExperiment")) {
       stop("'object' must be one of classes 'Seurat', 'ExpressionSet', 'SingleCellExperiment'")
+    }
+    
+    ## If matrix is provided, check for colData
+    if(class(object)[1] %in% c("matrix", "dgCMatrix") & is.null(colData)) {
+      stop("'colData' must be supplied when 'object' is a matrix")
+    }
+    ## If matrix is provided, check for colData
+    if(class(object)[1] %in% c("matrix", "dgCMatrix") & !identical(rownames(colData), colnames(object))) {
+      stop("'colData' row names must match 'object' column names")
     }
     
     ## Set cluster function
@@ -115,14 +126,21 @@ K2preproc <- function(object, cohorts=NULL, eMatDS = NULL, vehicle=NULL, variabl
       clustList <- list()
     }
     
-    if(class(object) == "ExpressionSet") {
+    if(class(object)[1] %in% c("matrix", "dgCMatrix")) {
+      K2res <- new("K2", 
+                   eMat=object,
+                   eMatDS=eMatDS,
+                   colData=colData)
+    }
+    
+    if(class(object)[1] == "ExpressionSet") {
       K2res <- new("K2", 
                    eMat=object@assayData$exprs,
                    eMatDS=eMatDS,
                    colData=object@phenoData@data)
     }
     
-    if(class(object) == "Seurat") {
+    if(class(object)[1] == "Seurat") {
       if(nrow(eMatDS) == 0) {
         K2res <- new("K2", 
                      eMat=object@assays[[seuAssay]]@scale.data,
@@ -137,7 +155,7 @@ K2preproc <- function(object, cohorts=NULL, eMatDS = NULL, vehicle=NULL, variabl
     
     }
     
-    if(class(object) == "SingleCellExperiment") {
+    if(class(object)[1] == "SingleCellExperiment") {
       if(is.null(sceAssayDS)) {
         K2res <- new("K2", 
                      eMat=object@assays@data[[sceAssay]],
@@ -149,6 +167,11 @@ K2preproc <- function(object, cohorts=NULL, eMatDS = NULL, vehicle=NULL, variabl
                      eMatDS=object@assays@data[[sceAssayDS]],
                      colData=as.data.frame(object@colData))
       }
+    }
+    
+    ## Check eMatDF
+    if(nrow(K2eMatDS(K2res)) > 0 & ! identical(colnames(K2eMatDS(K2res)), colnames(K2eMat(K2res)))) {
+      stop("Columns in eMat and eMatDS don't match")
     }
     
     ## Set nFeats if argument == 'sqrt'

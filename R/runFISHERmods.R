@@ -46,6 +46,18 @@ runFISHERmods <- function(K2res, genesets=NULL, qthresh=NULL,
     if (length(K2genesets(K2res)) == 0) {
         stop("No named list of genesets provided")
     }
+    
+    ## Gene names not found in expression set
+    if(nrow(K2eMatDS(K2res)) != 0) {
+      gs <- rownames(K2eMatDS(K2res))
+    } else {
+      gs <- rownames(K2eMat(K2res))
+    }
+    if (length(K2genesets(K2res)) > 0 &&
+        sum(unique(unlist(K2genesets(K2res))) %in%
+            gs == 0)) {
+      stop("No features in argument, genesets, found in data set.\n")
+    }
 
     ## Run hyperenrichment
     K2results(K2res) <- lapply(K2results(K2res), function(x) {

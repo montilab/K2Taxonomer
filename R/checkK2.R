@@ -203,13 +203,6 @@
 
         ## Run stopping criteria for genesets slot
 
-        ## Gene names not found in expression set
-        if (length(K2genesets(K2r)) > 0 &&
-            sum(unique(unlist(K2genesets(K2r))) %in%
-            rownames(K2eMat(K2r))) == 0) {
-            stop("No features in argument, genesets, found in ExpressionSet.\n")
-        }
-
         ## Geneset names not found
         if (length(K2genesets(K2r)) > 0 &&
             is.null(names(K2genesets(K2r)))) {
