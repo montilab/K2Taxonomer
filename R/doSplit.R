@@ -24,7 +24,7 @@
             eKeep <- rownames(K2colData(K2r))[K2colData(K2r)[,
                 K2meta(K2r)$cohorts] %in% colnames(dataM)]
             dgeSeg <- suppressWarnings(.dgeWrapper(K2r, eKeep, Fstat=TRUE))
-            K2data(K2r) <- dgeSeg$dataM
+            K2data(K2r) <- dgeSeg$dataM[,clabs]
         }
 
         ## Get consensus module
