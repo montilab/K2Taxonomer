@@ -55,7 +55,7 @@ runFISHERmods <- function(K2res, genesets=NULL, qthresh=NULL,
     }
     if (length(K2genesets(K2res)) > 0 &&
         sum(unique(unlist(K2genesets(K2res))) %in%
-            gs == 0)) {
+            gs) == 0) {
       stop("No features in argument, genesets, found in data set.\n")
     }
 
