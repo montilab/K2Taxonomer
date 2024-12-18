@@ -143,12 +143,12 @@ K2preproc <- function(object, cohorts=NULL, eMatDS = NULL, colData = NULL,
     if(class(object)[1] == "Seurat") {
       if(nrow(eMatDS) == 0) {
         K2res <- new("K2", 
-                     eMat=object@assays[[seuAssay]]@scale.data,
-                     eMatDS=object@assays[[seuAssayDS]]@data,
+                     eMat=object@assays[[seuAssay]]$scale.data,
+                     eMatDS=object@assays[[seuAssayDS]]$data,
                      colData=object@meta.data)
       } else {
         K2res <- new("K2", 
-                     eMat=object@assays[[seuAssay]]@scale.data,
+                     eMat=object@assays[[seuAssay]]$scale.data,
                      eMatDS=eMatDS,
                      colData=object@meta.data)
       }
