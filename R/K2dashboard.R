@@ -69,9 +69,8 @@ K2dashboard <- function(K2res, analysis_name="K2Taxonomer",
     saveRDS(K2res, file.path(dirPath, "K2results.rds"))
 
     ## Get rmd file location
-    # K2rmd <- system.file("dashboard", "K2Dashboard.Rmd", package =
-    #     "K2Taxonomer")
-    K2rmd <- file.path("dashboard", "K2Dashboard.Rmd")
+    K2rmd <- system.file("dashboard", "K2Dashboard.Rmd", package =
+        "K2Taxonomer")
 
     ## Write RMD file
     K2rmdLines <- readLines(K2rmd)
@@ -81,15 +80,11 @@ K2dashboard <- function(K2res, analysis_name="K2Taxonomer",
         K2rmdLines[2])
 
     # Add about document
-    # if (about) {
-    #     file.copy(system.file("dashboard", "about.md", package="K2Taxonomer"),
-    #         dirPath, overwrite=TRUE)
-    # }
-    
     if (about) {
-      file.copy(file.path("dashboard", "about.md"), dirPath, overwrite=TRUE)
+        file.copy(system.file("dashboard", "about.md", package="K2Taxonomer"),
+            dirPath, overwrite=TRUE)
     }
-
+    
     # Write document
     writeLines(K2rmdLines, RMDpath)
 
