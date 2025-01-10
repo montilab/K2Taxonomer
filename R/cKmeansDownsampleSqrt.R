@@ -44,7 +44,7 @@ cKmeansDownsampleSqrt <- function(labels, features, K2res) {
   mustLink <- outer(labsSub, labsSub, "==")
   mustLink[upper.tri(mustLink, diag=TRUE)] <- FALSE
   mustLink <- which(mustLink, arr.ind=TRUE)
-  clink <- sample(nrow(eMatSub), 1)
+  clink <- sample(ncol(eMatSub), 1)
   
   ## Cluster data
   dClust <- factor(lcvqe(t(eMatSub), k=2, mustLink=mustLink,
