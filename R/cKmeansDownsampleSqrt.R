@@ -40,14 +40,15 @@ cKmeansDownsampleSqrt <- function(labels, features, K2res) {
   eMatSub <- eMatSub[, sVec]
   labsSub <- labsSub[sVec]
   
-  ## Get constraints
+  ## Set constraints
   mustLink <- outer(labsSub, labsSub, "==")
   mustLink[upper.tri(mustLink, diag=TRUE)] <- FALSE
   mustLink <- which(mustLink, arr.ind=TRUE)
+  clink <- sample(nrow(eMatSub), 1)
   
   ## Cluster data
-  dClust=factor(lcvqe(t(eMatSub), k=2, mustLink=mustLink,
-                      cantLink=matrix(c(1, 1), nrow=1), maxIter=MI),
+  dClust <- factor(lcvqe(t(eMatSub), k=2, mustLink=mustLink,
+                      cantLink=matrix(c(clink, clink), nrow=1), maxIter=MI),
                 levels=c(1, 2))
   
   ## Get label-level clusters

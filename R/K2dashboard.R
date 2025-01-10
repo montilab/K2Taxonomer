@@ -57,7 +57,7 @@ K2dashboard <- function(K2res, analysis_name="K2Taxonomer",
 
     ## Directory to print
     dirPath <- file.path(output_dir, paste(analysis_name_nospace,
-        gsub("-| |:", "_", Sys.time()), sample(1e+07, 1), sep="_"))
+        gsub("-| |:", "_", Sys.time())))
     ## RMD file
     RMDpath <- file.path(dirPath, paste0(analysis_name_nospace,
         ".Rmd"))
