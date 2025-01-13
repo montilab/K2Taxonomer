@@ -42,8 +42,7 @@ Suggests:
     knitr,
     rmarkdown,
     RUnit, 
-    BiocGenerics,
-    cinaRgenesets
+    BiocGenerics
 Depends:
   R (>= 4.0)
 BugReports: https://github.com/montilab/K2Taxonomer
