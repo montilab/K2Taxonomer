@@ -197,7 +197,7 @@ plotGenePathway <- function(K2res,
       theme_bw() +
       ggtitle(feature) +
       theme(plot.margin=margin(0, 10, 0, 10), legend.position="none",
-            axis.text.x=element_text(angle=45, hjust=0, size=15),
+            axis.text.x=element_text(angle=45, hjust=1, size=15),
             axis.text.y=element_text(size=15), axis.title.x=element_blank(),
             strip.background = element_rect(fill = "white"))
     
