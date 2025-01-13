@@ -40,9 +40,9 @@ K2tax <- function(K2res, nFeats=NULL, featMetric=NULL, recalcDataMatrix=NULL,
     ## Get parallel parameters
     if(K2meta(K2res)$useCors > 1) {
       bF <- get(class(bpparam())[[1]])
-      K2meta(K2res)$BPPARAM_useCors <- bF(workers = K2meta(K2res)$useCors)
+      K2meta(K2res)$BPPARAM_useCors <- bF(workers = K2meta(K2res)$useCors, RNGseed = 12345)
     } else {
-      K2meta(K2res)$BPPARAM_useCors <- SerialParam()
+      K2meta(K2res)$BPPARAM_useCors <- SerialParam(RNGseed = 12345)
     }
 
     ## Create Splits of the data
