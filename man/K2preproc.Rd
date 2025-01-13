@@ -8,6 +8,7 @@ K2preproc(
   object,
   cohorts = NULL,
   eMatDS = NULL,
+  colData = NULL,
   vehicle = NULL,
   variables = NULL,
   seuAssay = "RNA",
@@ -41,11 +42,13 @@ K2preproc(
 )
 }
 \arguments{
-\item{object}{An object of class Seurat, SingleCellExperiment, or ExpressionSet.}
+\item{object}{An object of class matrix, dgCMatrix, Seurat, SingleCellExperiment, or ExpressionSet.}
 
 \item{cohorts}{Character. The column in meta data of 'object' that has cohort IDs. Default NULL if no cohorts in data.}
 
 \item{eMatDS}{Numeric matrix. A matrix with the same number of observations as 'object' containing normalized expression data to be used in analyses downstream of partitioning algorithm.}
+
+\item{colData}{data.frame. Only used if 'object' is a matrix or dgCMatrix. A data frame with named rows and columns containing observation data for each column in 'object'.}
 
 \item{vehicle}{The value in the cohort variable that contains the ID of observation to use as control. Default NULL if no vehicle to be used.}
 
