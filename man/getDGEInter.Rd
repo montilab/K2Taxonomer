@@ -10,7 +10,8 @@ getDGEInter(
   minDiff = NULL,
   maxPval = NULL,
   genes = NULL,
-  nodes = NULL
+  nodes = NULL,
+  pagelength = 50
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ getDGEInter(
 \item{genes}{Character. A vector of gene identifiers to display.}
 
 \item{nodes}{Character. A vector of node identifiers to display.}
+
+\item{pagelength}{Numeric. Number of rows to display in each page of output.}
 }
 \value{
 An interactive data frame with the following columns:

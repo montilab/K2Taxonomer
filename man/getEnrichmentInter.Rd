@@ -12,7 +12,8 @@ getEnrichmentInter(
   maxFDR_fisher = NULL,
   maxPval_fisher = NULL,
   gsNames = NULL,
-  nodes = NULL
+  nodes = NULL,
+  pagelength = 50
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ getEnrichmentInter(
 \item{gsNames}{Character. A vector of gene sets identifiers to display.}
 
 \item{nodes}{Character. A vector of node identifiers to display.}
+
+\item{pagelength}{Numeric. Number of rows to display in each page of output.}
 }
 \value{
 An interactive data frame with the following columns:

@@ -6,6 +6,7 @@
 #' @param maxPval Numeric. A value between 0 and 1 indicating the p-value cutoff for differential gene expression analysis.
 #' @param genes Character. A vector of gene identifiers to display.
 #' @param nodes Character. A vector of node identifiers to display.
+#' @param pagelength Numeric. Number of rows to display in each page of output.
 #' @return An interactive data frame with the following columns:
 #' \itemize{
 #'  \item{Gene: }{The identifier of the gene}
@@ -34,7 +35,8 @@ getDGEInter <- function(K2res,
                         minDiff = NULL,
                         maxPval = NULL,
                         genes = NULL,
-                        nodes = NULL) {
+                        nodes = NULL,
+                        pagelength = 50) {
   
   # Get results tables
   dgetab <- getDGETable(K2res)
@@ -133,7 +135,7 @@ getDGEInter <- function(K2res,
                          scrollY=TRUE, 
                          dom="Brtp", 
                          paging=TRUE,
-                         pageLength=50,
+                         pageLength=pagelength,
             selection="none")) %>%
     formatRound(c("Mean", "Diff"), digits=2) %>%
     formatSignif(c("P Value", "FDR"), digits=2) %>%
