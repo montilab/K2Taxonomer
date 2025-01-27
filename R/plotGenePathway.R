@@ -67,7 +67,7 @@ plotGenePathway <- function(K2res,
   
   ## Create data.frame of expression values
   e <- eM[feature, ]
-  df <- data.frame(e=e, ch=nams, stringsAsFactors=FALSE)
+  df <- data.frame(ch=nams, e=e, stringsAsFactors=FALSE)
   
   ## Get node edge members
   obsList <- K2results(K2res)[[node]]$obs
@@ -87,7 +87,7 @@ plotGenePathway <- function(K2res,
       data.frame(ch = coh, me = mean(df[df$ch == coh, "e"]))
     }))
   } else {
-    dfMeans <- df
+    dfMeans <- df[,-3]
     colnames(dfMeans)[2] <- "me"
   }
   dfMeans <- dfMeans[order(dfMeans$me, decreasing=TRUE), ]
