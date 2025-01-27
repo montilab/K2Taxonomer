@@ -26,11 +26,13 @@ hclustWrapper <- function(labels, features, K2res) {
     if ("distMetric" %in% names(K2meta(K2res)$clustList)) {
       distMetric <- K2meta(K2res)$clustList$distMetric
     } else {
-      distMetric <- "ward.D2"
+      distMetric <- "euclidean"
     }
+  
+    eMatSub <- K2data(K2res)[features, labels]
 
-    dDist <- dist(t(dataMatrix), method=clustList$distMetric)
-    dClust <- hclust(dDist, method=clustList$aggMethod)
+    dDist <- dist(t(eMatSub), method=distMetric)
+    dClust <- hclust(dDist, method=aggMethod)
     modVec <- as.character(cutree(dClust, k=2))
     mods <- paste(modVec, collapse="")
     return(mods)
