@@ -31,7 +31,7 @@ K2tax(
  \item{Sn: }{Robust scale estimator}
 }}
 
-\item{recalcDataMatrix}{Logical. Recalculate dataMatrix for each partion? Default is FALSE.}
+\item{recalcDataMatrix}{Logical. Recalculate dataMatrix for each partion? Default is TRUE.}
 
 \item{nBoots}{nBoots A value of the number of bootstraps to run at each partition. Default is 500.}
 

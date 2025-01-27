@@ -82,7 +82,7 @@ K2preproc(
 
 \item{DGEexpThreshold}{Numeric. A value between 0 and 1 indicating for filtering lowly expressed genes for partition-specific differential gene expression. Proportion of observations with counts > 0 in at least one subgroup at a specific partition.}
 
-\item{recalcDataMatrix}{Logical. Recalculate dataMatrix for each partion? Default is FALSE.}
+\item{recalcDataMatrix}{Logical. Recalculate dataMatrix for each partion? Default is TRUE.}
 
 \item{nBoots}{nBoots A value of the number of bootstraps to run at each partition. Default is 500.}
 
