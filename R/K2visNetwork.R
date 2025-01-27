@@ -127,7 +127,8 @@ K2visNetwork <- function(K2res, labelsize = 50) {
 
     ## Generate plot
     p <- visNetwork(nodes, edges) %>% visEdges(arrows="to") %>%
-        visHierarchicalLayout(direction="LR")
+        visHierarchicalLayout(direction="LR") %>%
+        visInteraction(zoomSpeed = 0.1)
 
     return(p)
 }

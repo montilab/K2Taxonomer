@@ -336,7 +336,7 @@ output$dendro <- renderVisNetwork({
     visEdges(width=11, smooth=TRUE) %>%
     visPhysics(hierarchicalRepulsion=list(nodeDistance=200)) %>%
     visHierarchicalLayout(direction="LR", levelSeparation=300) %>%
-    visInteraction(dragNodes=FALSE)
+    visInteraction(dragNodes=FALSE, zoomSpeed = 0.1)
 
 })
 
