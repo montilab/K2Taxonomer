@@ -53,9 +53,6 @@ setMethod("show", "K2", function(object) {
         "\n",
         " Differential Enrichment Analysis: ", ifelse(
             is.null(object@results$A$dsse), "FALSE", "TRUE"), 
-        "\n",
-        " Phenotypic Variable Testing: ", ifelse(
-            is.null(object@results$A$modTests), "FALSE", "TRUE"), 
         "\n", sep = ""
     )
 })

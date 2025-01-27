@@ -25,7 +25,7 @@
 #' }
 #' @param DGEmethod Character. Method for running differential gene expression analyses. Use one of either 'limma' (default) or 'mast'.
 #' @param DGEexpThreshold Numeric. A value between 0 and 1 indicating for filtering lowly expressed genes for partition-specific differential gene expression. Proportion of observations with counts > 0 in at least one subgroup at a specific partition.
-#' @param recalcDataMatrix Logical. Recalculate dataMatrix for each partion? Default is FALSE.
+#' @param recalcDataMatrix Logical. Recalculate dataMatrix for each partion? Default is TRUE.
 #' @param nBoots nBoots A value of the number of bootstraps to run at each partition. Default is 500.
 #' @param clustFunc Character. Wrapper function to be used in recursive partitioning.
 #' \itemize{
@@ -109,6 +109,26 @@ K2preproc <- function(object, cohorts=NULL, eMatDS = NULL, colData = NULL,
     ## If matrix is provided, check for colData
     if(class(object)[1] %in% c("matrix", "dgCMatrix") & !identical(rownames(colData), colnames(object))) {
       stop("'colData' row names must match 'object' column names")
+    }
+    
+    ## Fix inputs when no cohort it given
+    if(is.null(cohorts) & (class(clustFunc) != "function" &
+                           (class(clustFunc) == "character" && 
+                           clustFunc %in% c("cKmeansDownsampleSmallest", "cKmeansDownsampleSqrt")))) {
+      cat("No cohorts specified and clustFunc = '", clustFunc, "' . Setting clustFunc = 'hclustWrapper'\n", sep = "")
+      clustFunc <- "hclustWrapper"
+    }
+    
+    ## Fix inputs when no cohort it given
+    if(is.null(cohorts) & recalcDataMatrix) {
+      cat("No cohorts specified and recalcDataMatrix = TRUE. Setting recalcDataMatrix = FALSE\n")
+      recalcDataMatrix <- FALSE
+    }
+    
+    ## Fix inputs when no cohort it given
+    if(is.null(cohorts) & featMetric == "F") {
+      cat("No cohorts specified and featMetric = 'F'. Setting featMetric = 'mad'\n")
+      featMetric <- "mad"
     }
     
     ## Set cluster function
