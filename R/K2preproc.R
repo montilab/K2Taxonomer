@@ -2,9 +2,9 @@
 #'
 #' This function will generate an object of class, K2.  This will run
 #' pre-processing functions for running K2 Taxonomer procedure.
-#' @param object An object of class matrix, dgCMatrix, Seurat, SingleCellExperiment, or ExpressionSet.
+#' @param object An object of class matrix, dgCMatrix, Seurat, SingleCellExperiment, or ExpressionSet. For matrix and dgCMatrix, include genes and observations (single-cell/bulk profiles) as rows and columns, respectively.
 #' @param cohorts Character. The column in meta data of 'object' that has cohort IDs. Default NULL if no cohorts in data.
-#' @param eMatDS Numeric matrix. A matrix with the same number of observations as 'object' containing normalized expression data to be used in analyses downstream of partitioning algorithm.
+#' @param eMatDS Numeric matrix. A matrix with the same number of observations as 'object' containing normalized expression data to be used in analyses downstream of partitioning results.
 #' @param colData data.frame. Only used if 'object' is a matrix or dgCMatrix. A data frame with named rows and columns containing observation data for each column in 'object'.
 #' @param vehicle The value in the cohort variable that contains the ID of observation to use as control. Default NULL if no vehicle to be used.
 #' @param variables Character. Columns in meta data of 'object' to control for in differential analyses.
