@@ -50,7 +50,7 @@ getEnrichmentTable <- function(K2res) {
 
         ## Get GSE tables
         GSEtab <- NULL
-        if (!is.null(K2resList[[x]]$dge)) {
+        if (!is.null(K2resList[[x]]$gse)) {
             GSEtabList <- K2resList[[x]]$gse
 
             ## Add group informaiton and extract tables
@@ -66,11 +66,13 @@ getEnrichmentTable <- function(K2res) {
                     }
                     return(GSEsub)
               }))
-
-            ## Make pval and fdr column names unique
-            colnames(GSEtab)[colnames(GSEtab) %in% c("pval",
-                "fdr")] <- paste(colnames(GSEtab)[colnames(GSEtab) %in%
-                c("pval", "fdr")], "fisher", sep="_")
+            
+            if(!is.null(GSEtab)) {
+                ## Make pval and fdr column names unique
+                colnames(GSEtab)[colnames(GSEtab) %in% c("pval",
+                    "fdr")] <- paste(colnames(GSEtab)[colnames(GSEtab) %in%
+                    c("pval", "fdr")], "fisher", sep="_")
+                }
         }
         return(GSEtab)
 
@@ -87,7 +89,7 @@ getEnrichmentTable <- function(K2res) {
         K2resList) {
 
         SSGSEAtab <- NULL
-        if (!is.null(K2resList[[x]]$dge)) {
+        if (!is.null(K2resList[[x]]$dsse)) {
             ## Get SSGSEA tables
             SSGSEAtab <- K2resList[[x]]$dsse
 
