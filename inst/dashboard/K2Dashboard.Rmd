@@ -186,12 +186,14 @@ labs <- get_leaves_attr(K2dendrogram, "label")
 obsMap <- unlist(lapply(K2list, function(x) x$obs), recursive=FALSE)
 
 ## Set enrichment score label
-if(meta$ScoreGeneSetMethod == "GSVA") {
-  enrYlab <- "GSVA Enrichment Score"
-} else {
-  enrYlab <- "AUCell Enrichment Score (Scaled)"
-}
+ScoreGeneSetMethod <- meta$ScoreGeneSetMethod
 
+## Set enrichment score label
+if(meta$ScoreGeneSetMethod == "GSVA") {
+  enrYlab <- "GSVA Score"
+} else {
+  enrYlab <- "Log2 AUCell Score"
+}
 ```
 
 ```{r progressbar, context="server"}
@@ -874,7 +876,7 @@ output$pathwayPlot <- renderPlotly({
             K2list[[values$nodeSelHEp]]$obs[[2]],
             meta$cohorts,
             meta$vehicle,
-            enrYlab)
+            ScoreGeneSetMethod)
 
     } else {
 

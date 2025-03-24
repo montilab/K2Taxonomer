@@ -49,7 +49,7 @@ plotGenePathway <- function(K2res,
     if(K2meta(K2res)$ScoreGeneSetMethod == "GSVA") {
       yaxis <- "GSVA Score"
     } else {
-      yaxis <- "Log AUCell Score"
+      yaxis <- "Log2 AUCell Score"
     }
   }
   
