@@ -71,7 +71,7 @@ data("cellMarker2_genesets")
 
 ## Get Necessary Data Objects
 
-```{r k2 data alt}
+```{r k2DataAlt}
 ## Integrated expression matrix used for clustering data
 integrated_expression_matrix <- ifnb_small@assays$integrated$scale.data
 

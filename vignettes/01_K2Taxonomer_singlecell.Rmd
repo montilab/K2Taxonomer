@@ -53,7 +53,7 @@ data("cellMarker2_genesets")
 
 # The IFNB Data
 
-```{r ifnb data, fig.align='center', fig.width=7, fig.height=7}
+```{r ifnbdata, fig.align='center', fig.width=7, fig.height=7}
 DimPlot(ifnb_small, label = TRUE, raster =TRUE,  pt.size = 3, alpha = 0.4) + NoLegend()
 ```
 
@@ -61,7 +61,7 @@ DimPlot(ifnb_small, label = TRUE, raster =TRUE,  pt.size = 3, alpha = 0.4) + NoL
 
 ### Get Necessary Data Objects
 
-```{r k2 data alt}
+```{r k2dataalt}
 ## Integrated expression matrix used for clustering data
 integrated_expression_matrix <- ifnb_small@assays$integrated$scale.data
 
@@ -114,13 +114,13 @@ K2visNetwork(K2res)
 
 ## Partition-level Differential Gene Expression Analysis
 
-```{r Run differential analysis}
+```{r RunDifferentialAnalysis}
 K2res <- runDGEmods(K2res)
 ```
 
 ## Perform gene set based analyses
 
-```{r Run gene sets}
+```{r RunGeneSets}
 ### Perform Fisher Exact Test based over-representation analysis
 K2res <- runFISHERmods(K2res)
 
@@ -137,26 +137,26 @@ K2res <- runDSSEmods(K2res)
 
 ### Create Static Table of DGE Results
 
-```{r DGE static}
+```{r DGEstatic}
 DGEtable <- getDGETable(K2res)
 head(DGEtable)
 ```
 
 ### Create Interactive Table of DGE Results
 
-```{r DGE inter, eval = FALSE}
+```{r DGEinter, eval = FALSE}
 getDGEInter(K2res, minDiff = 1, node = c("A"), pagelength = 10)
 ```
 
 ### Create Plot of Gene Expression
 
-```{r DGE plot, fig.align='center', fig.width=10, fig.height=5}
+```{r DGEplot, fig.align='center', fig.width=10, fig.height=5}
 plotGenePathway(K2res, feature = "FTL", node = "A")
 ```
 
 ### Create Static Plot Gene Expression
 
-```{r DGE plot static, fig.align='center', fig.width=10, fig.height=5}
+```{r DGEplotStatic, fig.align='center', fig.width=10, fig.height=5}
 plotGenePathway(K2res, feature = "FTL", node = "A", use_plotly = FALSE)
 ```
 
@@ -164,26 +164,26 @@ plotGenePathway(K2res, feature = "FTL", node = "A", use_plotly = FALSE)
 
 ### Create Static Table of Gene Set Results
 
-```{r DSSE static}
+```{r DSSEstatic}
 ENRtable <- getEnrichmentTable(K2res)
 head(ENRtable)
 ```
 
 ### Create Interactive Table of Gene Set Results
 
-```{r DSSE inter, eval = FALSE}
+```{r DSSEinter, eval = FALSE}
 getEnrichmentInter(K2res, nodes = c("A"), pagelength = 10)
 ```
 
 ### Create Interactive Plot of Single-sample Scoring
 
-```{r DSSE plot, fig.align='center', fig.width=10, fig.height=5}
+```{r DSSEplot, fig.align='center', fig.width=10, fig.height=5}
 plotGenePathway(K2res, feature = "Monocyte", node = "A", type = "gMat")
 ```
 
 ### Create Static Plot of Single-sample Scoring
 
-```{r DSSE plot static, fig.align='center', fig.width=10, fig.height=5}
+```{r DSSEplotStatic, fig.align='center', fig.width=10, fig.height=5}
 plotGenePathway(K2res, feature = "Monocyte", node = "A", type = "gMat", use_plotly = FALSE)
 ```
 
@@ -200,7 +200,7 @@ K2dashboard(K2res, "K2results_ifnb_small")
 
 Given their size, parts of the K2Taxonomer workflow can take a long time with single-cell data sets. Accordingly, it is generally recommended to run the workflow using parallel computing. This can be implemented easily by setting the `useCors` argument in `K2preproc()`
 
-```{r, eval=FALSE}
+```{r parellel, eval=FALSE}
 # Not run
 K2res <- K2preproc(object = integrated_expression_matrix,
                    eMatDS = normalized_expression_matrix,
@@ -215,7 +215,7 @@ K2res <- K2preproc(object = integrated_expression_matrix,
 
 ## Using Seurat object directly
 
-```{r k2preproc}
+```{r k2seurat}
 K2res_seurat <- K2preproc(object = ifnb_small,
                    cohorts="cell_type",
                    seuAssay = "integrated",

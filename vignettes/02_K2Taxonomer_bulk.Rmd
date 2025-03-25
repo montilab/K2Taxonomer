@@ -61,7 +61,7 @@ data(sample.ExpressionSet)
 
 ## Get Necessary Data Objects
 
-```{r k2 data alt}
+```{r k2dataAlt}
 ## Normalized expression matrix
 expression_matrix <- exprs(sample.ExpressionSet)
 
@@ -191,13 +191,13 @@ K2visNetwork(K2res)
 
 ## Partition-level Differential Gene Expression Analysis
 
-```{r Run differential analysis}
+```{r RunDifferentialAnalysis}
 K2res <- runDGEmods(K2res)
 ```
 
 ## Perform gene set based analyses
 
-```{r Run gene sets}
+```{r RunGeneSets}
 ### Perform Fisher Exact Test based over-representation analysis
 K2res <- runFISHERmods(K2res)
 
@@ -214,26 +214,26 @@ K2res <- runDSSEmods(K2res)
 
 ### Create Static Table of DGE Results
 
-```{r DGE static}
+```{r DGEstatic}
 DGEtable <- getDGETable(K2res)
 head(DGEtable)
 ```
 
 ### Create Interactive Table of DGE Results
 
-```{r DGE inter, eval = FALSE}
+```{r DGEinter, eval = FALSE}
 getDGEInter(K2res, minDiff = 1, node = c("A"), pagelength = 10)
 ```
 
 ### Create Plot of Gene Expression
 
-```{r DGE plot, fig.align='center', fig.width=10, fig.height=5}
+```{r DGEplot, fig.align='center', fig.width=10, fig.height=5}
 plotGenePathway(K2res, feature = "31583_at", node = "A", subsample = FALSE)
 ```
 
 ### Create Static Plot Gene Expression
 
-```{r DGE plot static, fig.align='center', fig.width=10, fig.height=5}
+```{r DGEplotStatic, fig.align='center', fig.width=10, fig.height=5}
 plotGenePathway(K2res, feature = "31583_at", node = "A", use_plotly = FALSE)
 ```
 
@@ -241,26 +241,26 @@ plotGenePathway(K2res, feature = "31583_at", node = "A", use_plotly = FALSE)
 
 ### Create Static Table of Gene Set Results
 
-```{r DSSE static}
+```{r DSSEstatic}
 ENRtable <- getEnrichmentTable(K2res)
 head(ENRtable)
 ```
 
 ### Create Interactive Table of Gene Set Results
 
-```{r DSSE inter, eval = FALSE}
+```{r DSSEinter, eval = FALSE}
 getEnrichmentInter(K2res, nodes = c("A"), pagelength = 10)
 ```
 
 ### Create Interactive Plot of Single-sample Scoring
 
-```{r DSSE plot, fig.align='center', fig.width=10, fig.height=3}
+```{r DSSEplot, fig.align='center', fig.width=10, fig.height=3}
 plotGenePathway(K2res, feature = "GS1", node = "A", type = "gMat")
 ```
 
 ### Create Static Plot of Single-sample Scoring
 
-```{r DSSE plot static, fig.align='center', fig.width=6, fig.height=2}
+```{r DSSEplotStatic, fig.align='center', fig.width=6, fig.height=2}
 plotGenePathway(K2res, feature = "GS1", node = "A", type = "gMat", use_plotly = FALSE)
 ```
 
@@ -277,7 +277,7 @@ K2dashboard(K2res, "K2results_sample.ExpressionSet")
 
 Given their size, parts of the K2Taxonomer workflow can take a long time with single-cell data sets. Accordingly, it is generally recommended to run the workflow using parallel computing. This can be implemented easily by setting the `useCors` argument in `K2preproc()`
 
-```{r, eval=FALSE}
+```{r parallel, eval=FALSE}
 # Not run
 K2res <- K2preproc(expression_matrix,
                    colData = sample_data,
@@ -288,7 +288,7 @@ K2res <- K2preproc(expression_matrix,
 
 ## Using ExpresssionSet object directly
 
-```{r k2preproc}
+```{r altRun}
 K2res_eSet <- K2preproc(sample.ExpressionSet,
                    genesets = genesetsExample)
 
