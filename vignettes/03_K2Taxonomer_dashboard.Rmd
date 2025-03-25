@@ -35,9 +35,9 @@ dashoboards from the output of the `r Githubpkg("montilab/K2Taxonomer")`
 workflow [@reed_2020]. For a more detailed description for running
 `r Githubpkg("montilab/K2Taxonomer")` visit the vignettes describing single-cell and
 single-cell workflows
-[here](https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_singlecell),
+[here](https://montilab.github.io/K2Taxonomer/articles/01_K2Taxonomer_singlecell),
 and
-[here](https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_bulk),
+[here](https://montilab.github.io/K2Taxonomer/articles/02_K2Taxonomer_bulk),
 respectively.
 
 # Requirements
@@ -69,7 +69,7 @@ data("ifnb_small")
 data("cellMarker2_genesets")
 ```
 
-## Get Necessary Data Objects
+## Get necessary data objects
 
 ```{r k2DataAlt}
 ## Integrated expression matrix used for clustering data
