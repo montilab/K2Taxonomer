@@ -12,6 +12,8 @@ biocViews: StatisticalMethod, Clustering
 Imports:
   BiocManager,
   BiocParallel,
+  BiocStyle,
+  BiocGenerics,
   ggplot2,
   plotly,
   limma,
@@ -35,14 +37,12 @@ Imports:
   methods,
   Seurat,
   Matrix,
+  ggdendro,
   MAST
 Suggests:
-    ggdendro,
-    BiocStyle,
     knitr,
     rmarkdown,
-    RUnit, 
-    BiocGenerics
+    RUnit
 Depends:
   R (>= 4.0)
 BugReports: https://github.com/montilab/K2Taxonomer
