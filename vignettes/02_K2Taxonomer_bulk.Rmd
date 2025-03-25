@@ -48,13 +48,25 @@ library(ggdendro)
 
 ## Read in sample `ExpressionSet` object
 
-The main input of `r Githubpkg("montilab/K2Taxonomer")` is an `ExpressionSet`
+The main input of `r Githubpkg("montilab/K2Taxonomer")` is an expression matrix
 object with approximately normally distributed expression values. Here we read
-in an example data set. See *?sample.ExpressionSet* for more information about
-these data.
+in an example data set, which includes an expression matrix and sample data. 
+See *?sample.ExpressionSet* for more information about these data.
 
 ```{r loadData}
 data(sample.ExpressionSet)
+```
+
+# Running `r Githubpkg("montilab/K2Taxonomer")`
+
+## Get Necessary Data Objects
+
+```{r k2 data alt}
+## Normalized expression matrix
+expression_matrix <- exprs(sample.ExpressionSet)
+
+## Sample information
+sample_data <- pData(sample.ExpressionSet)
 ```
 
 ### Create dummy example gene set object
@@ -67,8 +79,6 @@ genesetsExample <- list(
     GS3=genes[101:150])
 ```
 
-# `r Githubpkg("montilab/K2Taxonomer")` basic run
-
 ## Initialize `K2` object
 
 The `K2preproc()` initializes the `K2` object and runs pre-processing steps.
@@ -76,17 +86,11 @@ Here, you can specify all arguments used throughout the analysis. Otherwise,
 you can specify these arguments within the specific functions for which they
 are implemented. See help pages for more information.
 
-Here we will start by using the defaults.
-
 ```{r create}
 ## Run pre-processing
-K2res <- K2preproc(sample.ExpressionSet,
+K2res <- K2preproc(expression_matrix,
+                   colData = sample_data,
                    genesets = genesetsExample)
-```
-
-```{r createCounts, eval=FALSE}
-## NOT RUN
-K2res <- K2preproc(sample.ExpressionSet)
 ```
 
 ### `K2` object structre
@@ -269,41 +273,33 @@ K2dashboard(K2res, "K2results_sample.ExpressionSet")
 
 # Implementation Options
 
-## Using Expression Matrices Directly
+## Parellel excecutation
 
-### Get Necessary Data Objects
+Given their size, parts of the K2Taxonomer workflow can take a long time with single-cell data sets. Accordingly, it is generally recommended to run the workflow using parallel computing. This can be implemented easily by setting the `useCors` argument in `K2preproc()`
 
-```{r k2 data alt}
-## Integrated expression matrix used for clustering data
-integrated_expression_matrix <- ifnb_small@assays$integrated$scale.data
-
-## Normalized expression matrix to be used for downstream analyses
-normalized_expression_matrix <- ifnb_small@assays$SCT$data
-
-## Profile-level information
-cell_data <- ifnb_small@meta.data
+```{r, eval=FALSE}
+# Not run
+K2res <- K2preproc(expression_matrix,
+                   colData = sample_data,
+                   genesets = genesetsExample,
+                   useCors = 8) ## Runs K2Taxonomer in parellel with eight cores.
 ```
 
-### Perform Recursive Partitioning
 
-```{r k2 run alt, fig.align='center', fig.width=5, fig.height=4}
-# Initialize `K2` object
-K2res_mats <- K2preproc(object = integrated_expression_matrix,
-                        eMatDS = normalized_expression_matrix,
-                        colData = cell_data,
-                        cohorts="cell_type",
-                        nBoots = 200,
-                        clustFunc = "cKmeansDownsampleSqrt",
-                        genesets = cellMarker2_genesets)
+## Using ExpresssionSet object directly
+
+```{r k2preproc}
+K2res_eSet <- K2preproc(sample.ExpressionSet,
+                   genesets = genesetsExample)
 
 ## Run recursive partitioning algorithm
-K2res_mats <- K2tax(K2res_mats)
+K2res_eSet <- K2tax(K2res_eSet)
 
 ## Get dendrogram from K2Taxonomer
-dendro_mats <- K2dendro(K2res_mats)
+dendro_eSet <- K2dendro(K2res_eSet)
 
 ## Plot dendrogram
-ggdendrogram(dendro_mats)
+ggdendrogram(dendro_eSet)
 ```
 
 # References
