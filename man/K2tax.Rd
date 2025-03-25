@@ -2,7 +2,7 @@
 % Please edit documentation in R/K2tax.R
 \name{K2tax}
 \alias{K2tax}
-\title{Function K2 Taxonomer}
+\title{Function to K2 Taxonomer partitioning}
 \usage{
 K2tax(
   K2res,
@@ -11,7 +11,7 @@ K2tax(
   recalcDataMatrix = NULL,
   nBoots = NULL,
   clustFunc = NULL,
-  clustCors = NULL,
+  useCors = NULL,
   clustList = NULL,
   linkage = NULL,
   oneoff = NULL,
@@ -19,51 +19,65 @@ K2tax(
 )
 }
 \arguments{
-\item{K2res}{An object of class K2. The output of K2preproc().}
+\item{K2res}{A K2 class object.}
 
-\item{nFeats}{A numeric value <= P of subsets of the data to use.}
+\item{nFeats}{'sqrt' or a numeric value <= number of features to subset for each partition.}
 
-\item{featMetric}{Metric to use to assign variance/signal score. Options are
-'square' (default), 'mad' to use MAD scores, 'sd' to use standard deviation}
+\item{featMetric}{Character. Metric to use to assign gene-level variance/signal score.
+\itemize{
+ \item{F: }{F-statistic from evaluating differences in means across cohort}
+ \item{mad: }{Median absolute deviation}
+ \item{sd: }{Standard deviation}
+ \item{Sn: }{Robust scale estimator}
+}}
 
-\item{recalcDataMatrix}{Recalculate dataMatrix for each partion?}
+\item{recalcDataMatrix}{Logical. Recalculate dataMatrix for each partion? Default is TRUE.}
 
-\item{nBoots}{A numeric value of the number of bootstraps to run at each
-split.}
+\item{nBoots}{nBoots A value of the number of bootstraps to run at each partition. Default is 500.}
 
-\item{clustFunc}{Wrapper function to cluster a P x N (See details).}
+\item{clustFunc}{Character. Wrapper function to be used in recursive partitioning.
+\itemize{
+ \item{cKmeansDownsampleSqrt: }{Perform constrained K-means clustering after
+ subsampling each cohort by the square root of the number of observations}
+ \item{cKmeansDownsampleSmallest: }{Perform constrained K-means clustering
+ after subsampling each cohort by the size of the smallest cohort}
+ \item{hclustWrapper: }{Perform hierarchical clustering}
+}}
 
-\item{clustCors}{Number of cores to use for clustering.}
+\item{useCors}{Numeric. Number of cores to use for parallelizable processes.}
 
-\item{clustList}{List of objects to use for clustering procedure.}
+\item{clustList}{Optional named list of parameters to use with clustFunc.
+\itemize{
+ \item{cKmeansDownsampleSqrt: }{
+   \itemize{
+     \item{maxIter: }{The maximum number of iterations to use with lcvqe()}
+   }
+ }
+ \item{cKmeansDownsampleSmallest: }{
+   \itemize{
+     \item{maxIter: }{The maximum number of iterations to use with lcvqe()}
+   }
+ }
+ \item{hclustWrapper: }{
+   \itemize{
+     \item{aggMethod: }{One of the hierarchichal methods specified by hclust() function}
+     \item{distMetric: }{One of the distance metrics specified by dist() function}
+   }
+ }
+}}
 
-\item{linkage}{Linkage criteria for splitting cosine matrix ('method' in
-hclust).}
+\item{linkage}{Character. Linkage criteria for splitting cosine matrix ('method' in hclust). 'average' by default.}
 
-\item{oneoff}{Logical. Allow 1 member clusters?}
+\item{oneoff}{Logical. Allow 1 observation partition groups? Default is TRUE.}
 
-\item{stabThresh}{A numeric value < 1, to set stopping threshold (use any
-negative value for no threshold).}
+\item{stabThresh}{Numeric. A value between 0 and 1 indicatingThreshold for ending clustering.}
 }
 \value{
 An object of class K2.
 }
 \description{
 This function performs K2 Taxonomer procedure only. Arguments values are
-extracted from K2meta(K2res) unless othewise specified.
-}
-\examples{
-## Read in ExpressionSet object
-library(Biobase)
-data(sample.ExpressionSet)
-
-## Pre-process and create K2 object
-K2res <- K2preproc(sample.ExpressionSet)
-
-## Run K2 Taxonomer algorithm
-K2res <- K2tax(K2res,
-            stabThresh=0.5)
-
+extracted from K2meta(K2res) unless specified otherwise.
 }
 \references{
 \insertRef{reed_2020}{K2Taxonomer}

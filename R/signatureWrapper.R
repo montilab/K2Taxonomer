@@ -1,216 +1,191 @@
-.signatureWrapper <- function(eSet, cohorts, mods, vehicle=NULL,
-    covariates=NULL, block=NULL, logCounts=FALSE) {
+.signatureWrapper <- function(K2r, mods, GENE = TRUE) {
+  
+    # Get objects from K2r object
+    pD <- K2colData(K2r)
+    cohorts <- K2meta(K2r)$cohorts
+    vehicle <- K2meta(K2r)$vehicle
+    variables <- K2meta(K2r)$variables
+    block <- K2meta(K2r)$block
+    logCounts <- K2meta(K2r)$logCounts
+    DGEexpThreshold <- K2meta(K2r)$DGEexpThreshold
 
+    # Get function for expression data matrix
+    if(GENE) {
+      if(nrow(K2eMatDS(K2r)) != 0) {
+        EXPFUNC <- K2eMatDS
+      } else {
+        EXPFUNC <- K2eMat
+      }
+    } else {
+      EXPFUNC <- K2gMat
+    }
+    
+    # IF !GENE don't assume log counts
+    if(!GENE) {
+      logCounts <- FALSE
+    }
+    
     ## Remove vehicle from mods and make a data frame
     if (!is.null(vehicle)) {
         mods <- mods[names(mods) != vehicle]
     }
-    mods <- data.frame(mods=as.character(mods), GROUP=names(mods),
+    modDF <- data.frame(mods=as.character(mods), GROUP=names(mods),
         stringsAsFactors=FALSE)
+    
+    ## Get min module size
+    minModSize <- min(table(mods))
 
-    modStats <- NULL
+    modS <- NULL
     desForm <- NULL
 
     ## Run if there are subgroups to compare and at least three
     ## observations
-    if (length(unique(mods$mods)) > 1 && (nrow(mods) > 2 | !is.null(cohorts))) {
+    if (length(unique(modDF$mods)) > 1 && (minModSize > 2 | !is.null(cohorts))) {
 
         ## If replicates in data get unique cohorts
         if (is.null(cohorts)) {
             cohorts <- "GROUP"
-            pData(eSet)[, cohorts] <- colnames(eSet)
+            pD[, cohorts] <- colnames(EXPFUNC(K2r))
         }
 
         ## Get unique groups
-        gUnique <- unique(pData(eSet)[, cohorts])
+        gUnique <- unique(pD[, cohorts])
 
         if (!is.null(vehicle)) {
             gUnique <- gUnique[gUnique != vehicle]
         }
 
         ## Subset data for mods
-        eSub <- eSet[, pData(eSet)[, cohorts] %in% c(vehicle,
-            mods$GROUP)]
-        
-        ## Remove non-expressed/no variance features
-        eSub <- eSub[apply(eSub, 1, sd) > 0,]
+        eSub <- EXPFUNC(K2r)[, pD[, cohorts] %in% c(vehicle,
+            modDF$GROUP)]
 
         ## Drop levels
-        pData(eSub) <- droplevels(pData(eSub))
+        pD <- droplevels(pD)
 
         ## Create new variable in pData by merging with mods
         ## data.frame
-        pData(eSub)$GROUP <- factor(pData(eSub)[, cohorts], levels=c(vehicle,
-            mods$GROUP))
-        pData(eSub)$Rownames <- rownames(pData(eSub))
-        pD <- merge(pData(eSub), mods, all.x=TRUE)
+        pD$GROUP <- factor(pD[, cohorts], levels=c(vehicle,
+            modDF$GROUP))
+        pD$Rownames <- rownames(pD)
+        pD <- merge(pD, modDF, all.x=TRUE)
         rownames(pD) <- pD$Rownames
         pD <- pD[colnames(eSub), , drop=FALSE]
-
-        ## Add vehicle mod
-        pD$mods[is.na(pD$mods)] <- "0"
-        pD$mods <- as.factor(pD$mods)
-        pDmods <- paste0("X", as.character(unique(pD$mods)))
-
-        ## Add back to eSet
-        pData(eSub) <- pD
-
-        ## Need to run different analysis if there are cohorts or not
-        if (!is.null(cohorts)) {
-
-            ## Create design matrix
-            desForm <- paste0("~0+", "mods", .formatCov(covariates))
-            design <- model.matrix(as.formula(desForm), data=pData(eSub))
+        
+        # Get minimum number of observations per module
+        minObs <- min(table(pD$mods))
+        if(minObs > 2) {
+          
+          ## Add vehicle mod
+          pD$mods[is.na(pD$mods)] <- "0"
+          pD$mods <- as.factor(pD$mods)
+          pDmods <- paste0("mods", as.character(sort(unique(pD$mods))))
+          
+          ## If block add to pD
+          if (!is.null(block)) {
+            pD$block <- as.character(pD[, block])
+          }
+          
+          ## Remove lowly expressed genes
+          if(DGEexpThreshold > 0 & GENE) {
+            eSub <- .K2filterGenes(eSub, pD$mods, DGEexpThreshold)
+          }
+  
+          ## Create design matrix
+          if(!(length(pDmods) > 2 & is.null(vehicle))) {
+          
+            desForm <- paste0("~mods", .formatCov(variables))
+            design <- model.matrix(as.formula(desForm), data=pD)
             
-            ## Check that model is full rank with covariates, if not model w/o covariates
+            ## Check that model is full rank with variables, if not model w/o variables
             if(!is.fullrank(design)) {
-                desForm <- paste0("~0+", "mods", .formatCov(NULL))
-                design <- model.matrix(as.formula(desForm), data=pData(eSub))
+                desForm <- paste0("~mods", .formatCov(NULL))
+                design <- model.matrix(as.formula(desForm), data=pD)
             }
-            colnames(design) <- sub("mods", "X", colnames(design))
-
-            ## Run duplicateCorrelation
-            if (!is.null(block)) {
-                ## Create contrasts between chemicals
-                corfit <- duplicateCorrelation(eSub, design,
-                    block=pData(eSub)[, block])
-
-                if (corfit$consensus.correlation %in% c(-1, 1) |
-                    is.na(corfit$consensus.correlation)) {
-                    fit <- lmFit(eSub, design)
-                } else {
-                    fit <- lmFit(eSub, design,
-                        correlation=corfit$consensus.correlation,
-                        block=pData(eSub)[, block])
-                }
-            } else {
-                ## Fit model
-                fit <- lmFit(eSub, design)
-            }
-
-            ## Fit contrasts
-            modFit <- lapply(paste0("X", unique(mods$mods)),
-                function(x, design, fit) {
-                    conString <- paste0(x, " - (", paste(pDmods[pDmods !=
-                    x], collapse="+"), ")/", sum(pDmods !=
-                    x))
-                    contrasts <- makeContrasts(contrasts=conString,
-                    levels=design)
-                    contFit <- suppressWarnings(topTable(eBayes(
-                        contrasts.fit(fit, contrasts),
-                        trend=logCounts, robust=logCounts),
-                    number=Inf, sort.by="none"))
-                    contFit <- contFit[, c("logFC", "AveExpr",
-                    "t", "P.Value", "adj.P.Val", "B")]
-                    contFit$edge <- sub("X", "", x)
-                    return(contFit)
-                }, design, fit)
-
-        } else {
-            desForm <- paste0("~0+ ", "GROUP", .formatCov(covariates))
-            design <- model.matrix(as.formula(desForm), data=pData(eSub))
             
-            ## Check that model is full rank with covariates, if not model w/o covariates
+            conVec <- sapply(pDmods[-1], function(x) {
+              paste0(x, "-(", paste(pDmods[pDmods !=x][-1], collapse="+"), ")/",
+                     sum(pDmods !=x) - 1)
+            })
+            
+          } else {
+            
+            desForm <- paste0("~0+mods", .formatCov(variables))
+            design <- model.matrix(as.formula(desForm), data=pD)
+            
+            ## Check that model is full rank with variables, if not model w/o variables
             if(!is.fullrank(design)) {
-                desForm <- paste0("~0+", "GROUP", .formatCov(NULL))
-                design <- model.matrix(as.formula(desForm), data=pData(eSub))
+              desForm <- paste0("~0+mods", .formatCov(NULL))
+              design <- model.matrix(as.formula(desForm), data=pD)
             }
-            colnames(design) <- sub("GROUP", "X", colnames(design))
-
-            ## Run duplicateCorrelation
-            if (!is.null(block)) {
-                ## Create contrasts between chemicals
-                corfit <- duplicateCorrelation(eSub, design,
-                    block=pData(eSub)[, block])
-
-                if (corfit$consensus.correlation %in% c(-1, 1) |
-                    is.na(corfit$consensus.correlation)) {
-                    fit <- lmFit(eSub, design)
-                } else {
-                    fit <- lmFit(eSub, design,
-                        correlation=corfit$consensus.correlation,
-                        block=pData(eSub)[, block])
-                }
-            } else {
-                ## Fit model
-                fit <- lmFit(eSub, design)
-            }
-
-            ## Create contrasts strings
-            modsFull <- unique(pD[, c("GROUP", "mods")])
-            modsTable <- table(modsFull$mods)
-            cVec <- vapply(names(modsTable), function(x) {
-                paste0("(", paste(paste0("X", modsFull$GROUP[modsFull$mods ==
-                    x], collapse="+")), ")/", sum(modsFull$mods ==
-                    x))
-            }, FUN.VALUE=integer(1))
-
-            ## Run each contrast
-            modFit <- lapply(as.character(unique(mods$mods)),
-                function(x, cVec, design, fit) {
-                    conString <- paste0(cVec[x], " - (",
-                    paste(cVec[names(cVec) !=x], collapse="+"), ")/",
-                    sum(names(cVec) != x))
-                    contrasts <- makeContrasts(contrasts=conString,
-                    levels=design)
-                    contFit <- topTable(eBayes(contrasts.fit(fit,
-                    contrasts), trend=logCounts, robust=logCounts),
-                    number=Inf, sort.by="none")
-                    contFit <- contFit[, c("logFC", "AveExpr",
-                    "t", "P.Value", "adj.P.Val", "B")]
-                    contFit$edge <- x
-                    return(contFit)
-                }, cVec, design, fit)
-        }
-
-        ## Create vector of where to assign result
-        if (is.null(vehicle)) {
-            if (length(modFit) == 2) {
-                one2 <- c(1, 2)[as.numeric(modFit[[1]]$t < 0) +
-                    1]
-            } else {
-                one2 <- vapply(seq(nrow(modFit[[1]])), function(row,
-                    modFit) {
-                    which.max(vapply(seq(length(modFit)), function(g,
-                    modFit, row) {
-                    modFit[[g]][row, "t"]
-                    }, modFit, row, FUN.VALUE=numeric(1)))
-                }, modFit, FUN.VALUE=integer(1))
-            }
-        } else {
-            one2 <- c(1, 2)[as.numeric(vapply(seq(nrow(modFit[[1]])),
-                function(row, modFit) {
-                    modFit[[1]]$P.Value[row] > modFit[[2]]$P.Value[row]
-                }, modFit, FUN.VALUE=logical(1))) + 1]
-        }
-
-        ## Create just one data.frame
-        modStats <- as.data.frame(t(vapply(seq_len(nrow(modFit[[1]])),
-            function(row, one2, modFit) {
-                unlist(as.numeric(modFit[[one2[row]]][row, ]))
-            }, one2, modFit, FUN.VALUE=double(7))))
-        colnames(modStats) <- colnames(modFit[[1]])
-        rownames(modStats) <- rownames(modFit[[1]])
-
-        ## Order by p-value
-        modStats <- modStats[order(modStats$P.Value, -abs(modStats$logFC)), ]
-        modStats$adj.P.Val <- p.adjust(modStats$P.Value, method="BH")
-
-        ## Remove large objects
-        rm(fit, modFit, design, mods, gUnique, one2, eSet, eSub,
-            pD)
-
-        ## Save mods as character
-        modStats$edge <- as.character(modStats$edge)
-
-        ## Change column names
-        colnames(modStats) <- c("coef", "mean", "t", "pval",
-            "fdr", "B", "edge")
+            
+            conVec <- sapply(pDmods, function(x) {
+              paste0(x, "-(", paste(pDmods[pDmods !=x], collapse="+"), ")/",
+                     sum(pDmods !=x))
+            })
+            
+          }
+          
+          ## Run duplicateCorrelation
+          if (!is.null(block)) {
+            
+              ## Create contrasts between chemicals
+              corfit <- duplicateCorrelation(eSub, design, 
+                                             block=pD$block)
+              
+              if (corfit$consensus.correlation %in% c(-1, 1) |
+                  is.na(corfit$consensus.correlation)) {
+                  fit <- lmFit(eSub, design)
+              } else {
+                  fit <- lmFit(eSub, design,
+                      correlation=corfit$consensus.correlation,
+                      block=pD[, block])
+              }
+              
+          } else {
+              ## Fit model
+              fit <- lmFit(eSub, design)
+          }
+          
+          if(length(pDmods) == 2 & is.null(vehicle)) {
+            modS <- .limmaTable(pDmods[2], fit, logCounts)
+            modVec <- sub("mods", "", pDmods)
+            modS$edge <- ifelse(modS$t > 0, modVec[2], modVec[1])
+            modS$coef <- abs(modS$coef)
+            modS$t <- abs(modS$t)
+            modS <- modS[order(modS$pval),]
+          }
+          
+          if(!is.null(vehicle)) {
+            modS <- do.call(rbind, lapply(pDmods[-1], function(x) {
+              modM <- .limmaTable(x, fit, logCounts, conVec, design, "mods0")
+              return(modM)
+            }))
+            modS <- modS[order(modS$pvalV, partial = -abs(modS$coefV)),]
+            modS <- modS[sign(modS$coef) == sign(modS$coefV),]
+            modS <- modS[!duplicated(modS$feat),]
+            modS <- modS[order(modS$pval),-seq(ncol(modS)-1, ncol(modS))]
+          }
+          
+          if(length(pDmods) > 2 & is.null(vehicle)) {
+            modS <- do.call(rbind,
+                            lapply(pDmods, 
+                                   .limmaTable, fit, logCounts, conVec, design))
+            modS <- modS[order(modS$pval, partial = -abs(modS$coef)),]
+            modS <- modS[!duplicated(modS$feat),]
+            modS <- modS[order(modS$pval),]
+          }
+  
+          ## Remove large objects
+          rm(fit, design, modDF, gUnique, eSub, pD)
+  
+          ## Save mods as character
+          modS$edge <- as.character(modS$edge)
+      }
     }
 
     ## Return
     return(list(
-        modStats = modStats,
+        modStats = modS,
         formula = desForm
     ))
 }

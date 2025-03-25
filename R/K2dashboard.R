@@ -1,8 +1,7 @@
 #' Generate interactive dashboard of K2 Taxonomer results
 #'
-#' This function will generate an interactive dashboard of the annotated K=2
-#' clustering results in a specified directory.
-#' @param K2res Object of class K2.
+#' This function will generate an interactive dashboard of the annotated K2
+#' Taxonomer results in a specified directory.
 #' @param analysis_name Character string of the name of analysis to write files
 #' and generate title of report.
 #' @param about Logical. Whether to create an 'about' tab in the dashboard.
@@ -11,15 +10,8 @@
 #' @references
 #'  \insertRef{reed_2020}{K2Taxonomer}
 #' @keywords clustering
+#' @inheritParams K2tax
 #' @export
-#' @examples
-#'
-#' ## Read in K2 Taxonomer results
-#' data(K2res)
-#'
-#' ## Generate interactive dashboard
-#' K2dashboard(K2res, output_dir=tempdir())
-#'
 
 K2dashboard <- function(K2res, analysis_name="K2Taxonomer",
     about=TRUE, output_dir=".") {
@@ -46,7 +38,7 @@ K2dashboard <- function(K2res, analysis_name="K2Taxonomer",
     }
 
     ## GSVA
-    if (ncol(K2gSet(K2res)) == 0) {
+    if (ncol(K2gMat(K2res)) == 0) {
         stop("No ssGSEA data found. Please run runGSVAmods().\n")
     }
 
@@ -65,7 +57,7 @@ K2dashboard <- function(K2res, analysis_name="K2Taxonomer",
 
     ## Directory to print
     dirPath <- file.path(output_dir, paste(analysis_name_nospace,
-        gsub("-| |:", "_", Sys.time()), sample(1e+07, 1), sep="_"))
+        gsub("-| |:", "_", Sys.time())))
     ## RMD file
     RMDpath <- file.path(dirPath, paste0(analysis_name_nospace,
         ".Rmd"))
@@ -92,7 +84,7 @@ K2dashboard <- function(K2res, analysis_name="K2Taxonomer",
         file.copy(system.file("dashboard", "about.md", package="K2Taxonomer"),
             dirPath, overwrite=TRUE)
     }
-
+    
     # Write document
     writeLines(K2rmdLines, RMDpath)
 

@@ -4,25 +4,18 @@
 \alias{K2visNetwork}
 \title{Interactive K2 dendrogram}
 \usage{
-K2visNetwork(K2res)
+K2visNetwork(K2res, labelsize = 50)
 }
 \arguments{
-\item{K2res}{A list object. The output of runK2tax().}
+\item{K2res}{A K2 class object.}
+
+\item{labelsize}{Size of labels displayed in window.}
 }
 \value{
-An interactive dendrogram created by `visNetwork::visNetwork()`.
+An interactive dendrogram created by visNetwork::visNetwork().
 }
 \description{
 Create an interactive dendrogram of the K2 Taxonomer results
-}
-\examples{
-
-## Read in K2 Taxonomer results
-data(K2res)
-
-## Generate interactive dendrogram
-K2visNetwork(K2res)
-
 }
 \references{
 \insertRef{reed_2020}{K2Taxonomer}

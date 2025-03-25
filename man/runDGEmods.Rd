@@ -2,34 +2,36 @@
 % Please edit documentation in R/runDGEmods.R
 \name{runDGEmods}
 \alias{runDGEmods}
-\title{Perform differential analysis of gene splits}
+\title{Perform differential analysis between subgroups at each partition}
 \usage{
-runDGEmods(K2res)
+runDGEmods(
+  K2res,
+  DGEmethod = NULL,
+  DGEexpThreshold = NULL,
+  vehicle = NULL,
+  variables = NULL,
+  block = NULL,
+  logCounts = NULL
+)
 }
 \arguments{
-\item{K2res}{An object of class K2. The output of K2tax().}
+\item{DGEmethod}{Character. Method for running differential gene expression analyses. Use one of either 'limma' (default) or 'mast'.}
+
+\item{DGEexpThreshold}{Numeric. A value between 0 and 1 indicating for filtering lowly expressed genes for partition-specific differential gene expression. Proportion of observations with counts > 0 in at least one subgroup at a specific partition.}
+
+\item{vehicle}{The value in the cohort variable that contains the ID of observation to use as control. Default NULL if no vehicle to be used.}
+
+\item{variables}{Character. Columns in meta data of 'object' to control for in differential analyses.}
+
+\item{block}{Character. Block parameter in limma for modeling higherarchical data structure, such as multiple observations per individual.}
+
+\item{logCounts}{Logical. Whether or not expression values are log-scale counts or log normalized counts from RNA-seq. Default is TRUE.}
 }
 \value{
 An object of class K2.
 }
 \description{
-Adds limma differential analysis results to the output of K2tax().
-}
-\examples{
-## Read in ExpressionSet object
-library(Biobase)
-data(sample.ExpressionSet)
-
-## Pre-process and create K2 object
-K2res <- K2preproc(sample.ExpressionSet)
-
-## Run K2 Taxonomer algorithm
-K2res <- K2tax(K2res,
-            stabThresh=0.5)
-
-## Run differential analysis on each partition
-K2res <- runDGEmods(K2res)
-
+Adds differential analysis results to the output of K2tax().
 }
 \references{
 \insertRef{reed_2020}{K2Taxonomer}

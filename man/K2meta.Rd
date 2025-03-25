@@ -26,8 +26,3 @@ Named list. Parameters used in K2Taxonomer run.
 \description{
 Retrieve or assign meta data variables.
 }
-\examples{
-data(K2res)
-K2meta(K2res)
-
-}

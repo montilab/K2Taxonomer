@@ -1,0 +1,237 @@
+---
+title: "Running K2Taxonomer on Single-cell RNA Sequencing Data"
+author:
+- name: Eric R. Reed
+date: March 25, 2025
+output:
+  BiocStyle::html_document
+package: K2Taxonomer
+vignette: >
+  %\VignetteIndexEntry{01_K2Taxonomer_singlecell}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: "`r system.file('REFERENCES.bib', package='K2Taxonomer')`"
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+    collapse=TRUE,
+    comment="#>",
+    message=FALSE,
+    warning=FALSE
+)
+```
+
+# Introduction
+
+# Requirements
+
+## Load packages
+
+```{r setup}
+## K2Taxonomer package
+library(K2Taxonomer)
+
+## Seurat package
+library(Seurat)
+
+## For drawing dendrograms
+library(ggdendro)
+```
+
+## Read in single-cell RNAseq data
+
+```{r loadData}
+data("ifnb_small")
+```
+
+### Read in gene sets for subgroup annotation
+
+```{r loadGeneSets}
+data("cellMarker2_genesets")
+```
+
+# The IFNB Data
+
+```{r ifnb data, fig.align='center', fig.width=7, fig.height=7}
+DimPlot(ifnb_small, label = TRUE, raster =TRUE,  pt.size = 3, alpha = 0.4) + NoLegend()
+```
+
+# Running `r Githubpkg("montilab/K2Taxonomer")`
+
+### Get Necessary Data Objects
+
+```{r k2 data alt}
+## Integrated expression matrix used for clustering data
+integrated_expression_matrix <- ifnb_small@assays$integrated$scale.data
+
+## Normalized expression matrix to be used for downstream analyses
+normalized_expression_matrix <- ifnb_small@assays$SCT$data
+
+## Profile-level information
+cell_data <- ifnb_small@meta.data
+```
+
+### Perform Recursive Partitioning
+
+```{r k2_run}
+# Initialize `K2` object
+K2res <- K2preproc(object = integrated_expression_matrix,
+                   eMatDS = normalized_expression_matrix,
+                   colData = cell_data,
+                   cohorts="cell_type",
+                   nBoots = 200,
+                   clustFunc = "cKmeansDownsampleSqrt",
+                   genesets = cellMarker2_genesets)
+```
+
+## Run recursive partitioning algorithm
+
+```{r tax}
+K2res <- K2tax(K2res)
+```
+
+## Generate dendrogram from `r Githubpkg("montilab/K2Taxonomer")` results
+
+### Static dendrogram
+
+```{r dendrogram, fig.align='center', fig.width=5, fig.height=4}
+## Get dendrogram from K2Taxonomer
+dendro <- K2dendro(K2res)
+
+## Plot dendrogram
+ggdendrogram(dendro)
+```
+
+### Interactive dendrogram
+
+```{r dendrogram inter, fig.align='center', fig.width=5, fig.height=5}
+K2visNetwork(K2res)
+```
+
+
+# Annotate `r Githubpkg("montilab/K2Taxonomer")` results
+
+## Partition-level Differential Gene Expression Analysis
+
+```{r Run differential analysis}
+K2res <- runDGEmods(K2res)
+```
+
+## Perform gene set based analyses
+
+```{r Run gene sets}
+### Perform Fisher Exact Test based over-representation analysis
+K2res <- runFISHERmods(K2res)
+
+### Perform single-sample gene set scoring
+K2res <- runScoreGeneSets(K2res)
+
+### Perform partition-level differential gene set score analysis
+K2res <- runDSSEmods(K2res)
+```
+
+# Explore Annotation Results
+
+## Partition-level Differential Gene Expression Analysis
+
+### Create Static Table of DGE Results
+
+```{r DGE static}
+DGEtable <- getDGETable(K2res)
+head(DGEtable)
+```
+
+### Create Interactive Table of DGE Results
+
+```{r DGE inter, eval = FALSE}
+getDGEInter(K2res, minDiff = 1, node = c("A"), pagelength = 10)
+```
+
+### Create Plot of Gene Expression
+
+```{r DGE plot, fig.align='center', fig.width=10, fig.height=5}
+plotGenePathway(K2res, feature = "FTL", node = "A")
+```
+
+### Create Static Plot Gene Expression
+
+```{r DGE plot static, fig.align='center', fig.width=10, fig.height=5}
+plotGenePathway(K2res, feature = "FTL", node = "A", use_plotly = FALSE)
+```
+
+## Partition-level Gene Set Enrichment Results
+
+### Create Static Table of Gene Set Results
+
+```{r DSSE static}
+ENRtable <- getEnrichmentTable(K2res)
+head(ENRtable)
+```
+
+### Create Interactive Table of Gene Set Results
+
+```{r DSSE inter, eval = FALSE}
+getEnrichmentInter(K2res, nodes = c("A"), pagelength = 10)
+```
+
+### Create Interactive Plot of Single-sample Scoring
+
+```{r DSSE plot, fig.align='center', fig.width=10, fig.height=5}
+plotGenePathway(K2res, feature = "Monocyte", node = "A", type = "gMat")
+```
+
+### Create Static Plot of Single-sample Scoring
+
+```{r DSSE plot static, fig.align='center', fig.width=10, fig.height=5}
+plotGenePathway(K2res, feature = "Monocyte", node = "A", type = "gMat", use_plotly = FALSE)
+```
+
+# Create Dashboard
+
+```{r dash, eval=FALSE}
+# Not run
+K2dashboard(K2res, "K2results_ifnb_small")
+```
+
+# Implementation Options
+
+## Parellel excecutation
+
+Given their size, parts of the K2Taxonomer workflow can take a long time with single-cell data sets. Accordingly, it is generally recommended to run the workflow using parallel computing. This can be implemented easily by setting the `useCors` argument in `K2preproc()`
+
+```{r, eval=FALSE}
+# Not run
+K2res <- K2preproc(object = integrated_expression_matrix,
+                   eMatDS = normalized_expression_matrix,
+                   colData = cell_data,
+                   cohorts="cell_type",
+                   nBoots = 200,
+                   useCors = 8, ## Runs K2Taxonomer in parellel with eight cores.
+                   clustFunc = "cKmeansDownsampleSqrt",
+                   genesets = cellMarker2_genesets)
+```
+
+
+## Using Seurat object directly
+
+```{r k2preproc}
+K2res_seurat <- K2preproc(object = ifnb_small,
+                   cohorts="cell_type",
+                   seuAssay = "integrated",
+                   seuAssayDS = "SCT",
+                   nBoots = 200,
+                   clustFunc = "cKmeansDownsampleSqrt",
+                   genesets = cellMarker2_genesets)
+
+## Run recursive partitioning algorithm
+K2res_seurat <- K2tax(K2res_seurat)
+
+## Get dendrogram from K2Taxonomer
+dendro_seurat <- K2dendro(K2res_seurat)
+
+## Plot dendrogram
+ggdendrogram(dendro_seurat)
+```
+
+# References

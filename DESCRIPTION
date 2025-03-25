@@ -1,9 +1,9 @@
 Package: K2Taxonomer
 Type: Package
 Title: Creating annotated submodules of high-throughput data through recursive partitioning
-Version: 1.0.7
-Date: 2023-11-14
-Authors@R: person("Eric", "Reed", email="reeder@bu.edu",
+Version: 2.0.0
+Date: 2024-08-07
+Authors@R: person("Eric", "Reed", email="eric.reed@einsteinmed.edu",
                   role=c("aut", "cre"))
 Description: Perform and annotate subgroups of high-throughput data by repeated partioning of bootstrapped features. User may input any clustering method that splits observations into 2 clusters. Results can be summarized in a interactive dashboard.
 License: GPL-3 + file LICENSE
@@ -11,6 +11,8 @@ VignetteBuilder: knitr
 biocViews: StatisticalMethod, Clustering
 Imports:
   BiocManager,
+  BiocParallel,
+  ggplot2,
   plotly,
   limma,
   parallel,
@@ -24,12 +26,16 @@ Imports:
   conclust,
   Biobase,
   GSVA,
+  AUCell,
   dendextend,
   scRNAseq,
   Rdpack,
   statmod,
   stats,
-  methods
+  methods,
+  Seurat,
+  Matrix,
+  MAST
 Suggests:
     ggdendro,
     BiocStyle,
@@ -40,39 +46,40 @@ Suggests:
 Depends:
   R (>= 4.0)
 BugReports: https://github.com/montilab/K2Taxonomer
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 RdMacros: Rdpack
 Collate:
-    'data.R'
+    'aggregateGeneSetScores.R'
     'AllClasses.R'
     'AllGenerics.R'
-    'K2tax.R'
-    'K2dashboard.R'
-    'K2dendro.R'
-    'K2visNetwork.R'
-    'getGenePathways.R'
-    'hclustWrapper.R'
-    'cKmeansWrapper.R'
-    'cKmeansWrapperSubsample.R'
-    'K2preproc.R'
-    'runTestsMods.R'
-    'runDGEmods.R'
-    'runGSEmods.R'
-    'runGSVAmods.R'
-    'runDSSEmods.R'
-    'runK2Taxonomer.R'
-    'runFisher1sided.R'
-    'runFisher2sided.R'
-    'runWilcox.R'
-    'runTtest.R'
-    'signatureWrapper.R'
-    'fixFDR.R'
+    'checkK2.R'
+    'cKmeansDownsampleSmallest.R'
+    'cKmeansDownsampleSqrt.R'
+    'data.R'
     'dgeWrapper.R'
     'doSplit.R'
-    'isK2.R'
+    'fixFDR.R'
     'formatCov.R'
-    'checkK2.R'
-    'getEnrichmentTable.R'
-    'aggregateGSVAscores.R'
+    'formatInfo.R'
+    'getDGEInter.R'
     'getDGETable.R'
-    'getTestsModTable.R'
+    'getEnrichmentInter.R'
+    'getEnrichmentTable.R'
+    'getGenePathways.R'
+    'hclustWrapper.R'
+    'isK2.R'
+    'K2dashboard.R'
+    'K2dendro.R'
+    'K2filterGenes.R'
+    'K2preproc.R'
+    'K2tax.R'
+    'K2visNetwork.R'
+    'limmaTable.R'
+    'mastTable.R'
+    'plotGenePathway.R'
+    'runDGEmods.R'
+    'runDSSEmods.R'
+    'runFISHERmods.R'
+    'runScoreGeneSets.R'
+    'signatureWrapper_MAST.R'
+    'signatureWrapper.R'

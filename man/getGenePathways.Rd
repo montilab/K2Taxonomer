@@ -7,7 +7,7 @@
 getGenePathways(genesets)
 }
 \arguments{
-\item{genesets}{A named list of features in row names of dataMatrix.}
+\item{genesets}{Named list. Feature sets to be includes in enrichment-based analyses.}
 }
 \value{
 A named vector

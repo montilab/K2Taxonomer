@@ -29,20 +29,20 @@ setMethod("K2data<-", "K2", function(K2res, value) {
 #' @return Data frame. Observation information from K2Taxonomer run.
 #' @examples
 #' data(K2res)
-#' head(K2info(K2res))
+#' head(K2colData(K2res))
 #'
 #' @export
-setGeneric("K2info", function(K2res) standardGeneric("K2info"))
+setGeneric("K2colData", function(K2res) standardGeneric("K2colData"))
 
-#' @rdname K2info
-setGeneric("K2info<-", function(K2res, value) standardGeneric("K2info<-"))
+#' @rdname K2colData
+setGeneric("K2colData<-", function(K2res, value) standardGeneric("K2colData<-"))
 
-#' @rdname K2info
-setMethod("K2info", "K2", function(K2res) K2res@info)
+#' @rdname K2colData
+setMethod("K2colData", "K2", function(K2res) K2res@colData)
 
-#' @rdname K2info
-setMethod("K2info<-", "K2", function(K2res, value) {
-    K2res@info <- value
+#' @rdname K2colData
+setMethod("K2colData<-", "K2", function(K2res, value) {
+    K2res@colData <- value
     K2res
 })
 
@@ -124,51 +124,71 @@ setMethod("K2gene2Pathway<-", "K2", function(K2res, value) {
     K2res
 })
 
-#' @title ExpressionSet object used in K2Taxonomer run
-#' @description Retrieve or assign ExpressionSet object.
+#' @title Expression matrix object used in partitioning
+#' @description Retrieve or assign Matrix object.
 #' @param K2res K2 class object.
-#' @param value ExpressionSet.
-#' @return ExpressionSet.
+#' @param value Matrix.
+#' @return Matrix.
 #' @examples
 #' data(K2res)
-#' K2eSet(K2res)
+#' K2eMat(K2res)
 #'
 #' @export
-setGeneric("K2eSet", function(K2res) standardGeneric("K2eSet"))
+setGeneric("K2eMat", function(K2res) standardGeneric("K2eMat"))
 
-#' @rdname K2eSet
-setGeneric("K2eSet<-", function(K2res, value) standardGeneric("K2eSet<-"))
+#' @rdname K2eMat
+setGeneric("K2eMat<-", function(K2res, value) standardGeneric("K2eMat<-"))
 
-#' @rdname K2eSet
-setMethod("K2eSet", "K2", function(K2res) K2res@eSet)
+#' @rdname K2eMat
+setMethod("K2eMat", "K2", function(K2res) K2res@eMat)
 
-#' @rdname K2eSet
-setMethod("K2eSet<-", "K2", function(K2res, value) {
-    K2res@eSet <- value
+#' @rdname K2eMat
+setMethod("K2eMat<-", "K2", function(K2res, value) {
+    K2res@eMat <- value
     K2res
 })
 
-#' @title ExpressionSet object of of GSVA output
-#' @description Retrieve or assign ExpressionSet object of GSVA output.
+#' @title Expression matrix object used for differential expression
+#' @description Retrieve or assign Matrix object.
 #' @param K2res K2 class object.
-#' @param value ExpressionSet.
-#' @return ExpressionSet.
+#' @param value Matrix.
+#' @return Matrix.
 #' @examples
 #' data(K2res)
-#' K2gSet(K2res)
+#' K2eMatDS(K2res)
 #'
 #' @export
-setGeneric("K2gSet", function(K2res) standardGeneric("K2gSet"))
+setGeneric("K2eMatDS", function(K2res) standardGeneric("K2eMatDS"))
 
-#' @rdname K2gSet
-setGeneric("K2gSet<-", function(K2res, value) standardGeneric("K2gSet<-"))
+#' @rdname K2eMatDS
+setGeneric("K2eMatDS<-", function(K2res, value) standardGeneric("K2eMatDS<-"))
 
-#' @rdname K2gSet
-setMethod("K2gSet", "K2", function(K2res) K2res@gSet)
+#' @rdname K2eMatDS
+setMethod("K2eMatDS", "K2", function(K2res) K2res@eMatDS)
 
-#' @rdname K2gSet
-setMethod("K2gSet<-", "K2", function(K2res, value) {
-    K2res@gSet <- value
+#' @rdname K2eMatDS
+setMethod("K2eMatDS<-", "K2", function(K2res, value) {
+  K2res@eMatDS <- value
+  K2res
+})
+
+#' @title Numeric matrix of enrichment scores
+#' @description Retrieve or assign matrix of enrichment scores.
+#' @param K2res K2 class object.
+#' @param value Matrix.
+#' @return Matrix.
+#' @export
+setGeneric("K2gMat", function(K2res) standardGeneric("K2gMat"))
+
+#' @rdname K2gMat
+setGeneric("K2gMat<-", function(K2res, value) standardGeneric("K2gMat<-"))
+
+#' @rdname K2gMat
+setMethod("K2gMat", "K2", function(K2res) K2res@gMat)
+
+#' @rdname K2gMat
+setMethod("K2gMat<-", "K2", function(K2res, value) {
+    K2res@gMat <- value
     K2res
 })
 
@@ -177,10 +197,6 @@ setMethod("K2gSet<-", "K2", function(K2res, value) {
 #' @param K2res K2 class object.
 #' @param value Named list. Parameters used in K2Taxonomer run.
 #' @return Named list. Parameters used in K2Taxonomer run.
-#' @examples
-#' data(K2res)
-#' K2meta(K2res)
-#'
 #' @export
 setGeneric("K2meta", function(K2res) standardGeneric("K2meta"))
 
@@ -201,10 +217,6 @@ setMethod("K2meta<-", "K2", function(K2res, value) {
 #' @param K2res K2 class object.
 #' @param value Named vector. A vector with a URL string for each gene.
 #' @return Named vector. A vector with a URL string for each gene.
-#' @examples
-#' data(K2res)
-#' K2geneURL(K2res)
-#'
 #' @export
 setGeneric("K2geneURL", function(K2res) standardGeneric("K2geneURL"))
 
@@ -225,9 +237,6 @@ setMethod("K2geneURL<-", "K2", function(K2res, value) {
 #' @param K2res K2 class object.
 #' @param value Named vector. A vector with a URL string for each geneset.
 #' @return Named vector. A vector with a URL string for each geneset.
-#' @examples
-#' data(K2res)
-#' K2genesetURL(K2res)
 #' @export
 setGeneric("K2genesetURL", function(K2res) standardGeneric("K2genesetURL"))
 
