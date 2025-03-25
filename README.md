@@ -14,7 +14,7 @@ The package documentation describes applications of `K2Taxonomer` to both single
 
 ### Cite
 
-Reed, Eric R, and Stefano Monti. “Multi-Resolution Characterization of Molecular Taxonomies in Bulk and Single-Cell Transcriptomics Data.” _Nucleic Acids Research_ 49, no. 17 (July 6, 2021): e98. https://doi.org/10.1093/nar/gkab552.
+Reed, Eric R, and Stefano Monti. “Multi-Resolution Characterization of Molecular Taxonomies in Bulk and Single-Cell Transcriptomics Data.” _Nucleic Acids Research_ 49, no. 17 (September 27, 2021): e98. https://doi.org/10.1093/nar/gkab552.
 
 ### Documentation
 
