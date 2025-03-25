@@ -1,0 +1,12 @@
+pandoc: 3.1.11
+pkgdown: 2.0.9
+pkgdown_sha: ~
+articles:
+  01_K2Taxonomer_singlecell: 01_K2Taxonomer_singlecell.html
+  02_K2Taxonomer_bulk: 02_K2Taxonomer_bulk.html
+  03_K2Taxonomer_dashboard: 03_K2Taxonomer_dashboard.html
+last_built: 2025-03-25T19:41Z
+urls:
+  reference: https://montilab.github.io/K2Taxonomer/reference
+  article: https://montilab.github.io/K2Taxonomer/articles
+
