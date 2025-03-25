@@ -2,7 +2,7 @@
 title: "Running K2Taxonomer on Single-cell RNA Sequencing Data"
 author:
 - name: Eric R. Reed
-date: "Created: January 14, 2024; Compiled: `r Sys.Date()`"
+date: March 25, 2025
 output:
   BiocStyle::html_document
 package: K2Taxonomer
@@ -59,13 +59,27 @@ DimPlot(ifnb_small, label = TRUE, raster =TRUE,  pt.size = 3, alpha = 0.4) + NoL
 
 # Running `r Githubpkg("montilab/K2Taxonomer")`
 
-## Initialize `K2` object
+### Get Necessary Data Objects
 
-```{r k2preproc}
-K2res <- K2preproc(object = ifnb_small,
+```{r k2 data alt}
+## Integrated expression matrix used for clustering data
+integrated_expression_matrix <- ifnb_small@assays$integrated$scale.data
+
+## Normalized expression matrix to be used for downstream analyses
+normalized_expression_matrix <- ifnb_small@assays$SCT$data
+
+## Profile-level information
+cell_data <- ifnb_small@meta.data
+```
+
+### Perform Recursive Partitioning
+
+```{r k2_run}
+# Initialize `K2` object
+K2res <- K2preproc(object = integrated_expression_matrix,
+                   eMatDS = normalized_expression_matrix,
+                   colData = cell_data,
                    cohorts="cell_type",
-                   seuAssay = "integrated",
-                   seuAssayDS = "SCT",
                    nBoots = 200,
                    clustFunc = "cKmeansDownsampleSqrt",
                    genesets = cellMarker2_genesets)
@@ -113,7 +127,7 @@ K2res <- runFISHERmods(K2res)
 ### Perform single-sample gene set scoring
 K2res <- runScoreGeneSets(K2res)
 
-### Perform partition-evels differential gene set score analysis
+### Perform partition-level differential gene set score analysis
 K2res <- runDSSEmods(K2res)
 ```
 
@@ -182,41 +196,42 @@ K2dashboard(K2res, "K2results_ifnb_small")
 
 # Implementation Options
 
-## Using Expression Matrices Directly
+## Parellel excecutation
 
-### Get Necessary Data Objects
+Given their size, parts of the K2Taxonomer workflow can take a long time with single-cell data sets. Accordingly, it is generally recommended to run the workflow using parallel computing. This can be implemented easily by setting the `useCors` argument in `K2preproc()`
 
-```{r k2 data alt}
-## Integrated expression matrix used for clustering data
-integrated_expression_matrix <- ifnb_small@assays$integrated$scale.data
-
-## Normalized expression matrix to be used for downstream analyses
-normalized_expression_matrix <- ifnb_small@assays$SCT$data
-
-## Profile-level information
-cell_data <- ifnb_small@meta.data
+```{r, eval=FALSE}
+# Not run
+K2res <- K2preproc(object = integrated_expression_matrix,
+                   eMatDS = normalized_expression_matrix,
+                   colData = cell_data,
+                   cohorts="cell_type",
+                   nBoots = 200,
+                   useCors = 8, ## Runs K2Taxonomer in parellel with eight cores.
+                   clustFunc = "cKmeansDownsampleSqrt",
+                   genesets = cellMarker2_genesets)
 ```
 
-### Perform Recursive Partitioning
 
-```{r k2 run alt, fig.align='center', fig.width=5, fig.height=4}
-# Initialize `K2` object
-K2res_mats <- K2preproc(object = integrated_expression_matrix,
-                        eMatDS = normalized_expression_matrix,
-                        colData = cell_data,
-                        cohorts="cell_type",
-                        nBoots = 200,
-                        clustFunc = "cKmeansDownsampleSqrt",
-                        genesets = cellMarker2_genesets)
+## Using Seurat object directly
+
+```{r k2preproc}
+K2res_seurat <- K2preproc(object = ifnb_small,
+                   cohorts="cell_type",
+                   seuAssay = "integrated",
+                   seuAssayDS = "SCT",
+                   nBoots = 200,
+                   clustFunc = "cKmeansDownsampleSqrt",
+                   genesets = cellMarker2_genesets)
 
 ## Run recursive partitioning algorithm
-K2res_mats <- K2tax(K2res_mats)
+K2res_seurat <- K2tax(K2res_seurat)
 
 ## Get dendrogram from K2Taxonomer
-dendro_mats <- K2dendro(K2res_mats)
+dendro_seurat <- K2dendro(K2res_seurat)
 
 ## Plot dendrogram
-ggdendrogram(dendro_mats)
+ggdendrogram(dendro_seurat)
 ```
 
 # References
