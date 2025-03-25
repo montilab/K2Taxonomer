@@ -1,5 +1,5 @@
 ---
-title: "K2Taxonomer Dashboard Generation"
+title: "K2Taxonomer Dashboards"
 author:
 - name: Eric R. Reed
 date: March 25, 2025
@@ -226,9 +226,9 @@ images to view in higher resolution**
 
 ***
 
-<a href="https://montilab.github.io/K2Taxonomer/articles/page1.png">
+<a href="https://montilab.github.io/K2Taxonomer/articles/page1.jpeg">
     <img alt="page1"
-    src="https://montilab.github.io/K2Taxonomer/articles/page1.png">
+    src="page1.jpeg">
 </a>
 
 ***
@@ -237,9 +237,9 @@ images to view in higher resolution**
 
 ***
 
-<a href="https://montilab.github.io/K2Taxonomer/articles/page2.png">
+<a href="https://montilab.github.io/K2Taxonomer/articles/page2.jpeg">
     <img alt="page2"
-    src="https://montilab.github.io/K2Taxonomer/articles/page2.jpg">
+    src="page2.jpeg">
 </a>
 
 ***
@@ -248,9 +248,9 @@ images to view in higher resolution**
 
 ***
 
-<a href="https://montilab.github.io/K2Taxonomer/articles/page3.png">
+<a href="https://montilab.github.io/K2Taxonomer/articles/page3.jpeg">
     <img alt="page3"
-    src="https://montilab.github.io/K2Taxonomer/articles/page3.jpg">
+    src="page3.jpeg">
 </a>
 
 ***
@@ -259,9 +259,9 @@ images to view in higher resolution**
 
 ***
 
-<a href="https://montilab.github.io/K2Taxonomer/articles/page4.png">
+<a href="https://montilab.github.io/K2Taxonomer/articles/page4.jpeg">
     <img alt="page4"
-    src="https://montilab.github.io/K2Taxonomer/articles/page4.jpg">
+    src="page4.jpeg">
 </a>
 
 ***
