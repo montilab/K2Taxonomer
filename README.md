@@ -2,7 +2,7 @@
 
 ### Introduction
 
-*K2Taxonomer* is an R package built around a "top-down" recursive partitioning framework to perform unsupervised learning of nested “taxonomy-like” subgroups from high-throughput -omics data. This framework was devised to be flexibly applicable to different data structures, supporting the analysis of both bulk and single-cell data sets. In addition to implementing the algorithm, the package includes functionality to annotate estimated subgroups using gene- and pathway-level analyses.
+*K2Taxonomer* is an R package built around a "top-down" recursive partitioning framework to perform unsupervised learning of nested “taxonomy-like” subgroups from high-throughput -omics data. This framework was devised to be flexibly applicable to different data structures, supporting the analysis of both bulk and single-cell data sets. In addition to implementing the algorithm, the package includes functionalities to annotate estimated subgroups using gene- and pathway-level analyses.
 
 The recursive partitioning approach utilized by `K2Taxonomer` presents advantages over conventional unsupervised approaches, including:
 
@@ -44,12 +44,12 @@ library(K2Taxonomer)
 
 K2Taxonomer requires two data inputs
 
-  - An object comprising expression and observation data. This must be one of three object classes: `ExpressionSet`, `Seurat`, or `SingleCellExperiment`.
+  - An object comprising expression and metadata. This must be one of three object classes: `ExpressionSet`, `Seurat`, or `SingleCellExperiment`.
   - An object comprising a named list of gene signatures
   
-##### Expression and observational data
+##### Expression and metadata
 
-This example was written for a seurat object which includes the following
+The following example takes a seurat object as input, which includes the following
 
   - An "integrated" data slot which contains batch corrected scaled data used in Seurat clustering.
   - An "RNA" slot containing the un-integreated expression data
