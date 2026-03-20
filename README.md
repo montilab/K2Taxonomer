@@ -132,7 +132,7 @@ K2dashboard(K2res)
 plot(K2dendro(K2res))
 ```
 
-##### Create interactive dendrogram
+#### Create interactive dendrogram
 
 ```r
 K2visNetwork(K2res)
@@ -145,5 +145,47 @@ DGEtable <- getDGETable(K2res)
 ```
 
 ##### Create interactive table of differential gene expression results
+
+```r
+getDGEInter(K2res, node = c("A"))
+```
+
+#### Create table of gene set results
+
+```r
+ENRtable <- getEnrichmentTable(K2res)
+```
+
+##### Create interactive table of gene set results
+
+```r
+getEnrichmentInter(K2res, nodes = c("A"))
+```
+
+#### Plot gene expression
+
+```r
+plotGenePathway(K2res, feature = "FTL", node = "A", use_plotly = FALSE)
+```
+
+##### Create interactive plot of gene expression
+
+```r
+plotGenePathway(K2res, feature = "FTL", node = "A")
+```
+
+#### Plot of single-sample gene sets scoring
+
+```r
+plotGenePathway(K2res, feature = "Monocyte", node = "A", type = "gMat", use_plotly = FALSE)
+```
+
+##### Create interactive plot of single-sample gene sets scoring
+
+```r
+plotGenePathway(K2res, feature = "Monocyte", node = "A", type = "gMat")
+```
+
+
 
 
