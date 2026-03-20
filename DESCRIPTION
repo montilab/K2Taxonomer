@@ -13,7 +13,6 @@ biocViews: StatisticalMethod, Clustering
 Imports:
   BiocManager,
   BiocParallel,
-  BiocStyle,
   BiocGenerics,
   ggplot2,
   plotly,
@@ -42,6 +41,7 @@ Imports:
 Suggests:
     knitr,
     rmarkdown,
+    BiocStyle,
     RUnit
 Depends:
   R (>= 4.0)
