@@ -147,7 +147,7 @@ K2dendro <- function(K2res) {
     ## Get heights scaling factor
     logStabCums <- get_nodes_attr(aList, "log_stab_cum")
     members <- get_nodes_attr(aList, "members")
-    minHeight <- min(log(members) + logStabCums, na.rm=t)
+    minHeight <- min(log(members) + logStabCums, na.rm=TRUE)
 
     ## Add heights to upper nodes
     aList <- dendrapply(aList, function(x, minHeight) {
