@@ -8,6 +8,7 @@ Authors@R: person("Eric", "Reed", email="eric.reed@einsteinmed.edu",
 Description: Perform and annotate subgroups of high-throughput data by repeated partioning of bootstrapped features. User may input any clustering method that splits observations into 2 clusters. Results can be summarized in a interactive dashboard.
 License: GPL-3 + file LICENSE
 VignetteBuilder: knitr
+Encoding: UTF-8
 biocViews: StatisticalMethod, Clustering
 Imports:
   BiocManager,
@@ -25,7 +26,6 @@ Imports:
   DT,
   robustbase,
   magrittr,
-  conclust,
   Biobase,
   GSVA,
   AUCell,
@@ -83,4 +83,5 @@ Collate:
     'runScoreGeneSets.R'
     'signatureWrapper_MAST.R'
     'signatureWrapper.R'
+    'lcvqe.R'
 URL: https://montilab.github.io/K2Taxonomer/

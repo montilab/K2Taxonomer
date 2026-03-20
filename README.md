@@ -165,25 +165,25 @@ getEnrichmentInter(K2res, nodes = c("A"))
 #### Plot gene expression
 
 ```r
-plotGenePathway(K2res, feature = "FTL", node = "A", use_plotly = FALSE)
+plotGenePathway(K2res, feature = "LYZ", node = "A", use_plotly = FALSE)
 ```
 
 ##### Create interactive plot of gene expression
 
 ```r
-plotGenePathway(K2res, feature = "FTL", node = "A")
+plotGenePathway(K2res, feature = "LYZ", node = "A")
 ```
 
 #### Plot of single-sample gene sets scoring
 
 ```r
-plotGenePathway(K2res, feature = "Monocyte", node = "A", type = "gMat", use_plotly = FALSE)
+plotGenePathway(K2res, feature = "GS1", node = "A", type = "gMat", use_plotly = FALSE)
 ```
 
 ##### Create interactive plot of single-sample gene sets scoring
 
 ```r
-plotGenePathway(K2res, feature = "Monocyte", node = "A", type = "gMat")
+plotGenePathway(K2res, feature = "GS1", node = "A", type = "gMat")
 ```
 
 
