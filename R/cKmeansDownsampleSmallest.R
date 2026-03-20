@@ -14,7 +14,6 @@
 #'  \insertRef{cKm}{K2Taxonomer}
 #' @inheritParams K2tax
 #' @export
-#' @import conclust
 
 ## Create wrapper to subsample
 cKmeansDownsampleSmallest <- function(labels, features, K2res) {

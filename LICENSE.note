@@ -1,0 +1,5 @@
+This package includes the lcvqe function from the 'conclust' package,
+originally authored by Tran Khanh Hiep and Nguyen Minh Duc.
+Copyright (C) 2016 Tran Khanh Hiep
+License: GPL-3
+Source: https://github.com/cran/conclust

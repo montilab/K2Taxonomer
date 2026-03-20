@@ -15,7 +15,6 @@
 #'  \insertRef{cKm}{K2Taxonomer}
 #' @inheritParams K2tax
 #' @export
-#' @import conclust
 
 ## Wrapper to subsample
 cKmeansDownsampleSqrt <- function(labels, features, K2res) {
