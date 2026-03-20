@@ -12,3 +12,7 @@ vignettes/.DS_Store
 vignettes/.gitignore
 .Rproj.user
 .git
+^\.github$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

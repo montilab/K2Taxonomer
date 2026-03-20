@@ -13,9 +13,12 @@ The recursive partitioning approach utilized by `K2Taxonomer` presents advantage
 The package documentation describes applications of `K2Taxonomer` to both single-cell and bulk gene expression data. For analyses of single-cell gene expression data `K2Taxonomer` is designed to characterize nested subgroups of previously identified cell types, such as those previously estimated by scRNAseq clustering analysis.
 
 ### Cite
-Reed, Eric R, and Stefano Monti. “Multi-Resolution Characterization of Molecular Taxonomies in Bulk and Single-Cell Transcriptomics Data.” _Nucleic Acids Research_ 49, no. 17 (July 6, 2021): e98. https://doi.org/10.1093/nar/gkab552.
+
+Reed, Eric R, and Stefano Monti. “Multi-Resolution Characterization of Molecular Taxonomies in Bulk and Single-Cell Transcriptomics Data.” _Nucleic Acids Research_ 49, no. 17 (September 27, 2021): e98. https://doi.org/10.1093/nar/gkab552.
 
 ### Documentation
+
+Articles describing `K2Taxonomer` workflows can be found on the package's [GitHub Page](https://montilab.github.io/K2Taxonomer/).
 
 ### Requirements
 
@@ -23,9 +26,7 @@ Reed, Eric R, and Stefano Monti. “Multi-Resolution Characterization of Molecul
 
 ### Installation
 
-#### Install from GitHub
-
-You may install `K2Taxonomer` from GitHub directly using the `devtools` R package or clone the repository and download from source. Typical download time is around 1 minute.
+You may install `K2Taxonomer` from GitHub directly using the `devtools` R package or clone the repository and download from source.
 
 ```r
 install.packages("devtools")
@@ -145,33 +146,4 @@ DGEtable <- getDGETable(K2res)
 
 ##### Create interactive table of differential gene expression results
 
-```r
-getDGEInter(K2res, minDiff = 1, node = c("A", "B"))
-```
-
-#### Create table of enrichment results
-
-```r
-ENRtable <- getEnrichmentTable(K2res)
-```
-
-##### Create interactive table of enrichment results
-
-```r
-getEnrichmentInter(K2res, nodes = c("A", "D"))
-```
-
-#### Create plots of gene and enrichment scores per cohort at specific nodes
-
-##### Genes
-
-```r
-plotGenePathway(K2res, feature = "MALAT1", node = "A")
-```
-
-##### Enrichment Scores
-
-```r
-plotGenePathway(K2res, feature = "GS1", node = "A", type = "gMat")
-```
 

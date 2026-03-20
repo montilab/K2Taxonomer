@@ -23,13 +23,11 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-This vignette describes the general workflow for running
-`r Githubpkg("montilab/K2Taxonomer")` on gene expression data [@reed_2020].
-While this vignette describes an analysis of bulk gene expression data, many of
-these steps are shared with that of single-cell expression analyses. A vignette
-for running `r Githubpkg("montilab/K2Taxonomer")` on single-cell expression data
-can be found
-[here](https://montilab.github.io/K2Taxonomer/articles/K2Taxonomer_singlecell).
+This vignette describes the workflow for running 
+`r Githubpkg("montilab/K2Taxonomer")` recursive partitioning on bulk gene expression data [@reed_2020]. 
+Note, that many of these steps are shared with that of single-cell expression analyses. 
+A vignette for running `r Githubpkg("montilab/K2Taxonomer")` on single-cell expression data 
+can be found [here](https://montilab.github.io/K2Taxonomer/articles/01_K2Taxonomer_singlecell). 
 
 # Requirements
 
@@ -48,13 +46,25 @@ library(ggdendro)
 
 ## Read in sample `ExpressionSet` object
 
-The main input of `r Githubpkg("montilab/K2Taxonomer")` is an `ExpressionSet`
+The main input of `r Githubpkg("montilab/K2Taxonomer")` is an expression matrix
 object with approximately normally distributed expression values. Here we read
-in an example data set. See *?sample.ExpressionSet* for more information about
-these data.
+in an example data set, which includes an expression matrix and sample data. 
+See *?sample.ExpressionSet* for more information about these data.
 
 ```{r loadData}
 data(sample.ExpressionSet)
+```
+
+# Running `r Githubpkg("montilab/K2Taxonomer")`
+
+## Get necessary data objects
+
+```{r k2dataAlt}
+## Normalized expression matrix
+expression_matrix <- exprs(sample.ExpressionSet)
+
+## Sample information
+sample_data <- pData(sample.ExpressionSet)
 ```
 
 ### Create dummy example gene set object
@@ -67,8 +77,6 @@ genesetsExample <- list(
     GS3=genes[101:150])
 ```
 
-# `r Githubpkg("montilab/K2Taxonomer")` basic run
-
 ## Initialize `K2` object
 
 The `K2preproc()` initializes the `K2` object and runs pre-processing steps.
@@ -76,67 +84,25 @@ Here, you can specify all arguments used throughout the analysis. Otherwise,
 you can specify these arguments within the specific functions for which they
 are implemented. See help pages for more information.
 
-Here we will start by using the defaults.
+A description of arguments implemented in this vignette are
+
+- **object**: "Expression Matrix": Expression matrix to be used for partioning and downstram analyses.
+- **colData**: "Data Frame": A data frame which contains a row for each profile (i.e. columns in **object**).
+- **genesets**: "Named List": A named list of gene sets to be used for downstream annotation.
+
+Note, that many of the default arguments are chosen for the single-cell workflow. However, these will be replaced if the argument, **cohort** is not specified, and a message is printed.
 
 ```{r create}
 ## Run pre-processing
-K2res <- K2preproc(sample.ExpressionSet,
+K2res <- K2preproc(expression_matrix,
+                   colData = sample_data,
                    genesets = genesetsExample)
 ```
 
-```{r createCounts, eval=FALSE}
-## NOT RUN
-K2res <- K2preproc(sample.ExpressionSet)
-```
-
-### `K2` object structre
-
-`r Githubpkg("montilab/K2Taxonomer")` functions create and manipulate S4, `K2`
-objects, defined within the package. `K2` objects have 5 slots.
-
-- **eSet**: "ExpressionSet": Original expression data, extracted by `K2eSet()`.
-- **meta**: "list": Named list of parameters for running analysis, extracted by
-`K2data()`.
-- **dataMatrix**: "matrix": Matrix of processed expression data for running
-`r Githubpkg("montilab/K2Taxonomer")` algorithm, extracted by `K2results`.
-- **info**: "data.frame": Data frame of entered observation-level information,
-extracted by `K2info()`.
-- **results**: "list": Named list of the results of running the
-`r Githubpkg("montilab/K2Taxonomer")` algorithm, including differential
-analysis and enrichment results, extracted by `K2results()`
-- **genesets**: "list": Named list of gene sets to run for enrichment analysis,
-extracted by `K2genesets`.
-- **gene2Pathway**: "character": Named vector of gene set names in which each
-gene appears, extracted by `K2gene2Pathway`.
-- **geneURL**: "character": Named vector of URLs to link to each gene in the
-dashboard, extracted by `K2geneURL()`.
-- **genesetURL**: "character": Named vector of URLs to link to each gene set in
-the dashboard, extracted by `K2genesetURL()`.
-
-`K2preproc()` will fill in three of these slots:, **eMat**, **meta**, and
-**dataMatrix**.
-
-```{r eSetDataMatrix}
-## Extract Expression Matrix
-K2eMat(K2res)[1:5, 1:5]
-
-## Extract dataMatrix
-dim(K2data(K2res))
-```
-
-**meta** will be populated by default a set of parameters entered into
-`K2preproc()`.  Note that for each step, new parameters may be entered,
-specific to that function.
-
-```{r}
-## Extract meta data
-names(K2meta(K2res))
-```
-
-## Running `r Githubpkg("montilab/K2Taxonomer")` algorithm
+## Perform recursive partitioning
 
 The `r Githubpkg("montilab/K2Taxonomer")` is run by `K2tax()`.  At each
-recursion of the algorithm, the observations in **dataMatrix** are partitioned
+recursion of the algorithm, the observations are partitioned
 into two sub-groups based on a compilation of repeated K=2 clustering on
 bootstrapped sampling of features. For each partition in the recursion, a
 stability metric is used to estimate robustness, which takes on values between
@@ -161,7 +127,7 @@ and values between 0.8 and 0.7, are generally recommended.
 ```{r partition}
 ## Run K2Taxonomer aglorithm
 K2res <- K2tax(K2res,
-            stabThresh=0.5)
+               stabThresh=0.5)
 ```
 
 ## Generate dendrogram from `r Githubpkg("montilab/K2Taxonomer")` results
@@ -187,13 +153,13 @@ K2visNetwork(K2res)
 
 ## Partition-level Differential Gene Expression Analysis
 
-```{r Run differential analysis}
+```{r RunDifferentialAnalysis}
 K2res <- runDGEmods(K2res)
 ```
 
 ## Perform gene set based analyses
 
-```{r Run gene sets}
+```{r RunGeneSets}
 ### Perform Fisher Exact Test based over-representation analysis
 K2res <- runFISHERmods(K2res)
 
@@ -210,26 +176,26 @@ K2res <- runDSSEmods(K2res)
 
 ### Create Static Table of DGE Results
 
-```{r DGE static}
+```{r DGEstatic}
 DGEtable <- getDGETable(K2res)
 head(DGEtable)
 ```
 
 ### Create Interactive Table of DGE Results
 
-```{r DGE inter, eval = FALSE}
+```{r DGEinter, eval = FALSE}
 getDGEInter(K2res, minDiff = 1, node = c("A"), pagelength = 10)
 ```
 
 ### Create Plot of Gene Expression
 
-```{r DGE plot, fig.align='center', fig.width=10, fig.height=5}
+```{r DGEplot, fig.align='center', fig.width=10, fig.height=5}
 plotGenePathway(K2res, feature = "31583_at", node = "A", subsample = FALSE)
 ```
 
 ### Create Static Plot Gene Expression
 
-```{r DGE plot static, fig.align='center', fig.width=10, fig.height=5}
+```{r DGEplotStatic, fig.align='center', fig.width=10, fig.height=5}
 plotGenePathway(K2res, feature = "31583_at", node = "A", use_plotly = FALSE)
 ```
 
@@ -237,30 +203,32 @@ plotGenePathway(K2res, feature = "31583_at", node = "A", use_plotly = FALSE)
 
 ### Create Static Table of Gene Set Results
 
-```{r DSSE static}
+```{r DSSEstatic}
 ENRtable <- getEnrichmentTable(K2res)
 head(ENRtable)
 ```
 
 ### Create Interactive Table of Gene Set Results
 
-```{r DSSE inter, eval = FALSE}
+```{r DSSEinter, eval = FALSE}
 getEnrichmentInter(K2res, nodes = c("A"), pagelength = 10)
 ```
 
 ### Create Interactive Plot of Single-sample Scoring
 
-```{r DSSE plot, fig.align='center', fig.width=10, fig.height=3}
+```{r DSSEplot, fig.align='center', fig.width=10, fig.height=3}
 plotGenePathway(K2res, feature = "GS1", node = "A", type = "gMat")
 ```
 
 ### Create Static Plot of Single-sample Scoring
 
-```{r DSSE plot static, fig.align='center', fig.width=6, fig.height=2}
+```{r DSSEplotStatic, fig.align='center', fig.width=6, fig.height=2}
 plotGenePathway(K2res, feature = "GS1", node = "A", type = "gMat", use_plotly = FALSE)
 ```
 
 # Create Dashboard
+
+For more information about K2Taxonomer dashboards, read this [vignette](https://montilab.github.io/K2Taxonomer/articles/03_K2Taxonomer_dashboard).
 
 ```{r dash, eval=FALSE}
 # Not run
@@ -269,41 +237,36 @@ K2dashboard(K2res, "K2results_sample.ExpressionSet")
 
 # Implementation Options
 
-## Using Expression Matrices Directly
+## Parellel excecutation
 
-### Get Necessary Data Objects
+The K2Taxonomer workflow can take a long time with large data sets. Accordingly, it is generally recommended to run the workflow using parallel computing. This can be implemented easily by setting the `useCors` argument in `K2preproc()`
 
-```{r k2 data alt}
-## Integrated expression matrix used for clustering data
-integrated_expression_matrix <- ifnb_small@assays$integrated$scale.data
-
-## Normalized expression matrix to be used for downstream analyses
-normalized_expression_matrix <- ifnb_small@assays$SCT$data
-
-## Profile-level information
-cell_data <- ifnb_small@meta.data
+```{r parallel, eval=FALSE}
+# Not run
+K2res <- K2preproc(expression_matrix,
+                   colData = sample_data,
+                   genesets = genesetsExample,
+                   stabThresh=0.5,
+                   useCors = 8) ## Runs K2Taxonomer in parellel with eight cores.
 ```
 
-### Perform Recursive Partitioning
+## Using ExpresssionSet object directly
 
-```{r k2 run alt, fig.align='center', fig.width=5, fig.height=4}
-# Initialize `K2` object
-K2res_mats <- K2preproc(object = integrated_expression_matrix,
-                        eMatDS = normalized_expression_matrix,
-                        colData = cell_data,
-                        cohorts="cell_type",
-                        nBoots = 200,
-                        clustFunc = "cKmeansDownsampleSqrt",
-                        genesets = cellMarker2_genesets)
+In addition to expression matrices, `ExpressionSet` objects may be input directly with the **object** argument. When implemented, **colData** isn't specified and this information is pulled from the phenotype data of the `ExpressionSet` object.
+
+```{r altRun}
+K2res_eSet <- K2preproc(sample.ExpressionSet,
+                   genesets = genesetsExample,
+                   stabThresh=0.5)
 
 ## Run recursive partitioning algorithm
-K2res_mats <- K2tax(K2res_mats)
+K2res_eSet <- K2tax(K2res_eSet)
 
 ## Get dendrogram from K2Taxonomer
-dendro_mats <- K2dendro(K2res_mats)
+dendro_eSet <- K2dendro(K2res_eSet)
 
 ## Plot dendrogram
-ggdendrogram(dendro_mats)
+ggdendrogram(dendro_eSet)
 ```
 
 # References
