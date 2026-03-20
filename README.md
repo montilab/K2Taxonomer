@@ -2,7 +2,7 @@
 
 ### Introduction
 
-*K2Taxonomer* is an R package built around a "top-down" recursive partitioning framework to perform unsupervised learning of nested “taxonomy-like” subgroups from high-throughput -omics data. This framework was devised to be flexibly applicable to different data structures, supporting the analysis of both bulk and single-cell data sets. In addition to implementing the algorithm, the package includes functionality to annotate estimated subgroups using gene- and pathway-level analyses.
+*K2Taxonomer* is an R package built around a "top-down" recursive partitioning framework to perform unsupervised learning of nested “taxonomy-like” subgroups from high-throughput -omics data. This framework was devised to be flexibly applicable to different data structures, supporting the analysis of both bulk and single-cell data sets. In addition to implementing the algorithm, the package includes functionalities to annotate estimated subgroups using gene- and pathway-level analyses.
 
 The recursive partitioning approach utilized by `K2Taxonomer` presents advantages over conventional unsupervised approaches, including:
 
@@ -33,5 +33,117 @@ install.packages("devtools")
 devtools::install_github("montilab/K2Taxonomer")
 ```
 
+### Usage
+
+#### Load packages and read in gene expression data
+
+```r
+library(K2Taxonomer)
+```
+
+#### Required data sets
+
+K2Taxonomer requires two data inputs
+
+  - An object comprising expression and metadata. This must be one of three object classes: `ExpressionSet`, `Seurat`, or `SingleCellExperiment`.
+  - An object comprising a named list of gene signatures
+  
+##### Expression and metadata
+
+The following example takes a seurat object as input, which includes the following
+
+  - An "integrated" data slot which contains batch corrected scaled data used in Seurat clustering.
+  - An "RNA" slot containing the un-integreated expression data
+  - A column called "seurat_clusters", which contains the cluster labels.
+  
+##### Gene sets
+
+These objects are simply a named list of vectors containing gene identifiers.
+For example,
+
+```r
+GENESETS <- list(
+  GS1 = c("LYZ", "AIF1", "S100A11", "FCER1G", "SAT1", "LST1", "DUSP1", "S100A4", "CTSS", "SERPINA1"),
+  GS2 = c("STMN1", "MYBL2", "HIST1H4C", "RPLP0", "RPSA", "TYMS", "NUSAP1", "HMGB1", "LDHB", "C12orf75")
+)
+```
+
+#### Initialize K2Taxonomer
+
+```r
+RNGkind("L'Ecuyer-CMRG")
+set.seed(1)
+K2res <- K2preproc(seu,
+                   cohorts="seurat_clusters",
+                   seuAssay = "integrated",
+                   seuAssayDS = "RNA",
+                   featMetric="F",
+                   logCounts=TRUE,
+                   clustFunc="cKmeansDownsampleSqrt",
+                   useCors=8,
+                   DGEmethod = "mast",
+                   genesets = GENESETS,
+                   ScoreGeneSetMethod = "AUCELL")
+```
+
+#### Run K2T algorithm
+
+```r
+K2res <- K2tax(K2res)
+```
+
+#### Run differential expression analysis to identify markers of each partition
+
+```r
+K2res <- runDGEmods(K2res)
+```
+
+#### Run gene set enrichment based on significantly differently expression genes
+
+```r
+K2res <- runFISHERmods(K2res)
+```
+
+#### Run gene set scoring with specified algorithm
+
+ScoreGeneSetMethod from `K2preproc()`. This can be either "AUCELL" or "GSVA".
+
+```r
+K2res <- runScoreGeneSets(K2res)
+```
+
+#### Run Difference gene set scoring
+
+```r
+K2res <- runDSSEmods(K2res)
+```
+
+#### Create dashboard
+
+```r
+K2dashboard(K2res)
+```
+
+### Functions for results visualization
+
+#### Plot dendrogram of K2tax() output
+
+```r
+plot(K2dendro(K2res))
+```
+
+##### Create interactive dendrogram
+
+```r
+K2visNetwork(K2res)
+```
+
+#### Create table of differential gene expression results
+
+```r
+DGEtable <- getDGETable(K2res)
+```
+
+##### Create interactive table of differential gene expression results
 
 
