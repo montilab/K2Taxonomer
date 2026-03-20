@@ -159,7 +159,7 @@ ENRtable <- getEnrichmentTable(K2res)
 ##### Create interactive table of gene set results
 
 ```r
-getEnrichmentInter(K2res, nodes = c("A"), pagelength = 10)
+getEnrichmentInter(K2res, nodes = c("A"))
 ```
 
 #### Plot gene expression
