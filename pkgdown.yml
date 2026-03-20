@@ -1,0 +1,8 @@
+pandoc: 3.1.11
+pkgdown: 2.2.0
+pkgdown_sha: ~
+articles:
+  01_K2Taxonomer_singlecell: 01_K2Taxonomer_singlecell.html
+  02_K2Taxonomer_bulk: 02_K2Taxonomer_bulk.html
+  03_K2Taxonomer_dashboard: 03_K2Taxonomer_dashboard.html
+last_built: 2026-03-20T21:53Z
